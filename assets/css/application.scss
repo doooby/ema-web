@@ -1,0 +1,104 @@
+$EMA-bg: #F3ECE9;
+$EMA-controls: #C2C0BF;
+$EMA-font: #000000;
+
+$EMA-primary: #E74011;
+$EMA-primary-contrast: #fff;
+
+$gl-sizes: (
+  1: 2,
+  2: 4,
+  3: 8,
+  4: 12,
+  5: 18,
+  6: 24,
+  7: 32,
+  8: 40,
+);
+
+:root {
+  --EMA-bg: #{$EMA-bg};
+  --EMA-controls: #{$EMA-controls};
+  --EMA-font: #{$EMA-font};
+}
+
+$body-color: $EMA-font;
+
+$enable-shadows: false;
+$enable-rounded: false;
+
+$input-bg: $EMA-controls;
+$text-muted: $EMA-controls;
+
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+
+@function px ($value) {
+  @return #{$value}px;
+}
+
+@function px-size($size) {
+  @return #{size($size)}px;
+}
+
+//@function px-big-size($multiplier) {
+//  @return #{big-size($multiplier)}px;
+//}
+
+@function size($size) {
+  @return map-get($gl-sizes, $size);
+}
+
+@function big-size($multiplier) {
+  @return $multiplier * size(6);
+}
+
+@mixin button-like {
+  cursor: pointer;
+  user-select: none;
+}
+
+.button-like {
+  @include button-like;
+}
+
+body {
+  height: 100vh;
+}
+
+#__nuxt {
+  height: 100%;
+  max-height: 100%;
+}
+
+#__layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  position: relative;
+}
+
+@each $prop, $abbrev in (margin: m, padding: p) {
+  @each $size, $value in $gl-sizes {
+    .e#{$abbrev}-#{$size} { #{$prop}: px($value) !important; }
+    .e#{$abbrev}t-#{$size},
+    .e#{$abbrev}y-#{$size} {
+      #{$prop}-top: px($value) !important;
+    }
+    .e#{$abbrev}r-#{$size},
+    .e#{$abbrev}x-#{$size} {
+      #{$prop}-right: px($value) !important;
+    }
+    .e#{$abbrev}b-#{$size},
+    .e#{$abbrev}y-#{$size} {
+      #{$prop}-bottom: px($value) !important;
+    }
+    .e#{$abbrev}l-#{$size},
+    .e#{$abbrev}x-#{$size} {
+      #{$prop}-left: px($value) !important;
+    }
+  }
+}
+
+@import 'components/top_bar';
