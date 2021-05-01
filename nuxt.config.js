@@ -45,6 +45,15 @@ export default {
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
+  build: {},
+
+  router: {
+    extendRoutes (routes, resolve) {
+      routes.push({
+        name: 'database-root',
+        path: '/database',
+        component: resolve(__dirname, 'pages/database/users.vue'),
+      });
+    },
   },
 };

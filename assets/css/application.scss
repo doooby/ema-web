@@ -5,6 +5,8 @@ $EMA-font: #000000;
 $EMA-primary: #E74011;
 $EMA-primary-contrast: #fff;
 
+$EMA-top-bar-height: 40;
+
 $gl-sizes: (
   1: 2,
   2: 4,
@@ -22,13 +24,13 @@ $gl-sizes: (
   --EMA-font: #{$EMA-font};
 }
 
-$body-color: $EMA-font;
+//$body-color: $EMA-font;
 
 $enable-shadows: false;
 $enable-rounded: false;
 
-$input-bg: $EMA-controls;
-$text-muted: $EMA-controls;
+//$input-bg: $EMA-controls;
+//$text-muted: $EMA-controls;
 
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~bootstrap-vue/src/index.scss';
@@ -62,23 +64,6 @@ $text-muted: $EMA-controls;
   @include button-like;
 }
 
-body {
-  height: 100vh;
-}
-
-#__nuxt {
-  height: 100%;
-  max-height: 100%;
-}
-
-#__layout {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-height: 100%;
-  position: relative;
-}
-
 @each $prop, $abbrev in (margin: m, padding: p) {
   @each $size, $value in $gl-sizes {
     .e#{$abbrev}-#{$size} { #{$prop}: px($value) !important; }
@@ -100,5 +85,7 @@ body {
     }
   }
 }
+
+@import 'layouts/database';
 
 @import 'components/top_bar';
