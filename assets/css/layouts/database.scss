@@ -1,8 +1,9 @@
 body.body-database {
   $menu-width: big-size(8);
+  $menu-border-width: 1;
   .page-body {
     position: relative;
-    padding-left: px($menu-width);
+    padding-left: px($menu-width + $menu-border-width);
     height: calc(100vh - #{$EMA-top-bar-height}px);
   }
   .page-menu {
@@ -11,16 +12,17 @@ body.body-database {
     top: px($EMA-top-bar-height);
     height: calc(100vh - #{$EMA-top-bar-height}px);
     width: px($menu-width);
+    border-right: px($menu-border-width) solid var(--EMA-controls);
   }
   .page-content {
     overflow-y: scroll;
     position: relative;
     height: calc(100vh - #{$EMA-top-bar-height}px);
     &.-has-submenu {
-      padding-left: px($menu-width);
+      padding-left: px($menu-width + $menu-border-width);
     }
     .page-menu {
-      left: px($menu-width);
+      left: px($menu-width + $menu-border-width);
     }
   }
 }

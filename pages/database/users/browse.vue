@@ -1,7 +1,7 @@
 <template>
   <div class="page-content -has-submenu">
     <div class="page-menu">
-      submenu
+      <search-form />
     </div>
     <div>
       database
@@ -11,8 +11,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import SearchForm from '@lib/database/users/SearchForm.vue';
 
 export default Vue.extend({
+  components: {
+    SearchForm,
+  },
   layout: 'database',
 });
 </script>

@@ -1,6 +1,6 @@
-$EMA-bg: #F3ECE9;
-$EMA-controls: #C2C0BF;
-$EMA-font: #000000;
+$LIGHT-bg: #F3ECE9;
+$LIGHT-controls: #C2C0BF;
+$LIGHT-font: #000000;
 
 $EMA-primary: #E74011;
 $EMA-primary-contrast: #fff;
@@ -19,21 +19,21 @@ $gl-sizes: (
 );
 
 :root {
-  --EMA-bg: #{$EMA-bg};
-  --EMA-controls: #{$EMA-controls};
-  --EMA-font: #{$EMA-font};
+  --EMA-bg: #{$LIGHT-bg};
+  --EMA-controls: #{$LIGHT-controls};
+  --EMA-font: #{$LIGHT-font};
 }
 
-//$body-color: $EMA-font;
+//$body-color: $LIGHT-font;
 
-$enable-shadows: false;
+//$enable-shadows: false;
 $enable-rounded: false;
 
-//$input-bg: $EMA-controls;
-//$text-muted: $EMA-controls;
+$input-bg: var(--EMA-controls);
+//$text-muted: $LIGHT-controls;
 
-@import '~bootstrap/scss/bootstrap.scss';
-@import '~bootstrap-vue/src/index.scss';
+@import 'bootstrap';
+@import '~bootstrap-vue/src/index';
 
 @function px ($value) {
   @return #{$value}px;

@@ -1,0 +1,46 @@
+<template>
+  <div>
+    <form-field
+      v-for="field in fields"
+      :key="field.name"
+      :dom-id="domIdBase + field.name"
+      :field="field"
+      @change="change"
+    />
+  </div>
+</template>
+
+<script lang="ts">
+import Vue, { PropType } from 'vue';
+import FormFieldComponent from './Field';
+import { FormField } from '.';
+
+export default Vue.extend({
+  components: {
+    FormField: FormFieldComponent,
+  },
+  props: {
+    domIdBase: {
+      type: String,
+      default: '',
+    },
+    fields: {
+      type: Array as PropType<FormField[]>,
+      required: true,
+    },
+    value: {
+      type: Object as PropType<{ [name: string]: any }>,
+      required: true,
+    },
+  },
+  methods: {
+    change ({ field, value }: { field: FormField, value: any }): void {
+      const newValue = Object.freeze({
+        ...this.value,
+        [field.name]: value,
+      });
+      this.$emit('input', newValue);
+    },
+  },
+});
+</script>

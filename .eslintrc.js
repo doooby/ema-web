@@ -16,5 +16,6 @@ module.exports = {
     'object-curly-spacing': [ 'error', 'always' ],
     'array-bracket-spacing': [ 'error', 'always' ],
     'comma-dangle': [ 'error', 'always-multiline' ],
+    curly: [ 'error', 'multi-line' ],
   },
 };
