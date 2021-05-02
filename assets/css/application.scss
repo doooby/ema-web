@@ -88,4 +88,6 @@ $input-bg: var(--EMA-controls);
 
 @import 'layouts/database';
 
-@import 'components/top_bar';
+@import 'components/TopBar';
+
+@import 'lib/DataTable';

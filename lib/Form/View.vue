@@ -13,7 +13,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import FormFieldComponent from './Field';
-import { FormField } from '.';
+import { FormField, FormValues } from '.';
 
 export default Vue.extend({
   components: {
@@ -29,7 +29,7 @@ export default Vue.extend({
       required: true,
     },
     value: {
-      type: Object as PropType<{ [name: string]: any }>,
+      type: Object as PropType<FormValues>,
       required: true,
     },
   },

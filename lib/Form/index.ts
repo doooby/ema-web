@@ -5,6 +5,10 @@ export interface FormField {
   controlType: 'text';
 }
 
+export interface FormValues {
+  [field: string]: any;
+}
+
 export function defineFormFields (...fields: FormField[]): Readonly<FormField[]> {
   // prevent name duplications
   const index: { [name: string]: FormField } = {};
@@ -12,7 +16,7 @@ export function defineFormFields (...fields: FormField[]): Readonly<FormField[]>
   return Object.freeze(Object.values(index));
 }
 
-export function createFormModel (): { [field: string]: any } {
+export function createFormModel (): FormValues {
   return Object.freeze({});
 }
 

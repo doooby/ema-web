@@ -48,8 +48,7 @@ export default Vue.extend({
   },
   methods: {
     search () {
-      // eslint-disable-next-line no-console
-      console.log(this.searchValues);
+      this.$emit('search', this.searchValues);
     },
   },
 });
