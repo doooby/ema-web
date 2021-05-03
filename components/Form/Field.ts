@@ -1,5 +1,5 @@
 import Vue, { VNode } from 'vue';
-import { FormField, FIELD_PROPS } from '@lib/Form';
+import { FormField, FIELD_PROPS } from '@c/Form';
 
 import VoidControl from './controls/Void.vue';
 import TextControl from './controls/Text.vue';

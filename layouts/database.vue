@@ -12,13 +12,16 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import TopBar from '@c/database/TopBar.vue';
 
 export default Vue.extend({
+  components: {
+    TopBar,
+  },
   head: {
     bodyAttrs: {
       class: 'body-database',
     },
   },
-
 });
 </script>

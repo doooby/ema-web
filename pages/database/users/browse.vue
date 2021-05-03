@@ -17,10 +17,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import SearchForm from '@lib/database/users/SearchForm.vue';
-import { defineTableColumns, TableRow } from '@lib/DataTable';
-import DataTable from '@lib/DataTable/View.vue';
-import { FormValues } from '@lib/Form';
+import SearchForm from '@c/database/users/SearchForm.vue';
+import { defineTableColumns, TableRow } from '@c/DataTable';
+import DataTable from '@c/DataTable/View.vue';
+import { FormValues } from '@c/Form';
 
 export default Vue.extend({
   components: {

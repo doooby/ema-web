@@ -24,8 +24,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import { BIconLightning, BIconSearch } from 'bootstrap-vue';
-import { defineFormFields, createFormModel } from '@lib/Form';
-import FormView from '@lib/Form/View.vue';
+import { defineFormFields, createFormModel } from '@c/Form';
+import FormView from '@c/Form/View.vue';
 
 const searchFields = defineFormFields(
   {
