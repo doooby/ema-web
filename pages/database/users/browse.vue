@@ -36,11 +36,21 @@ export default Vue.extend({
         { key: 'fullName', caption: 'Full Name' },
       ),
       tableRows: [] as TableRow[],
+      searching: this.$api.createRequestState(),
     };
   },
   methods: {
-    search (_values: FormValues) {
-
+    search (values: FormValues) {
+      if (this.searching.running) return;
+      this.$api.query(this.searching, async (api) => {
+        const records = await api.users.search(this.searching, values);
+        if (records !== null) {
+          this.tableRows = records.list.map(user => ({
+            key: String(user.id),
+            values: this.tableColumns.map(column => (user as any)[column.key]),
+          }));
+        }
+      });
     },
   },
 });
