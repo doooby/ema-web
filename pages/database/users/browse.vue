@@ -33,7 +33,7 @@ export default Vue.extend({
       tableColumns: defineTableColumns(
         { key: 'id', caption: 'ID' },
         { key: 'login', caption: 'Login' },
-        { key: 'fullName', caption: 'Full Name' },
+        { key: 'full_name', caption: 'Full Name' },
       ),
       tableRows: [] as TableRow[],
       searching: this.$api.createRequestState(),

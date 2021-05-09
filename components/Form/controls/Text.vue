@@ -21,13 +21,13 @@ export default Vue.extend({
   props: FIELD_PROPS,
   computed: {
     sanitizedValue (): string {
-      return 'uff';
+      const rawValue = this.formValues[this.field.name];
+      return rawValue ? String(rawValue) : '';
     },
   },
   methods: {
-    onBlur (): void {
-      const newValue = 'nuff';
-      this.$emit('change', newValue);
+    onBlur (event: {target: HTMLInputElement}): void {
+      this.$emit('change', event.target.value);
     },
   },
 });

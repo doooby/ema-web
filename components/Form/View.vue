@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div :class="$attrs.class">
     <form-field
       v-for="field in fields"
       :key="field.name"
       :dom-id="domIdBase + field.name"
       :field="field"
+      :form-values="value"
       @change="change"
     />
   </div>
@@ -35,11 +36,10 @@ export default Vue.extend({
   },
   methods: {
     change ({ field, value }: { field: FormField, value: any }): void {
-      const newValue = Object.freeze({
+      this.$emit('input', Object.freeze({
         ...this.value,
         [field.name]: value,
-      });
-      this.$emit('input', newValue);
+      }));
     },
   },
 });

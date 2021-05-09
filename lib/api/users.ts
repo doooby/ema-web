@@ -1,36 +1,33 @@
-import { PaginatedRecords, parsers, Prop } from './parsers';
-import { ApiRequest, Params, fetch } from '.';
+/* eslint-disable camelcase */
+import { ResourceChange, PaginatedRecords, mappers, Prop } from './mappers';
+import { ApiRequest, Params, fetch, processResponse } from '.';
 
-export interface User {
-  id: number;
-  login: string;
-  fullName: string;
+function parseUser (object: Prop.Object) {
+  return {
+    id: mappers.recordId(object),
+    login: mappers.nonEmptyString(object.login),
+    full_name: mappers.nonEmptyString(object.full_name),
+  };
 }
+
+export type User = ReturnType<typeof parseUser>;
 
 export async function search (request: ApiRequest, params: Params)
   : Promise<null | PaginatedRecords<User>> {
   const response = await fetch('/users/search', {
     data: params,
   });
-  if (request.canceled) return null;
-
-  if (!response.ok) {
-    request.lastFail = response.error;
-    return null;
-  }
-
-  try {
-    return parsers.paginatedRecords(response.payload, parseUser);
-  } catch (_err) {
-    request.lastFail = 'invalid_data';
-    return null;
-  }
+  return processResponse(request, response,
+    payload => mappers.paginatedRecords(payload, parseUser),
+  );
 }
 
-function parseUser (object: Prop.Object): User {
-  return {
-    id: parsers.recordId(object),
-    login: parsers.nonEmptyString(object, 'login'),
-    fullName: parsers.nonEmptyString(object, 'full_name'),
-  };
+export async function create (request: ApiRequest, user: Params)
+  : Promise<null | ResourceChange> {
+  const response = await fetch('/users/create', {
+    data: { user },
+  });
+  return processResponse(request, response,
+    payload => mappers.changedRecord(payload),
+  );
 }

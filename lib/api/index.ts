@@ -7,6 +7,7 @@ export interface ApiRequest {
   running: boolean;
   canceled: boolean;
   lastFail?: string;
+  error?: Error;
 }
 
 export interface Params {
@@ -95,5 +96,24 @@ export async function fetch (
     return response;
   } catch (error) {
     return { ok: false, error: error.message };
+  }
+}
+
+export function processResponse<V> (
+  request: ApiRequest,
+  response: Response,
+  processor: (payload: any) => V,
+): null | V {
+  if (request.canceled) return null;
+  if (!response.ok) {
+    request.lastFail = response.error;
+    return null;
+  }
+  try {
+    return processor(response.payload);
+  } catch (err) {
+    request.error = err;
+    request.lastFail = 'invalid_data';
+    return null;
   }
 }
