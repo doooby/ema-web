@@ -34,11 +34,11 @@ export const mappers = {
   changedRecord (value: any): ResourceChange {
     return mappers.object<ResourceChange>(value, object => ({
       success: mappers.boolean(object.success),
-      errors: mappers.array(
+      errors: mappers.optional(object.errors, () => mappers.array(
         object.errors, error => mappers.tuple(error, tuple => [
           mappers.nonEmptyString(tuple[0]), mappers.nonEmptyString(tuple[1]),
         ]),
-      ),
+      )),
     }));
   },
   array<I> (value: any, parser: (object: any) => I): I[] {
@@ -67,6 +67,14 @@ export const mappers = {
   recordId (object: Prop.Object): Prop.Id {
     const value = object.id;
     if (typeof value !== 'number' || isNaN(value)) throw new Error('invalid resource id');
+    return value;
+  },
+  optional<V> (value: any, mapper: (presentValue: any) => V): undefined | V {
+    if (value === undefined) return undefined;
+    return mapper(value);
+  },
+  string (value: any): Prop.String {
+    if (typeof value !== 'string') throw new Error('invalid string');
     return value;
   },
   nonEmptyString (value: any): Prop.String {

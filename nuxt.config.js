@@ -1,5 +1,5 @@
 import path from 'path';
-import { databaseRoutes } from './components/database/router';
+import { databaseRoutes } from './lib/database/router';
 
 export default {
   server: {

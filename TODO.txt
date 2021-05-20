@@ -1,0 +1,6 @@
+- lib/api/mappers - make the parsers traceable for better error messages
+- create db index page with links
+- db left menu
+- user create
+- user update
+- translations

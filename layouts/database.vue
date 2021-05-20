@@ -3,6 +3,7 @@
     <top-bar />
     <div class="page-body">
       <div class="page-menu">
+        <nuxt-link class="my-3" to="/database">Index</nuxt-link>
         <h2>Database</h2>
       </div>
       <Nuxt />

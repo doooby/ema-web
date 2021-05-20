@@ -6,7 +6,7 @@ function parseUser (object: Prop.Object) {
   return {
     id: mappers.recordId(object),
     login: mappers.nonEmptyString(object.login),
-    full_name: mappers.nonEmptyString(object.full_name),
+    full_name: mappers.string(object.full_name),
   };
 }
 
@@ -27,7 +27,10 @@ export async function create (request: ApiRequest, user: Params)
   const response = await fetch('/users/create', {
     data: { user },
   });
-  return processResponse(request, response,
+  console.log({ response });
+  const parsed = processResponse(request, response,
     payload => mappers.changedRecord(payload),
   );
+  console.log({ parsed });
+  return parsed;
 }
