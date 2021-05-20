@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { ResourceChange, PaginatedRecords, mappers, Prop } from './mappers';
+import { RecordChange, PaginatedRecords, mappers, Prop } from './mappers';
 import { ApiRequest, Params, fetch, processResponse } from '.';
 
 function parseUser (object: Prop.Object) {
@@ -23,14 +23,11 @@ export async function search (request: ApiRequest, params: Params)
 }
 
 export async function create (request: ApiRequest, user: Params)
-  : Promise<null | ResourceChange> {
+  : Promise<null | RecordChange> {
   const response = await fetch('/users/create', {
     data: { user },
   });
-  console.log({ response });
-  const parsed = processResponse(request, response,
+  return processResponse(request, response,
     payload => mappers.changedRecord(payload),
   );
-  console.log({ parsed });
-  return parsed;
 }

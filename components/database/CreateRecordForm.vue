@@ -38,10 +38,10 @@
 import Vue, { PropType } from 'vue';
 import { createFormModel, FormField } from '@c/Form';
 import FormView from '@c/Form/View.vue';
-import { RecordErrors, ResourceChange } from '~/lib/api/mappers';
+import { RecordErrors, RecordChange } from '~/lib/api/mappers';
 import { ApiRequest, Params } from '~/lib/api';
 
-type ResourceCreateRequest = (request: ApiRequest, params: Params) => Promise<null | ResourceChange>;
+type RecordCreateRequest = (request: ApiRequest, params: Params) => Promise<null | RecordChange>;
 
 export default Vue.extend({
   components: {
@@ -57,7 +57,7 @@ export default Vue.extend({
       required: true,
     },
     apiRequest: {
-      type: Function as PropType<ResourceCreateRequest>,
+      type: Function as PropType<RecordCreateRequest>,
       required: true,
     },
     onSuccessRoute: {

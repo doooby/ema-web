@@ -9,7 +9,7 @@ export namespace Prop {
 
 export type RecordErrors = Array<[ string, string ]>;
 
-export interface ResourceChange {
+export interface RecordChange {
   success: boolean;
   errors?: RecordErrors;
 }
@@ -31,8 +31,8 @@ export const mappers = {
     if (typeof value !== 'object') throw new Error('invalid object');
     return parser(value);
   },
-  changedRecord (value: any): ResourceChange {
-    return mappers.object<ResourceChange>(value, object => ({
+  changedRecord (value: any): RecordChange {
+    return mappers.object<RecordChange>(value, object => ({
       success: mappers.boolean(object.success),
       errors: mappers.optional(object.errors, () => mappers.array(
         object.errors, error => mappers.tuple(error, tuple => [
@@ -66,7 +66,7 @@ export const mappers = {
   },
   recordId (object: Prop.Object): Prop.Id {
     const value = object.id;
-    if (typeof value !== 'number' || isNaN(value)) throw new Error('invalid resource id');
+    if (typeof value !== 'number' || isNaN(value)) throw new Error('invalid record id');
     return value;
   },
   optional<V> (value: any, mapper: (presentValue: any) => V): undefined | V {
