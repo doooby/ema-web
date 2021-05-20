@@ -1,5 +1,4 @@
 import path from 'path';
-import { databaseRoutes } from './lib/database/router';
 
 export default {
   server: {
@@ -56,12 +55,6 @@ export default {
   build: {
     extend (config) {
       config.resolve.alias['@c'] = path.join(__dirname, 'components');
-    },
-  },
-
-  router: {
-    extendRoutes (routes, resolve) {
-      databaseRoutes(routes, resolve);
     },
   },
 };
