@@ -2,10 +2,7 @@
   <div>
     <top-bar />
     <div class="page-body">
-      <div class="page-menu">
-        <nuxt-link class="my-3" to="/database">Index</nuxt-link>
-        <h2>Database</h2>
-      </div>
+      <resources-menu />
       <Nuxt />
     </div>
   </div>
@@ -14,10 +11,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import TopBar from '@c/database/TopBar.vue';
+import ResourcesMenu from '@c/database/ResourcesMenu.vue';
 
 export default Vue.extend({
   components: {
     TopBar,
+    ResourcesMenu,
   },
   head: {
     bodyAttrs: {
