@@ -1,7 +1,7 @@
 import 'vue';
 import { Context } from '@nuxt/types';
-
 import * as users from './users';
+import { safeMap } from '~/lib/api/mappers';
 
 export interface ApiRequest {
   running: boolean;
@@ -109,11 +109,13 @@ export function processResponse<V> (
     request.lastFail = response.error;
     return null;
   }
-  try {
-    return processor(response.payload);
-  } catch (err) {
-    request.error = err;
+
+  const mappingResult = safeMap(response.payload, processor);
+  if (mappingResult instanceof Error) {
+    request.error = mappingResult;
     request.lastFail = 'invalid_data';
     return null;
   }
+
+  return mappingResult;
 }

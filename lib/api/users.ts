@@ -1,19 +1,24 @@
-/* eslint-disable camelcase */
-import { RecordChange, PaginatedRecords, mappers, Prop } from './mappers';
+import * as mappers from './mappers';
 import { ApiRequest, Params, fetch, processResponse } from '.';
 
-function parseUser (object: Prop.Object) {
-  return {
-    id: mappers.recordId(object),
-    login: mappers.nonEmptyString(object.login),
-    full_name: mappers.string(object.full_name),
-  };
+const { object, recordId, prop, val } = mappers;
+
+interface User {
+  id: string;
+  login: string;
+  fullName: string;
 }
 
-export type User = ReturnType<typeof parseUser>;
+function parseUser (value: any): User {
+  return object(value, root => ({
+    id: recordId(root),
+    login: prop('login', root, val.string),
+    fullName: prop('full_name', root, val.string),
+  }));
+}
 
 export async function search (request: ApiRequest, params: Params)
-  : Promise<null | PaginatedRecords<User>> {
+  : Promise<null | mappers.PaginatedRecords<User>> {
   const response = await fetch('/users/search', {
     data: params,
   });
@@ -23,7 +28,7 @@ export async function search (request: ApiRequest, params: Params)
 }
 
 export async function create (request: ApiRequest, user: Params)
-  : Promise<null | RecordChange> {
+  : Promise<null | mappers.RecordChange> {
   const response = await fetch('/users/create', {
     data: { user },
   });

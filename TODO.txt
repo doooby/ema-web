@@ -1,4 +1,2 @@
-- lib/api/mappers - make the parsers traceable for better error messages
-- db left menu
 - user update
 - translations
