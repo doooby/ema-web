@@ -17,5 +17,6 @@ module.exports = {
     'array-bracket-spacing': [ 'error', 'always' ],
     'comma-dangle': [ 'error', 'always-multiline' ],
     curly: [ 'error', 'multi-line' ],
+    camelcase: [ 'off' ],
   },
 };

@@ -8,12 +8,12 @@
       :fields="fields"
     />
     <div class="text-right">
-      <span v-if="creating.running">
+      <span v-if="updating.running">
         processing...
       </span>
       <b-button
         variant="success"
-        :disabled="creating.running"
+        :disabled="updating.running"
         @click="save"
       >
         Save
@@ -31,7 +31,11 @@ import RecordErrors from '@c/database/RecordErrors';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
 import { ApiRequest, Params } from '~/lib/api';
 
-type RecordCreateRequest = (request: ApiRequest, params: Params) => Promise<null | RecordChange>;
+type RecordUpdateRequest = (
+  request: ApiRequest,
+  id: number | string,
+  params: Params,
+) => Promise<null | RecordChange>;
 
 export default Vue.extend({
   components: {
@@ -39,6 +43,10 @@ export default Vue.extend({
     RecordErrors,
   },
   props: {
+    recordId: {
+      type: [ Number, String ] as number | string,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -48,7 +56,7 @@ export default Vue.extend({
       required: true,
     },
     apiRequest: {
-      type: Function as PropType<RecordCreateRequest>,
+      type: Function as PropType<RecordUpdateRequest>,
       required: true,
     },
     onSuccessRoute: {
@@ -59,16 +67,16 @@ export default Vue.extend({
   data () {
     return {
       formValues: createFormModel(),
-      creating: this.$api.createRequestState(),
+      updating: this.$api.createRequestState(),
       errors: null as null | RecordError[],
     };
   },
   methods: {
     save () {
-      if (this.creating.running) return;
+      if (this.updating.running) return;
       this.errors = null;
-      this.$api.query(this.creating, async () => {
-        const result = await this.apiRequest(this.creating, this.formValues);
+      this.$api.query(this.updating, async () => {
+        const result = await this.apiRequest(this.updating, this.recordId, this.formValues);
         if (result?.success) {
           await this.$router.push({ path: this.onSuccessRoute });
         } else if (result?.errors) {

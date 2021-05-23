@@ -5,11 +5,12 @@
         @search="search"
       />
     </div>
-    <div>
+    <div class="em-4">
       <data-table
         :columns="tableColumns"
         :rows="tableRows"
         :headers="true"
+        :record-edit-path="key => `/database/users/${key}/edit`"
       />
     </div>
   </div>
@@ -39,13 +40,16 @@ export default Vue.extend({
       searching: this.$api.createRequestState(),
     };
   },
+  mounted () {
+    this.search({});
+  },
   methods: {
     search (values: FormValues) {
       if (this.searching.running) return;
       this.$api.query(this.searching, async (api) => {
         const records = await api.users.search(this.searching, values);
         if (records !== null) {
-          this.tableRows = records.list.map(user => ({
+          this.tableRows = records.records.map(user => ({
             key: String(user.id),
             values: this.tableColumns.map(column => (user as any)[column.key]),
           }));

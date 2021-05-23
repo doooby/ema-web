@@ -1,16 +1,16 @@
-export type RecordErrors = Array<[ string, string ]>;
+export type RecordError = [ string, string ];
 
 export interface RecordChange {
   success: boolean;
-  errors?: RecordErrors;
+  errors?: RecordError[];
 }
 
 export interface PaginatedRecords<R> {
   records: R[];
   total: number;
   page: number;
-  pagesCount: number;
-  perPage: number;
+  pages_count: number;
+  per_page: number;
 }
 
 class MappingError extends Error {
@@ -74,9 +74,9 @@ export function maybeProp<V> (
   return prop(name, parent, map);
 }
 
-export function recordId (parent: any): string {
+export function recordId (parent: any): number {
   const value = parent.id;
-  if (typeof value !== 'string' || value.length === 0) throw new MappingError('invalid record id');
+  if (typeof value !== 'number') throw new MappingError('invalid record id');
   return value;
 }
 
@@ -118,7 +118,7 @@ export function paginatedRecords<R> (value: any, record: (value: any) => R): Pag
     records: prop('records', root, records => list(records, record)),
     total: prop('total', root, val.integer),
     page: prop('page', root, val.integer),
-    pagesCount: prop('pages_count', root, val.integer),
-    perPage: prop('per_page', root, val.integer),
+    pages_count: prop('pages_count', root, val.integer),
+    per_page: prop('per_page', root, val.integer),
   }));
 }

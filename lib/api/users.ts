@@ -1,19 +1,19 @@
 import * as mappers from './mappers';
 import { ApiRequest, Params, fetch, processResponse } from '.';
 
-const { object, recordId, prop, val } = mappers;
+const { object, recordId, prop, maybeProp, val } = mappers;
 
 interface User {
-  id: string;
+  id: number;
   login: string;
-  fullName: string;
+  full_name?: string;
 }
 
 function parseUser (value: any): User {
   return object(value, root => ({
     id: recordId(root),
     login: prop('login', root, val.string),
-    fullName: prop('full_name', root, val.string),
+    full_name: maybeProp('full_name', root, val.string),
   }));
 }
 
@@ -30,6 +30,16 @@ export async function search (request: ApiRequest, params: Params)
 export async function create (request: ApiRequest, user: Params)
   : Promise<null | mappers.RecordChange> {
   const response = await fetch('/users/create', {
+    data: { user },
+  });
+  return processResponse(request, response,
+    payload => mappers.changedRecord(payload),
+  );
+}
+
+export async function update (request: ApiRequest, userId: number, user: Params)
+  : Promise<null | mappers.RecordChange> {
+  const response = await fetch(`/users/${userId}/update`, {
     data: { user },
   });
   return processResponse(request, response,
