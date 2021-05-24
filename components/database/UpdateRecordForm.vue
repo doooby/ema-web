@@ -27,7 +27,7 @@
 import Vue, { PropType } from 'vue';
 import { createFormModel, FormField } from '@c/Form';
 import FormView from '@c/Form/View.vue';
-import RecordErrors from '@c/database/RecordErrors';
+import RecordErrors from '@c/database/RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
 import { ApiRequest, Params } from '~/lib/api';
 
@@ -44,7 +44,7 @@ export default Vue.extend({
   },
   props: {
     recordId: {
-      type: [ Number, String ] as number | string,
+      type: [ Number, String ],
       required: true,
     },
     title: {

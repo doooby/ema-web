@@ -22,13 +22,7 @@
           <template #button-content>
             <b-icon-three-dots-vertical />
           </template>
-          <b-dropdown-item
-            v-if="recordEditPath"
-            :to="recordEditPath(row.key)"
-          >
-            <b-icon-pencil class="rounded" variant="warning" />
-            editace
-          </b-dropdown-item>
+          <slot name="row-actions" :item="row.item" />
         </b-dropdown>
       </div>
       <div
@@ -43,13 +37,13 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { BIconThreeDotsVertical, BIconPencil } from 'bootstrap-vue';
+import { BIconThreeDotsVertical } from 'bootstrap-vue';
 import { TableColumn, TableRow } from '.';
+import { notify } from '~/lib/notifier';
 
 export default Vue.extend({
   components: {
     BIconThreeDotsVertical,
-    BIconPencil,
   },
   props: {
     columns: {
@@ -59,13 +53,24 @@ export default Vue.extend({
     headers: {
       type: Boolean,
     },
-    rows: {
-      type: Array as PropType<TableRow[]>,
+    dataset: {
+      type: Array as PropType<any[]>,
       required: true,
     },
-    recordEditPath: {
-      type: Function as PropType<null | ((id: any) => string)>,
-      default: null,
+  },
+  computed: {
+    rows (): TableRow[] {
+      const validItems = this.dataset.filter(item => item?.id);
+      if (validItems.length < this.dataset.length) {
+        notify('error', 'DataTable: some item of given dataset are missing an id.');
+      }
+
+      const columns = this.columns;
+      return validItems.map(item => ({
+        key: String(item.id),
+        item,
+        values: columns.map(column => this.sanitizeCellValue(column, item[column.key])),
+      }));
     },
   },
   methods: {

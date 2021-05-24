@@ -5,7 +5,7 @@
         <update-record-form
           :record-id="recordId"
           class="col-md-8 col-lg-4"
-          title="new user"
+          title="edit user"
           :fields="fields"
           :api-request="updateUser"
           on-success-route="/database"

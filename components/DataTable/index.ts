@@ -1,5 +1,6 @@
 export interface TableRow {
   key: string;
+  item: any;
   values: any[];
 }
 
