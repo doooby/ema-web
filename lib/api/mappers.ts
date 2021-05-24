@@ -1,5 +1,10 @@
 export type RecordError = [ string, string ];
 
+export interface RecordGet<R> {
+  success: boolean;
+  record: R;
+}
+
 export interface RecordChange {
   success: boolean;
   errors?: RecordError[];
@@ -101,6 +106,13 @@ export function safeMap<T> (value: any, map: (value: any) => T): Error | T {
     if (error instanceof MappingError) error.finalize();
     return error;
   }
+}
+
+export function record<R> (value: any, record: (value: any) => R): RecordGet<R> {
+  return object(value, root => ({
+    success: prop('success', root, val.boolean),
+    record: prop('record', root, record),
+  }));
 }
 
 export function changedRecord (value: any): RecordChange {

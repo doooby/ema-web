@@ -9,7 +9,7 @@ interface User {
   full_name?: string;
 }
 
-function parseUser (value: any): User {
+function mapUser (value: any): User {
   return object(value, root => ({
     id: recordId(root),
     login: prop('login', root, val.string),
@@ -23,7 +23,15 @@ export async function search (request: ApiRequest, params: Params)
     data: params,
   });
   return processResponse(request, response,
-    payload => mappers.paginatedRecords(payload, parseUser),
+    payload => mappers.paginatedRecords(payload, mapUser),
+  );
+}
+
+export async function get (request: ApiRequest, userId: number)
+  : Promise<null | mappers.RecordGet<User>> {
+  const response = await fetch(`/users/${userId}`);
+  return processResponse(request, response,
+    payload => mappers.record(payload, mapUser),
   );
 }
 
@@ -32,9 +40,7 @@ export async function create (request: ApiRequest, user: Params)
   const response = await fetch('/users/create', {
     data: { user },
   });
-  return processResponse(request, response,
-    payload => mappers.changedRecord(payload),
-  );
+  return processResponse(request, response, mappers.changedRecord);
 }
 
 export async function update (request: ApiRequest, userId: number, user: Params)
@@ -42,7 +48,5 @@ export async function update (request: ApiRequest, userId: number, user: Params)
   const response = await fetch(`/users/${userId}/update`, {
     data: { user },
   });
-  return processResponse(request, response,
-    payload => mappers.changedRecord(payload),
-  );
+  return processResponse(request, response, mappers.changedRecord);
 }

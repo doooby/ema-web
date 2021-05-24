@@ -3,12 +3,13 @@
     <div class="container">
       <div class="row justify-content-md-center">
         <update-record-form
-          :record-id="recordId"
           class="col-md-8 col-lg-4"
           title="edit user"
           :fields="fields"
-          :api-request="updateUser"
-          on-success-route="/database"
+          :record-id="recordId"
+          :api-get="getUser"
+          :api-update="updateUser"
+          on-success="/database"
         />
       </div>
     </div>
@@ -19,7 +20,7 @@
 import Vue from 'vue';
 import { defineFormFields } from '@c/Form';
 import UpdateRecordForm from '@c/database/UpdateRecordForm.vue';
-import { update as updateUser } from '~/lib/api/users';
+import { get as getUser, update as updateUser } from '~/lib/api/users';
 
 export default Vue.extend({
   components: {
@@ -32,6 +33,7 @@ export default Vue.extend({
         { name: 'login', controlType: 'text' },
         { name: 'full_name', controlType: 'text' },
       ),
+      getUser,
       updateUser,
     };
   },
