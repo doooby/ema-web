@@ -16,8 +16,15 @@ export function defineFormFields (...fields: FormField[]): Readonly<FormField[]>
   return Object.freeze(Object.values(index));
 }
 
-export function createFormModel (): FormValues {
-  return Object.freeze({});
+export function createFormModel (fields?: FormField[], record?: any): FormValues {
+  const model = {} as FormValues;
+  if (fields) {
+    if (!record) record = {};
+    for (const field of fields) {
+      model[field.name] = record[field.name];
+    }
+  }
+  return Object.freeze(model);
 }
 
 export const FIELD_PROPS = {

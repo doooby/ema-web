@@ -95,6 +95,7 @@ export default Vue.extend({
       const result = await this.apiGet(this.loading, this.recordId);
       if (result?.success) {
         this.record = result.record;
+        this.formValues = createFormModel(this.fields, this.record);
       } else {
         this.loadingFailed = true;
       }
