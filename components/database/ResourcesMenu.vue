@@ -43,6 +43,13 @@ export default Vue.extend({
 
 const resources: Resource[] = [
   {
+    name: 'countries',
+    pages: [
+      { name: 'browse' },
+      { name: 'new' },
+    ],
+  },
+  {
     name: 'users',
     pages: [
       { name: 'browse' },

@@ -1,7 +1,9 @@
-import 'vue';
 import { Context } from '@nuxt/types';
-import * as users from './users';
+import 'vue';
 import { safeMap } from '~/lib/api/mappers';
+
+import * as countries from './countries';
+import * as users from './users';
 
 export interface ApiRequest {
   running: boolean;
@@ -26,6 +28,7 @@ interface Response {
 }
 
 const API = {
+  countries,
   users,
 };
 

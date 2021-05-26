@@ -3,8 +3,16 @@
     <h1>DB index</h1>
 
     <ul>
-      <li><nuxt-link to="/database/users/browse">Users - browse</nuxt-link></li>
-      <li><nuxt-link to="/database/users/new">Users - new</nuxt-link></li>
+      <li>
+        <nuxt-link to="/database/countries/browse">
+          Countries
+        </nuxt-link>
+      </li>
+      <li>
+        <nuxt-link to="/database/users/browse">
+          Users
+        </nuxt-link>
+      </li>
     </ul>
   </div>
 </template>
