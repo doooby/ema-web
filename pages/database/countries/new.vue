@@ -6,7 +6,7 @@
           class="col-md-8 col-lg-4"
           title="new country"
           :fields="fields"
-          :api-request="createCountry"
+          :create-record="createCountry"
           on-success-route="/database"
         />
       </div>
@@ -18,7 +18,6 @@
 import Vue from 'vue';
 import { defineFormFields } from '@c/Form';
 import CreateRecordForm from '@c/database/CreateRecordForm.vue';
-import { create as createCountry } from '~/lib/api/countries';
 
 export default Vue.extend({
   components: {
@@ -30,7 +29,7 @@ export default Vue.extend({
       fields: defineFormFields(
         { name: 'designation', controlType: 'text' },
       ),
-      createCountry,
+      createCountry: this.$api.queries.countries.create,
     };
   },
 });

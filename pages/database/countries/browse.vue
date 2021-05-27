@@ -42,14 +42,12 @@ export default Vue.extend({
     this.search({});
   },
   methods: {
-    search (values: FormValues) {
+    async search (values: FormValues) {
       if (this.searching.running) return;
-      this.$api.query(this.searching, async (api) => {
-        const records = await api.countries.search(this.searching, values);
-        if (records !== null) {
-          this.tableData = records.records;
-        }
-      });
+      const result = await this.$api.query(this.searching, this.$api.queries.countries.search, values);
+      if (result !== null) {
+        this.tableData = result.records;
+      }
     },
   },
 });

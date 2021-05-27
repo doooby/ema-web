@@ -7,8 +7,8 @@
           title="edit user"
           :fields="fields"
           :record-id="recordId"
-          :api-get="getUser"
-          :api-update="updateUser"
+          :get-record="getUser"
+          :update-record="updateUser"
           on-success="/database"
         />
       </div>
@@ -20,7 +20,6 @@
 import Vue from 'vue';
 import { defineFormFields } from '@c/Form';
 import UpdateRecordForm from '@c/database/UpdateRecordForm.vue';
-import { get as getUser, update as updateUser } from '~/lib/api/users';
 
 export default Vue.extend({
   components: {
@@ -33,8 +32,8 @@ export default Vue.extend({
         { name: 'login', controlType: 'text' },
         { name: 'full_name', controlType: 'text' },
       ),
-      getUser,
-      updateUser,
+      getUser: this.$api.queries.users.get,
+      updateUser: this.$api.queries.users.update,
     };
   },
   computed: {

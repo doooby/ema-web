@@ -6,7 +6,7 @@
           class="col-md-8 col-lg-4"
           title="new user"
           :fields="fields"
-          :api-request="createUser"
+          :create-record="createUser"
           on-success-route="/database"
         />
       </div>
@@ -18,7 +18,6 @@
 import Vue from 'vue';
 import { defineFormFields } from '@c/Form';
 import CreateRecordForm from '@c/database/CreateRecordForm.vue';
-import { create as createUser } from '~/lib/api/users';
 
 export default Vue.extend({
   components: {
@@ -31,7 +30,7 @@ export default Vue.extend({
         { name: 'login', controlType: 'text' },
         { name: 'full_name', controlType: 'text' },
       ),
-      createUser,
+      createUser: this.$api.queries.users.create,
     };
   },
 });

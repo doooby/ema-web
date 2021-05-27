@@ -1,5 +1,5 @@
 import * as mappers from './mappers';
-import { ApiRequest, Params, fetch, processResponse } from '.';
+import { ApiRequest, Params, query } from '.';
 
 const { object, recordId, prop, maybeProp, val } = mappers;
 
@@ -17,36 +17,37 @@ function mapUser (value: any): User {
   }));
 }
 
-export async function search (request: ApiRequest, params: Params)
-  : Promise<null | mappers.PaginatedRecords<User>> {
-  const response = await fetch('/users/search', {
+export function search (request: ApiRequest, params: Params) {
+  return query({
+    path: '/users/search',
     data: params,
+    request,
+    mapper: payload => mappers.paginatedRecords(payload, mapUser),
   });
-  return processResponse(request, response,
-    payload => mappers.paginatedRecords(payload, mapUser),
-  );
 }
 
-export async function get (request: ApiRequest, userId: number)
-  : Promise<null | mappers.RecordGet<User>> {
-  const response = await fetch(`/users/${userId}`);
-  return processResponse(request, response,
-    payload => mappers.record(payload, mapUser),
-  );
+export function get (request: ApiRequest, userId: number) {
+  return query({
+    path: `/users/${userId}`,
+    request,
+    mapper: payload => mappers.record(payload, mapUser),
+  });
 }
 
-export async function create (request: ApiRequest, user: Params)
-  : Promise<null | mappers.RecordChange> {
-  const response = await fetch('/users/create', {
+export function create (request: ApiRequest, user: Params) {
+  return query({
+    path: '/users/create',
     data: { user },
+    request,
+    mapper: mappers.changedRecord,
   });
-  return processResponse(request, response, mappers.changedRecord);
 }
 
-export async function update (request: ApiRequest, userId: number, user: Params)
-  : Promise<null | mappers.RecordChange> {
-  const response = await fetch(`/users/${userId}/update`, {
+export function update (request: ApiRequest, userId: number, user: Params) {
+  return query({
+    path: `/users/${userId}/update`,
     data: { user },
+    request,
+    mapper: mappers.changedRecord,
   });
-  return processResponse(request, response, mappers.changedRecord);
 }

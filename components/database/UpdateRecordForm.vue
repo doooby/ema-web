@@ -67,11 +67,11 @@ export default Vue.extend({
       type: Array as PropType<FormField[]>,
       required: true,
     },
-    apiGet: {
+    getRecord: {
       type: Function as PropType<RecordGetRequest>,
       required: true,
     },
-    apiUpdate: {
+    updateRecord: {
       type: Function as PropType<RecordUpdateRequest>,
       required: true,
     },
@@ -90,33 +90,29 @@ export default Vue.extend({
       errors: null as null | RecordError[],
     };
   },
-  mounted () {
-    this.$api.query(this.loading, async () => {
-      const result = await this.apiGet(this.loading, this.recordId);
-      if (result?.success) {
-        this.record = result.record;
-        this.formValues = createFormModel(this.fields, this.record);
-      } else {
-        this.loadingFailed = true;
-      }
-    });
+  async mounted () {
+    const result = await this.$api.query(this.loading, this.getRecord, this.recordId);
+    if (result?.success) {
+      this.record = result.record;
+      this.formValues = createFormModel(this.fields, this.record);
+    } else {
+      this.loadingFailed = true;
+    }
   },
   methods: {
-    save () {
+    async save () {
       if (this.updating.running) return;
       this.errors = null;
-      this.$api.query(this.updating, async () => {
-        const result = await this.apiUpdate(this.updating, this.recordId, this.formValues);
-        if (result?.success) {
-          await this.$router.push({ path: this.onSuccess });
-        } else if (result?.errors) {
-          this.errors = result.errors;
-        } else {
-          this.errors = [
-            [ 'base', 'unknown fail' ],
-          ];
-        }
-      });
+      const result = await this.$api.query(this.updating, this.updateRecord, this.recordId, this.formValues);
+      if (result?.success) {
+        await this.$router.push({ path: this.onSuccess });
+      } else if (result?.errors) {
+        this.errors = result.errors;
+      } else {
+        this.errors = [
+          [ 'base', 'unknown fail' ],
+        ];
+      }
     },
   },
 });

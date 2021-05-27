@@ -47,7 +47,7 @@ export default Vue.extend({
       type: Array as PropType<FormField[]>,
       required: true,
     },
-    apiRequest: {
+    createRecord: {
       type: Function as PropType<RecordCreateRequest>,
       required: true,
     },
@@ -64,21 +64,19 @@ export default Vue.extend({
     };
   },
   methods: {
-    save () {
+    async save () {
       if (this.creating.running) return;
       this.errors = null;
-      this.$api.query(this.creating, async () => {
-        const result = await this.apiRequest(this.creating, this.formValues);
-        if (result?.success) {
-          await this.$router.push({ path: this.onSuccessRoute });
-        } else if (result?.errors) {
-          this.errors = result.errors;
-        } else {
-          this.errors = [
-            [ 'base', 'unknown fail' ],
-          ];
-        }
-      });
+      const result = await this.$api.query(this.creating, this.createRecord, this.formValues);
+      if (result?.success) {
+        await this.$router.push({ path: this.onSuccessRoute });
+      } else if (result?.errors) {
+        this.errors = result.errors;
+      } else {
+        this.errors = [
+          [ 'base', 'unknown fail' ],
+        ];
+      }
     },
   },
 });

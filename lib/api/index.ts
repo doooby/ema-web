@@ -9,7 +9,7 @@ export interface ApiRequest {
   running: boolean;
   canceled: boolean;
   lastFail?: string;
-  error?: Error;
+  lastError?: Error;
 }
 
 export interface Params {
@@ -35,6 +35,7 @@ const API = {
 export class ApiPlugin {
   context: Context;
   baseUrl: string;
+  queries = API;
 
   constructor (context: Context) {
     this.context = context;
@@ -55,11 +56,15 @@ export class ApiPlugin {
     };
   }
 
-  query (request: ApiRequest, query: (api: typeof API) => Promise<void>) {
+  async query <R, A extends Array<any> = any[]> (
+    request: ApiRequest,
+    query: (request: ApiRequest, ...args: A) => Promise<null | R>,
+    ...args: A
+  ): Promise<null | R> {
     this.context.app.store!.commit('api/addQuery', request);
-    query(API).finally(() => {
-      this.context.app.store!.commit('api/removeQuery', request);
-    });
+    const result = await query(request, ...args);
+    this.context.app.store!.commit('api/removeQuery', request);
+    return result;
   }
 }
 
@@ -102,7 +107,7 @@ export async function fetch (
   }
 }
 
-export function processResponse<V> (
+function processResponse <V> (
   request: ApiRequest,
   response: Response,
   processor: (payload: any) => V,
@@ -115,10 +120,21 @@ export function processResponse<V> (
 
   const mappingResult = safeMap(response.payload, processor);
   if (mappingResult instanceof Error) {
-    request.error = mappingResult;
+    request.lastError = mappingResult;
     request.lastFail = 'invalid_data';
     return null;
   }
 
   return mappingResult;
+}
+
+export async function query <V> (
+  options: FetchOptions & {
+    path: string,
+    request: ApiRequest,
+    mapper: (payload: any) => V,
+  },
+): Promise<null | V> {
+  const response = await fetch(options.path, options);
+  return processResponse(options.request, response, options.mapper);
 }

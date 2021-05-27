@@ -1,5 +1,5 @@
 import * as mappers from './mappers';
-import { ApiRequest, Params, fetch, processResponse } from '.';
+import { ApiRequest, Params, query } from '.';
 
 const { object, recordId, prop, val } = mappers;
 
@@ -15,36 +15,28 @@ function mapCountry (value: any): Country {
   }));
 }
 
-export async function search (request: ApiRequest, params: Params)
-  : Promise<null | mappers.PaginatedRecords<Country>> {
-  const response = await fetch('/countries/search', {
+export function search (request: ApiRequest, params: Params) {
+  return query({
+    path: '/countries/search',
     data: params,
+    request,
+    mapper: payload => mappers.paginatedRecords(payload, mapCountry),
   });
-  return processResponse(request, response,
-    payload => mappers.paginatedRecords(payload, mapCountry),
-  );
 }
 
-export async function get (request: ApiRequest, countryId: number)
-  : Promise<null | mappers.RecordGet<Country>> {
-  const response = await fetch(`/countries/${countryId}`);
-  return processResponse(request, response,
-    payload => mappers.record(payload, mapCountry),
-  );
+export function get (request: ApiRequest, countryId: number) {
+  return query({
+    path: `/countries/${countryId}`,
+    request,
+    mapper: payload => mappers.record(payload, mapCountry),
+  });
 }
 
-export async function create (request: ApiRequest, country: Params)
-  : Promise<null | mappers.RecordChange> {
-  const response = await fetch('/countries/create', {
+export function create (request: ApiRequest, country: Params) {
+  return query({
+    path: '/countries/create',
     data: { country },
+    request,
+    mapper: mappers.changedRecord,
   });
-  return processResponse(request, response, mappers.changedRecord);
-}
-
-export async function update (request: ApiRequest, countryId: number, country: Params)
-  : Promise<null | mappers.RecordChange> {
-  const response = await fetch(`/countries/${countryId}/update`, {
-    data: { country },
-  });
-  return processResponse(request, response, mappers.changedRecord);
 }
