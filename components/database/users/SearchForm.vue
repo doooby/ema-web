@@ -1,7 +1,7 @@
 <template>
   <div class="epx-3">
     <h5>
-      <span>database_page.users.browse.search.title</span>
+      {{ $t('db.search.header') }}
     </h5>
     <form-view
       v-model="searchValues"
@@ -26,8 +26,9 @@ import FormView from '@c/Form/View.vue';
 
 const searchFields = defineFormFields(
   {
-    name: 'search',
+    name: 'name',
     controlType: 'text',
+    t: 'db.users.record.name',
   },
 );
 

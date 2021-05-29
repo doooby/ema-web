@@ -1,6 +1,6 @@
 <template>
   <b-form-group
-    label="field.label"
+    :label="labelText()"
     :label-for="domId"
   >
     <input
@@ -26,6 +26,9 @@ export default Vue.extend({
     },
   },
   methods: {
+    labelText () {
+      return this.$t(this.field.t || 'form.field.unknown');
+    },
     onBlur (event: {target: HTMLInputElement}): void {
       this.$emit('change', event.target.value);
     },

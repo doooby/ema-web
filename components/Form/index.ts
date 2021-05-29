@@ -3,6 +3,7 @@ import { PropType } from 'vue';
 export interface FormField {
   name: string;
   controlType: 'text';
+  t?: string;
 }
 
 export interface FormValues {

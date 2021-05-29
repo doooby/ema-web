@@ -49,6 +49,14 @@ export default {
         bootstrapVueCSS: false,
       },
     } ],
+    [ 'nuxt-i18n', {
+      locales: [
+        { code: 'en', file: 'en.js' },
+      ],
+      defaultLocale: 'en',
+      lazy: true,
+      langDir: 'config/locales',
+    } ],
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
