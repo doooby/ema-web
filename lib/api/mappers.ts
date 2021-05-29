@@ -43,22 +43,36 @@ export function object<V> (value: any, map: (object: { [prop: string]: any }) =>
   if (typeof value !== 'object' || value === null) {
     throw new MappingError('invalid object');
   }
-  return map(value);
+  return Object.freeze(map(value));
 }
 
-export function list<V> (value: any, map: (list: any) => V): V[] {
+export function list<V> (value: any, map: (item: any) => V): V[] {
   if (typeof value !== 'object' || value === null || typeof value.map !== 'function') {
     throw new MappingError('invalid list');
   }
-  return value.map((item: any) => map(item));
+  return Object.freeze(value.map((item: any) => map(item)));
 }
 
 export function tuple<V> (value: any, map: (items: any[]) => V): V {
   if (typeof value !== 'object' || value === null) throw new MappingError('invalid tuple');
-  return map(value);
+  return Object.freeze(map(value));
 }
 
-export function prop<V> (name: string, parent: { [prop: string]: any }, map: (value: any) => V): V {
+export function index<V extends { id: any }> (value: any, map: (item: any) => V): { [id: string]: undefined | V } {
+  if (typeof value !== 'object' || value === null || typeof value.map !== 'function') {
+    throw new MappingError('invalid index-able list');
+  }
+  const items = list(value, map);
+  const index: { [id: string]: undefined | V } = {};
+  for (const item of items) index[item.id] = item;
+  return index;
+}
+
+export function prop<V> (
+  name: string,
+  parent: { [prop: string]: any },
+  map: (value: any) => V,
+): V {
   try {
     return map(parent[name]);
   } catch (error) {
@@ -79,9 +93,27 @@ export function maybeProp<V> (
   return prop(name, parent, map);
 }
 
+export function assoc<A> (
+  name: string,
+  parent: { [prop: string]: any },
+  index?: { [id: string]: undefined | A },
+): A {
+  const associateId = assocId(parent, name);
+  const associatedRecord = index && index[associateId];
+  if (!associatedRecord) throw new MappingError(`association ${name}[${associateId}] not found`);
+  return associatedRecord;
+}
+
 export function recordId (parent: any): number {
   const value = parent.id;
   if (typeof value !== 'number') throw new MappingError('invalid record id');
+  return value;
+}
+
+export function assocId (parent: any, associationName: string): number {
+  const propName = `${associationName}_id`;
+  const value = parent[propName];
+  if (typeof value !== 'number') throw new MappingError(`invalid association id ${propName}`);
   return value;
 }
 
@@ -125,12 +157,23 @@ export function changedRecord (value: any): RecordChange {
   }));
 }
 
-export function paginatedRecords<R> (value: any, record: (value: any) => R): PaginatedRecords<R> {
-  return object(value, root => ({
-    records: prop('records', root, records => list(records, record)),
-    total: prop('total', root, val.integer),
-    page: prop('page', root, val.integer),
-    pages_count: prop('pages_count', root, val.integer),
-    per_page: prop('per_page', root, val.integer),
-  }));
+export function paginatedRecords<R, A> (
+  value: any,
+  mapRecord: (value: any, associations?: A) => R,
+  mapAssociations?: (value: any) => A,
+): PaginatedRecords<R> {
+  return object(value, (root) => {
+    const associations = mapAssociations && prop('associations', root, mapAssociations);
+    const records = prop('records', root, records => list(
+      records,
+      item => mapRecord(item, associations),
+    ));
+    return {
+      records,
+      total: prop('total', root, val.integer),
+      page: prop('page', root, val.integer),
+      pages_count: prop('pages_count', root, val.integer),
+      per_page: prop('per_page', root, val.integer),
+    };
+  });
 }
