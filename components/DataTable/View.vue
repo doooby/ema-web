@@ -69,7 +69,7 @@ export default Vue.extend({
       return validItems.map(item => ({
         key: String(item.id),
         item,
-        values: columns.map(column => this.sanitizeCellValue(column, item[column.key])),
+        values: columns.map(column => cellValueGet(column, item)),
       }));
     },
   },
@@ -79,4 +79,12 @@ export default Vue.extend({
     },
   },
 });
+
+function cellValueGet (column: TableColumn, item: any) {
+  if (column.value) {
+    return column.value(item);
+  } else {
+    return item[column.key];
+  }
+}
 </script>

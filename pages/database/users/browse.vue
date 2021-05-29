@@ -44,6 +44,7 @@ export default Vue.extend({
       tableColumns: defineTableColumns(
         { key: 'id', caption: 'ID' },
         { key: 'login', caption: 'Login' },
+        { key: 'country', caption: 'Country', value: user => user.country.designation },
         { key: 'full_name', caption: 'Full Name' },
       ),
       tableData: [] as any[],

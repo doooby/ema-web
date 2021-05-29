@@ -140,11 +140,18 @@ export function safeMap<T> (value: any, map: (value: any) => T): Error | T {
   }
 }
 
-export function record<R> (value: any, record: (value: any) => R): RecordGet<R> {
-  return object(value, root => ({
-    success: prop('success', root, val.boolean),
-    record: prop('record', root, record),
-  }));
+export function record<R, A> (
+  value: any,
+  mapRecord: (value: any, associations?: A) => R,
+  mapAssociations?: (value: any) => A,
+): RecordGet<R> {
+  return object(value, (root) => {
+    const associations = mapAssociations && prop('associations', root, mapAssociations);
+    return {
+      success: prop('success', root, val.boolean),
+      record: prop('record', root, record => mapRecord(record, associations)),
+    };
+  });
 }
 
 export function changedRecord (value: any): RecordChange {

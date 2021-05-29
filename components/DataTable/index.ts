@@ -7,6 +7,7 @@ export interface TableRow {
 export interface TableColumn {
   key: string;
   caption: string;
+  value?: (item: any) => any;
 }
 
 export function defineTableColumns (...columns: TableColumn[]): Readonly<TableColumn[]> {

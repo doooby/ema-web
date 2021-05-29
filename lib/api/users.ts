@@ -63,7 +63,7 @@ export function get (request: ApiRequest, userId: number) {
   return query({
     path: `/users/${userId}`,
     request,
-    mapper: payload => record(payload, mapUser),
+    mapper: payload => record(payload, mapUser, mapAssociations),
   });
 }
 
