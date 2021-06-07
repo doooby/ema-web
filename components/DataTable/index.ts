@@ -1,3 +1,5 @@
+import View from './View.vue';
+
 export interface TableRow {
   key: string;
   item: any;
@@ -16,3 +18,7 @@ export function defineTableColumns (...columns: TableColumn[]): Readonly<TableCo
   for (const column of columns) index[column.key] = Object.freeze(column);
   return Object.freeze(Object.values(index));
 }
+
+export {
+  View,
+};

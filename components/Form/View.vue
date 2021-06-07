@@ -7,6 +7,7 @@
       :field="field"
       :form-values="value"
       @change="change"
+      @commit="commit"
     />
   </div>
 </template>
@@ -17,22 +18,11 @@ import FormFieldComponent from './Field';
 import { FormField, FormValues } from '.';
 
 export default Vue.extend({
-  components: {
-    FormField: FormFieldComponent,
-  },
+  components: { FormField: FormFieldComponent },
   props: {
-    domIdBase: {
-      type: String,
-      default: '',
-    },
-    fields: {
-      type: Array as PropType<FormField[]>,
-      required: true,
-    },
-    value: {
-      type: Object as PropType<FormValues>,
-      required: true,
-    },
+    domIdBase: { type: String, default: '' },
+    fields: { type: Array as PropType<Readonly<FormField[]>>, required: true },
+    value: { type: Object as PropType<FormValues>, required: true },
   },
   methods: {
     change ({ field, value }: { field: FormField, value: any }): void {
@@ -40,6 +30,9 @@ export default Vue.extend({
         ...this.value,
         [field.name]: value,
       }));
+    },
+    commit () {
+      this.$emit('commit');
     },
   },
 });

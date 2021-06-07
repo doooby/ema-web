@@ -22,9 +22,7 @@ import { defineFormFields } from '@c/Form';
 import UpdateRecordForm from '@c/database/UpdateRecordForm.vue';
 
 export default Vue.extend({
-  components: {
-    UpdateRecordForm,
-  },
+  components: { UpdateRecordForm },
   layout: 'database',
   data () {
     return {

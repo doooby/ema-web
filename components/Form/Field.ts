@@ -1,5 +1,6 @@
 import Vue, { VNode } from 'vue';
-import { FormField, FIELD_PROPS } from '@c/Form';
+import { FormField } from '.';
+import { FIELD_PROPS } from './constants';
 
 import VoidControl from './controls/Void.vue';
 import TextControl from './controls/Text.vue';
@@ -24,6 +25,9 @@ export default Vue.extend({
         on: {
           change (value: any) {
             (listeners.change as any)?.({ field: props.field, value });
+          },
+          commit () {
+            (listeners.commit as any)?.();
           },
         },
       },

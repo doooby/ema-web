@@ -11,10 +11,18 @@ export default {
         name: 'Name',
       },
     },
+
+    schools: {
+      meta: { s: 'school', p: 'schools' },
+      fields: {
+
+      },
+    },
   },
   form: {
     field: {
-      unknown: 'Unknown field',
+      name: 'Name',
+      unknown: 'Unknown Field',
     },
   },
 };

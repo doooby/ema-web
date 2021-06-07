@@ -19,10 +19,7 @@ import { RecordError } from '~/lib/api/mappers';
 
 export default Vue.extend({
   props: {
-    errors: {
-      type: Array as PropType<RecordError[]>,
-      default: null,
-    },
+    errors: { type: Array as PropType<RecordError[]>, default: null },
   },
 });
 </script>

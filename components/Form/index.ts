@@ -1,9 +1,10 @@
-import { PropType } from 'vue';
+import View from './View.vue';
+import VueI18n from 'vue-i18n';
 
 export interface FormField {
   name: string;
   controlType: 'text';
-  t?: string;
+  caption?: VueI18n.TranslateResult;
 }
 
 export interface FormValues {
@@ -28,17 +29,6 @@ export function createFormModel (fields?: FormField[], record?: any): FormValues
   return Object.freeze(model);
 }
 
-export const FIELD_PROPS = {
-  domId: {
-    type: String,
-    required: true,
-  },
-  field: {
-    type: Object as PropType<FormField>,
-    required: true,
-  },
-  formValues: {
-    type: Object as PropType<FormValues>,
-    required: true,
-  },
+export {
+  View,
 };

@@ -9,13 +9,14 @@
       class="form-control"
       :value="sanitizedValue"
       @blur="onBlur"
+      @keypress.enter="onCommit"
     >
   </b-form-group>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS } from '..';
+import { FIELD_PROPS } from '../constants';
 
 export default Vue.extend({
   props: FIELD_PROPS,
@@ -27,10 +28,14 @@ export default Vue.extend({
   },
   methods: {
     labelText () {
-      return this.$t(this.field.t || 'form.field.unknown');
+      return this.field.caption || this.$t('form.field.unknown');
     },
-    onBlur (event: {target: HTMLInputElement}): void {
+    onBlur (event: {target: HTMLInputElement}) {
       this.$emit('change', event.target.value);
+    },
+    onCommit (event: {target: HTMLInputElement}) {
+      this.$emit('change', event.target.value);
+      this.$emit('commit');
     },
   },
 });
