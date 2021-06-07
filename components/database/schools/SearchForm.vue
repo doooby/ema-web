@@ -4,7 +4,7 @@
       <b-icon-lightning font-scale="2" />
     </div>
     <h5>
-      <span>search countries</span>
+      <span>search Schools</span>
     </h5>
     <form-view
       v-model="searchValues"

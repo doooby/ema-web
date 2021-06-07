@@ -32,7 +32,7 @@ export default Vue.extend({
     return {
       tableColumns: defineTableColumns(
         { key: 'id', caption: 'ID' },
-        { key: 'designation', caption: 'Designation' },
+        { key: 'name', caption: 'Name' },
       ),
       tableData: [] as any[],
       searching: this.$api.createRequestState(),

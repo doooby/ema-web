@@ -5,13 +5,13 @@ const { object, recordId, prop, val } = mappers;
 
 interface Country {
   id: number;
-  designation: string;
+  name: string;
 }
 
 function mapCountry (value: any): Country {
   return object(value, root => ({
     id: recordId(root),
-    designation: prop('designation', root, val.string),
+    name: prop('name', root, val.string),
   }));
 }
 

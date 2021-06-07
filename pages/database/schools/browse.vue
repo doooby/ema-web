@@ -13,7 +13,7 @@
       >
         <template #row-actions="rowActionProps">
           <b-dropdown-item
-            :to="`/database/users/${rowActionProps.item.id}/edit`"
+            :to="`/database/schools/${rowActionProps.item.id}/edit`"
           >
             <b-icon-pencil class="rounded" variant="warning" />
             editace
@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import SearchForm from '@c/database/users/SearchForm.vue';
+import SearchForm from '@c/database/schools/SearchForm.vue';
 import { defineTableColumns } from '@c/DataTable';
 import DataTable from '@c/DataTable/View.vue';
 import { FormValues } from '@c/Form';
@@ -43,9 +43,9 @@ export default Vue.extend({
     return {
       tableColumns: defineTableColumns(
         { key: 'id', caption: 'ID' },
-        { key: 'login', caption: 'Login' },
+        { key: 'name', caption: 'Name' },
         { key: 'country', caption: 'Country', value: user => user.country.name },
-        { key: 'full_name', caption: 'Full Name' },
+        { key: 'address', caption: 'Address' },
       ),
       tableData: [] as any[],
       searching: this.$api.createRequestState(),
@@ -57,7 +57,7 @@ export default Vue.extend({
   methods: {
     async search (values: FormValues) {
       if (this.searching.running) return;
-      const result = await this.$api.query(this.searching, this.$api.queries.users.search, values);
+      const result = await this.$api.query(this.searching, this.$api.queries.schools.search, values);
       if (result !== null) {
         this.tableData = result.records;
       }

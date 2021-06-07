@@ -56,5 +56,11 @@ const resources: Resource[] = [
       { name: 'new' },
     ],
   },
+  {
+    name: 'schools',
+    pages: [
+      { name: 'browse' },
+    ],
+  },
 ];
 </script>

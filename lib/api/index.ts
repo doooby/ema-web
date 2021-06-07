@@ -4,6 +4,7 @@ import { safeMap } from '~/lib/api/mappers';
 
 import * as countries from './countries';
 import * as users from './users';
+import * as schools from './schools';
 
 export interface ApiRequest {
   running: boolean;
@@ -30,6 +31,7 @@ interface Response {
 const API = {
   countries,
   users,
+  schools,
 };
 
 export class ApiPlugin {

@@ -27,7 +27,7 @@ export default Vue.extend({
   data () {
     return {
       fields: defineFormFields(
-        { name: 'designation', controlType: 'text' },
+        { name: 'name', controlType: 'text' },
       ),
       createCountry: this.$api.queries.countries.create,
     };

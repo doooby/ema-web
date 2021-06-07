@@ -13,6 +13,11 @@
           Users
         </nuxt-link>
       </li>
+      <li>
+        <nuxt-link to="/database/schools/browse">
+          Schools
+        </nuxt-link>
+      </li>
     </ul>
   </div>
 </template>
