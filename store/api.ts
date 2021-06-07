@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
-import { ApiRequest } from '@/lib/api';
+import { ApiRequest } from '~/lib/api';
 
 @Module({
   name: 'api',

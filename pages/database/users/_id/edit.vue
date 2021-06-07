@@ -18,8 +18,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { defineFormFields } from '@c/Form';
-import UpdateRecordForm from '@c/database/UpdateRecordForm.vue';
+import { defineFormFields } from '~/components/Form';
+import UpdateRecordForm from '~/components/database/UpdateRecordForm.vue';
 
 export default Vue.extend({
   components: { UpdateRecordForm },

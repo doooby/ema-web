@@ -25,9 +25,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { createFormModel, FormField } from '@c/Form';
-import { View as FormView } from '@/components/Form';
-import RecordErrors from '@c/database/RecordErrors.vue';
+import { createFormModel, FormField, View as FormView } from '~/components/Form';
+import RecordErrors from './RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
 import { ApiRequest, Params } from '~/lib/api';
 

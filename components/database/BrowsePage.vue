@@ -28,8 +28,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { FormField, FormValues } from '@/components/Form';
-import { TableColumn, View as DataTableView } from '@/components/DataTable';
+import { FormField, FormValues } from '~/components/Form';
+import { TableColumn, View as DataTableView } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import { notify } from '~/lib/notifier';
 import { BIconPencil } from 'bootstrap-vue';

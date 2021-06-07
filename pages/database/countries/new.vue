@@ -16,8 +16,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { defineFormFields } from '@c/Form';
-import CreateRecordForm from '@c/database/CreateRecordForm.vue';
+import { defineFormFields } from '~/components/Form';
+import CreateRecordForm from '~/components/database/CreateRecordForm.vue';
 
 export default Vue.extend({
   components: {

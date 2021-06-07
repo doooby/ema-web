@@ -17,7 +17,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { BIconSearch } from 'bootstrap-vue';
-import { createFormModel, FormField, View as FormView } from '@/components/Form';
+import { createFormModel, FormField, View as FormView } from '~/components/Form';
 
 export default Vue.extend({
   components: { BIconSearch, FormView },

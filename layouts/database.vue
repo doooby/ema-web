@@ -10,8 +10,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import TopBar from '@c/database/TopBar.vue';
-import ResourcesMenu from '@c/database/ResourcesMenu.vue';
+import TopBar from '~/components/database/TopBar.vue';
+import ResourcesMenu from '~/components/database/ResourcesMenu.vue';
 
 export default Vue.extend({
   components: {
