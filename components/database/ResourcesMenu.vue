@@ -10,10 +10,10 @@
       <ul>
         <li
           v-for="page in resource.pages"
-          :key="page.name"
+          :key="page"
         >
-          <nuxt-link :to="`/database/${resource.name}/${page.name}`">
-            {{ page.name }}
+          <nuxt-link :to="`/database/${resource.name}/${page}`">
+            {{ page }}
           </nuxt-link>
         </li>
       </ul>
@@ -26,9 +26,7 @@ import Vue from 'vue';
 
 interface Resource {
   name: string;
-  pages: Array<{
-    name: string;
-  }>;
+  pages: string[];
 }
 
 export default Vue.extend({
@@ -42,25 +40,8 @@ export default Vue.extend({
 });
 
 const resources: Resource[] = [
-  {
-    name: 'countries',
-    pages: [
-      { name: 'browse' },
-      { name: 'new' },
-    ],
-  },
-  {
-    name: 'users',
-    pages: [
-      { name: 'browse' },
-      { name: 'new' },
-    ],
-  },
-  {
-    name: 'schools',
-    pages: [
-      { name: 'browse' },
-    ],
-  },
+  { name: 'countries', pages: [ 'browse', 'new' ] },
+  { name: 'users', pages: [ 'browse', 'new' ] },
+  { name: 'schools', pages: [ 'browse', 'new' ] },
 ];
 </script>

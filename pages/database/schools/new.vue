@@ -1,6 +1,6 @@
 <template>
   <new-page
-    entity="countries"
+    entity="schools"
     :fields="fields"
   />
 </template>
@@ -16,6 +16,7 @@ export default Vue.extend({
     return {
       fields: [
         { name: 'name', controlType: 'text' },
+        { name: 'address', controlType: 'text' },
       ],
     };
   },
