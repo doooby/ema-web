@@ -28,7 +28,7 @@ export default Vue.extend({
   },
   methods: {
     labelText () {
-      return this.field.caption || this.$t('form.field.unknown');
+      return this.$t(this.field.caption || `form.field.${this.field.name}`);
     },
     onBlur (event: {target: HTMLInputElement}) {
       this.$emit('change', event.target.value);

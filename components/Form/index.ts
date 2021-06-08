@@ -1,10 +1,9 @@
 import View from './View.vue';
-import VueI18n from 'vue-i18n';
 
 export interface FormField {
   name: string;
   controlType: 'text';
-  caption?: VueI18n.TranslateResult;
+  caption?: string;
 }
 
 export interface FormValues {

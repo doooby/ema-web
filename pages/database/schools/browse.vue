@@ -9,28 +9,22 @@
 <script lang="ts">
 import Vue from 'vue';
 import { BrowsePage } from '~/components/database';
-import { defineFormFields } from '~/components/Form';
-import { defineTableColumns } from '~/components/DataTable';
 
 export default Vue.extend({
   components: { BrowsePage },
   layout: 'database',
   data () {
     return {
-      tableColumns: defineTableColumns(
-        { key: 'id', caption: 'ID' },
-        { key: 'name', caption: 'Name' },
-        { key: 'country', caption: 'Country', value: user => user.country.name },
-        { key: 'address', caption: 'Address' },
-      ),
+      searchFields: [
+        { name: 'name', controlType: 'text' },
+      ],
+      tableColumns: [
+        { name: 'id' },
+        { name: 'name' },
+        { name: 'country', value: (school: any) => school.country.name },
+        { name: 'address' },
+      ],
     };
-  },
-  computed: {
-    searchFields () {
-      return defineFormFields(
-        { name: 'name', controlType: 'text', caption: this.$t('form.field.name') },
-      );
-    },
   },
 });
 </script>

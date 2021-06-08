@@ -2,15 +2,15 @@
   <div class="page-content -has-submenu">
     <div class="page-menu">
       <search-form
-        :fields="searchFields"
+        :fields="compiledSearchFields"
         @search="search"
       />
     </div>
     <div class="em-4">
       <data-table-view
-        :columns="tableColumns"
+        :columns="compiledTableColumns"
         :dataset="tableDataSet"
-        :headers="true"
+        :header-translation="column => `record.${entity}.${column.name}`"
       >
         <template #row-actions="rowActionProps">
           <b-dropdown-item
@@ -28,8 +28,8 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { FormField, FormValues } from '~/components/Form';
-import { TableColumn, View as DataTableView } from '~/components/DataTable';
+import { FormField, FormValues, defineFormFields } from '~/components/Form';
+import { TableColumn, defineTableColumns, View as DataTableView } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import { notify } from '~/lib/notifier';
 import { BIconPencil } from 'bootstrap-vue';
@@ -38,8 +38,8 @@ export default Vue.extend({
   components: { SearchForm, DataTableView, BIconPencil },
   props: {
     entity: { type: String, required: true },
-    searchFields: { type: Array as PropType<Readonly<FormField[]>>, required: true },
-    tableColumns: { type: Array as PropType<Readonly<TableColumn[]>>, required: true },
+    searchFields: { type: Array as PropType<FormField[]>, required: true },
+    tableColumns: { type: Array as PropType<TableColumn[]>, required: true },
     enableEdit: { type: Boolean, default: true },
   },
   data () {
@@ -47,6 +47,14 @@ export default Vue.extend({
       tableDataSet: [] as any[],
       searching: this.$api.createRequestState(),
     };
+  },
+  computed: {
+    compiledSearchFields (): Readonly<FormField[]> {
+      return defineFormFields(...this.searchFields);
+    },
+    compiledTableColumns (): Readonly<TableColumn[]> {
+      return defineTableColumns(...this.tableColumns);
+    },
   },
   mounted () {
     this.search({});
