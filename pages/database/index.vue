@@ -1,24 +1,9 @@
 <template>
-  <div>
+  <div class="ep-5">
     <h1>DB index</h1>
-
-    <ul>
-      <li>
-        <nuxt-link to="/database/countries/browse">
-          Countries
-        </nuxt-link>
-      </li>
-      <li>
-        <nuxt-link to="/database/users/browse">
-          Users
-        </nuxt-link>
-      </li>
-      <li>
-        <nuxt-link to="/database/schools/browse">
-          Schools
-        </nuxt-link>
-      </li>
-    </ul>
+    <p>
+      Well, this page is just a placeholder.
+    </p>
   </div>
 </template>
 

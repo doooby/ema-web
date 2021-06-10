@@ -26,6 +26,14 @@ export default {
     },
   },
   db: {
+    menu: {
+      index_link: 'Index Page',
+      search_placeholder: 'search resource',
+    },
+    pages: {
+      browse: 'Browse',
+      new: 'Add New Record',
+    },
     browse: {
       search: 'search',
     },

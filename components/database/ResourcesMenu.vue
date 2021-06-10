@@ -1,47 +1,30 @@
 <template>
-  <div class="page-menu">
-    <nuxt-link class="my-3" to="/database">
-      Index
+  <div class="page-menu ep-3">
+    <nuxt-link to="/database">
+      {{ $t('db.menu.index_link') }}
     </nuxt-link>
-    <div v-if="resource">
-      <h2>
-        {{ resource.name }}
-      </h2>
-      <ul>
-        <li
-          v-for="page in resource.pages"
-          :key="page"
-        >
-          <nuxt-link :to="`/database/${resource.name}/${page}`">
-            {{ page }}
-          </nuxt-link>
-        </li>
-      </ul>
-    </div>
+    <current-resource-menu
+      v-if="currentResource"
+      :resource="currentResource"
+    />
+    <resources-listing />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-
-interface Resource {
-  name: string;
-  pages: string[];
-}
+import { dbPages, Resource } from '~/config/pages';
+import CurrentResourceMenu from './CurrentResourceMenu.vue';
+import ResourcesListing from './ResourcesListing.vue';
 
 export default Vue.extend({
+  components: { CurrentResourceMenu, ResourcesListing },
   computed: {
-    resource (): undefined | Resource {
+    currentResource (): undefined | Resource {
       const name = this.$route.path.match(/^\/database\/(\w+)\/?.*/)?.[1];
-      const resource = name && resources.find(item => item.name === name);
+      const resource = name && dbPages.find(item => item.name === name);
       return resource || undefined;
     },
   },
 });
-
-const resources: Resource[] = [
-  { name: 'countries', pages: [ 'browse', 'new' ] },
-  { name: 'users', pages: [ 'browse', 'new' ] },
-  { name: 'schools', pages: [ 'browse', 'new' ] },
-];
 </script>
