@@ -19,6 +19,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { Resource, resourcePath } from '~/config/pages';
+import VueI18n from 'vue-i18n';
 
 export default Vue.extend({
   props: {
@@ -28,7 +29,7 @@ export default Vue.extend({
     },
   },
   computed: {
-    pages (): { text: string, path: string }[] {
+    pages (): { text: VueI18n.TranslateResult, path: string }[] {
       const { name, pages } = this.resource;
       return pages.map(page => ({
         text: this.$t(`db.pages.${page}`),

@@ -56,6 +56,13 @@ export default Vue.extend({
       return defineTableColumns(...this.tableColumns);
     },
   },
+  watch: {
+    entity () {
+      this.tableDataSet = [];
+      this.searching = this.$api.createRequestState();
+      Vue.nextTick(() => this.search({}));
+    },
+  },
   mounted () {
     this.search({});
   },

@@ -62,6 +62,15 @@ export default Vue.extend({
       errors: null as null | RecordError[],
     };
   },
+  watch: {
+    fields () {
+      this.formValues = createFormModel();
+    },
+    createRecord () {
+      this.creating = this.$api.createRequestState();
+      this.errors = null;
+    },
+  },
   methods: {
     async save () {
       if (this.creating.running) return;
