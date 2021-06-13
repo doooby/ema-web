@@ -10,11 +10,11 @@ export interface FormValues {
   [field: string]: any;
 }
 
-export function defineFormFields (...fields: FormField[]): Readonly<FormField[]> {
+export function defineFormFields (...fields: FormField[]): FormField[] {
   // prevent name duplications
   const index: { [name: string]: FormField } = {};
   for (const field of fields) index[field.name] = Object.freeze(field);
-  return Object.freeze(Object.values(index));
+  return Object.freeze(Object.values(index)) as any;
 }
 
 export function createFormModel (fields?: FormField[], record?: any): FormValues {

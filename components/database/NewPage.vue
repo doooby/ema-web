@@ -5,9 +5,8 @@
         <create-record-form
           class="col-md-8 col-lg-4"
           :title="title"
-          :fields="compiledFields"
-          :create-record="query"
-          :on-success-route="`/database/${entity}`"
+          :form="formProps"
+          @created="onCreated"
         />
       </div>
     </div>
@@ -17,7 +16,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { defineFormFields, FormField } from '~/components/Form';
-import CreateRecordForm from '~/components/database/CreateRecordForm.vue';
+import CreateRecordForm, { FormProps } from '~/components/database/CreateRecordForm.vue';
 import { ApiRequest, Params } from '~/lib/api';
 import { notify } from '~/lib/notifier';
 import VueI18n from 'vue-i18n';
@@ -32,20 +31,31 @@ export default Vue.extend({
     title (): VueI18n.TranslateResult {
       return this.$t('db.new.title', { entity: this.$t(`record.${this.entity}.meta.s`) });
     },
-    compiledFields (): Readonly<FormField[]> {
+    compiledFields (): FormField[] {
       const fields = this.fields.map(field => ({
         ...field,
         caption: field.caption || `record.${this.entity}.${field.name}`,
       }));
       return defineFormFields(...fields);
     },
-    query (): (request: ApiRequest, record: Params) => Promise<null | any> {
+    queryCreate (): (request: ApiRequest, record: Params) => Promise<any> {
       const query = (this.$api.queries as any)[this.entity]?.create;
       if (!query) {
-        notify('error', `database.BrowsePage: search query is missing for entity ${this.entity}.`);
+        notify('error', `database.BrowsePage: create query is missing for entity ${this.entity}.`);
         return () => Promise.resolve(null);
       }
       return query;
+    },
+    formProps (): Readonly<FormProps> {
+      return Object.freeze({
+        fields: this.compiledFields,
+        requestCreate: this.queryCreate,
+      });
+    },
+  },
+  methods: {
+    onCreated () {
+      this.$router.push({ path: '/database' });
     },
   },
 });

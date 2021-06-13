@@ -3,6 +3,9 @@ export default {
     field: {
       name: 'name',
     },
+    actions: {
+
+    },
   },
   record: {
     countries: {
@@ -26,6 +29,12 @@ export default {
     },
   },
   db: {
+    meta: {
+      loading: '...loading the record',
+      record_not_found: 'Record not found.',
+      processing: '...processing',
+      save: 'Save',
+    },
     menu: {
       index_link: 'Index Page',
       search_placeholder: 'search resource',

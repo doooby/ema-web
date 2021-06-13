@@ -4,7 +4,7 @@ import { ApiRequest, Params, query } from '.';
 const { object, recordId, prop, val } = mappers;
 
 interface Country {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -24,7 +24,7 @@ export function search (request: ApiRequest, params: Params) {
   });
 }
 
-export function get (request: ApiRequest, countryId: number) {
+export function get (request: ApiRequest, countryId: string) {
   return query({
     path: `/countries/${countryId}`,
     request,

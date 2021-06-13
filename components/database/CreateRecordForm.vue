@@ -30,7 +30,15 @@ import RecordErrors from './RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
 import { ApiRequest, Params } from '~/lib/api';
 
-type RecordCreateRequest = (request: ApiRequest, params: Params) => Promise<null | RecordChange>;
+type RecordCreateRequest = (
+  request: ApiRequest,
+  params: Params,
+) => Promise<null | RecordChange>;
+
+export interface FormProps {
+  fields: FormField[];
+  requestCreate: RecordCreateRequest;
+}
 
 export default Vue.extend({
   components: {
@@ -38,19 +46,11 @@ export default Vue.extend({
     RecordErrors,
   },
   props: {
+    form: {
+      type: Object as PropType<Readonly<FormProps>>,
+      required: true,
+    },
     title: {
-      type: String,
-      required: true,
-    },
-    fields: {
-      type: Array as PropType<FormField[]>,
-      required: true,
-    },
-    createRecord: {
-      type: Function as PropType<RecordCreateRequest>,
-      required: true,
-    },
-    onSuccessRoute: {
       type: String,
       required: true,
     },
@@ -63,21 +63,16 @@ export default Vue.extend({
     };
   },
   watch: {
-    fields () {
-      this.formValues = createFormModel();
-    },
-    createRecord () {
-      this.creating = this.$api.createRequestState();
-      this.errors = null;
-    },
+    form () { this.reset(); },
   },
   methods: {
     async save () {
       if (this.creating.running) return;
+      const { requestCreate } = this.form;
       this.errors = null;
-      const result = await this.$api.query(this.creating, this.createRecord, this.formValues);
+      const result = await this.$api.query(this.creating, requestCreate, this.formValues);
       if (result?.success) {
-        await this.$router.push({ path: this.onSuccessRoute });
+        this.$emit('created');
       } else if (result?.errors) {
         this.errors = result.errors;
       } else {
@@ -85,6 +80,11 @@ export default Vue.extend({
           [ 'base', 'unknown fail' ],
         ];
       }
+    },
+    reset () {
+      this.formValues = createFormModel();
+      this.creating = this.$api.createRequestState();
+      this.errors = null;
     },
   },
 });

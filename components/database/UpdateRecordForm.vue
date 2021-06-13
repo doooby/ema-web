@@ -4,10 +4,10 @@
       {{ title }}
     </h2>
     <b-alert :show="!record && !loadingFailed" variant="info">
-      ...loading the record
+      {{ $t('db.meta.loading') }}
     </b-alert>
     <b-alert :show="loadingFailed" variant="warning">
-      Record not found
+      {{ $t('db.meta.record_not_found') }}
     </b-alert>
     <form-view
       v-if="record"
@@ -16,14 +16,14 @@
     />
     <div v-if="record" class="text-right">
       <span v-if="updating.running">
-        processing...
+        {{ $t('db.meta.processing') }}
       </span>
       <b-button
         variant="success"
         :disabled="updating.running"
         @click="save"
       >
-        Save
+        {{ $t('db.meta.save') }}
       </b-button>
     </div>
     <record-errors :errors="errors" />
@@ -39,39 +39,30 @@ import { ApiRequest, Params } from '~/lib/api';
 
 type RecordGetRequest = (
   request: ApiRequest,
-  id: number | string,
+  id: string,
 ) => Promise<null | RecordGet<any>>;
 
 type RecordUpdateRequest = (
   request: ApiRequest,
-  id: number | string,
+  id: string,
   params: Params,
 ) => Promise<null | RecordChange>;
+
+export interface FormProps {
+  id: string;
+  fields: FormField[];
+  requestGet: RecordGetRequest;
+  requestUpdate: RecordUpdateRequest;
+}
 
 export default Vue.extend({
   components: { FormView, RecordErrors },
   props: {
-    recordId: {
-      type: [ Number, String ],
+    form: {
+      type: Object as PropType<Readonly<FormProps>>,
       required: true,
     },
     title: {
-      type: String,
-      required: true,
-    },
-    fields: {
-      type: Array as PropType<FormField[]>,
-      required: true,
-    },
-    getRecord: {
-      type: Function as PropType<RecordGetRequest>,
-      required: true,
-    },
-    updateRecord: {
-      type: Function as PropType<RecordUpdateRequest>,
-      required: true,
-    },
-    onSuccess: {
       type: String,
       required: true,
     },
@@ -86,11 +77,15 @@ export default Vue.extend({
       errors: null as null | RecordError[],
     };
   },
+  watch: {
+    form () { this.reset(); },
+  },
   async mounted () {
-    const result = await this.$api.query(this.loading, this.getRecord, this.recordId);
+    const { id, requestGet, fields } = this.form;
+    const result = await this.$api.query(this.loading, requestGet, id);
     if (result?.success) {
       this.record = result.record;
-      this.formValues = createFormModel(this.fields, this.record);
+      this.formValues = createFormModel(fields, this.record);
     } else {
       this.loadingFailed = true;
     }
@@ -98,10 +93,11 @@ export default Vue.extend({
   methods: {
     async save () {
       if (this.updating.running) return;
+      const { id, requestUpdate } = this.form;
       this.errors = null;
-      const result = await this.$api.query(this.updating, this.updateRecord, this.recordId, this.formValues);
+      const result = await this.$api.query(this.updating, requestUpdate, id, this.formValues);
       if (result?.success) {
-        await this.$router.push({ path: this.onSuccess });
+        this.$emit('updated');
       } else if (result?.errors) {
         this.errors = result.errors;
       } else {
@@ -109,6 +105,14 @@ export default Vue.extend({
           [ 'base', 'unknown fail' ],
         ];
       }
+    },
+    reset () {
+      this.record = null;
+      this.formValues = createFormModel();
+      this.loading = this.$api.createRequestState();
+      this.loadingFailed = false;
+      this.updating = this.$api.createRequestState();
+      this.errors = null;
     },
   },
 });

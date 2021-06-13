@@ -5,7 +5,7 @@ import { AssociatedCountry, mapAssociatedCountry } from './shared/associatedCoun
 const { object, record, recordId, prop, maybeProp, index, assoc, val } = mappers;
 
 interface User {
-  id: number;
+  id: string;
   login: string;
   full_name?: string;
   country: AssociatedCountry;
@@ -39,7 +39,7 @@ export function search (request: ApiRequest, params: Params) {
   });
 }
 
-export function get (request: ApiRequest, userId: number) {
+export function get (request: ApiRequest, userId: string) {
   return query({
     path: `/users/${userId}`,
     request,
@@ -56,7 +56,7 @@ export function create (request: ApiRequest, user: Params) {
   });
 }
 
-export function update (request: ApiRequest, userId: number, user: Params) {
+export function update (request: ApiRequest, userId: string, user: Params) {
   return query({
     path: `/users/${userId}/update`,
     data: { user },
