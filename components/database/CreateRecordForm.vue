@@ -5,7 +5,7 @@
     </h2>
     <form-view
       v-model="formValues"
-      :fields="fields"
+      :fields="form.fields"
     />
     <div class="text-right">
       <span v-if="creating.running">

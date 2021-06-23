@@ -4,14 +4,14 @@ import BrowsePage from '~/components/database/BrowsePage.vue';
 export default buildDatabasePage(
   BrowsePage,
   {
-    entity: 'countries',
+    entity: 'students',
     searchFields: [
       { name: 'name', controlType: 'text' },
     ],
     tableColumns: [
       { name: 'id' },
-      { name: 'name' },
+      { name: 'full_name' },
+      { name: 'country', value: (school: any) => school.country.name },
     ],
-    enableEdit: false,
   },
 );

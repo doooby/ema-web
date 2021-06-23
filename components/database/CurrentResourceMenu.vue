@@ -6,7 +6,7 @@
     <ul>
       <li
         v-for="page in pages"
-        :key="page"
+        :key="page.name"
       >
         <nuxt-link :to="page.path">
           {{ page.text }}
@@ -29,9 +29,10 @@ export default Vue.extend({
     },
   },
   computed: {
-    pages (): { text: VueI18n.TranslateResult, path: string }[] {
+    pages (): { name: string, text: VueI18n.TranslateResult, path: string }[] {
       const { name, pages } = this.resource;
       return pages.map(page => ({
+        name: page,
         text: this.$t(`db.pages.${page}`),
         path: resourcePath(name, page),
       }));

@@ -4,7 +4,7 @@ import { ApiRequest, Params, query } from '.';
 const { object, recordId, prop, val } = mappers;
 
 interface Country {
-  id: string;
+  id: number;
   name: string;
 }
 

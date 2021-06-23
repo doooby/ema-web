@@ -2,12 +2,11 @@ import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
 import { AssociatedCountry, mapAssociatedCountry } from './associations/country';
 
-const { object, record, recordId, prop, maybeProp, index, assoc, val } = mappers;
+const { object, record, recordId, prop, index, assoc, val } = mappers;
 
-interface User {
+interface Student {
   id: number;
-  login: string;
-  full_name?: string;
+  full_name: string;
   country: AssociatedCountry;
 }
 
@@ -15,11 +14,10 @@ interface Associations {
   country: { [id: string]: undefined | AssociatedCountry },
 }
 
-function mapUser (value: any, associations?: Associations): User {
+function mapStudent (value: any, associations?: Associations): Student {
   return object(value, root => ({
     id: recordId(root),
-    login: prop('login', root, val.string),
-    full_name: maybeProp('full_name', root, val.string),
+    full_name: prop('full_name', root, val.string),
     country: assoc('country', root, associations?.country),
   }));
 }
@@ -32,34 +30,34 @@ function mapAssociations (value: any): Associations {
 
 export function search (request: ApiRequest, params: Params) {
   return query({
-    path: '/users/search',
+    path: '/students/search',
     data: params,
     request,
-    mapper: payload => mappers.paginatedRecords(payload, mapUser, mapAssociations),
+    mapper: payload => mappers.paginatedRecords(payload, mapStudent, mapAssociations),
   });
 }
 
-export function get (request: ApiRequest, userId: string) {
+export function get (request: ApiRequest, studentId: number) {
   return query({
-    path: `/users/${userId}`,
+    path: `/students/${studentId}`,
     request,
-    mapper: payload => record(payload, mapUser, mapAssociations),
+    mapper: payload => record(payload, mapStudent, mapAssociations),
   });
 }
 
-export function create (request: ApiRequest, user: Params) {
+export function create (request: ApiRequest, student: Params) {
   return query({
-    path: '/users/create',
-    data: { user },
+    path: '/students/create',
+    data: { student },
     request,
     mapper: mappers.changedRecord,
   });
 }
 
-export function update (request: ApiRequest, userId: string, user: Params) {
+export function update (request: ApiRequest, studentId: number, student: Params) {
   return query({
-    path: `/users/${userId}/update`,
-    data: { user },
+    path: `/students/${studentId}/update`,
+    data: { student },
     request,
     mapper: mappers.changedRecord,
   });

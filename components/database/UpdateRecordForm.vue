@@ -12,7 +12,7 @@
     <form-view
       v-if="record"
       v-model="formValues"
-      :fields="fields"
+      :fields="form.fields"
     />
     <div v-if="record" class="text-right">
       <span v-if="updating.running">

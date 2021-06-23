@@ -1,3 +1,11 @@
+const shared = {
+  record: {
+    id: 'id',
+    name: 'name',
+    country: 'country',
+  },
+};
+
 export default {
   form: {
     field: {
@@ -10,22 +18,34 @@ export default {
   record: {
     countries: {
       meta: { s: 'country', p: 'countries' },
-      id: 'id',
-      name: 'name',
+      id: shared.record.id,
+      name: shared.record.name,
     },
     users: {
       meta: { s: 'user', p: 'users' },
-      id: 'id',
+      id: shared.record.id,
       login: 'login',
-      full_name: 'full name',
-      country: 'country',
+      full_name: shared.record.name,
+      country: shared.record.country,
     },
     schools: {
       meta: { s: 'school', p: 'schools' },
-      id: 'id',
-      name: 'name',
-      country: 'country',
+      id: shared.record.id,
+      name: shared.record.name,
+      country: shared.record.country,
       address: 'address',
+    },
+    courses: {
+      meta: { s: 'course', p: 'courses' },
+      id: shared.record.id,
+      name: shared.record.name,
+      country: shared.record.country,
+    },
+    students: {
+      meta: { s: 'student', p: 'students' },
+      id: shared.record.id,
+      full_name: shared.record.name,
+      country: shared.record.country,
     },
   },
   db: {

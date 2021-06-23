@@ -104,9 +104,9 @@ export function assoc<A> (
   return associatedRecord;
 }
 
-export function recordId (parent: any): string {
+export function recordId (parent: any): number {
   const value = parent.id;
-  if (typeof value !== 'string') throw new MappingError('invalid record id');
+  if (typeof value !== 'number') throw new MappingError('invalid record id');
   return value;
 }
 

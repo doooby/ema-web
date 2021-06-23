@@ -1,6 +1,6 @@
 import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
-import { AssociatedCountry, mapAssociatedCountry } from './shared/associatedCountry';
+import { AssociatedCountry, mapAssociatedCountry } from './associations/country';
 
 const { object, record, recordId, prop, maybeProp, index, assoc, val } = mappers;
 

@@ -40,7 +40,8 @@ export default Vue.extend({
     },
     shownResources (): { name: VueI18n.TranslateResult, path: string }[] {
       const term = this.searchValue.trim().toLowerCase();
-      const hits = dbPages.filter(resource => resource.name.includes(term));
+      let hits = dbPages.filter(resource => resource.name.includes(term));
+      hits = hits.sort((a, b) => a.name.localeCompare(b.name));
       return hits.map(resource => ({
         name: this.$t(`record.${resource.name}.meta.p`),
         path: resourcePath(resource.name, resource.pages[0]),
