@@ -2,12 +2,16 @@
   <div class="page-content">
     <div class="container">
       <div class="row justify-content-md-center">
-        <update-record-form
-          class="col-md-8 col-lg-4"
-          :form="formProps"
-          :title="title"
-          @updated="onUpdated"
-        />
+        <div class="col-md-8 col-lg-4">
+          <h2 class="text-center">
+            {{ title }}
+          </h2>
+          <update-record-form
+            :form="formProps"
+            :title="title"
+            @updated="onUpdated"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -38,7 +42,7 @@ export default Vue.extend({
       }));
       return defineFormFields(...fields);
     },
-    queryGet (): (request: ApiRequest, recordId: string) => Promise<any> {
+    queryGet (): (request: ApiRequest, recordId: number) => Promise<any> {
       const query = (this.$api.queries as any)[this.entity]?.get;
       if (!query) {
         notify('error', `database.EditPage: get query is missing for entity ${this.entity}.`);
@@ -46,7 +50,7 @@ export default Vue.extend({
       }
       return query;
     },
-    queryUpdate (): (request: ApiRequest, recordId: string) => Promise<any> {
+    queryUpdate (): (request: ApiRequest, recordId: number) => Promise<any> {
       const query = (this.$api.queries as any)[this.entity]?.update;
       if (!query) {
         notify('error', `database.EditPage: update query is missing for entity ${this.entity}.`);
@@ -56,7 +60,7 @@ export default Vue.extend({
     },
     formProps (): Readonly<FormProps> {
       return Object.freeze({
-        id: this.$route.params.id,
+        id: Number(this.$route.params.id),
         fields: this.compiledFields,
         requestGet: this.queryGet,
         requestUpdate: this.queryUpdate,

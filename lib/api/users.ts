@@ -39,7 +39,7 @@ export function search (request: ApiRequest, params: Params) {
   });
 }
 
-export function get (request: ApiRequest, userId: string) {
+export function get (request: ApiRequest, userId: number) {
   return query({
     path: `/users/${userId}`,
     request,
@@ -56,7 +56,7 @@ export function create (request: ApiRequest, user: Params) {
   });
 }
 
-export function update (request: ApiRequest, userId: string, user: Params) {
+export function update (request: ApiRequest, userId: number, user: Params) {
   return query({
     path: `/users/${userId}/update`,
     data: { user },

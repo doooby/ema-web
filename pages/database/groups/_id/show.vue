@@ -1,8 +1,14 @@
 <template>
   <show-page
-    entity="schools"
+    entity="groups"
     :record-id="recordId"
-  />
+  >
+    <template #detail="{ record }">
+      <div v-if="record">
+        year: {{ record.year }}
+      </div>
+    </template>
+  </show-page>
 </template>
 
 <script lang="ts">

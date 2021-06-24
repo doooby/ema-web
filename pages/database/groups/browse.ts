@@ -15,5 +15,8 @@ export default buildDatabasePage(
       { name: 'course', value: (group: any) => group.course.name },
       { name: 'school', value: (group: any) => group.school.name },
     ],
+    recordActions: {
+      show: true,
+    },
   },
 );

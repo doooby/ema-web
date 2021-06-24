@@ -1,6 +1,6 @@
 <template>
   <show-page
-    entity="schools"
+    entity="courses"
     :record-id="recordId"
   />
 </template>

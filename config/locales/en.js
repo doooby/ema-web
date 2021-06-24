@@ -64,7 +64,7 @@ export default {
     },
   },
   db: {
-    meta: {
+    shared: {
       edit: 'Edit',
       loading: '...loading the record',
       processing: '...processing',
@@ -85,6 +85,9 @@ export default {
     },
     new: {
       title: 'new {entity}',
+    },
+    edit: {
+      title: 'edit {entity}',
     },
   },
 };

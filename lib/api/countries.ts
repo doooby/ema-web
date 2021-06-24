@@ -24,7 +24,7 @@ export function search (request: ApiRequest, params: Params) {
   });
 }
 
-export function get (request: ApiRequest, countryId: string) {
+export function get (request: ApiRequest, countryId: number) {
   return query({
     path: `/countries/${countryId}`,
     request,

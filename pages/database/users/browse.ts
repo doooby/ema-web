@@ -14,5 +14,8 @@ export default buildDatabasePage(
       { name: 'country', value: (user: any) => user.country.name },
       { name: 'full_name' },
     ],
+    recordActions: {
+      edit: true,
+    },
   },
 );

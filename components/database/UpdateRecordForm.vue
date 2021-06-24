@@ -1,13 +1,10 @@
 <template>
   <div :class="$attrs.class">
-    <h2>
-      {{ title }}
-    </h2>
     <b-alert :show="!record && !loadingFailed" variant="info">
-      {{ $t('db.meta.loading') }}
+      {{ $t('db.shared.loading') }}
     </b-alert>
     <b-alert :show="loadingFailed" variant="warning">
-      {{ $t('db.meta.record_not_found') }}
+      {{ $t('db.shared.record_not_found') }}
     </b-alert>
     <form-view
       v-if="record"
@@ -16,14 +13,14 @@
     />
     <div v-if="record" class="text-right">
       <span v-if="updating.running">
-        {{ $t('db.meta.processing') }}
+        {{ $t('db.shared.processing') }}
       </span>
       <b-button
         variant="success"
         :disabled="updating.running"
         @click="save"
       >
-        {{ $t('db.meta.save') }}
+        {{ $t('db.shared.save') }}
       </b-button>
     </div>
     <record-errors :errors="errors" />
@@ -39,17 +36,17 @@ import { ApiRequest, Params } from '~/lib/api';
 
 type RecordGetRequest = (
   request: ApiRequest,
-  id: string,
+  id: number,
 ) => Promise<null | RecordGet<any>>;
 
 type RecordUpdateRequest = (
   request: ApiRequest,
-  id: string,
+  id: number,
   params: Params,
 ) => Promise<null | RecordChange>;
 
 export interface FormProps {
-  id: string;
+  id: number;
   fields: FormField[];
   requestGet: RecordGetRequest;
   requestUpdate: RecordUpdateRequest;
@@ -60,10 +57,6 @@ export default Vue.extend({
   props: {
     form: {
       type: Object as PropType<Readonly<FormProps>>,
-      required: true,
-    },
-    title: {
-      type: String,
       required: true,
     },
   },

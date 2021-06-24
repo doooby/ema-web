@@ -12,20 +12,20 @@
         :dataset="records"
         :header-translation="column => `record.${entity}.${column.name}`"
       >
-        <template #row-actions="rowActionProps">
+        <template #row-actions="{ item }">
           <b-dropdown-item
             v-if="recordActions && recordActions.show"
-            :to="`/database/${entity}/${rowActionProps.item.id}/show`"
+            :to="`/database/${entity}/${item.id}/show`"
           >
-            <b-icon-card-heading class="rounded" variant="primary" />
-            {{ $t('db.meta.show') }}
+            <b-icon-card-heading variant="primary" />
+            {{ $t('db.shared.show') }}
           </b-dropdown-item>
           <b-dropdown-item
             v-if="recordActions && recordActions.edit"
-            :to="`/database/${entity}/${rowActionProps.item.id}/edit`"
+            :to="`/database/${entity}/${item.id}/edit`"
           >
-            <b-icon-pencil class="rounded" variant="warning" />
-            {{ $t('db.meta.edit') }}
+            <b-icon-pencil variant="secondary" />
+            {{ $t('db.shared.edit') }}
           </b-dropdown-item>
         </template>
       </data-table-view>
