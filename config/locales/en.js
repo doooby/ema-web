@@ -2,8 +2,16 @@ const shared = {
   record: {
     id: 'id',
     name: 'name',
-    country: 'country',
   },
+};
+
+const records = {
+  countries: { s: 'country', p: 'countries' },
+  users: { s: 'user', p: 'users' },
+  courses: { s: 'course', p: 'courses' },
+  groups: { s: 'group', p: 'groups' },
+  schools: { s: 'school', p: 'schools' },
+  students: { s: 'student', p: 'students' },
 };
 
 export default {
@@ -17,43 +25,52 @@ export default {
   },
   record: {
     countries: {
-      meta: { s: 'country', p: 'countries' },
+      meta: records.countries,
       id: shared.record.id,
       name: shared.record.name,
     },
     users: {
-      meta: { s: 'user', p: 'users' },
+      meta: records.users,
       id: shared.record.id,
       login: 'login',
       full_name: shared.record.name,
-      country: shared.record.country,
-    },
-    schools: {
-      meta: { s: 'school', p: 'schools' },
-      id: shared.record.id,
-      name: shared.record.name,
-      country: shared.record.country,
-      address: 'address',
+      country: records.countries.s,
     },
     courses: {
-      meta: { s: 'course', p: 'courses' },
+      meta: records.courses,
       id: shared.record.id,
       name: shared.record.name,
-      country: shared.record.country,
+      country: records.countries.s,
+    },
+    groups: {
+      meta: records.groups,
+      id: shared.record.id,
+      name: shared.record.name,
+      course: records.courses.s,
+      school: records.schools.s,
+    },
+    schools: {
+      meta: records.schools,
+      id: shared.record.id,
+      name: shared.record.name,
+      country: records.countries.s,
+      address: 'address',
     },
     students: {
-      meta: { s: 'student', p: 'students' },
+      meta: records.students,
       id: shared.record.id,
       full_name: shared.record.name,
-      country: shared.record.country,
+      country: records.countries.s,
     },
   },
   db: {
     meta: {
+      edit: 'Edit',
       loading: '...loading the record',
-      record_not_found: 'Record not found.',
       processing: '...processing',
+      record_not_found: 'Record not found.',
       save: 'Save',
+      show: 'Show',
     },
     menu: {
       index_link: 'Index Page',

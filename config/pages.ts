@@ -8,8 +8,9 @@ export const dbPages: Resource[] = [
   { name: 'users', pages: [ 'browse', 'new' ] },
 
   { name: 'courses', pages: [ 'browse', 'new' ] },
+  { name: 'groups', pages: [ 'browse', 'new' ] },
   { name: 'schools', pages: [ 'browse', 'new' ] },
-  { name: 'students', pages: [ 'browse', 'new' ] },
+  { name: 'students', pages: [ 'browse' ] },
 ];
 
 export function resourcePath (name: string, page: string): string {

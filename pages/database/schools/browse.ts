@@ -14,5 +14,9 @@ export default buildDatabasePage(
       { name: 'country', value: (school: any) => school.country.name },
       { name: 'address' },
     ],
+    recordActions: {
+      edit: true,
+      show: true,
+    },
   },
 );

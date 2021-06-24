@@ -6,6 +6,7 @@ import * as countries from './countries';
 import * as users from './users';
 
 import * as courses from './courses';
+import * as groups from './groups';
 import * as schools from './schools';
 import * as students from './students';
 
@@ -36,6 +37,7 @@ const API = {
   users,
 
   courses,
+  groups,
   schools,
   students,
 };
