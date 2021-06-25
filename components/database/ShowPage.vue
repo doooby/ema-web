@@ -13,10 +13,10 @@
             {{ $t('db.shared.record_not_found') }}
           </b-alert>
           <h3 v-if="record">
-            {{ title(record) }}
+            {{ title.text(record) }}
             <edit-record-link :entity="entity" :record-id="recordId" />
           </h3>
-          <slot name="detail" :record="record" />
+          <slot v-if="record" name="detail" :record="record" />
         </div>
       </div>
     </div>
@@ -28,14 +28,27 @@ import Vue, { PropType } from 'vue';
 import { notify } from '~/lib/notifier';
 import EditRecordLink from '~/components/database/EditRecordLink.vue';
 
+interface Title {
+  text(record: any): undefined | string;
+  showEditLink?: boolean;
+}
+
+const title_text_default = (record: any) => record.name as string;
+export function buildTitle (props: Partial<Title>): Title {
+  return Object.freeze({
+    text: title_text_default,
+    ...props,
+  });
+}
+
 export default Vue.extend({
   components: { EditRecordLink },
   props: {
     entity: { type: String, required: true },
     recordId: { type: Number, required: true },
     title: {
-      type: Function as PropType<(record: any) => undefined | string>,
-      default: record => record?.name,
+      type: Function as PropType<Title>,
+      default: () => buildTitle({ showEditLink: true }),
     },
   },
   data () {

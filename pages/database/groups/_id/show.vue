@@ -4,9 +4,7 @@
     :record-id="recordId"
   >
     <template #detail="{ record }">
-      <div v-if="record">
-        year: {{ record.year }}
-      </div>
+      year: {{ record.year }}
     </template>
   </show-page>
 </template>
