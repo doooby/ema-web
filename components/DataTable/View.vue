@@ -7,7 +7,7 @@
       @sizes-changed="onHeadersChanged"
     >
       <template #cell="{ column }">
-        {{ column.name }}
+        <slot name="headerCell" :column="column" />
       </template>
     </header-row>
     <div

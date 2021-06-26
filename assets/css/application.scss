@@ -1,4 +1,3 @@
-$LIGHT-bg: #F3ECE9;
 $LIGHT-controls: #C2C0BF;
 $LIGHT-font: #000000;
 
@@ -19,11 +18,12 @@ $gl-sizes: (
 );
 
 :root {
-  --EMA-bg: #{$LIGHT-bg};
+  --EMA-bg: white;
   --EMA-controls: #{$LIGHT-controls};
   --EMA-font: #{$LIGHT-font};
 }
 
+$body-bg: var(--EMA-bg);
 //$body-color: $LIGHT-font;
 
 //$enable-shadows: false;

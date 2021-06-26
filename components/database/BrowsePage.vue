@@ -11,8 +11,8 @@
         :columns="compiledTableColumns"
         :dataset="records"
       >
-        <template #column="{ column }">
-          {{ `record.${entity}.${column.name}` }}
+        <template #headerCell="{ column }">
+          {{ $t(`record.${entity}.${column.name}`) }}
         </template>
         <template #row-actions="{ item }">
           <b-dropdown-item

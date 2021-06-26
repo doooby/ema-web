@@ -1,8 +1,10 @@
 .data-table {
+  $header-bg-color: var(--EMA-controls);
+  background-color: $header-bg-color;
   .--row {
     $border-color: var(--EMA-controls);
-    $header-bg-color: var(--EMA-controls);
     border: 1px solid $border-color;
+    background-color: var(--EMA-bg);
     &:not(:first-child) {
       border-top-width: 0;
     }

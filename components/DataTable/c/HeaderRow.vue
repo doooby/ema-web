@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="d-flex --row --header"
-  >
+  <div :class="className">
     <div :style="actionsStyle" />
     <div
       v-for="(column, index) in columns"
@@ -15,6 +13,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
+import classNames from 'classnames';
 import { ACTIONS_COLUMN_WIDTH, TableColumn } from '..';
 
 export default Vue.extend({
@@ -23,7 +22,18 @@ export default Vue.extend({
     actionsWidth: { type: Number, default: undefined },
     columnCellStyles: { type: Array as PropType<Array<null | string>>, required: true },
   },
+  data () {
+    return {
+      columnWidthsComputed: false,
+    };
+  },
   computed: {
+    className (): string {
+      return classNames(
+        'd-flex --row --header',
+        !this.columnWidthsComputed && 'invisible',
+      );
+    },
     actionsStyle (): string {
       return `width: ${this.actionsWidth || ACTIONS_COLUMN_WIDTH}px;`;
     },
@@ -37,6 +47,7 @@ export default Vue.extend({
       sizes.push(getNormalizedColumnWidth(column));
     }
     this.$emit('sizes-changed', sizes);
+    this.columnWidthsComputed = true;
   },
 });
 

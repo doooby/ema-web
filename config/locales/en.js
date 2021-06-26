@@ -46,6 +46,7 @@ export default {
       meta: records.groups,
       id: shared.record.id,
       name: shared.record.name,
+      year: 'year',
       course: records.courses.s,
       school: records.schools.s,
     },
