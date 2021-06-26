@@ -21,7 +21,6 @@
 import Vue, { PropType } from 'vue';
 import UpdateRecordForm, { FormProps } from './UpdateRecordForm.vue';
 import { defineFormFields, FormField } from '../Form';
-import VueI18n from 'vue-i18n';
 import { ApiRequest } from '~/lib/api';
 import { notify } from '~/lib/notifier';
 
@@ -32,15 +31,17 @@ export default Vue.extend({
     fields: { type: Array as PropType<FormField[]>, required: true },
   },
   computed: {
-    title (): VueI18n.TranslateResult {
-      return this.$t('db.edit.title', { entity: this.$t(`record.${this.entity}.meta.s`) });
+    title (): string {
+      return this.$t('db.edit.title', {
+        entity: this.$t(`record.${this.entity}.meta.s`),
+      }) as string;
     },
     compiledFields (): FormField[] {
       const fields = this.fields.map(field => ({
         ...field,
         caption: field.caption || `record.${this.entity}.${field.name}`,
       }));
-      return defineFormFields(...fields);
+      return defineFormFields(fields);
     },
     queryGet (): (request: ApiRequest, recordId: number) => Promise<any> {
       const query = (this.$api.queries as any)[this.entity]?.get;

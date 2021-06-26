@@ -7,15 +7,21 @@
       border-top-width: 0;
     }
 
-    &.--header {
-      background-color: $header-bg-color;
-    }
-
     > div {
-      padding: px-size(1);
-      width: 120px;
-      white-space: nowrap;
       border-right: 1px solid $border-color;
     }
+
+    &.--header {
+      background-color: $header-bg-color;
+      > div {
+        text-align: center;
+      }
+    }
   }
+}
+
+.data-table__text-cell {
+  padding: px-size(1);
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

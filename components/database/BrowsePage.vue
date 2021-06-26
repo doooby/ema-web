@@ -10,8 +10,10 @@
       <data-table-view
         :columns="compiledTableColumns"
         :dataset="records"
-        :header-translation="column => `record.${entity}.${column.name}`"
       >
+        <template #column="{ column }">
+          {{ `record.${entity}.${column.name}` }}
+        </template>
         <template #row-actions="{ item }">
           <b-dropdown-item
             v-if="recordActions && recordActions.show"
@@ -62,10 +64,10 @@ export default Vue.extend({
   },
   computed: {
     compiledSearchFields (): Readonly<FormField[]> {
-      return defineFormFields(...this.searchFields);
+      return defineFormFields(this.searchFields);
     },
     compiledTableColumns (): Readonly<TableColumn[]> {
-      return defineTableColumns(...this.tableColumns);
+      return defineTableColumns(this.tableColumns);
     },
   },
   watch: {

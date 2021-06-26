@@ -26,7 +26,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { dbPages, resourcePath } from '~/config/pages';
-import VueI18n from 'vue-i18n';
 
 export default Vue.extend({
   data () {
@@ -35,15 +34,15 @@ export default Vue.extend({
     };
   },
   computed: {
-    placeholderText (): VueI18n.TranslateResult {
-      return this.$t('db.menu.search_placeholder');
+    placeholderText (): string {
+      return this.$t('db.menu.search_placeholder') as string;
     },
-    shownResources (): { name: VueI18n.TranslateResult, path: string }[] {
+    shownResources (): Array<{ name: string, path: string }> {
       const term = this.searchValue.trim().toLowerCase();
       let hits = dbPages.filter(resource => resource.name.includes(term));
       hits = hits.sort((a, b) => a.name.localeCompare(b.name));
       return hits.map(resource => ({
-        name: this.$t(`record.${resource.name}.meta.p`),
+        name: this.$t(`record.${resource.name}.meta.p`) as string,
         path: resourcePath(resource.name, resource.pages[0]),
       }));
     },

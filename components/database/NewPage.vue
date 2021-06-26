@@ -19,7 +19,6 @@ import { defineFormFields, FormField } from '~/components/Form';
 import CreateRecordForm, { FormProps } from '~/components/database/CreateRecordForm.vue';
 import { ApiRequest, Params } from '~/lib/api';
 import { notify } from '~/lib/notifier';
-import VueI18n from 'vue-i18n';
 
 export default Vue.extend({
   components: { CreateRecordForm },
@@ -28,15 +27,17 @@ export default Vue.extend({
     fields: { type: Array as PropType<FormField[]>, required: true },
   },
   computed: {
-    title (): VueI18n.TranslateResult {
-      return this.$t('db.new.title', { entity: this.$t(`record.${this.entity}.meta.s`) });
+    title (): string {
+      return this.$t('db.new.title', {
+        entity: this.$t(`record.${this.entity}.meta.s`),
+      }) as string;
     },
     compiledFields (): FormField[] {
       const fields = this.fields.map(field => ({
         ...field,
         caption: field.caption || `record.${this.entity}.${field.name}`,
       }));
-      return defineFormFields(...fields);
+      return defineFormFields(fields);
     },
     queryCreate (): (request: ApiRequest, record: Params) => Promise<any> {
       const query = (this.$api.queries as any)[this.entity]?.create;

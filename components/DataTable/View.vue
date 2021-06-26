@@ -1,23 +1,21 @@
 <template>
   <div class="d-flex flex-column data-table">
-    <div
-      v-if="headers"
-      class="d-flex --row --header"
+    <header-row
+      v-if="showHeaders"
+      :columns="columns"
+      :column-cell-styles="columnCellStyles"
+      @sizes-changed="onHeadersChanged"
     >
-      <div />
-      <div
-        v-for="column in columns"
-        :key="column.name"
-      >
-        {{ columnCaption(column) }}
-      </div>
-    </div>
+      <template #cell="{ column }">
+        {{ column.name }}
+      </template>
+    </header-row>
     <div
       v-for="row in rows"
       :key="row.name"
       class="d-flex --row"
     >
-      <div>
+      <div :style="actionsColumnCellStyles">
         <b-dropdown no-caret variant="link" dropright>
           <template #button-content>
             <b-icon-three-dots-vertical />
@@ -28,8 +26,12 @@
       <div
         v-for="(column, index) in columns"
         :key="column.name"
+        class="d-flex align-items-center justify-content-center"
+        :style="columnCellStyles[index]"
       >
-        {{ sanitizeCellValue(column, row.values[index]) }}
+        <div class="overflow-hidden data-table__text-cell">
+          {{ row.cells[index] }}
+        </div>
       </div>
     </div>
   </div>
@@ -38,22 +40,22 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { BIconThreeDotsVertical } from 'bootstrap-vue';
-import { TableColumn, TableRow } from '.';
+import { ACTIONS_COLUMN_WIDTH, TableColumn, TableRow, Cell } from '.';
 import { notify } from '~/lib/notifier';
-import VueI18n from 'vue-i18n';
+import HeaderRow from './c/HeaderRow.vue';
 
 export default Vue.extend({
-  components: {
-    BIconThreeDotsVertical,
-  },
+  components: { HeaderRow, BIconThreeDotsVertical },
   props: {
     columns: { type: Array as PropType<TableColumn[]>, required: true },
-    headers: { type: Boolean, default: true },
-    headerTranslation: {
-      type: Function as PropType<(column: TableColumn) => string>,
-      default: null,
-    },
+    showHeaders: { type: Boolean, default: true },
     dataset: { type: Array as PropType<any[]>, required: true },
+  },
+  data () {
+    return {
+      actionsColumnCellStyles: cellStyle(ACTIONS_COLUMN_WIDTH),
+      columnCellStyles: this.columns.map(_ => null) as Array<null | string>,
+    };
   },
   computed: {
     rows (): TableRow[] {
@@ -63,28 +65,27 @@ export default Vue.extend({
       }
 
       const columns = this.columns;
-      return validItems.map(item => ({
+      return validItems.map((item, index) => ({
         name: String(item.id),
         item,
-        values: columns.map(column => cellValueGet(column, item)),
+        cells: columns.map(column => renderCell(column, item, index)),
       }));
     },
   },
   methods: {
-    columnCaption (column : TableColumn): VueI18n.TranslateResult {
-      return this.$t(column.caption || this.headerTranslation?.(column) || column.name);
-    },
-    sanitizeCellValue (_column: TableColumn, value: any): null | string {
-      return value === undefined ? null : String(value);
+    onHeadersChanged (sizes: number[]): void {
+      this.columnCellStyles = sizes.map(value => cellStyle(value));
     },
   },
 });
 
-function cellValueGet (column: TableColumn, item: any) {
-  if (column.value) {
-    return column.value(item);
-  } else {
-    return item[column.name];
-  }
+function cellStyle (columnSize: number): string {
+  return `width: ${columnSize}px;`;
+}
+
+function renderCell (column: TableColumn, item: any, _index: number): Cell {
+  const text = item[column.name];
+  if (typeof text === 'number') return String(text);
+  return typeof text === 'string' ? text : undefined;
 }
 </script>
