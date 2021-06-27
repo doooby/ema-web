@@ -75,12 +75,13 @@ export default Vue.extend({
   },
   methods: {
     async onLoadOptions () {
+      if (!this.controlSettings) return;
       if (this.options.items !== null) return;
       if (this.options.request.running) return;
       const result: any = await this.$api.query(this.options.request, this.requestGetOptions);
       if (result !== null) {
         const { getText } = this.controlSettings;
-        this.options.items = result.records.map(record => ({
+        this.options.items = result.records.map((record: any) => ({
           record,
           text: getText ? getText(record) : record.name,
         }));
