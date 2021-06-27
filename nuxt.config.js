@@ -2,7 +2,8 @@ import path from 'path';
 
 export default {
   server: {
-    port: 3070,
+    host: process.env.HOST || 'localhost',
+    port: process.env.PORT || 3070,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head

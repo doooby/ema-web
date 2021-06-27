@@ -42,21 +42,15 @@ const API = {
   students,
 };
 
+// const BASE_URL = 'https://ema-v2-server.herokuapp.com/web';
+const BASE_URL = 'http://localhost:3071/web';
+
 export class ApiPlugin {
   context: Context;
-  baseUrl: string;
   queries = API;
 
   constructor (context: Context) {
     this.context = context;
-    this.baseUrl = 'http://localhost:3071/web';
-  }
-
-  static singleton: null | ApiPlugin = null;
-  static createSingleton (context: Context): ApiPlugin {
-    if (ApiPlugin.singleton !== null) throw new Error('consecutive instantiation');
-    ApiPlugin.singleton = new ApiPlugin(context);
-    return ApiPlugin.singleton;
   }
 
   createRequestState (): ApiRequest {
@@ -88,11 +82,6 @@ export async function fetch (
   path: string,
   options?: FetchOptions,
 ): Promise<Response> {
-  const plugin = ApiPlugin.singleton;
-  if (!plugin) {
-    return { ok: false, error: 'plugin_not_initialized' };
-  }
-
   const nativeOptions: any = {
     method: 'POST',
     credentials: 'include',
@@ -104,7 +93,7 @@ export async function fetch (
   };
 
   try {
-    const rawResponse = await globalThis.fetch(plugin.baseUrl + path, nativeOptions);
+    const rawResponse = await globalThis.fetch(BASE_URL + path, nativeOptions);
     const response: Response = await rawResponse.json();
     if (!response.ok) {
       // const textKey = `apiService.${response.error || 'fatal_unknown'}`;
