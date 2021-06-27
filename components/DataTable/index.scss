@@ -21,10 +21,9 @@
       }
     }
   }
-}
-
-.data-table__text-cell {
-  padding: px-size(1);
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  .--cell {
+    padding: px-size(1);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }

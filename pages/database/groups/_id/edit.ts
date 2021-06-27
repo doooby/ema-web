@@ -9,6 +9,7 @@ export default buildDatabasePage(
       { name: 'name', control: 'text' },
       { name: 'year', control: 'text' },
       { name: 'course', control: { type: 'assoc', entity: 'courses' } },
+      { name: 'school', control: { type: 'assoc', entity: 'schools' } },
     ],
   },
 );

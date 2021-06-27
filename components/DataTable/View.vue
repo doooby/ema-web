@@ -29,7 +29,7 @@
         class="d-flex align-items-center justify-content-center"
         :style="columnCellStyles[index]"
       >
-        <div class="overflow-hidden data-table__text-cell">
+        <div class="overflow-hidden --cell">
           <table-cell
             :key="index"
             :column="column"

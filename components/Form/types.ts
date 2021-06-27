@@ -1,6 +1,13 @@
+export interface AssociationControl {
+  type: 'assoc',
+  name?: string,
+  entity: string,
+  getText?:(record: any) => string,
+}
+
 type Control =
   'text'
-  | { type: 'assoc', name?: string, entity: string, getText?:(record: any) => string }
+  | AssociationControl
   ;
 
 export interface FormField {

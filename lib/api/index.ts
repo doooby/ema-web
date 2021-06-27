@@ -109,7 +109,7 @@ export async function fetch (
     if (!response.ok) {
       // const textKey = `apiService.${response.error || 'fatal_unknown'}`;
       // response.error = store.getState().localisation.t(textKey);
-      response.error = 'API localisation not implmented - ' + (response.error || 'undefined_error');
+      response.error = 'api.error.' + (response.error || 'undefined_error');
     }
     return response;
   } catch (error) {

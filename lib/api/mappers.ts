@@ -184,3 +184,18 @@ export function paginatedRecords<R, A> (
     };
   });
 }
+
+export function associatedRecords<R> (
+  value: any,
+  mapRecord: (value: any) => R,
+): { records: R[] } {
+  return object(value, (root) => {
+    const records = prop('records', root, records => list(
+      records,
+      item => mapRecord(item),
+    ));
+    return {
+      records,
+    };
+  });
+}

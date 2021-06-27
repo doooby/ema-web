@@ -1,9 +1,10 @@
 <template>
-  <div :class="$attrs.class">
+  <div :class="className">
     <form-field
       v-for="field in fields"
       :key="field.name"
       :dom-id="domIdBase + field.name"
+      :model="model"
       :field="field"
       :form-values="value"
       @change="change"
@@ -14,6 +15,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
+import classNames from 'classnames';
 import FormFieldComponent from './Field';
 import { FormField, FormValues } from './types';
 
@@ -21,8 +23,17 @@ export default Vue.extend({
   components: { FormField: FormFieldComponent },
   props: {
     domIdBase: { type: String, default: '' },
+    model: { type: Object as any, default: null },
     fields: { type: Array as PropType<Readonly<FormField[]>>, required: true },
     value: { type: Object as PropType<FormValues>, required: true },
+  },
+  computed: {
+    className (): string {
+      return classNames(
+        'form',
+        this.$attrs.class,
+      );
+    },
   },
   methods: {
     change ({ field, value }: { field: FormField, value: any }): void {

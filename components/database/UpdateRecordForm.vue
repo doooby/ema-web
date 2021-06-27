@@ -1,17 +1,18 @@
 <template>
   <div :class="$attrs.class">
-    <b-alert :show="!record && !loadingFailed" variant="info">
+    <b-alert :show="!record.item && !record.failed" variant="info">
       {{ $t('db.shared.loading') }}
     </b-alert>
-    <b-alert :show="loadingFailed" variant="warning">
+    <b-alert :show="record.failed" variant="warning">
       {{ $t('db.shared.record_not_found') }}
     </b-alert>
     <form-view
-      v-if="record"
+      v-if="record.item"
       v-model="formValues"
       :fields="form.fields"
+      :model="record.item"
     />
-    <div v-if="record" class="text-right">
+    <div v-if="record.item" class="text-right">
       <span v-if="updating.running">
         {{ $t('db.shared.processing') }}
       </span>
@@ -62,10 +63,12 @@ export default Vue.extend({
   },
   data () {
     return {
-      record: null as any,
+      record: {
+        item: null as any,
+        request: this.$api.createRequestState(),
+        failed: false,
+      },
       formValues: createFormModel(),
-      loading: this.$api.createRequestState(),
-      loadingFailed: false,
       updating: this.$api.createRequestState(),
       errors: null as null | RecordError[],
     };
@@ -75,12 +78,12 @@ export default Vue.extend({
   },
   async mounted () {
     const { id, requestGet, fields } = this.form;
-    const result = await this.$api.query(this.loading, requestGet, id);
+    const result = await this.$api.query(this.record.request, requestGet, id);
     if (result?.success) {
-      this.record = result.record;
-      this.formValues = createFormModel(fields, this.record);
+      this.record.item = result.record;
+      this.formValues = createFormModel(fields, this.record.item);
     } else {
-      this.loadingFailed = true;
+      this.record.failed = true;
     }
   },
   methods: {
@@ -101,10 +104,12 @@ export default Vue.extend({
       }
     },
     reset () {
-      this.record = null;
+      this.record = {
+        item: null as any,
+        request: this.$api.createRequestState(),
+        failed: false,
+      };
       this.formValues = createFormModel();
-      this.loading = this.$api.createRequestState();
-      this.loadingFailed = false;
       this.updating = this.$api.createRequestState();
       this.errors = null;
     },

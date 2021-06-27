@@ -1,6 +1,8 @@
 import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
 import { AssociatedCountry, mapAssociatedCountry } from './associations/country';
+import { associatedRecords } from './mappers';
+import { mapAssociatedSchool } from '~/lib/api/associations/school';
 
 const { object, record, recordId, prop, maybeProp, index, assoc, val } = mappers;
 
@@ -62,5 +64,13 @@ export function update (request: ApiRequest, schoolId: number, school: Params) {
     data: { school },
     request,
     mapper: mappers.changedRecord,
+  });
+}
+
+export function searchAssociated (request: ApiRequest) {
+  return query({
+    path: '/schools/search_associated',
+    request,
+    mapper: payload => associatedRecords(payload, mapAssociatedSchool),
   });
 }
