@@ -17,6 +17,7 @@
       background-color: $header-bg-color;
       > div {
         text-align: center;
+        overflow-wrap: break-word;
       }
     }
   }

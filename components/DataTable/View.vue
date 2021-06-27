@@ -7,12 +7,12 @@
       @sizes-changed="onHeadersChanged"
     >
       <template #cell="{ column }">
-        <slot name="headerCell" :column="column" />
+        <slot name="header-cell" :column="column" />
       </template>
     </header-row>
     <div
       v-for="row in rows"
-      :key="row.name"
+      :key="row.index"
       class="d-flex --row"
     >
       <div :style="actionsColumnCellStyles">
@@ -30,7 +30,12 @@
         :style="columnCellStyles[index]"
       >
         <div class="overflow-hidden data-table__text-cell">
-          {{ row.cells[index] }}
+          <table-cell
+            :key="index"
+            :column="column"
+            :row="row"
+            :template="columnTemplates && columnTemplates[column.name]"
+          />
         </div>
       </div>
     </div>
@@ -40,14 +45,17 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { BIconThreeDotsVertical } from 'bootstrap-vue';
-import { ACTIONS_COLUMN_WIDTH, TableColumn, TableRow, Cell } from '.';
+import { TableColumn, TableRow } from './types';
+import { ACTIONS_COLUMN_WIDTH } from './constants';
+import TableCell from './TableCell';
 import { notify } from '~/lib/notifier';
 import HeaderRow from './c/HeaderRow.vue';
 
 export default Vue.extend({
-  components: { HeaderRow, BIconThreeDotsVertical },
+  components: { HeaderRow, TableCell, BIconThreeDotsVertical },
   props: {
     columns: { type: Array as PropType<TableColumn[]>, required: true },
+    columnTemplates: { type: Object as PropType<{ [name: string]: any }>, default: undefined },
     showHeaders: { type: Boolean, default: true },
     dataset: { type: Array as PropType<any[]>, required: true },
   },
@@ -63,13 +71,7 @@ export default Vue.extend({
       if (validItems.length < this.dataset.length) {
         notify('error', 'DataTable: some item of given dataset are missing an id.');
       }
-
-      const columns = this.columns;
-      return validItems.map((item, index) => ({
-        name: String(item.id),
-        item,
-        cells: columns.map(column => renderCell(column, item, index)),
-      }));
+      return validItems.map((item, index) => ({ index, item }));
     },
   },
   methods: {
@@ -81,11 +83,5 @@ export default Vue.extend({
 
 function cellStyle (columnSize: number): string {
   return `width: ${columnSize}px;`;
-}
-
-function renderCell (column: TableColumn, item: any, _index: number): Cell {
-  const text = item[column.name];
-  if (typeof text === 'number') return String(text);
-  return typeof text === 'string' ? text : undefined;
 }
 </script>

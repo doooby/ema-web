@@ -1,20 +1,5 @@
-import Vue from 'vue';
+import { TableColumn, TableRow } from './types';
 import View from './View.vue';
-
-export const ACTIONS_COLUMN_WIDTH = 50;
-
-export type Cell = undefined | string | Vue.VNode;
-
-export interface TableRow {
-  name: string;
-  item: any;
-  cells: Cell[];
-}
-
-export interface TableColumn {
-  name: string;
-  caption?: string;
-}
 
 export function defineTableColumns (columns: TableColumn[]): Readonly<TableColumn[]> {
   // prevent name duplications
@@ -25,4 +10,6 @@ export function defineTableColumns (columns: TableColumn[]): Readonly<TableColum
 
 export {
   View,
+  TableColumn,
+  TableRow,
 };

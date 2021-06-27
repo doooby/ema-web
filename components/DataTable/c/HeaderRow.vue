@@ -4,6 +4,7 @@
     <div
       v-for="(column, index) in columns"
       :key="column.name"
+      class="ep-2"
       :style="columnCellStyles[index]"
     >
       <slot name="cell" :column="column" />
@@ -14,7 +15,8 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import classNames from 'classnames';
-import { ACTIONS_COLUMN_WIDTH, TableColumn } from '..';
+import { ACTIONS_COLUMN_WIDTH } from '../constants';
+import { TableColumn } from '../types';
 
 export default Vue.extend({
   props: {

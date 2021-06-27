@@ -10,8 +10,9 @@
       <data-table-view
         :columns="compiledTableColumns"
         :dataset="records"
+        :column-templates="columnTemplates"
       >
-        <template #headerCell="{ column }">
+        <template #header-cell="{ column }">
           {{ $t(`record.${entity}.${column.name}`) }}
         </template>
         <template #row-actions="{ item }">
@@ -68,6 +69,15 @@ export default Vue.extend({
     },
     compiledTableColumns (): Readonly<TableColumn[]> {
       return defineTableColumns(this.tableColumns);
+    },
+    columnTemplates (): { [name: string]: any } {
+      const templates = {} as { [name: string]: any };
+      for (const column of this.compiledTableColumns) {
+        if (!column.slot) continue;
+        const slot = this.$scopedSlots[column.slot];
+        if (slot) templates[column.name] = slot;
+      }
+      return templates;
     },
   },
   watch: {

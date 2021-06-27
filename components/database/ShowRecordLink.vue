@@ -1,19 +1,19 @@
 <template>
   <nuxt-link
-    :to="`/database/${entity}/${recordId}/edit`"
-    :title="$t('db.shared.edit')"
+    :to="`/database/${entity}/${recordId}/show`"
+    :title="$t('db.shared.show')"
   >
-    <b-icon-pencil variant="secondary" />
-    {{ $children }}
+    <b-icon-card-heading variant="primary" />
+    <slot />
   </nuxt-link>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { BIconPencil } from 'bootstrap-vue';
+import { BIconCardHeading } from 'bootstrap-vue';
 
 export default Vue.extend({
-  components: { BIconPencil },
+  components: { BIconCardHeading },
   props: {
     entity: { type: String, required: true },
     recordId: { type: Number, required: true },
