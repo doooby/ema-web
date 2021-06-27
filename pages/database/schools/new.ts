@@ -6,8 +6,8 @@ export default buildDatabasePage(
   {
     entity: 'schools',
     fields: [
-      { name: 'name', controlType: 'text' },
-      { name: 'address', controlType: 'text' },
+      { name: 'name', control: 'text' },
+      { name: 'address', control: 'text' },
     ],
   },
 );

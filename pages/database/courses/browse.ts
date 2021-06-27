@@ -6,7 +6,7 @@ export default buildDatabasePage(
   {
     entity: 'courses',
     searchFields: [
-      { name: 'name', controlType: 'text' },
+      { name: 'name', control: 'text' },
     ],
     tableColumns: [
       { name: 'id' },

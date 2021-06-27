@@ -9,7 +9,6 @@ export interface TableRow {
 
 export interface TableColumn {
   name: string;
-  caption?: string;
   getText?: (item: any) => undefined | string;
   slot?: string;
   cell?: Cell

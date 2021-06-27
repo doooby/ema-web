@@ -17,14 +17,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import { FIELD_PROPS } from '../constants';
+import { fieldCaptionGet } from '..';
 
 export default Vue.extend({
   props: FIELD_PROPS,
   computed: {
     labelText (): string {
-      return this.$t(
-        this.field.caption || `form.field.${this.field.name}`,
-      ) as string;
+      return this.$t(fieldCaptionGet(this.field)) as string;
     },
     sanitizedValue (): string {
       const rawValue = this.formValues[this.field.name];

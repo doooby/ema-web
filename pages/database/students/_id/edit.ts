@@ -6,7 +6,7 @@ export default buildDatabasePage(
   {
     entity: 'students',
     fields: [
-      { name: 'full_name', controlType: 'text' },
+      { name: 'full_name', control: 'text' },
     ],
   },
 );

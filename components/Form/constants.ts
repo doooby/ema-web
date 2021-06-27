@@ -1,5 +1,5 @@
 import { PropType } from 'vue';
-import { FormField, FormValues } from '.';
+import { FormField, FormValues } from './types';
 
 export const FIELD_PROPS = {
   domId: { type: String, required: true },

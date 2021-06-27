@@ -1,14 +1,10 @@
 import View from './View.vue';
+import { FormField, FormValues } from './types';
 
-export interface FormField {
-  name: string;
-  controlType: 'text';
-  caption?: string;
-}
-
-export interface FormValues {
-  [field: string]: any;
-}
+export {
+  FormField,
+  FormValues,
+};
 
 export function defineFormFields (fields: FormField[]): FormField[] {
   // prevent name duplications
@@ -26,6 +22,25 @@ export function createFormModel (fields?: FormField[], record?: any): FormValues
     }
   }
   return Object.freeze(model);
+}
+
+export function formModelToRecordParams (fields: FormField[], values: FormValues): FormValues {
+  const params = {} as FormValues;
+  for (const { name, control } of fields) {
+    if (typeof control === 'object') {
+      switch (control.type) {
+        case 'assoc':
+          params[control.name || `${name}_id`] = values[name]?.id;
+          continue;
+      }
+    }
+    params[name] = values[name];
+  }
+  return params;
+}
+
+export function fieldCaptionGet (field: FormField): string {
+  return field.caption || `form.field.${field.name}`;
 }
 
 export {

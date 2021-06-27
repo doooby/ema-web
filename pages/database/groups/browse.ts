@@ -6,7 +6,7 @@ export default buildDatabasePage(
   {
     entity: 'groups',
     searchFields: [
-      { name: 'name', controlType: 'text' },
+      { name: 'name', control: 'text' },
     ],
     tableColumns: [
       { name: 'id' },
@@ -17,6 +17,7 @@ export default buildDatabasePage(
     ],
     recordActions: {
       show: true,
+      edit: true,
     },
   },
 );

@@ -15,7 +15,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import FormFieldComponent from './Field';
-import { FormField, FormValues } from '.';
+import { FormField, FormValues } from './types';
 
 export default Vue.extend({
   components: { FormField: FormFieldComponent },

@@ -8,7 +8,7 @@ export const dbPages: Resource[] = [
   { name: 'users', pages: [ 'browse', 'new' ] },
 
   { name: 'courses', pages: [ 'browse', 'new' ] },
-  { name: 'groups', pages: [ 'browse' ] },
+  { name: 'groups', pages: [ 'browse', 'new' ] },
   { name: 'schools', pages: [ 'browse', 'new' ] },
   { name: 'students', pages: [ 'browse', 'new' ] },
 ];

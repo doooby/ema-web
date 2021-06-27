@@ -4,9 +4,11 @@ import NewPage from '~/components/database/NewPage.vue';
 export default buildDatabasePage(
   NewPage,
   {
-    entity: 'students',
+    entity: 'groups',
     fields: [
-      { name: 'full_name', control: 'text' },
+      { name: 'name', control: 'text' },
+      { name: 'year', control: 'text' },
+      { name: 'course', control: { type: 'assoc', entity: 'courses' } },
     ],
   },
 );

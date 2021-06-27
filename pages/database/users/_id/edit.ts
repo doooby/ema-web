@@ -6,8 +6,8 @@ export default buildDatabasePage(
   {
     entity: 'users',
     fields: [
-      { name: 'login', controlType: 'text' },
-      { name: 'full_name', controlType: 'text' },
+      { name: 'login', control: 'text' },
+      { name: 'full_name', control: 'text' },
     ],
   },
 );

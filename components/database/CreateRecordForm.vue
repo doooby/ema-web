@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { createFormModel, FormField, View as FormView } from '~/components/Form';
+import { createFormModel, FormField, formModelToRecordParams, View as FormView } from '~/components/Form';
 import RecordErrors from './RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
 import { ApiRequest, Params } from '~/lib/api';
@@ -68,9 +68,10 @@ export default Vue.extend({
   methods: {
     async save () {
       if (this.creating.running) return;
-      const { requestCreate } = this.form;
       this.errors = null;
-      const result = await this.$api.query(this.creating, requestCreate, this.formValues);
+      const { requestCreate } = this.form;
+      const params = formModelToRecordParams(this.form.fields, this.formValues);
+      const result = await this.$api.query(this.creating, requestCreate, params);
       if (result?.success) {
         this.$emit('created');
       } else if (result?.errors) {

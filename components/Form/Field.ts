@@ -1,15 +1,23 @@
 import Vue, { VNode } from 'vue';
-import { FormField } from '.';
+import { FormField } from './types';
 import { FIELD_PROPS } from './constants';
 
 import VoidControl from './controls/Void.vue';
 import TextControl from './controls/Text.vue';
+import AssociationControl from './controls/Association.vue';
 
 function getControl (field: FormField): null | Vue.Component {
-  switch (field.controlType) {
-    case 'text': return TextControl;
-    default: return null;
+  const control = field.control;
+  if (typeof control === 'object') {
+    switch (control.type) {
+      case 'assoc': return AssociationControl;
+    }
+  } else {
+    switch (control) {
+      case 'text': return TextControl;
+    }
   }
+  return null;
 }
 
 export default Vue.extend({
