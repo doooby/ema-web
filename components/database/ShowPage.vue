@@ -14,7 +14,11 @@
           </b-alert>
           <h3 v-if="record">
             {{ title.text(record) }}
-            <edit-record-link :entity="entity" :record-id="recordId" />
+            <edit-record-link
+              v-if="title.showEditLink"
+              :entity="entity"
+              :record-id="recordId"
+            />
           </h3>
           <slot v-if="record" name="detail" :record="record" />
         </div>
@@ -47,7 +51,7 @@ export default Vue.extend({
     entity: { type: String, required: true },
     recordId: { type: Number, required: true },
     title: {
-      type: Function as PropType<Title>,
+      type: Object as PropType<Title>,
       default: () => buildTitle({ showEditLink: true }),
     },
   },

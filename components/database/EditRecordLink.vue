@@ -4,7 +4,7 @@
     :title="$t('db.shared.edit')"
   >
     <b-icon-pencil variant="secondary" />
-    {{ $children }}
+    <slot />
   </nuxt-link>
 </template>
 
