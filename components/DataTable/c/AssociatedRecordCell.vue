@@ -1,10 +1,7 @@
 <template>
-  <div>
-    kuza
-  </div>
-<!--  <show-record-link :entity="column.cell.entity" :record-id="associatedItem.id">-->
-<!--    {{ row.item.school.name }}-->
-<!--  </show-record-link>-->
+  <show-record-link :entity="column.cell.entity" :record-id="associatedItem.id">
+    {{ caption }}
+  </show-record-link>
 </template>
 
 <script lang="ts">

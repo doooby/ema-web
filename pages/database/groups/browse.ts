@@ -4,18 +4,18 @@ import BrowsePage from '~/components/database/BrowsePage.vue';
 export default buildDatabasePage(
   BrowsePage,
   {
-    entity: 'schools',
+    entity: 'groups',
     searchFields: [
       { name: 'name', controlType: 'text' },
     ],
     tableColumns: [
       { name: 'id' },
       { name: 'name' },
-      { name: 'country', getText: (school: any) => school.country.name },
-      { name: 'address' },
+      { name: 'year' },
+      { name: 'course', cell: { type: 'assoc', entity: 'courses' } },
+      { name: 'school', cell: { type: 'assoc', entity: 'courses' } },
     ],
     recordActions: {
-      edit: true,
       show: true,
     },
   },
