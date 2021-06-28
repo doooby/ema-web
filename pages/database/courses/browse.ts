@@ -11,7 +11,6 @@ export default buildDatabasePage(
     tableColumns: [
       { name: 'id' },
       { name: 'name' },
-      { name: 'country', value: (school: any) => school.country.name },
     ],
     recordActions: {
       edit: true,

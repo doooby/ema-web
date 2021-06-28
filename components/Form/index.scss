@@ -1,4 +1,7 @@
 .form {
+  .--assoc-control--text {
+    background-color: $input-bg;
+  }
   .--assoc-control--dropdown .dropdown-menu {
     max-height: 300px;
     overflow-y: auto;

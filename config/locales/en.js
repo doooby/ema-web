@@ -9,6 +9,7 @@ const records = {
   countries: { s: 'country', p: 'countries' },
   users: { s: 'user', p: 'users' },
   courses: { s: 'course', p: 'courses' },
+  educational_levels: { s: 'educational level', p: 'educational levels' },
   groups: { s: 'group', p: 'groups' },
   schools: { s: 'school', p: 'schools' },
   students: { s: 'student', p: 'students' },
@@ -42,6 +43,14 @@ export default {
       name: shared.record.name,
       country: records.countries.s,
     },
+    educational_levels: {
+      meta: records.educational_levels,
+      id: shared.record.id,
+      order: 'order',
+      name: shared.record.name,
+      start_age: 'start_age',
+      years_length: 'years_length',
+    },
     groups: {
       meta: records.groups,
       id: shared.record.id,
@@ -60,7 +69,7 @@ export default {
     students: {
       meta: records.students,
       id: shared.record.id,
-      full_name: shared.record.name,
+      full_name: 'full name',
       country: records.countries.s,
     },
   },

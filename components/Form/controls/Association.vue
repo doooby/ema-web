@@ -3,8 +3,8 @@
     :label="labelText"
     :label-for="domId"
   >
-    <div class="d-flex">
-      <div class="flex-fill">
+    <div class="d-flex align-items-center">
+      <div class="flex-fill --assoc-control--text">
         {{ valueText }}
       </div>
       <b-dropdown variant="secondary" right class="--assoc-control--dropdown" @show="onLoadOptions">

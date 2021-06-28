@@ -4,17 +4,18 @@ import BrowsePage from '~/components/database/BrowsePage.vue';
 export default buildDatabasePage(
   BrowsePage,
   {
-    entity: 'users',
-    searchFields: [
-      { name: 'name', control: 'text' },
-    ],
+    entity: 'educational_levels',
+    searchFields: [],
     tableColumns: [
       { name: 'id' },
-      { name: 'login' },
-      { name: 'full_name' },
+      { name: 'order' },
+      { name: 'name' },
+      { name: 'start_age' },
+      { name: 'years_length' },
     ],
     recordActions: {
       edit: true,
+      show: true,
     },
   },
 );

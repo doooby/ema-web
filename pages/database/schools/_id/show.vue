@@ -2,7 +2,12 @@
   <show-page
     entity="schools"
     :record-id="recordId"
-  />
+  >
+    <template #detail="{ record }">
+      address: {{ record.address }}
+      <br>
+    </template>
+  </show-page>
 </template>
 
 <script lang="ts">

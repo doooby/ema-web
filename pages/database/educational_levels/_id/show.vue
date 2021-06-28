@@ -1,9 +1,19 @@
 <template>
   <show-page
-    entity="students"
+    entity="educational_levels"
     :record-id="recordId"
-    :title="title"
-  />
+  >
+    <template #detail="{ record }">
+      order: {{ record.order }}
+      <br>
+
+      start_age: {{ record.start_age }}
+      <br>
+
+      years_length: {{ record.years_length }}
+      <br>
+    </template>
+  </show-page>
 </template>
 
 <script lang="ts">
@@ -16,10 +26,6 @@ export default Vue.extend({
   data () {
     return {
       recordId: Number(this.$route.params.id),
-      title: {
-        text: record => record.full_name,
-        showEditLink: true,
-      },
     };
   },
 });
