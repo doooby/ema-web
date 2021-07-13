@@ -18,6 +18,12 @@
         {{ record.course.name }}
       </show-record-link>
       <br>
+
+      <b-tabs lazy class="emy-3" content-class="emt-3">
+        <b-tab :title="$t('record.groups.students')">
+          <StudentsListing :group="record" />
+        </b-tab>
+      </b-tabs>
     </template>
   </show-page>
 </template>
@@ -26,9 +32,10 @@
 import Vue from 'vue';
 import ShowPage from '~/components/database/ShowPage.vue';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
+import StudentsListing from '~/components/database/pages/groups/StudentsListing.vue';
 
 export default Vue.extend({
-  components: { ShowPage, ShowRecordLink },
+  components: { ShowPage, ShowRecordLink, StudentsListing },
   layout: 'database',
   data () {
     return {

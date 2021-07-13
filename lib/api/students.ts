@@ -4,7 +4,7 @@ import { AssociatedCountry, mapAssociatedCountry } from './associations/country'
 
 const { object, record, recordId, prop, index, assoc, val } = mappers;
 
-interface Student {
+export interface Student {
   id: number;
   full_name: string;
   country: AssociatedCountry;

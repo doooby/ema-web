@@ -8,6 +8,7 @@
     </div>
     <div class="em-4">
       <data-table-view
+        :actions-column-width="50"
         :columns="compiledTableColumns"
         :dataset="records"
         :column-templates="columnTemplates"
@@ -15,21 +16,24 @@
         <template #header-cell="{ column }">
           {{ $t(`record.${entity}.${column.name}`) }}
         </template>
-        <template #row-actions="{ item }">
-          <b-dropdown-item
-            v-if="recordActions && recordActions.show"
-            :to="`/database/${entity}/${item.id}/show`"
-          >
-            <b-icon-card-heading variant="primary" />
-            {{ $t('db.shared.show') }}
-          </b-dropdown-item>
-          <b-dropdown-item
-            v-if="recordActions && recordActions.edit"
-            :to="`/database/${entity}/${item.id}/edit`"
-          >
-            <b-icon-pencil variant="secondary" />
-            {{ $t('db.shared.edit') }}
-          </b-dropdown-item>
+        <template
+          v-if="recordActions && recordActions.edit"
+          #row-actions-cell="{ item }"
+        >
+          <div style="width: 50px;">
+            <b-dropdown no-caret variant="link" dropright>
+              <template #button-content>
+                <b-icon-three-dots-vertical />
+              </template>
+              <b-dropdown-item
+                v-if="recordActions && recordActions.edit"
+                :to="`/database/${entity}/${item.id}/edit`"
+              >
+                <b-icon-pencil variant="secondary" />
+                {{ $t('db.shared.edit') }}
+              </b-dropdown-item>
+            </b-dropdown>
+          </div>
         </template>
       </data-table-view>
     </div>
@@ -42,15 +46,14 @@ import { FormField, FormValues, defineFormFields } from '~/components/Form';
 import { TableColumn, defineTableColumns, View as DataTableView } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import { notify } from '~/lib/notifier';
-import { BIconCardHeading, BIconPencil } from 'bootstrap-vue';
+import { BIconCardHeading, BIconPencil, BIconThreeDotsVertical } from 'bootstrap-vue';
 
 interface RecordActions {
   edit?: boolean;
-  show?: boolean;
 }
 
 export default Vue.extend({
-  components: { SearchForm, DataTableView, BIconCardHeading, BIconPencil },
+  components: { SearchForm, DataTableView, BIconCardHeading, BIconPencil, BIconThreeDotsVertical },
   props: {
     entity: { type: String, required: true },
     searchFields: { type: Array as PropType<FormField[]>, required: true },

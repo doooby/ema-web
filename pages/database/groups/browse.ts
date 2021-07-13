@@ -10,13 +10,12 @@ export default buildDatabasePage(
     ],
     tableColumns: [
       { name: 'id' },
-      { name: 'name' },
+      { name: 'name', cell: { type: 'link', entity: 'groups' } },
       { name: 'year' },
       { name: 'course', cell: { type: 'assoc', entity: 'courses' } },
-      { name: 'school', cell: { type: 'assoc', entity: 'courses' } },
+      { name: 'school', cell: { type: 'assoc', entity: 'schools' } },
     ],
     recordActions: {
-      show: true,
       edit: true,
     },
   },

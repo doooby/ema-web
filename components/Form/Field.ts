@@ -6,18 +6,20 @@ import VoidControl from './controls/Void.vue';
 import TextControl from './controls/Text.vue';
 import AssociationControl from './controls/Association.vue';
 
+const controlComponents: { [name: string]: any } = {
+  assoc: AssociationControl,
+  text: TextControl,
+};
+
 function getControl (field: FormField): null | Vue.Component {
   const control = field.control;
+  let component = null as null | Vue.Component;
   if (typeof control === 'object') {
-    switch (control.type) {
-      case 'assoc': return AssociationControl;
-    }
+    component = controlComponents[control.type];
   } else {
-    switch (control) {
-      case 'text': return TextControl;
-    }
+    component = controlComponents[control];
   }
-  return null;
+  return component;
 }
 
 export default Vue.extend({

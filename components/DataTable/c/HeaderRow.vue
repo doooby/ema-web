@@ -1,6 +1,6 @@
 <template>
   <div :class="className">
-    <div :style="actionsStyle" />
+    <div v-if="actionsWidth > 0" :style="actionsStyle" />
     <div
       v-for="(column, index) in columns"
       :key="column.name"
@@ -15,13 +15,12 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import classNames from 'classnames';
-import { ACTIONS_COLUMN_WIDTH } from '../constants';
 import { TableColumn } from '../types';
 
 export default Vue.extend({
   props: {
     columns: { type: Array as PropType<TableColumn[]>, required: true },
-    actionsWidth: { type: Number, default: undefined },
+    actionsWidth: { type: Number, default: 0 },
     columnCellStyles: { type: Array as PropType<Array<null | string>>, required: true },
   },
   data () {
@@ -37,7 +36,7 @@ export default Vue.extend({
       );
     },
     actionsStyle (): string {
-      return `width: ${this.actionsWidth || ACTIONS_COLUMN_WIDTH}px;`;
+      return `width: ${this.actionsWidth}px;`;
     },
   },
   mounted () {

@@ -1,5 +1,5 @@
 <template>
-  <show-record-link :entity="column.cell.entity" :record-id="associatedRecord.id">
+  <show-record-link :entity="column.cell.entity" :record-id="record.id">
     {{ caption }}
   </show-record-link>
 </template>
@@ -13,13 +13,13 @@ export default Vue.extend({
   components: { ShowRecordLink },
   props: TABLE_CELL_PROPS,
   computed: {
-    associatedRecord (): any {
-      return this.row.item[this.column.name];
+    record (): any {
+      return this.row.item;
     },
     caption (): string {
       const textGet = this.column.cell!.text;
-      if (textGet) return textGet(this.associatedRecord);
-      return this.associatedRecord.name;
+      if (textGet) return textGet(this.record);
+      return this.record[this.column.name];
     },
   },
 });

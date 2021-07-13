@@ -5,7 +5,7 @@ import { AssociatedSchool, mapAssociatedSchool } from './associations/school';
 
 const { object, record, recordId, prop, index, assoc, val } = mappers;
 
-interface Group {
+export interface Group {
   id: number;
   name: string;
   year: number;

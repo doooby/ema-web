@@ -2,6 +2,7 @@
   <div class="d-flex flex-column data-table">
     <header-row
       v-if="showHeaders"
+      :actions-width="actionsColumnWidth"
       :columns="columns"
       :column-cell-styles="columnCellStyles"
       @sizes-changed="onHeadersChanged"
@@ -15,14 +16,7 @@
       :key="row.index"
       class="d-flex --row"
     >
-      <div :style="actionsColumnCellStyles">
-        <b-dropdown no-caret variant="link" dropright>
-          <template #button-content>
-            <b-icon-three-dots-vertical />
-          </template>
-          <slot name="row-actions" :item="row.item" />
-        </b-dropdown>
-      </div>
+      <slot name="row-actions-cell" :item="row.item" />
       <div
         v-for="(column, index) in columns"
         :key="column.name"
@@ -39,21 +33,23 @@
         </div>
       </div>
     </div>
+    <div v-if="showFooterRow" class="d-flex --row">
+      <slot name="footer-row" />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { BIconThreeDotsVertical } from 'bootstrap-vue';
 import { TableColumn, TableRow } from './types';
-import { ACTIONS_COLUMN_WIDTH } from './constants';
 import TableCell from './TableCell';
 import { notify } from '~/lib/notifier';
 import HeaderRow from './c/HeaderRow.vue';
 
 export default Vue.extend({
-  components: { HeaderRow, TableCell, BIconThreeDotsVertical },
+  components: { HeaderRow, TableCell },
   props: {
+    actionsColumnWidth: { type: Number, default: 0 },
     columns: { type: Array as PropType<TableColumn[]>, required: true },
     columnTemplates: { type: Object as PropType<{ [name: string]: any }>, default: undefined },
     showHeaders: { type: Boolean, default: true },
@@ -61,7 +57,6 @@ export default Vue.extend({
   },
   data () {
     return {
-      actionsColumnCellStyles: cellStyle(ACTIONS_COLUMN_WIDTH),
       columnCellStyles: this.columns.map(_ => null) as Array<null | string>,
     };
   },
@@ -73,15 +68,14 @@ export default Vue.extend({
       }
       return validItems.map((item, index) => ({ index, item }));
     },
+    showFooterRow (): boolean {
+      return !!this.$scopedSlots['footer-row'];
+    },
   },
   methods: {
     onHeadersChanged (sizes: number[]): void {
-      this.columnCellStyles = sizes.map(value => cellStyle(value));
+      this.columnCellStyles = sizes.map(value => `width: ${value}px;`);
     },
   },
 });
-
-function cellStyle (columnSize: number): string {
-  return `width: ${columnSize}px;`;
-}
 </script>

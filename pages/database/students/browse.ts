@@ -10,11 +10,10 @@ export default buildDatabasePage(
     ],
     tableColumns: [
       { name: 'id' },
-      { name: 'full_name' },
+      { name: 'full_name', cell: { type: 'link', entity: 'students' } },
     ],
     recordActions: {
       edit: true,
-      show: true,
     },
   },
 );

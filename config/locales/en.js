@@ -58,6 +58,7 @@ export default {
       year: 'year',
       course: records.courses.s,
       school: records.schools.s,
+      students: records.students.p,
     },
     schools: {
       meta: records.schools,

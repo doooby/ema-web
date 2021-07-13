@@ -2,9 +2,11 @@ import Vue, { VNode } from 'vue';
 import { TABLE_CELL_PROPS } from './constants';
 
 import AssociatedRecordCell from './c/AssociatedRecordCell.vue';
+import RecordLinkCell from './c/RecordLinkCell.vue';
 
-export const cellComponents: { [name: string]: any } = {
+const cellComponents: { [name: string]: any } = {
   assoc: AssociatedRecordCell,
+  link: RecordLinkCell,
 };
 
 export default Vue.extend({

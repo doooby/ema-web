@@ -1,5 +1,6 @@
 export type Cell =
   { type: 'assoc', entity: string, text?(item: any): string }
+  | { type: 'link', entity: string, text?(item: any): string }
   ;
 
 export interface TableRow {

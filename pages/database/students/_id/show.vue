@@ -17,7 +17,7 @@ export default Vue.extend({
     return {
       recordId: Number(this.$route.params.id),
       title: {
-        text: record => record.full_name,
+        text: (record: any) => record.full_name,
         showEditLink: true,
       },
     };

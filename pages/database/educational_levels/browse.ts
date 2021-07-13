@@ -9,13 +9,12 @@ export default buildDatabasePage(
     tableColumns: [
       { name: 'id' },
       { name: 'order' },
-      { name: 'name' },
+      { name: 'name', cell: { type: 'link', entity: 'educational_levels' } },
       { name: 'start_age' },
       { name: 'years_length' },
     ],
     recordActions: {
       edit: true,
-      show: true,
     },
   },
 );
