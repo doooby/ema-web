@@ -8,6 +8,9 @@
         {{ $t(`record.students.${column.name}`) }}
       </template>
     </data-table-view>
+    <div v-if="editable">
+      add new
+    </div>
   </div>
 </template>
 
@@ -20,6 +23,7 @@ export default Vue.extend({
   components: { DataTableView },
   props: {
     group: { type: Object as PropType<Group>, required: true },
+    editable: { type: Boolean, default: false },
   },
   data () {
     return {
@@ -43,7 +47,10 @@ export default Vue.extend({
         { group_id: this.group.id },
       );
       if (result !== null) {
-        this.students = result.records;
+        this.students = [ ...result.records ];
+        this.$emit('loaded', this.students);
+      } else {
+        this.$emit('load-fail');
       }
     },
   },

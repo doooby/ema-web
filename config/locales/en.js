@@ -90,6 +90,7 @@ export default {
     pages: {
       browse: 'Browse',
       new: 'Add New Record',
+      edit_students: 'Edit Students',
     },
     browse: {
       search: 'search',
