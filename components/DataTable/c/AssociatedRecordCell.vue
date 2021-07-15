@@ -1,6 +1,6 @@
 <template>
   <show-record-link :entity="column.cell.entity" :record-id="associatedRecord.id">
-    {{ caption }}
+    {{ associatedRecord.label }}
   </show-record-link>
 </template>
 
@@ -15,11 +15,6 @@ export default Vue.extend({
   computed: {
     associatedRecord (): any {
       return this.row.item[this.column.name];
-    },
-    caption (): string {
-      const textGet = this.column.cell!.text;
-      if (textGet) return textGet(this.associatedRecord);
-      return this.associatedRecord.name;
     },
   },
 });

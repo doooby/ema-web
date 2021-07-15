@@ -4,7 +4,7 @@
       v-for="field in fields"
       :key="field.name"
       :dom-id="domIdBase + field.name"
-      :model="model"
+      :record="model"
       :field="field"
       :form-values="value"
       @change="change"

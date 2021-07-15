@@ -1,8 +1,7 @@
 export interface AssociationControl {
-  type: 'assoc',
-  name?: string,
-  entity: string,
-  getText?:(record: any) => string,
+  type: 'assoc';
+  name?: string;
+  entity: string;
 }
 
 type Control =

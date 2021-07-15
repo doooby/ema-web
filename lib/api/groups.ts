@@ -1,21 +1,20 @@
 import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
-import { AssociatedCourse, mapAssociatedCourse } from './associations/course';
-import { AssociatedSchool, mapAssociatedSchool } from './associations/school';
+import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
 
-const { object, record, recordId, prop, index, assoc, val } = mappers;
+const { object, record, recordId, prop, assoc, val } = mappers;
 
 export interface Group {
   id: number;
   name: string;
   year: number;
-  course: AssociatedCourse;
-  school: AssociatedSchool;
+  course: AssociatedRecord;
+  school: AssociatedRecord;
 }
 
 interface Associations {
-  course: { [id: string]: undefined | AssociatedCourse },
-  school: { [id: string]: undefined | AssociatedSchool },
+  course: AssociatedRecordsIndex,
+  school: AssociatedRecordsIndex,
 }
 
 function mapGroup (value: any, associations?: Associations): Group {
@@ -27,13 +26,7 @@ function mapGroup (value: any, associations?: Associations): Group {
     school: assoc('school', root, associations?.school),
   }));
 }
-
-function mapAssociations (value: any): Associations {
-  return object(value, root => ({
-    course: prop('course', root, courses => index(courses, mapAssociatedCourse)),
-    school: prop('school', root, schools => index(schools, mapAssociatedSchool)),
-  }));
-}
+const mapAssociations = createAssociationsMapper<Associations>('course', 'school');
 
 export function search (request: ApiRequest, params: Params) {
   return query({

@@ -1,6 +1,17 @@
+export interface AssociatedRecordCellType {
+  type: 'assoc';
+  entity: string;
+}
+
+export interface RecordLinkCellType {
+  type: 'link';
+  entity: string;
+  text?(item: any): string;
+}
+
 export type Cell =
-  { type: 'assoc', entity: string, text?(item: any): string }
-  | { type: 'link', entity: string, text?(item: any): string }
+  AssociatedRecordCellType
+  | RecordLinkCellType
   ;
 
 export interface TableRow {

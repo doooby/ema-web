@@ -1,18 +1,18 @@
 import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
-import { AssociatedCountry, mapAssociatedCountry } from './associations/country';
+import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
 
-const { object, record, recordId, prop, maybeProp, index, assoc, val } = mappers;
+const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 
 interface User {
   id: number;
   login: string;
   full_name?: string;
-  country: AssociatedCountry;
+  country: AssociatedRecord;
 }
 
 interface Associations {
-  country: { [id: string]: undefined | AssociatedCountry },
+  country: AssociatedRecordsIndex,
 }
 
 function mapUser (value: any, associations?: Associations): User {
@@ -24,11 +24,7 @@ function mapUser (value: any, associations?: Associations): User {
   }));
 }
 
-function mapAssociations (value: any): Associations {
-  return object(value, root => ({
-    country: prop('country', root, countries => index(countries, mapAssociatedCountry)),
-  }));
-}
+const mapAssociations = createAssociationsMapper<Associations>('country');
 
 export function search (request: ApiRequest, params: Params) {
   return query({

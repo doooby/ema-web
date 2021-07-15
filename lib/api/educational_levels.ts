@@ -1,8 +1,8 @@
 import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
-import { AssociatedCountry, mapAssociatedCountry } from './associations/country';
+import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
 
-const { object, record, recordId, prop, index, assoc, val } = mappers;
+const { object, record, recordId, prop, assoc, val } = mappers;
 
 interface EducationalLevel {
   id: number;
@@ -10,11 +10,11 @@ interface EducationalLevel {
   name: string;
   start_age: number;
   years_length: number;
-  country: AssociatedCountry;
+  country: AssociatedRecord;
 }
 
 interface Associations {
-  country: { [id: string]: undefined | AssociatedCountry },
+  country: AssociatedRecordsIndex,
 }
 
 function mapEducationalLevel (value: any, associations?: Associations): EducationalLevel {
@@ -28,11 +28,7 @@ function mapEducationalLevel (value: any, associations?: Associations): Educatio
   }));
 }
 
-function mapAssociations (value: any): Associations {
-  return object(value, root => ({
-    country: prop('country', root, countries => index(countries, mapAssociatedCountry)),
-  }));
-}
+const mapAssociations = createAssociationsMapper<Associations>('country');
 
 export function search (request: ApiRequest, params: Params) {
   return query({
@@ -68,11 +64,3 @@ export function update (request: ApiRequest, educationalLevelId: number, educati
     mapper: mappers.changedRecord,
   });
 }
-
-// export function searchAssociated (request: ApiRequest) {
-//   return query({
-//     path: '/educational_levels/search_associated',
-//     request,
-//     mapper: payload => associatedRecords(payload, mapAssociatedEducationalLevel),
-//   });
-// }

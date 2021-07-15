@@ -3,8 +3,8 @@
     :label="labelText"
     :label-for="domId"
   >
-    <div class="d-flex align-items-center">
-      <div class="flex-fill --assoc-control--text">
+    <div class="d-flex">
+      <div class="flex-fill text-truncate --assoc-control--text">
         {{ valueText }}
       </div>
       <b-dropdown variant="secondary" right class="--assoc-control--dropdown" @show="onLoadOptions">
@@ -54,10 +54,9 @@ export default Vue.extend({
     },
     valueText (): string {
       if (!this.controlSettings) return '';
-      const { getText } = this.controlSettings;
       const value = this.formValues[this.field.name];
       if (value) {
-        return getText ? getText(value) : value.name;
+        return value.label;
       }
       return '-';
     },
@@ -80,10 +79,9 @@ export default Vue.extend({
       if (this.options.request.running) return;
       const result: any = await this.$api.query(this.options.request, this.requestGetOptions);
       if (result !== null) {
-        const { getText } = this.controlSettings;
         this.options.items = result.records.map((record: any) => ({
           record,
-          text: getText ? getText(record) : record.name,
+          text: record.label,
         }));
       }
     },

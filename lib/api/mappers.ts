@@ -18,6 +18,14 @@ export interface PaginatedRecords<R> {
   per_page: number;
 }
 
+export interface AssociatedRecord<R=any> {
+  id: number;
+  label: string;
+  record?: R;
+}
+
+export type AssociatedRecordsIndex<R=any> = { [id: string]: undefined | AssociatedRecord<R> }
+
 class MappingError extends Error {
   reason: string;
   propTraces: [ string, any ][] = [];
@@ -185,17 +193,27 @@ export function paginatedRecords<R, A> (
   });
 }
 
-export function associatedRecords<R> (
-  value: any,
-  mapRecord: (value: any) => R,
-): { records: R[] } {
-  return object(value, (root) => {
-    const records = prop('records', root, records => list(
-      records,
-      item => mapRecord(item),
-    ));
-    return {
-      records,
-    };
-  });
+export function associatedRecords<R> (value: any): { records: AssociatedRecord<R>[] } {
+  return object(value, root => ({
+    records: prop('records', root, records => list(records, mapAssociatedRecord)),
+  }));
+}
+
+function mapAssociatedRecord<R=any> (value: any): AssociatedRecord<R> {
+  return object(value, root => ({
+    id: recordId(root),
+    label: prop('label', root, val.string),
+  }));
+}
+
+export function createAssociationsMapper<A> (...names: string[]) {
+  return function (value: any): A {
+    return object(value, (root) => {
+      const associations_index = {} as any;
+      for (const name of names) {
+        associations_index[name] = prop(name, root, records => index(records, mapAssociatedRecord));
+      }
+      return associations_index as A;
+    });
+  };
 }

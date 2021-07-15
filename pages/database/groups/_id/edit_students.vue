@@ -44,7 +44,6 @@ export default Vue.extend({
       loading: this.$api.createRequestState(),
       loadingFailed: false,
       students: [] as Student[],
-      changed: false,
     };
   },
   async mounted () {

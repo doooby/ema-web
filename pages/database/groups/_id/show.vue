@@ -9,27 +9,25 @@
 
       school:
       <show-record-link entity="schools" :record-id="record.school.id">
-        {{ record.school.name }}
+        {{ record.school.label }}
       </show-record-link>
       <br>
 
       course:
       <show-record-link entity="courses" :record-id="record.course.id">
-        {{ record.course.name }}
+        {{ record.course.label }}
       </show-record-link>
       <br>
 
       <b-tabs lazy class="emy-3" content-class="emt-3">
         <b-tab :title="$t('record.groups.students')">
-          <div class="d-flex flex-row-reverse">
-            <div>
-              <nuxt-link
-                :to="`/database/groups/${recordId}/edit_students`"
-                :title="$t('db.pages.edit_students')"
-              >
-                <b-icon-pencil variant="secondary" />
-              </nuxt-link>
-            </div>
+          <div class="text-right">
+            <nuxt-link
+              :to="`/database/groups/${recordId}/edit_students`"
+              :title="$t('db.pages.edit_students')"
+            >
+              <b-icon-pencil variant="secondary" />
+            </nuxt-link>
           </div>
           <StudentsListing :group="record" />
         </b-tab>

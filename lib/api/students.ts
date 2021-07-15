@@ -1,17 +1,17 @@
 import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
-import { AssociatedCountry, mapAssociatedCountry } from './associations/country';
+import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
 
-const { object, record, recordId, prop, index, assoc, val } = mappers;
+const { object, record, recordId, prop, assoc, val } = mappers;
 
 export interface Student {
   id: number;
   full_name: string;
-  country: AssociatedCountry;
+  country: AssociatedRecord;
 }
 
 interface Associations {
-  country: { [id: string]: undefined | AssociatedCountry },
+  country: AssociatedRecordsIndex,
 }
 
 function mapStudent (value: any, associations?: Associations): Student {
@@ -22,11 +22,7 @@ function mapStudent (value: any, associations?: Associations): Student {
   }));
 }
 
-function mapAssociations (value: any): Associations {
-  return object(value, root => ({
-    country: prop('country', root, countries => index(countries, mapAssociatedCountry)),
-  }));
-}
+const mapAssociations = createAssociationsMapper<Associations>('country');
 
 export function search (request: ApiRequest, params: Params) {
   return query({
@@ -34,6 +30,15 @@ export function search (request: ApiRequest, params: Params) {
     data: params,
     request,
     mapper: payload => mappers.paginatedRecords(payload, mapStudent, mapAssociations),
+  });
+}
+
+export function searchAssociated (request: ApiRequest, params?: Params) {
+  return query({
+    path: '/students/search?assoc=1',
+    data: params,
+    request,
+    mapper: payload => mappers.associatedRecords<Student>(payload),
   });
 }
 

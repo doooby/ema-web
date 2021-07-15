@@ -1,20 +1,18 @@
 import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
-import { AssociatedCountry, mapAssociatedCountry } from './associations/country';
-import { associatedRecords } from './mappers';
-import { mapAssociatedSchool } from '~/lib/api/associations/school';
+import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
 
-const { object, record, recordId, prop, maybeProp, index, assoc, val } = mappers;
+const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 
 interface School {
   id: number;
   name: string;
   address?: string;
-  country: AssociatedCountry;
+  country: AssociatedRecord;
 }
 
 interface Associations {
-  country: { [id: string]: undefined | AssociatedCountry },
+  country: AssociatedRecordsIndex,
 }
 
 function mapSchool (value: any, associations?: Associations): School {
@@ -26,11 +24,7 @@ function mapSchool (value: any, associations?: Associations): School {
   }));
 }
 
-function mapAssociations (value: any): Associations {
-  return object(value, root => ({
-    country: prop('country', root, countries => index(countries, mapAssociatedCountry)),
-  }));
-}
+const mapAssociations = createAssociationsMapper<Associations>('country');
 
 export function search (request: ApiRequest, params: Params) {
   return query({
@@ -38,6 +32,15 @@ export function search (request: ApiRequest, params: Params) {
     data: params,
     request,
     mapper: payload => mappers.paginatedRecords(payload, mapSchool, mapAssociations),
+  });
+}
+
+export function searchAssociated (request: ApiRequest, params?: Params) {
+  return query({
+    path: '/schools/search?assoc=1',
+    data: params,
+    request,
+    mapper: payload => mappers.associatedRecords<School>(payload),
   });
 }
 
@@ -64,13 +67,5 @@ export function update (request: ApiRequest, schoolId: number, school: Params) {
     data: { school },
     request,
     mapper: mappers.changedRecord,
-  });
-}
-
-export function searchAssociated (request: ApiRequest) {
-  return query({
-    path: '/schools/search_associated',
-    request,
-    mapper: payload => associatedRecords(payload, mapAssociatedSchool),
   });
 }

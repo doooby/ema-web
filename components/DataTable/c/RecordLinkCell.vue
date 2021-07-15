@@ -8,6 +8,7 @@
 import Vue from 'vue';
 import { TABLE_CELL_PROPS } from '../constants';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
+import { RecordLinkCellType } from '../types';
 
 export default Vue.extend({
   components: { ShowRecordLink },
@@ -17,7 +18,7 @@ export default Vue.extend({
       return this.row.item;
     },
     caption (): string {
-      const textGet = this.column.cell!.text;
+      const textGet = (this.column.cell as RecordLinkCellType)!.text;
       if (textGet) return textGet(this.record);
       return this.record[this.column.name];
     },

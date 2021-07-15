@@ -11,7 +11,7 @@ export default buildDatabasePage(
     tableColumns: [
       { name: 'id' },
       { name: 'name', cell: { type: 'link', entity: 'schools' } },
-      { name: 'country', getText: (school: any) => school.country.name },
+      { name: 'country', getText: (school: any) => school.country.label },
       { name: 'address' },
     ],
     recordActions: {
