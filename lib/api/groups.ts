@@ -62,3 +62,12 @@ export function update (request: ApiRequest, groupId: number, group: Params) {
     mapper: mappers.changedRecord,
   });
 }
+
+export function updateStudents (request: ApiRequest, groupId: number, studentIds: number[]) {
+  return query({
+    path: `/groups/${groupId}/update_students`,
+    data: { ids: studentIds },
+    request,
+    mapper: mappers.changedRecord,
+  });
+}

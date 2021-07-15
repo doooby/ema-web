@@ -1,6 +1,6 @@
 <template>
   <nuxt-link
-    :to="`/database/${entity}/${recordId}/show`"
+    :to="`/database/${entity}/${recordId}`"
     :title="$t('db.shared.show')"
   >
     <b-icon-card-heading variant="primary" />

@@ -50,7 +50,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { Group, Student } from '~/lib/records';
-import { defineFormFields, formModelToRecordParams, View as FormView } from '~/components/Form';
+import { defineFormFields, View as FormView } from '~/components/Form';
 import { defineTableColumns, View as DataTableView } from '~/components/DataTable';
 import { BIconDash, BIconPlus } from 'bootstrap-vue';
 
@@ -125,9 +125,17 @@ export default Vue.extend({
       const union = new Set([ ...this.originalStudentsIds, ...this.students.map(s => s.id) ]);
       this.changed = !(this.originalStudentsIds.length === union.size && this.students.length === union.size);
     },
-    save () {
-      const params = formModelToRecordParams(this.additionFields, this.additionValues);
-      console.log({ params });
+    async save () {
+      if (this.updating.running) return;
+      const result = await this.$api.query(
+        this.updating,
+        this.$api.queries.groups.updateStudents,
+        this.group.id,
+        this.students.map(s => s.id),
+      );
+      if (result?.success) {
+        this.$router.push({ path: `/database/groups/${this.group.id}` });
+      }
     },
   },
 });
