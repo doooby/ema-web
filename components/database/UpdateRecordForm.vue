@@ -10,7 +10,7 @@
       v-if="record.item"
       v-model="formValues"
       :fields="form.fields"
-      :model="record.item"
+      :record="record.item"
     />
     <div v-if="record.item" class="text-right">
       <span v-if="updating.running">

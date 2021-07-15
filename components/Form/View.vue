@@ -4,7 +4,7 @@
       v-for="field in fields"
       :key="field.name"
       :dom-id="domIdBase + field.name"
-      :record="model"
+      :record="record"
       :field="field"
       :form-values="value"
       @change="change"
@@ -23,7 +23,7 @@ export default Vue.extend({
   components: { FormField: FormFieldComponent },
   props: {
     domIdBase: { type: String, default: '' },
-    model: { type: Object as any, default: null },
+    record: { type: Object as any, default: null },
     fields: { type: Array as PropType<Readonly<FormField[]>>, required: true },
     value: { type: Object as PropType<FormValues>, required: true },
   },
