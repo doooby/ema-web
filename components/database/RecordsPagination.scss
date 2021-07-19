@@ -1,0 +1,27 @@
+.db--records-pagination {
+  > div {
+    min-width: 28px;
+    height: 28px;
+    border: 2px solid var(--EMA-controls);
+    padding: 2px;
+
+    margin-right: 4px;
+    &:last-child { margin-right: 0; }
+
+    &.current {
+      border-color: var(--EMA-font);
+      > div {
+        background-color: var(--EMA-font);
+        color: var(--EMA-bg);
+      }
+    }
+
+    > div {
+      text-align: center;
+      font-size: 14px;
+      line-height: 20px;
+      @extend .user-select-none;
+      cursor: pointer;
+    }
+  }
+}

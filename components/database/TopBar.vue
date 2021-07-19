@@ -1,5 +1,5 @@
 <template>
-  <div class="top-bar">
+  <div class="db--top-bar">
     LOGO
   </div>
 </template>

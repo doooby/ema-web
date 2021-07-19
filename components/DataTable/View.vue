@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column data-table">
+  <div class="col d-flex flex-column data-table">
     <header-row
       v-if="showHeaders"
       :actions-width="actionsColumnWidth"
