@@ -2,7 +2,6 @@
   <div>
     <data-table-view
       :columns="columns"
-      :actions-column-width="50"
       :dataset="students"
     >
       <template #header-cell="{ column }">

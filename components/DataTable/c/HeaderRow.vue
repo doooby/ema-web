@@ -23,32 +23,37 @@ export default Vue.extend({
     actionsWidth: { type: Number, default: 0 },
     columnCellStyles: { type: Array as PropType<Array<null | string>>, required: true },
   },
-  data () {
-    return {
-      columnWidthsComputed: false,
-    };
-  },
   computed: {
     className (): string {
       return classNames(
         'd-flex --row --header',
-        !this.columnWidthsComputed && 'invisible',
       );
     },
     actionsStyle (): string {
       return `width: ${this.actionsWidth}px;`;
     },
   },
+  watch: {
+    columns () {
+      Vue.nextTick(() => this.computeColumnsWidths());
+    },
+  },
   mounted () {
-    const columns = Array.from(this.$el.children) as HTMLDivElement[];
-    const sizes = [] as number [];
-    for (let index = 0; index < columns.length; index += 1) {
-      const column = columns[index];
-      if (column.style.width) continue;
-      sizes.push(getNormalizedColumnWidth(column));
-    }
-    this.$emit('sizes-changed', sizes);
-    this.columnWidthsComputed = true;
+    this.computeColumnsWidths();
+  },
+  methods: {
+    computeColumnsWidths () {
+      const columns = Array.from(this.$el.children) as HTMLDivElement[];
+      const sizes = [] as number [];
+      for (let index = 0; index < columns.length; index += 1) {
+        const column = columns[index];
+        const prevWidth = column.style.width;
+        column.style.width = '';
+        sizes.push(getNormalizedColumnWidth(column));
+        column.style.width = prevWidth;
+      }
+      this.$emit('sizes-changed', sizes);
+    },
   },
 });
 
