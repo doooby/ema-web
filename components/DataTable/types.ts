@@ -24,4 +24,5 @@ export interface TableColumn {
   getText?: (item: any) => undefined | string;
   slot?: string;
   cell?: Cell
+  data?: any;
 }

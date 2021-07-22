@@ -63,8 +63,8 @@ export default Vue.extend({
   data () {
     return {
       columns: defineTableColumns([
-        { name: 'id' },
-        { name: 'full_name', cell: { type: 'link', entity: 'students' } },
+        { name: 'id', cell: { type: 'link', entity: 'students' } },
+        { name: 'full_name' },
       ]),
       students: [] as Student[],
       fetching: this.$api.createRequestState(),

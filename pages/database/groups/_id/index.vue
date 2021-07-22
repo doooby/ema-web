@@ -24,12 +24,23 @@
           <div class="text-right">
             <nuxt-link
               :to="`/database/groups/${recordId}/edit_students`"
-              :title="$t('db.pages.edit_students')"
+              :title="$t('db.pages.groups.edit_students')"
             >
               <b-icon-pencil variant="secondary" />
             </nuxt-link>
           </div>
           <StudentsListing :group="record" />
+        </b-tab>
+        <b-tab active :title="$t('record.groups.attendance')">
+          <div class="text-right">
+            <!--<nuxt-link
+              :to="`/database/groups/${recordId}/edit_attendance`"
+              :title="$t('db.pages.groups.???')"
+            >
+              <b-icon-pencil variant="secondary" />
+            </nuxt-link>-->
+          </div>
+          <AttendanceListing :group="record" />
         </b-tab>
       </b-tabs>
     </template>
@@ -41,10 +52,11 @@ import Vue from 'vue';
 import ShowPage from '~/components/database/ShowPage.vue';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import StudentsListing from '~/components/database/pages/groups/StudentsListing.vue';
+import AttendanceListing from '~/components/database/pages/groups/AttendanceListing.vue';
 import { BIconPencil } from 'bootstrap-vue';
 
 export default Vue.extend({
-  components: { ShowPage, ShowRecordLink, StudentsListing, BIconPencil },
+  components: { ShowPage, ShowRecordLink, StudentsListing, AttendanceListing, BIconPencil },
   layout: 'database',
   data () {
     return {

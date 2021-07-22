@@ -28,7 +28,7 @@
             :key="index"
             :column="column"
             :row="row"
-            :template="columnTemplates && columnTemplates[column.name]"
+            :template="computedColumnTemplates[column.name]"
           />
         </div>
       </div>
@@ -67,6 +67,15 @@ export default Vue.extend({
         notify('error', 'DataTable: some item of given dataset are missing an id.');
       }
       return validItems.map((item, index) => ({ index, item }));
+    },
+    computedColumnTemplates (): { [name: string]: any } {
+      const templates = this.columnTemplates || {};
+      for (const column of this.columns) {
+        if (!column.slot) continue;
+        const slot = this.$scopedSlots[column.slot];
+        if (slot) templates[column.name] = slot;
+      }
+      return templates;
     },
     showFooterRow (): boolean {
       return !!this.$scopedSlots['footer-row'];

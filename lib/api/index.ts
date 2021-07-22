@@ -1,6 +1,7 @@
 import { Context } from '@nuxt/types';
 import 'vue';
 import { safeMap } from '~/lib/api/mappers';
+import { notify } from '~/lib/notifier';
 
 import * as countries from './countries';
 import * as users from './users';
@@ -122,6 +123,7 @@ function processResponse <V> (
   const mappingResult = safeMap(response.payload, processor);
   if (mappingResult instanceof Error) {
     request.lastError = mappingResult;
+    notify('error', mappingResult, response.payload);
     request.lastFail = 'invalid_data';
     return null;
   }

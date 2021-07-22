@@ -1,13 +1,13 @@
-
+/* eslint-disable no-console */
 export function notify (
   type: 'error',
-  message: string,
+  message: string | Error,
   context?: any,
 ) {
   switch (type) {
     case 'error':
-      // eslint-disable-next-line no-console
-      console.error(message, context);
+      console.error(message);
+      console.log(context);
       break;
   }
 }

@@ -14,7 +14,7 @@ export default Vue.extend({
   props: TABLE_CELL_PROPS,
   render (createElement, { props }): VNode {
     const { column, row, template } = props;
-    if (template) return template({ row });
+    if (template) return template({ column, row });
 
     if (column.cell) {
       const component = cellComponents[column.cell.type];

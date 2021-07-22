@@ -16,6 +16,7 @@
     "bootstrap-vue": "^2.21.2",
     "classnames": "^2.3.1",
     "core-js": "^3.9.1",
+    "date-fns": "^2.22.1",
     "nuxt": "^2.15.3",
     "nuxt-i18n": "^6.27.0",
     "sass": "^1.32.12",

@@ -15,6 +15,10 @@ const records = {
   students: { s: 'student', p: 'students' },
 };
 
+const common = {
+  attendance: 'attendance',
+};
+
 export default {
   form: {
     field: {
@@ -59,6 +63,7 @@ export default {
       course: records.courses.s,
       school: records.schools.s,
       students: records.students.p,
+      attendance: common.attendance,
     },
     schools: {
       meta: records.schools,
@@ -72,6 +77,7 @@ export default {
       id: shared.record.id,
       full_name: 'full name',
       country: records.countries.s,
+      attendance: common.attendance,
     },
   },
   db: {
@@ -91,7 +97,9 @@ export default {
     pages: {
       browse: 'Browse',
       new: 'Add New Record',
-      edit_students: 'Edit Students',
+      groups: {
+        edit_students: 'Edit Students',
+      },
     },
     browse: {
       search: 'search',

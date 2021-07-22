@@ -1,3 +1,5 @@
+import { parseISO as parseDate } from 'date-fns';
+
 export type RecordError = [ string, string ];
 
 export interface RecordGet<R> {
@@ -101,6 +103,16 @@ export function maybeProp<V> (
   return prop(name, parent, map);
 }
 
+export function mandatoryProp<V> (
+  name: string,
+  parent: { [prop: string]: any },
+): V {
+  return prop(name, parent, (value) => {
+    if (value === null || value === undefined) throw new MappingError('missing prop');
+    return value;
+  });
+}
+
 export function assoc<A> (
   name: string,
   parent: { [prop: string]: any },
@@ -136,6 +148,12 @@ export const val = {
   integer (value: any): number {
     if (typeof value !== 'number' || isNaN(value)) throw new MappingError('invalid number');
     return Math.round(value);
+  },
+  date (value: any): Date {
+    if (typeof value !== 'string') throw new MappingError('invalid date input');
+    const date = parseDate(value);
+    if (isNaN(date as any)) throw new MappingError('invalid date');
+    return date;
   },
 };
 
@@ -199,7 +217,7 @@ export function associatedRecords<R> (value: any): { records: AssociatedRecord<R
   }));
 }
 
-function mapAssociatedRecord<R=any> (value: any): AssociatedRecord<R> {
+export function mapAssociatedRecord<R=any> (value: any): AssociatedRecord<R> {
   return object(value, root => ({
     id: recordId(root),
     label: prop('label', root, val.string),

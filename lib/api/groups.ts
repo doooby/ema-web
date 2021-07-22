@@ -1,6 +1,13 @@
+import { formatISO } from 'date-fns';
 import * as mappers from './mappers';
 import { ApiRequest, Params, query } from '.';
-import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
+import {
+  AssociatedRecord,
+  AssociatedRecordsIndex,
+  createAssociationsMapper,
+  list, mandatoryProp,
+} from './mappers';
+import { mapAttendance, mapAssociations as mapAttendanceAssociations } from './attendances';
 
 const { object, record, recordId, prop, assoc, val } = mappers;
 
@@ -69,5 +76,28 @@ export function updateStudents (request: ApiRequest, groupId: number, studentIds
     data: { ids: studentIds },
     request,
     mapper: mappers.changedRecord,
+  });
+}
+
+export function getAttendances (request: ApiRequest, groupId: number, startDate: Date, endDate: Date) {
+  return query({
+    path: `/groups/${groupId}/attendances`,
+    data: {
+      start_date: formatISO(startDate, { representation: 'date' }),
+      end_date: formatISO(endDate, { representation: 'date' }),
+    },
+    request,
+    mapper: (root) => {
+      const associations = prop('associations', root, mapAttendanceAssociations);
+      const records = prop('records', root, records => list(
+        records,
+        item => mapAttendance(item, associations),
+      ));
+      return Object.freeze({
+        success: prop('success', root, val.boolean),
+        students: mandatoryProp<AssociatedRecordsIndex>('student', associations),
+        records,
+      });
+    },
   });
 }
