@@ -1,5 +1,7 @@
 import path from 'path';
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 export default {
   server: {
     host: process.env.HOST || 'localhost',
@@ -20,6 +22,13 @@ export default {
     link: [
       { rel: 'icon', type: 'image/png', href: '/favicon.png' },
     ],
+  },
+
+  publicRuntimeConfig: {
+    apiBaseUrl: (isDev
+      ? 'http://localhost:3071/web'
+      : 'https://ema-v2-server.herokuapp.com/web'
+    ),
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

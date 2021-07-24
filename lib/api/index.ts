@@ -45,8 +45,7 @@ const API = {
   students,
 };
 
-// const BASE_URL = 'https://ema-v2-server.herokuapp.com/web';
-const BASE_URL = 'http://localhost:3071/web';
+let BASE_URL: string;
 
 export class ApiPlugin {
   context: Context;
@@ -54,6 +53,7 @@ export class ApiPlugin {
 
   constructor (context: Context) {
     this.context = context;
+    BASE_URL = context.$config.apiBaseUrl;
   }
 
   createRequestState (): ApiRequest {
