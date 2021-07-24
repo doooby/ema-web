@@ -20,6 +20,7 @@ const common = {
 };
 
 export default {
+
   form: {
     field: {
       name: 'name',
@@ -90,6 +91,16 @@ export default {
       show: 'Show',
       records_count: 'Records Count',
       filter: 'Filter',
+    },
+    top_bar: {
+      home: 'Home',
+      logo: 'Home Page',
+      db: 'Database',
+      menu: {
+        login: 'Login',
+        logout: 'Logout',
+        language: 'language',
+      },
     },
     menu: {
       index_link: 'Index Page',
