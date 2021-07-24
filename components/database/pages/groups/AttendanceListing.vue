@@ -82,7 +82,7 @@ export default Vue.extend({
     this.fetchRecords();
   },
   methods: {
-    onDateChange (newDate) {
+    onDateChange (newDate: string) {
       this.date = parseISO(newDate);
     },
     formatISO (date: Date): string {
