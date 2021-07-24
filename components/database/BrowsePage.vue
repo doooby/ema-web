@@ -26,6 +26,7 @@
       </div>
       <div class="row no-gutters">
         <data-table-view
+          class="col"
           :actions-column-width="50"
           :columns="compiledTableColumns"
           :dataset="records ? records.records : []"

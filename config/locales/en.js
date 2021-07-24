@@ -88,7 +88,8 @@ export default {
       record_not_found: 'Record not found.',
       save: 'Save',
       show: 'Show',
-      records_count: 'records count',
+      records_count: 'Records Count',
+      filter: 'Filter',
     },
     menu: {
       index_link: 'Index Page',

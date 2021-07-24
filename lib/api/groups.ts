@@ -87,17 +87,15 @@ export function getAttendances (request: ApiRequest, groupId: number, startDate:
       end_date: formatISO(endDate, { representation: 'date' }),
     },
     request,
-    mapper: (root) => {
+    mapper: value => object(value, (root) => {
       const associations = prop('associations', root, mapAttendanceAssociations);
-      const records = prop('records', root, records => list(
-        records,
-        item => mapAttendance(item, associations),
-      ));
-      return Object.freeze({
-        success: prop('success', root, val.boolean),
+      return {
         students: mandatoryProp<AssociatedRecordsIndex>('student', associations),
-        records,
-      });
-    },
+        records: prop('records', root, records => list(
+          records,
+          item => mapAttendance(item, associations),
+        )),
+      };
+    }),
   });
 }

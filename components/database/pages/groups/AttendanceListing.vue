@@ -1,5 +1,21 @@
 <template>
   <div>
+    <div class="emy-2 d-flex">
+      <text-control
+        v-model="studentNameFilter"
+        class="ew-14"
+        :placeholder="$t('db.shared.filter')"
+        size="sm"
+      />
+      <b-form-datepicker
+        :value="date"
+        class="eml-4 ew-14"
+        size="sm"
+        label-no-date-selected=""
+        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+        @input="onDateChange"
+      />
+    </div>
     <data-table-view
       :columns="columns"
       :dataset="selectedStudents"
@@ -16,21 +32,24 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { startOfWeek, endOfWeek, parseISO as parseDate, formatISO } from 'date-fns';
+import { startOfWeek, endOfWeek, parseISO, formatISO } from 'date-fns';
 import { Group, Student } from '~/lib/records';
 import { defineTableColumns, TableColumn, View as DataTableView } from '~/components/DataTable';
 import { AssociatedRecord, AssociatedRecordsIndex } from '~/lib/api/mappers';
 import { Attendance } from '~/lib/api/attendances';
+import TextControl from '~/components/database/controls/TextControl.vue';
+import { BFormDatepicker } from 'bootstrap-vue';
 
 export default Vue.extend({
-  components: { DataTableView },
+  components: { DataTableView, TextControl, BFormDatepicker },
   props: {
     group: { type: Object as PropType<Group>, required: true },
   },
   data () {
     return {
-      date: parseDate('2020-09-06'),
+      date: parseISO('2020-09-06'),
       students: {} as AssociatedRecordsIndex,
+      studentNameFilter: '',
       records: [] as Attendance[],
       fetching: this.$api.createRequestState(),
     };
@@ -48,13 +67,24 @@ export default Vue.extend({
       ]);
     },
     selectedStudents (): AssociatedRecord[] {
-      return Object.values(this.students) as AssociatedRecord[];
+      const students = Object.values(this.students) as AssociatedRecord[];
+      const filter = this.studentNameFilter.toLowerCase();
+      if (!filter) return students;
+      return students.filter(student => student.label.toLowerCase().includes(filter));
+    },
+  },
+  watch: {
+    date () {
+      this.fetchRecords();
     },
   },
   mounted () {
     this.fetchRecords();
   },
   methods: {
+    onDateChange (newDate) {
+      this.date = parseISO(newDate);
+    },
     formatISO (date: Date): string {
       return formatISO(date, { representation: 'date' });
     },
@@ -67,7 +97,7 @@ export default Vue.extend({
         startOfWeek(this.date),
         endOfWeek(this.date),
       );
-      if (result?.success) {
+      if (result !== null) {
         this.students = result.students;
         this.records = result.records;
       }

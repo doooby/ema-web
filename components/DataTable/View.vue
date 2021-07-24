@@ -1,5 +1,5 @@
 <template>
-  <div class="col d-flex flex-column data-table">
+  <div :class="className">
     <header-row
       v-if="showHeaders"
       :actions-width="actionsColumnWidth"
@@ -45,6 +45,7 @@ import { TableColumn, TableRow } from './types';
 import TableCell from './TableCell';
 import { notify } from '~/lib/notifier';
 import HeaderRow from './c/HeaderRow.vue';
+import classNames from 'classnames';
 
 export default Vue.extend({
   components: { HeaderRow, TableCell },
@@ -61,6 +62,12 @@ export default Vue.extend({
     };
   },
   computed: {
+    className (): string {
+      return classNames(
+        'd-flex flex-column data-table',
+        this.$attrs.class,
+      );
+    },
     rows (): TableRow[] {
       const validItems = this.dataset.filter(item => item?.id);
       if (validItems.length < this.dataset.length) {

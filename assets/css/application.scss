@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $LIGHT-controls: #C2C0BF;
 $LIGHT-font: #000000;
 
@@ -67,23 +69,33 @@ $input-bg: var(--EMA-controls);
 @each $prop, $abbrev in (margin: m, padding: p) {
   @each $size, $value in $gl-sizes {
     .e#{$abbrev}-#{$size} { #{$prop}: px($value) !important; }
-    .e#{$abbrev}t-#{$size},
-    .e#{$abbrev}y-#{$size} {
-      #{$prop}-top: px($value) !important;
-    }
-    .e#{$abbrev}r-#{$size},
-    .e#{$abbrev}x-#{$size} {
-      #{$prop}-right: px($value) !important;
-    }
-    .e#{$abbrev}b-#{$size},
-    .e#{$abbrev}y-#{$size} {
-      #{$prop}-bottom: px($value) !important;
-    }
-    .e#{$abbrev}l-#{$size},
-    .e#{$abbrev}x-#{$size} {
-      #{$prop}-left: px($value) !important;
-    }
+    .e#{$abbrev}t-#{$size}, .e#{$abbrev}y-#{$size} { #{$prop}-top: px($value) !important; }
+    .e#{$abbrev}r-#{$size}, .e#{$abbrev}x-#{$size} { #{$prop}-right: px($value) !important; }
+    .e#{$abbrev}b-#{$size}, .e#{$abbrev}y-#{$size} { #{$prop}-bottom: px($value) !important; }
+    .e#{$abbrev}l-#{$size}, .e#{$abbrev}x-#{$size} { #{$prop}-left: px($value) !important; }
   }
+}
+
+@each $size, $value in (
+  map.merge($gl-sizes, (
+    9: 50,
+    10: 60,
+    11: 76,
+    12: 94,
+    13: 120,
+    14: 146,
+    15: 180,
+    16: 214,
+    17: 260,
+    18: 306,
+  ))
+) {
+  .ew-#{$size} { width: px($value) !important; }
+}
+
+.control-like {
+  background-color: var(--EMA-controls);
+  border: $input-border-width solid $input-border-color;
 }
 
 @import 'layouts/database';
