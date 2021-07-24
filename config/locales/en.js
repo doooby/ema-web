@@ -76,7 +76,7 @@ export default {
     students: {
       meta: records.students,
       id: shared.record.id,
-      full_name: 'full name jacket with waht',
+      full_name: 'full name',
       country: records.countries.s,
       attendance: common.attendance,
     },

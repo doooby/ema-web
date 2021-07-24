@@ -31,7 +31,7 @@
           </div>
           <StudentsListing :group="record" />
         </b-tab>
-        <b-tab active :title="$t('record.groups.attendance')">
+        <b-tab :title="$t('record.groups.attendance')">
           <div class="text-right">
             <!--<nuxt-link
               :to="`/database/groups/${recordId}/edit_attendance`"
