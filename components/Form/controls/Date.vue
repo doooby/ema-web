@@ -61,19 +61,19 @@ export default Vue.extend({
     },
   },
   watch: {
-    day (day) {
+    day (day: any) {
       if (typeof day !== 'number') return;
       const date = buildDate(this.year, this.month, day);
       this.onChange(date);
       if (!date) Vue.nextTick(() => { this.day = null; });
     },
-    month (month) {
+    month (month: any) {
       if (typeof month !== 'number') return;
       const date = buildDate(this.year, month, this.day);
       this.onChange(date);
       if (!date) Vue.nextTick(() => { this.day = null; });
     },
-    year (year) {
+    year (year: any) {
       if (typeof year !== 'number') return;
       const date = buildDate(year, this.month, this.day);
       this.onChange(date);
@@ -81,19 +81,19 @@ export default Vue.extend({
     },
   },
   methods: {
-    onChange (date) {
+    onChange (date: undefined | Date) {
       this.$emit('change', date);
     },
   },
 });
 
-function sanitizedDate (date): undefined | Date {
+function sanitizedDate (date: any): undefined | Date {
   return (date instanceof Date && !isNaN(date as any))
     ? date
     : undefined;
 }
 
-function buildDate (year, month, day): undefined | Date {
+function buildDate (year: any, month: any, day: any): undefined | Date {
   month = month && padStart(month.toString(), 2, '0');
   day = day && padStart(day.toString(), 2, '0');
   return sanitizedDate(parseDate(`${year}-${month}-${day}`));

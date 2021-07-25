@@ -22,6 +22,7 @@ export default Vue.extend({
         { name: 'first_name', control: 'text' },
         { name: 'last_name', control: 'text' },
         { name: 'born_at', control: 'date' },
+        { name: 'language', control: 'text' },
       ],
     };
   },

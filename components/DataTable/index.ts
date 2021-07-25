@@ -1,15 +1,17 @@
-import { TableColumn, TableRow } from './types';
 import View from './View.vue';
 
-export function defineTableColumns (columns: TableColumn[]): Readonly<TableColumn[]> {
-  // prevent name duplications
-  const index: { [name: string]: TableColumn } = {};
-  for (const column of columns) index[column.name] = Object.freeze(column);
-  return Object.freeze(Object.values(index));
+export namespace DataTable {
+  export interface Column {
+    name: string;
+    headerText?: false;
+    getText?: (item: any) => undefined | string;
+    size?: number;
+    slot?: string;
+    cell?: any
+    data?: any;
+  }
 }
 
 export {
-  View,
-  TableColumn,
-  TableRow,
+  View as DataTableView,
 };

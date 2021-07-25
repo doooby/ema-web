@@ -94,6 +94,7 @@ export default {
       language: 'Language',
       country: records.countries.s,
       attendance: common.attendance,
+      name: shared.record.name,
     },
   },
   db: {

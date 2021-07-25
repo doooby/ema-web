@@ -1,96 +1,68 @@
 <template>
   <div :class="className">
-    <header-row
-      v-if="showHeaders"
-      :actions-width="actionsColumnWidth"
-      :columns="columns"
-      :column-cell-styles="columnCellStyles"
-      @sizes-changed="onHeadersChanged"
-    >
-      <template #cell="{ column }">
-        <slot name="header-cell" :column="column" />
-      </template>
-    </header-row>
-    <div
-      v-for="row in rows"
-      :key="row.index"
-      class="d-flex --row"
-    >
-      <slot name="row-actions-cell" :item="row.item" />
-      <div
-        v-for="(column, index) in columns"
-        :key="column.name"
-        class="d-flex align-items-center justify-content-center"
-        :style="columnCellStyles[index]"
+    <table>
+      <table-colgroup
+        :columns="columns"
+        :widths="localColumnWidths"
+      />
+      <table-head
+        :columns="columns"
       >
-        <div class="overflow-hidden text-truncate --cell">
-          <table-cell
-            :key="index"
-            :column="column"
-            :row="row"
-            :template="computedColumnTemplates[column.name]"
-          />
-        </div>
-      </div>
-    </div>
-    <div v-if="showFooterRow" class="d-flex --row">
-      <slot name="footer-row" />
-    </div>
+        <template #header-cell="{ column }">
+          <slot name="header-cell" :column="column" />
+        </template>
+      </table-head>
+      <table-body
+        :columns="columns"
+        :dataset="computedDataSet"
+        :templates="computedCellTemplates"
+      />
+    </table>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { TableColumn, TableRow } from './types';
-import TableCell from './TableCell';
-import { notify } from '~/lib/notifier';
-import HeaderRow from './c/HeaderRow.vue';
 import classNames from 'classnames';
+import { DataTable } from '.';
+import TableColgroup from './TableColgroup';
+import TableHead from './TableHead';
+import TableBody from './TableBody';
+import { notify } from '~/lib/notifier';
 
 export default Vue.extend({
-  components: { HeaderRow, TableCell },
+  components: { TableColgroup, TableHead, TableBody },
   props: {
-    actionsColumnWidth: { type: Number, default: 0 },
-    columns: { type: Array as PropType<TableColumn[]>, required: true },
-    columnTemplates: { type: Object as PropType<{ [name: string]: any }>, default: undefined },
-    showHeaders: { type: Boolean, default: true },
+    columns: { type: Array as PropType<DataTable.Column[]>, required: true },
+    templates: { type: Object as PropType<{ [name: string]: any }>, default: undefined },
     dataset: { type: Array as PropType<any[]>, required: true },
   },
   data () {
     return {
-      columnCellStyles: this.columns.map(_ => null) as Array<null | string>,
+      localColumnWidths: this.columns.map(column => column.size),
     };
   },
   computed: {
-    className (): string {
+    className () {
       return classNames(
-        'd-flex flex-column data-table',
+        'data-table2',
         this.$attrs.class,
       );
     },
-    rows (): TableRow[] {
+    computedDataSet (): any[] {
       const validItems = this.dataset.filter(item => item?.id);
       if (validItems.length < this.dataset.length) {
         notify('error', 'DataTable: some item of given dataset are missing an id.');
       }
-      return validItems.map((item, index) => ({ index, item }));
+      return validItems;
     },
-    computedColumnTemplates (): { [name: string]: any } {
-      const templates = this.columnTemplates || {};
+    computedCellTemplates (): { [name: string]: any } {
+      const templates = { ...this.templates };
       for (const column of this.columns) {
-        if (!column.slot) continue;
-        const slot = this.$scopedSlots[column.slot];
+        const slot = column.slot && this.$scopedSlots[column.slot];
         if (slot) templates[column.name] = slot;
       }
       return templates;
-    },
-    showFooterRow (): boolean {
-      return !!this.$scopedSlots['footer-row'];
-    },
-  },
-  methods: {
-    onHeadersChanged (sizes: number[]): void {
-      this.columnCellStyles = sizes.map(value => `width: ${value}px;`);
     },
   },
 });

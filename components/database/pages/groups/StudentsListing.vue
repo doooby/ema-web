@@ -7,8 +7,12 @@
       <template #header-cell="{ column }">
         {{ $t(`record.students.${column.name}`) }}
       </template>
-      <template v-if="editable" #row-actions-cell="{ item }">
-        <b-button variant="outline-danger" @click="removeStudent(item)">
+      <template v-if="editable" #actions="{ dataItem }">
+        <b-button
+          variant="outline-danger"
+          size="sm"
+          @click="removeStudent(dataItem)"
+        >
           <b-icon-dash />
         </b-button>
       </template>
@@ -18,6 +22,7 @@
         <b-button
           v-if="!additionShown"
           variant="outline-primary"
+          size="sm"
           @click="showAddition"
         >
           <b-icon-plus />
@@ -48,9 +53,10 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { Group, Student } from '~/lib/records';
+import { Group } from '~/lib/records';
+import { AssociatedRecord } from '~/lib/api/mappers';
 import { defineFormFields, View as FormView } from '~/components/Form';
-import { defineTableColumns, View as DataTableView } from '~/components/DataTable';
+import { DataTableView } from '~/components/DataTable';
 import { BIconDash, BIconPlus } from 'bootstrap-vue';
 
 export default Vue.extend({
@@ -60,12 +66,16 @@ export default Vue.extend({
     editable: { type: Boolean, default: false },
   },
   data () {
+    const actionsColumn = this.editable
+      ? [ { name: 'actions', slot: 'actions', headerText: false, size: 40 } ]
+      : [];
     return {
-      columns: defineTableColumns([
-        { name: 'id', cell: { type: 'link', entity: 'students' } },
-        { name: 'full_name' },
-      ]),
-      students: [] as Student[],
+      columns: [
+        ...actionsColumn,
+        { name: 'id', cell: { type: 'link', entity: 'students' }, size: 60 },
+        { name: 'name', getText: student => student.label },
+      ],
+      students: [] as AssociatedRecord[],
       fetching: this.$api.createRequestState(),
       originalStudentsIds: [] as number[],
       changed: false,
@@ -85,7 +95,7 @@ export default Vue.extend({
       if (this.fetching.running) return;
       const result = await this.$api.query(
         this.fetching,
-        this.$api.queries.students.search,
+        this.$api.queries.students.searchAssociated,
         { group_id: this.group.id },
       );
       if (result !== null) {
@@ -96,7 +106,7 @@ export default Vue.extend({
         this.$emit('load-fail');
       }
     },
-    removeStudent (student: Student) {
+    removeStudent (student: AssociatedRecord) {
       const index = this.students.indexOf(student);
       if (index !== -1) this.students.splice(index, 1);
       this.updateChangeStatus();
@@ -104,18 +114,18 @@ export default Vue.extend({
     showAddition () {
       this.additionShown = true;
     },
-    async onAddStudent ({ student }: { student: Student }) {
+    async onAddStudent ({ student }: { student: AssociatedRecord }) {
       this.additionShown = false;
       if (this.fetchingStudentDetail.running) return;
       const result = await this.$api.query(
         this.fetchingStudentDetail,
-        this.$api.queries.students.get,
-        student.id,
+        this.$api.queries.students.searchAssociated,
+        { id: student.id },
       );
-      if (result !== null) {
-        const id = result.record.id;
-        if (!this.students.find(student => student.id === id)) {
-          this.students.push(result.record);
+      const record = result?.records?.[0];
+      if (record) {
+        if (!this.students.find(student => student.id === record.id)) {
+          this.students.push(record);
           this.updateChangeStatus();
         }
       }

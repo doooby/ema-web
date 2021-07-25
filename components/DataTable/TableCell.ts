@@ -1,33 +1,43 @@
 import Vue, { VNode } from 'vue';
-import { TABLE_CELL_PROPS } from './constants';
-
-import AssociatedRecordCell from './c/AssociatedRecordCell.vue';
-import RecordLinkCell from './c/RecordLinkCell.vue';
-
-const cellComponents: { [name: string]: any } = {
-  assoc: AssociatedRecordCell,
-  link: RecordLinkCell,
-};
+import { cellComponents } from './cells';
+import sharedProps from './cells/sharedProps';
 
 export default Vue.extend({
   functional: true,
-  props: TABLE_CELL_PROPS,
-  render (createElement, { props }): VNode {
-    const { column, row, template } = props;
-    if (template) return template({ column, row });
+  props: sharedProps,
+  render (createElement: any, { props }: any): VNode {
+    const { column, dataItem, template } = props;
+    if (template) return template({ column, dataItem });
 
     if (column.cell) {
       const component = cellComponents[column.cell.type];
-      if (component) return createElement(component, { props });
+      if (component) {
+        return createElement(
+          component,
+          {
+            props: { column, dataItem, template },
+          },
+        );
+      }
     }
 
     const { name, getText } = props.column;
-    const textValue = getText ? getText(row.item) : row.item?.[name];
-    return createElement('span', {}, renderTextCell(textValue));
+    const textValue = getText ? getText(dataItem) : dataItem?.[name];
+    return createElement(
+      'div',
+      {
+        attrs: {
+          class: 'single-row-cell',
+        },
+      },
+      sanitizeText(textValue),
+    );
   },
 });
 
-function renderTextCell (text: any): undefined | string {
-  if (typeof text === 'number') return String(text);
-  return typeof text === 'string' ? text : undefined;
+function sanitizeText (text: any): undefined | string {
+  switch (typeof text) {
+    case 'number': return String(text);
+    case 'string': return text;
+  }
 }

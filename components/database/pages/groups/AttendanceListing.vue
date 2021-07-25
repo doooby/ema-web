@@ -23,8 +23,8 @@
       <template #header-cell="{ column }">
         {{ column.data ? formatISO(column.data.attendance.date) : $t(`record.students.${column.name}`) }}
       </template>
-      <template #attendance="{ column, row }">
-        {{ presenceText(row.item, column.data.attendance) }}
+      <template #attendance="{ column, dataItem }">
+        {{ presenceText(dataItem, column.data.attendance) }}
       </template>
     </data-table-view>
   </div>
@@ -33,10 +33,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { startOfWeek, endOfWeek, parseISO, formatISO } from 'date-fns';
-import { Group, Student } from '~/lib/records';
-import { defineTableColumns, TableColumn, View as DataTableView } from '~/components/DataTable';
+import { Attendance, Group } from '~/lib/records';
+import { DataTableView, DataTable } from '~/components/DataTable';
 import { AssociatedRecord, AssociatedRecordsIndex } from '~/lib/api/mappers';
-import { Attendance } from '~/lib/api/attendances';
 import TextControl from '~/components/database/controls/TextControl.vue';
 import { BFormDatepicker } from 'bootstrap-vue';
 
@@ -55,16 +54,16 @@ export default Vue.extend({
     };
   },
   computed: {
-    columns (): Readonly<TableColumn[]> {
-      return defineTableColumns([
-        { name: 'id', cell: { type: 'link', entity: 'students' } },
-        { name: 'full_name', getText: student => student.label },
+    columns (): DataTable.Column[] {
+      return [
+        { name: 'id', cell: { type: 'link', entity: 'students' }, size: 60 },
+        { name: 'name', getText: student => student.label },
         ...this.records.map((attendance, index) => ({
           name: `a-${index}`,
           data: { attendance },
           slot: 'attendance',
         })),
-      ]);
+      ];
     },
     selectedStudents (): AssociatedRecord[] {
       const students = Object.values(this.students) as AssociatedRecord[];
@@ -102,7 +101,7 @@ export default Vue.extend({
         this.records = result.records;
       }
     },
-    presenceText (student: Student, attendance: Attendance): string {
+    presenceText (student: AssociatedRecord, attendance: Attendance): string {
       const present = attendance.present_students.find(s => s.id === student.id);
       return present ? 'yep' : 'nope';
     },
