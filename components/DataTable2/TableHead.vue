@@ -6,8 +6,12 @@
         :key="column.name"
         scope="col"
       >
-        <div>
-          <slot name="header-cell" :column="column" />
+        <div class="three-rows-cell">
+          <slot
+            v-if="column.headerText !== false"
+            name="header-cell"
+            :column="column"
+          />
         </div>
       </th>
       <th scope="col" />

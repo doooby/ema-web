@@ -1,5 +1,9 @@
 <template>
-  <show-record-link :entity="column.cell.entity" :record-id="associatedRecord.id">
+  <show-record-link
+    class="single-row-cell"
+    :entity="column.cell.entity"
+    :record-id="associatedRecord.id"
+  >
     {{ associatedRecord.label }}
   </show-record-link>
 </template>

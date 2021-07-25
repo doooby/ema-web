@@ -5,16 +5,10 @@
     :table-columns="tableColumns"
   >
     <template #actions="{ dataItem }">
-      <show-record-link
+      <record-actions-cell
         entity="students"
-        :record-id="dataItem.id"
-      >
-        {{ dataItem.id }}
-      </show-record-link>
-      <edit-record-link
-        class="eml-3"
-        entity="students"
-        :record-id="dataItem.id"
+        :record="dataItem"
+        :edit="true"
       />
     </template>
   </browse-page>
@@ -25,11 +19,10 @@ import Vue from 'vue';
 import { formatISO } from 'date-fns';
 import BrowsePage from '~/components/database/BrowsePage.vue';
 import { Student } from '~/lib/records';
-import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
-import EditRecordLink from '~/components/database/EditRecordLink.vue';
+import RecordActionsCell from '~/components/database/RecordActionsCell.vue';
 
 export default Vue.extend({
-  components: { BrowsePage, ShowRecordLink, EditRecordLink },
+  components: { RecordActionsCell, BrowsePage },
   layout: 'database',
   data () {
     return {
@@ -37,16 +30,26 @@ export default Vue.extend({
         { name: 'name', control: 'text' },
       ],
       tableColumns: [
-        { name: 'id', slot: 'actions' },
+        { name: 'actions', slot: 'actions', headerText: false, size: 40 },
+        { name: 'id', cell: { type: 'link' }, size: 60 },
         { name: 'first_name_en' },
         { name: 'last_name_en' },
         { name: 'first_name' },
         { name: 'last_name' },
         { name: 'born_at', getText: (student: Student) => formatISO(student.born_at, { representation: 'date' }) },
-        { name: 'gender' },
+        { name: 'gender', getText: (student: Student) => this.translateGender(student.gender) },
         { name: 'language' },
       ],
     };
+  },
+  methods: {
+    translateGender (gender: string) {
+      switch (gender) {
+        case 'f': return this.$t('gender.f');
+        case 'm': return this.$t('gender.m');
+        default: return this.$t('gender.other');
+      }
+    },
   },
 });
 </script>

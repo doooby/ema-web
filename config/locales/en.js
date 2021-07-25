@@ -20,7 +20,11 @@ const common = {
 };
 
 export default {
-
+  gender: {
+    m: 'Male',
+    f: 'Female',
+    other: 'Other',
+  },
   form: {
     field: {
       name: 'name',
@@ -81,7 +85,13 @@ export default {
     students: {
       meta: records.students,
       id: shared.record.id,
-      full_name: 'full name',
+      first_name_en: 'First Name EN',
+      last_name_en: 'Last Name EN',
+      first_name: 'First Name',
+      last_name: 'Last Name',
+      born_at: 'Date of Birth',
+      gender: 'Gender',
+      language: 'Language',
       country: records.countries.s,
       attendance: common.attendance,
     },

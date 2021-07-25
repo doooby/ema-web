@@ -36,11 +36,10 @@ export default Vue.extend({
     columns: { type: Array as PropType<DataTable.Column[]>, required: true },
     templates: { type: Object as PropType<{ [name: string]: any }>, default: undefined },
     dataset: { type: Array as PropType<any[]>, required: true },
-    // columnWidths: { type: Array as PropType<number[]>, default: undefined },
   },
   data () {
     return {
-      localColumnWidths: [] as number[],
+      localColumnWidths: this.columns.map(column => column.size),
     };
   },
   computed: {

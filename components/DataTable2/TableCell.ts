@@ -12,13 +12,26 @@ export default Vue.extend({
     if (column.cell) {
       const component = cellComponents[column.cell.type];
       if (component) {
-        return createElement(component, { column, dataItem, template });
+        return createElement(
+          component,
+          {
+            props: { column, dataItem, template },
+          },
+        );
       }
     }
 
     const { name, getText } = props.column;
     const textValue = getText ? getText(dataItem) : dataItem?.[name];
-    return createElement('span', {}, sanitizeText(textValue));
+    return createElement(
+      'div',
+      {
+        attrs: {
+          class: 'single-row-cell',
+        },
+      },
+      sanitizeText(textValue),
+    );
   },
 });
 

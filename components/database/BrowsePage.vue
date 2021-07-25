@@ -43,7 +43,6 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { FormField, defineFormFields, createFormModel, FormValues } from '~/components/Form';
-// import { TableColumn, defineTableColumns, View as DataTableView } from '~/components/DataTable';
 import { DataTable, DataTableView } from '~/components/DataTable2';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';

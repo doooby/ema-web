@@ -20,7 +20,7 @@ export default Vue.extend({
   },
   computed: {
     styles (): string[] {
-      return this.columns.map((_, i) => `width: ${this.widths[i] || 200}px`);
+      return this.columns.map((_, i) => `width: ${this.widths[i] || 150}px`);
     },
   },
 });
