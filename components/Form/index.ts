@@ -34,7 +34,14 @@ export function formModelToRecordParams (fields: FormField[], values: FormValues
           continue;
       }
     }
-    params[name] = values[name];
+    switch (control) {
+      case 'calendar':
+      case 'date':
+      case 'text':
+        params[name] = values[name] || '';
+        continue;
+    }
+    throw new Error(`Form field of type ${control} cannot be mapped to param`);
   }
   return params;
 }

@@ -5,7 +5,9 @@ export interface AssociationControl {
 }
 
 type Control =
-  'text'
+  'calendar'
+  | 'date'
+  | 'text'
   | AssociationControl
   ;
 

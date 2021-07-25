@@ -1,5 +1,6 @@
 <template>
   <nuxt-link
+    :class="$attrs.class"
     :to="`/database/${entity}/${recordId}`"
     :title="$t('db.shared.show')"
   >

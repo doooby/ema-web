@@ -94,7 +94,7 @@ export default Vue.extend({
       const params = formModelToRecordParams(this.form.fields, this.formValues);
       const result = await this.$api.query(this.updating, requestUpdate, id, params);
       if (result?.success) {
-        this.$emit('updated');
+        this.$emit('updated', id);
       } else if (result?.errors) {
         this.errors = result.errors;
       } else {

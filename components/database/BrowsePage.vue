@@ -27,7 +27,7 @@
       <div class="row no-gutters">
         <data-table-view
           class="col"
-          :actions-column-width="50"
+          :actions-column-width="recordActions ? 50 : 0"
           :columns="compiledTableColumns"
           :dataset="records ? records.records : []"
           :column-templates="columnTemplates"

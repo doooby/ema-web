@@ -24,6 +24,11 @@ export default {
   form: {
     field: {
       name: 'name',
+      date: {
+        day: 'Day',
+        month: 'Month',
+        year: 'Year',
+      },
     },
     actions: {
 

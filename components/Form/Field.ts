@@ -3,17 +3,21 @@ import { FormField } from './types';
 import { FIELD_PROPS } from './constants';
 
 import VoidControl from './controls/Void.vue';
-import TextControl from './controls/Text.vue';
 import AssociationControl from './controls/Association.vue';
+import CalendarControl from './controls/Calendar.vue';
+import DateControl from './controls/Date.vue';
+import TextControl from './controls/Text.vue';
 
 const controlComponents: { [name: string]: any } = {
   assoc: AssociationControl,
+  calendar: CalendarControl,
+  date: DateControl,
   text: TextControl,
 };
 
 function getControl (field: FormField): null | Vue.Component {
   const control = field.control;
-  let component = null as null | Vue.Component;
+  let component;
   if (typeof control === 'object') {
     component = controlComponents[control.type];
   } else {
