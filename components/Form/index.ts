@@ -1,3 +1,4 @@
+import { formatISO } from 'date-fns';
 import View from './View.vue';
 import { FormField, FormValues } from './types';
 import { notify } from '~/lib/notifier';
@@ -37,7 +38,11 @@ export function formModelToRecordParams (fields: FormField[], values: FormValues
     }
     switch (control) {
       case 'calendar':
-      case 'date':
+      case 'date': {
+        const date = values[name];
+        params[name] = date ? formatISO(date, { representation: 'date' }) : '';
+        continue;
+      }
       case 'text':
         params[name] = values[name] || '';
         continue;

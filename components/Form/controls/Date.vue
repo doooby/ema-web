@@ -33,8 +33,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import times from 'lodash/times';
-import reverse from 'lodash/reverse';
+import { times, reverse, padStart } from 'lodash';
 import { parseISO as parseDate } from 'date-fns';
 import { FIELD_PROPS } from '../constants';
 import { fieldCaptionGet } from '..';
@@ -46,10 +45,11 @@ const YEARS_OPTIONS = reverse(times(50, val => 2020 - val));
 export default Vue.extend({
   props: FIELD_PROPS,
   data () {
+    const date = sanitizedDate(this.formValues[this.field.name]);
     return {
-      day: null,
-      month: null,
-      year: null,
+      day: date ? date.getDate() : null,
+      month: date ? date.getMonth() + 1 : null,
+      year: date ? date.getFullYear() : null,
       dayOptions: DAY_OPTIONS,
       monthOptions: MONTHS_OPTIONS,
       yearOptions: YEARS_OPTIONS,
@@ -59,18 +59,43 @@ export default Vue.extend({
     labelText (): string {
       return this.$t(fieldCaptionGet(this.field)) as string;
     },
-    sanitizedValue (): undefined | Date {
-      const rawValue = this.formValues[this.field.name];
-      return (rawValue instanceof Date && !isNaN(rawValue as any))
-        ? rawValue
-        : undefined;
+  },
+  watch: {
+    day (day) {
+      if (typeof day !== 'number') return;
+      const date = buildDate(this.year, this.month, day);
+      this.onChange(date);
+      if (!date) Vue.nextTick(() => { this.day = null; });
+    },
+    month (month) {
+      if (typeof month !== 'number') return;
+      const date = buildDate(this.year, month, this.day);
+      this.onChange(date);
+      if (!date) Vue.nextTick(() => { this.day = null; });
+    },
+    year (year) {
+      if (typeof year !== 'number') return;
+      const date = buildDate(year, this.month, this.day);
+      this.onChange(date);
+      if (!date) Vue.nextTick(() => { this.day = null; });
     },
   },
   methods: {
-    onDateChange (rawDate: string) {
-      const date = parseDate(rawDate);
-      this.$emit('change', isNaN(date as any) ? undefined : date);
+    onChange (date) {
+      this.$emit('change', date);
     },
   },
 });
+
+function sanitizedDate (date): undefined | Date {
+  return (date instanceof Date && !isNaN(date as any))
+    ? date
+    : undefined;
+}
+
+function buildDate (year, month, day): undefined | Date {
+  month = month && padStart(month.toString(), 2, '0');
+  day = day && padStart(day.toString(), 2, '0');
+  return sanitizedDate(parseDate(`${year}-${month}-${day}`));
+}
 </script>
