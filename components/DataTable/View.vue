@@ -25,9 +25,9 @@
 import Vue, { PropType } from 'vue';
 import classNames from 'classnames';
 import { DataTable } from '.';
-import TableColgroup from './TableColgroup';
-import TableHead from './TableHead';
-import TableBody from './TableBody';
+import TableColgroup from './TableColgroup.vue';
+import TableHead from './TableHead.vue';
+import TableBody from './TableBody.vue';
 import { notify } from '~/lib/notifier';
 
 export default Vue.extend({
@@ -43,23 +43,25 @@ export default Vue.extend({
     };
   },
   computed: {
-    className () {
+    className (): string {
       return classNames(
         'data-table2',
         this.$attrs.class,
       );
     },
     computedDataSet (): any[] {
-      const validItems = this.dataset.filter(item => item?.id);
-      if (validItems.length < this.dataset.length) {
+      const dataset = this.dataset as any;
+      const validItems = dataset.filter((item: any) => item?.id);
+      if (validItems.length < dataset.length) {
         notify('error', 'DataTable: some item of given dataset are missing an id.');
       }
       return validItems;
     },
+    // TODO why `this.anything` raises typescript issues?
     computedCellTemplates (): { [name: string]: any } {
-      const templates = { ...this.templates };
-      for (const column of this.columns) {
-        const slot = column.slot && this.$scopedSlots[column.slot];
+      const templates = { ...this.templates } as { [name: string]: any };
+      for (const column of (this.columns as DataTable.Column[])) {
+        const slot = column.slot && (this.$scopedSlots as { [name: string]: any })[column.slot];
         if (slot) templates[column.name] = slot;
       }
       return templates;

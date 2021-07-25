@@ -73,7 +73,7 @@ export default Vue.extend({
       columns: [
         ...actionsColumn,
         { name: 'id', cell: { type: 'link', entity: 'students' }, size: 60 },
-        { name: 'name', getText: student => student.label },
+        { name: 'name', getText: (student: AssociatedRecord) => student.label },
       ],
       students: [] as AssociatedRecord[],
       fetching: this.$api.createRequestState(),

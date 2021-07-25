@@ -37,17 +37,17 @@ export default Vue.extend({
         { name: 'first_name' },
         { name: 'last_name' },
         { name: 'born_at', getText: (student: Student) => formatISO(student.born_at, { representation: 'date' }) },
-        { name: 'gender', getText: (student: Student) => this.translateGender(student.gender) },
+        { name: 'gender', getText: (student: Student) => (this as any).translateGender(student.gender) },
         { name: 'language' },
       ],
     };
   },
   methods: {
-    translateGender (gender: string) {
+    translateGender (gender: string): string {
       switch (gender) {
-        case 'f': return this.$t('gender.f');
-        case 'm': return this.$t('gender.m');
-        default: return this.$t('gender.other');
+        case 'f': return this.$t('gender.f') as string;
+        case 'm': return this.$t('gender.m') as string;
+        default: return this.$t('gender.other') as string;
       }
     },
   },
