@@ -4,7 +4,7 @@ import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } fr
 
 const { object, record, recordId, prop, assoc, val } = mappers;
 
-interface EducationalLevel {
+interface EducationLevel {
   id: number;
   order: number;
   name: string;
@@ -17,7 +17,7 @@ interface Associations {
   country: AssociatedRecordsIndex,
 }
 
-function mapEducationalLevel (value: any, associations?: Associations): EducationalLevel {
+function mapEducationLevel (value: any, associations?: Associations): EducationLevel {
   return object(value, root => ({
     id: recordId(root),
     order: prop('order', root, val.integer),
@@ -32,34 +32,34 @@ const mapAssociations = createAssociationsMapper<Associations>('country');
 
 export function search (request: ApiRequest, params: Params) {
   return query({
-    path: '/educational_levels/search',
+    path: '/education_levels/search',
     data: params,
     request,
-    mapper: payload => mappers.paginatedRecords(payload, mapEducationalLevel, mapAssociations),
+    mapper: payload => mappers.paginatedRecords(payload, mapEducationLevel, mapAssociations),
   });
 }
 
-export function get (request: ApiRequest, educationalLevelId: number) {
+export function get (request: ApiRequest, educationLevelId: number) {
   return query({
-    path: `/educational_levels/${educationalLevelId}`,
+    path: `/education_levels/${educationLevelId}`,
     request,
-    mapper: payload => record(payload, mapEducationalLevel, mapAssociations),
+    mapper: payload => record(payload, mapEducationLevel, mapAssociations),
   });
 }
 
-export function create (request: ApiRequest, educationalLevel: Params) {
+export function create (request: ApiRequest, EducationLevel: Params) {
   return query({
-    path: '/educational_levels/create',
-    data: { educationalLevel },
+    path: '/education_levels/create',
+    data: { EducationLevel },
     request,
     mapper: mappers.changedRecord,
   });
 }
 
-export function update (request: ApiRequest, educationalLevelId: number, educationalLevel: Params) {
+export function update (request: ApiRequest, educationLevelId: number, EducationLevel: Params) {
   return query({
-    path: `/educational_levels/${educationalLevelId}/update`,
-    data: { educationalLevel },
+    path: `/education_levels/${educationLevelId}/update`,
+    data: { EducationLevel },
     request,
     mapper: mappers.changedRecord,
   });

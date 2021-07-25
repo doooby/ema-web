@@ -1,6 +1,6 @@
 <template>
   <show-page
-    entity="educational_levels"
+    entity="education_levels"
     :record-id="recordId"
   >
     <template #detail="{ record }">

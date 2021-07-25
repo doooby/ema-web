@@ -31,7 +31,7 @@ export default Vue.extend({
       ],
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-        { name: 'id', cell: { type: 'link' }, size: 60 },
+        { name: 'id', cell: { type: 'link', entity: 'students' }, size: 60 },
         { name: 'first_name_en' },
         { name: 'last_name_en' },
         { name: 'first_name' },

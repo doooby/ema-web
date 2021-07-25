@@ -1,11 +1,12 @@
 <template>
-  <show-record-link
-    class="single-row-cell"
-    :entity="column.cell.entity"
-    :record-id="dataItem.id"
-  >
-    {{ caption }}
-  </show-record-link>
+  <div class="single-row-cell">
+    <show-record-link
+      :entity="column.cell.entity"
+      :record-id="dataItem.id"
+    >
+      {{ caption }}
+    </show-record-link>
+  </div>
 </template>
 
 <script lang="ts">

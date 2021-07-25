@@ -7,7 +7,7 @@ import * as countries from './countries';
 import * as users from './users';
 
 import * as courses from './courses';
-import * as educational_levels from './educational_levels';
+import * as education_levels from './education_levels';
 import * as groups from './groups';
 import * as schools from './schools';
 import * as students from './students';
@@ -39,7 +39,7 @@ const API = {
   users,
 
   courses,
-  educational_levels,
+  education_levels,
   groups,
   schools,
   students,

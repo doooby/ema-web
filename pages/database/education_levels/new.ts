@@ -1,10 +1,10 @@
 import { buildDatabasePage } from '~/components';
-import EditPage from '~/components/database/EditPage.vue';
+import NewPage from '~/components/database/NewPage.vue';
 
 export default buildDatabasePage(
-  EditPage,
+  NewPage,
   {
-    entity: 'educational_levels',
+    entity: 'education_levels',
     fields: [
       { name: 'order', control: 'text' },
       { name: 'name', control: 'text' },
