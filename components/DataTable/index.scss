@@ -25,3 +25,36 @@
     padding: px-size(1);
   }
 }
+
+.data-table2 {
+  overflow-x: scroll;
+  $header-bg-color: var(--EMA-controls);
+
+  table {
+    width: 100%;
+    color: $table-color;
+    background-color: $table-bg;
+    table-layout: fixed;
+
+    th,
+    td {
+      padding: px-size(1);
+      vertical-align: top;
+      border-top: $table-border-width solid $table-border-color;
+    }
+
+    thead {
+      background-color: $header-bg-color;
+      th {
+        border-bottom: (2 * $table-border-width) solid $table-border-color;
+        > div {
+          text-overflow: ellipsis;
+          word-wrap: break-word;
+          overflow: hidden;
+          max-height: 4em;
+          text-align: center;
+        }
+      }
+    }
+  }
+}

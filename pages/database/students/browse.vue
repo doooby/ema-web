@@ -4,17 +4,17 @@
     :search-fields="searchFields"
     :table-columns="tableColumns"
   >
-    <template #actions="{ row }">
+    <template #actions="{ dataItem }">
       <show-record-link
         entity="students"
-        :record-id="row.item.id"
+        :record-id="dataItem.id"
       >
-        {{ row.item.id }}
+        {{ dataItem.id }}
       </show-record-link>
       <edit-record-link
         class="eml-3"
         entity="students"
-        :record-id="row.item.id"
+        :record-id="dataItem.id"
       />
     </template>
   </browse-page>

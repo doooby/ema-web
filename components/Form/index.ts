@@ -1,5 +1,6 @@
 import View from './View.vue';
 import { FormField, FormValues } from './types';
+import { notify } from '~/lib/notifier';
 
 export {
   FormField,
@@ -41,7 +42,7 @@ export function formModelToRecordParams (fields: FormField[], values: FormValues
         params[name] = values[name] || '';
         continue;
     }
-    throw new Error(`Form field of type ${control} cannot be mapped to param`);
+    notify('error', `Form: field of type ${control} cannot be mapped to param`);
   }
   return params;
 }

@@ -89,7 +89,7 @@ export default {
   db: {
     shared: {
       edit: 'Edit',
-      loading: '...loading the record',
+      loading: '...loading',
       processing: '...processing',
       record_not_found: 'Record not found.',
       save: 'Save',

@@ -27,32 +27,12 @@
       <div class="row no-gutters">
         <data-table-view
           class="col"
-          :actions-column-width="recordActions ? 50 : 0"
-          :columns="compiledTableColumns"
+          :columns="tableColumns"
           :dataset="records ? records.records : []"
-          :column-templates="columnTemplates"
+          :templates="columnTemplates"
         >
           <template #header-cell="{ column }">
             {{ $t(`record.${entity}.${column.name}`) }}
-          </template>
-          <template
-            v-if="recordActions && recordActions.edit"
-            #row-actions-cell="{ item }"
-          >
-            <div style="width: 50px;">
-              <b-dropdown no-caret variant="link" dropright>
-                <template #button-content>
-                  <b-icon-three-dots-vertical />
-                </template>
-                <b-dropdown-item
-                  v-if="recordActions && recordActions.edit"
-                  :to="`/database/${entity}/${item.id}/edit`"
-                >
-                  <b-icon-pencil variant="secondary" />
-                  {{ $t('db.shared.edit') }}
-                </b-dropdown-item>
-              </b-dropdown>
-            </div>
           </template>
         </data-table-view>
       </div>
@@ -63,11 +43,11 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { FormField, defineFormFields, createFormModel, FormValues } from '~/components/Form';
-import { TableColumn, defineTableColumns, View as DataTableView } from '~/components/DataTable';
+// import { TableColumn, defineTableColumns, View as DataTableView } from '~/components/DataTable';
+import { DataTable, DataTableView } from '~/components/DataTable2';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';
 import { notify } from '~/lib/notifier';
-import { BIconPencil, BIconThreeDotsVertical } from 'bootstrap-vue';
 import { PaginatedRecords } from '~/lib/api/mappers';
 
 interface RecordActions {
@@ -75,11 +55,11 @@ interface RecordActions {
 }
 
 export default Vue.extend({
-  components: { SearchForm, DataTableView, BIconPencil, BIconThreeDotsVertical, RecordsPagination },
+  components: { SearchForm, DataTableView, RecordsPagination },
   props: {
     entity: { type: String, required: true },
     searchFields: { type: Array as PropType<FormField[]>, required: true },
-    tableColumns: { type: Array as PropType<TableColumn[]>, required: true },
+    tableColumns: { type: Array as PropType<DataTable.Column[]>, required: true },
     recordActions: { type: Object as PropType<RecordActions>, default: null },
   },
   data () {
@@ -93,12 +73,9 @@ export default Vue.extend({
     compiledSearchFields (): Readonly<FormField[]> {
       return defineFormFields(this.searchFields);
     },
-    compiledTableColumns (): Readonly<TableColumn[]> {
-      return defineTableColumns(this.tableColumns);
-    },
     columnTemplates (): { [name: string]: any } {
       const templates = {} as { [name: string]: any };
-      for (const column of this.compiledTableColumns) {
+      for (const column of this.tableColumns) {
         if (!column.slot) continue;
         const slot = this.$scopedSlots[column.slot];
         if (slot) templates[column.name] = slot;
