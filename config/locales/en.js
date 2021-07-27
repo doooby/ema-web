@@ -17,6 +17,7 @@ const records = {
 
 const common = {
   attendance: 'attendance',
+  address: 'address',
 };
 
 export default {
@@ -89,12 +90,25 @@ export default {
       last_name_en: 'Last Name EN',
       first_name: 'First Name',
       last_name: 'Last Name',
-      born_at: 'Date of Birth',
+      born_on: 'Date of Birth',
       gender: 'Gender',
       language: 'Language',
       country: records.countries.s,
       attendance: common.attendance,
       name: shared.record.name,
+      address: common.address,
+      residency: 'Residency Status',
+      distance_school_km: 'Distance to School (km)',
+      distance_school_time: 'Distance to School (minutes)',
+      caregivers_en: 'Parents / Caregivers EN',
+      caregivers: 'Parents / Caregivers',
+      caregivers_contact: 'Parents / Caregivers Contact',
+      out_of_school: 'Out of School Before Enrolment',
+      enrolment_on: 'Date of Enrolment',
+      completion_on: 'Date of Completion',
+      dropped_out_on: 'Date of Drop-out',
+      drop_out_reason: 'Drop-out Reason',
+      disability: 'Disability',
     },
   },
   db: {

@@ -10,7 +10,7 @@ export default buildDatabasePage(
       { name: 'last_name_en', control: 'text' },
       { name: 'first_name', control: 'text' },
       { name: 'last_name', control: 'text' },
-      { name: 'born_at', control: 'date' },
+      { name: 'born_on', control: 'date' },
     ],
   },
 );

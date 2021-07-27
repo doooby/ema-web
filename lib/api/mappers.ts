@@ -28,7 +28,7 @@ export interface AssociatedRecord<R=any> {
 
 export type AssociatedRecordsIndex<R=any> = { [id: string]: undefined | AssociatedRecord<R> }
 
-class MappingError extends Error {
+export class MappingError extends Error {
   reason: string;
   propTraces: [ string, any ][] = [];
 

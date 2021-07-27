@@ -20,6 +20,7 @@ import { formatISO } from 'date-fns';
 import BrowsePage from '~/components/database/BrowsePage.vue';
 import { Student } from '~/lib/records';
 import RecordActionsCell from '~/components/database/RecordActionsCell.vue';
+import { caregivers_cfwToText, disabilityToText } from '~/lib/api/students';
 
 export default Vue.extend({
   components: { RecordActionsCell, BrowsePage },
@@ -36,14 +37,28 @@ export default Vue.extend({
         { name: 'last_name_en' },
         { name: 'first_name' },
         { name: 'last_name' },
-        { name: 'born_at', getText: (student: Student) => formatISO(student.born_at, { representation: 'date' }) },
+        { name: 'born_on', getText: ({ born_on }: Student) => formatDate(born_on) },
         { name: 'gender', getText: (student: Student) => (this as any).translateGender(student.gender) },
         { name: 'language' },
+        { name: 'address' },
+        { name: 'residency' },
+        { name: 'distance_school_km' },
+        { name: 'distance_school_time' },
+        { name: 'caregivers_en', getText: (student: Student) => student.caregivers_en?.join(', ') },
+        { name: 'caregivers', getText: (student: Student) => student.caregivers_en?.join(', ') },
+        { name: 'caregivers_contact' },
+        { name: 'caregivers_cfw', getText: caregivers_cfwToText },
+        { name: 'out_of_school' },
+        { name: 'enrolment_on', getText: ({ enrolment_on }: Student) => formatDate(enrolment_on) },
+        { name: 'completion_on', getText: ({ completion_on }: Student) => formatDate(completion_on) },
+        { name: 'dropped_out_on', getText: ({ dropped_out_on }: Student) => formatDate(dropped_out_on) },
+        { name: 'drop_out_reason' },
+        { name: 'disability', getText: disabilityToText },
       ],
     };
   },
   methods: {
-    translateGender (gender: string): string {
+    translateGender (gender?: string): string {
       switch (gender) {
         case 'f': return this.$t('gender.f') as string;
         case 'm': return this.$t('gender.m') as string;
@@ -52,4 +67,10 @@ export default Vue.extend({
     },
   },
 });
+
+function formatDate (date?: Date): string {
+  if (!date) return '';
+  return formatISO(date, { representation: 'date' });
+}
+
 </script>
