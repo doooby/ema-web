@@ -13,7 +13,8 @@
         :id="domId"
         type="text"
         class="form-control"
-        :value="sanitizedValue"
+        :value="value"
+        @input="onInput"
         @blur="onBlur"
         @keypress.ctrl.enter="onCommit"
       >
@@ -33,21 +34,27 @@ import { fieldCaptionGet } from '..';
 
 export default Vue.extend({
   props: FIELD_PROPS,
+  data () {
+    const value = Number(this.formValues[this.field.name]);
+    return {
+      value: isNaN(value) ? '' : value,
+    };
+  },
   computed: {
     labelText (): string {
       return this.$t(fieldCaptionGet(this.field)) as string;
     },
-    sanitizedValue (): string {
-      const rawValue = this.formValues[this.field.name];
-      return rawValue ? String(rawValue) : '';
-    },
   },
   methods: {
-    onBlur (event: {target: HTMLInputElement}) {
-      this.$emit('change', event.target.value);
+    onInput (event: {target: HTMLInputElement}): void {
+      const value = Number(event.target.value);
+      if (!isNaN(value)) this.value = value;
+      else event.target.value = String(this.value);
     },
-    onCommit (event: {target: HTMLInputElement}) {
-      this.$emit('change', event.target.value);
+    onBlur (): void {
+      this.$emit('change', this.value);
+    },
+    onCommit (): void {
       this.$emit('commit');
     },
   },

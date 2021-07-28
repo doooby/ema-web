@@ -109,6 +109,12 @@ export default {
       dropped_out_on: 'Date of Drop-out',
       drop_out_reason: 'Drop-out Reason',
       disability: 'Disability',
+      disability_detail: {
+        s: 'Status',
+        d: 'Diagnosis',
+        n: 'Assistance Needed',
+        p: 'Assistance Provided',
+      },
     },
   },
   db: {
@@ -151,6 +157,17 @@ export default {
     },
     edit: {
       title: 'edit {entity}',
+    },
+  },
+  misc: {
+    language: {
+      en: 'English',
+    },
+    distance: {
+      km: 'Kilometers',
+    },
+    time: {
+      min: 'Minutes',
     },
   },
 };

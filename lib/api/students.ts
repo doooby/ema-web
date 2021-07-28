@@ -111,7 +111,10 @@ export function caregivers_cfwToText ({ caregivers_cfw }: Student): string {
 export function disabilityToText ({ disability }: Student): string {
   if (!disability) return '';
   const { s, d, n, p } = disability;
-  return `status=${s}, diagnosis=${d}, assistance needed=${n}, provided=${p}`;
+  const dd = d === 1 ? d : (d === 0 ? 0 : 'n/a');
+  const nn = n === 1 ? n : 0;
+  const pp = p === 1 ? p : 0;
+  return `status=${s}, diagnosis=${dd}, assistance needed=${nn}, provided=${pp}`;
 }
 
 export function search (request: ApiRequest, params: Params) {

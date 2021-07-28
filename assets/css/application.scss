@@ -19,24 +19,6 @@ $gl-sizes: (
   8: 40,
 );
 
-:root {
-  --EMA-bg: white;
-  --EMA-controls: #{$LIGHT-controls};
-  --EMA-font: #{$LIGHT-font};
-}
-
-$body-bg: var(--EMA-bg);
-//$body-color: $LIGHT-font;
-
-//$enable-shadows: false;
-$enable-rounded: false;
-
-$input-bg: var(--EMA-controls);
-//$text-muted: $LIGHT-controls;
-
-@import 'bootstrap';
-@import '~bootstrap-vue/src/index';
-
 @function px ($value) {
   @return #{$value}px;
 }
@@ -56,6 +38,15 @@ $input-bg: var(--EMA-controls);
 @function big-size($multiplier) {
   @return $multiplier * size(6);
 }
+
+:root {
+  --EMA-bg: white;
+  --EMA-controls: #{$LIGHT-controls};
+  --EMA-font: #{$LIGHT-font};
+}
+
+@import 'bootstrap';
+@import '~bootstrap-vue/src/index';
 
 @mixin button-like {
   cursor: pointer;

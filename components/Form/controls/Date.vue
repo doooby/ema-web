@@ -27,6 +27,15 @@
           :options="yearOptions"
         />
       </div>
+      <div v-if="field.data && field.data.deletable">
+        <b-button
+          variant="default"
+          class="eml-4 epx-2 control-like"
+          @click="onClear"
+        >
+          <b-icon-x variant="secondary" />
+        </b-button>
+      </div>
     </div>
   </b-form-group>
 </template>
@@ -37,12 +46,14 @@ import { times, reverse, padStart } from 'lodash';
 import { parseISO as parseDate } from 'date-fns';
 import { FIELD_PROPS } from '../constants';
 import { fieldCaptionGet } from '..';
+import { BIconX } from 'bootstrap-vue';
 
 const DAY_OPTIONS = times(31, val => val + 1);
 const MONTHS_OPTIONS = times(12, val => val + 1);
 const YEARS_OPTIONS = reverse(times(50, val => 2020 - val));
 
 export default Vue.extend({
+  components: { BIconX },
   props: FIELD_PROPS,
   data () {
     const date = sanitizedDate(this.formValues[this.field.name]);
@@ -81,8 +92,13 @@ export default Vue.extend({
     },
   },
   methods: {
-    onChange (date: undefined | Date) {
+    onChange (date: undefined | Date): void {
       this.$emit('change', date);
+    },
+    onClear (): void {
+      this.day = null;
+      this.month = null;
+      this.year = null;
     },
   },
 });

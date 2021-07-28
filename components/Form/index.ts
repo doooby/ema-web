@@ -28,12 +28,19 @@ export function createFormModel (fields?: FormField[], record?: any): FormValues
 
 export function formModelToRecordParams (fields: FormField[], values: FormValues): FormValues {
   const params = {} as FormValues;
+  let control_type: any;
   for (const { name, control } of fields) {
     if (typeof control === 'object') {
       switch (control.type) {
         case 'assoc':
           params[control.name || `${name}_id`] = values[name]?.id;
           continue;
+        case 'custom':
+          params[name] = values[name] || '';
+          continue;
+        default:
+          // @ts-ignore
+          control_type = control.type;
       }
     }
     switch (control) {
@@ -43,17 +50,28 @@ export function formModelToRecordParams (fields: FormField[], values: FormValues
         params[name] = date ? formatISO(date, { representation: 'date' }) : '';
         continue;
       }
+      case 'integer':
       case 'text':
         params[name] = values[name] || '';
         continue;
     }
-    notify('error', `Form: field of type ${control} cannot be mapped to param`);
+    notify('error', `Form: field of type ${control_type || control} cannot be mapped to param`);
   }
   return params;
 }
 
 export function fieldCaptionGet (field: FormField): string {
   return field.caption || `form.field.${field.name}`;
+}
+
+export function fieldLabelSet (field: FormField, name: string, value: string): FormField {
+  const labels = field.labels || {};
+  labels[name] = value;
+  return { ...field, labels };
+}
+
+export function fieldLabelGet (field: FormField, name: string): undefined | string {
+  return field.labels?.[name];
 }
 
 export {

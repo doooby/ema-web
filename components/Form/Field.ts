@@ -6,12 +6,14 @@ import VoidControl from './controls/Void.vue';
 import AssociationControl from './controls/Association.vue';
 import CalendarControl from './controls/Calendar.vue';
 import DateControl from './controls/Date.vue';
+import IntegerControl from './controls/Integer.vue';
 import TextControl from './controls/Text.vue';
 
 const controlComponents: { [name: string]: any } = {
   assoc: AssociationControl,
   calendar: CalendarControl,
   date: DateControl,
+  integer: IntegerControl,
   text: TextControl,
 };
 
@@ -19,6 +21,7 @@ function getControl (field: FormField): null | Vue.Component {
   const control = field.control;
   let component;
   if (typeof control === 'object') {
+    if (control.type === 'custom' && control.component) return control.component;
     component = controlComponents[control.type];
   } else {
     component = controlComponents[control];
