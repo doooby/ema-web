@@ -77,8 +77,8 @@ export default Vue.extend({
     status (newValue) {
       if (!newValue.length) {
         this.diagnosis = '';
-        this.assistance_needed = '0';
-        this.assistance_provided = '0';
+        this.assistance_needed = 0;
+        this.assistance_provided = 0;
       }
       this.recomputeValue();
     },
