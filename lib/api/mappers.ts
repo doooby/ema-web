@@ -2,7 +2,7 @@ import { parseISO as parseDate } from 'date-fns';
 
 export type RecordError = [ string, string ];
 
-export interface RecordGet<R> {
+export interface RecordGet<R=any> {
   success: boolean;
   record: R;
 }
@@ -12,7 +12,7 @@ export interface RecordChange {
   errors?: RecordError[];
 }
 
-export interface PaginatedRecords<R> {
+export interface PaginatedRecords<R=any> {
   records: R[];
   total: number;
   page: number;

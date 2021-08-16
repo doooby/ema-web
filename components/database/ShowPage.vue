@@ -20,7 +20,11 @@
               :record-id="recordId"
             />
           </h3>
-          <slot v-if="record" name="detail" :record="record" />
+          <slot
+            v-if="record"
+            name="detail"
+            :record="record"
+          />
         </div>
       </div>
     </div>
@@ -57,23 +61,30 @@ export default Vue.extend({
   },
   data () {
     return {
-      record: null as any,
-      loading: this.$api.createRequestState(),
-      loadingFailed: false,
+      getQueryState: this.$api.newQueryState(),
     };
   },
-  async mounted () {
-    const query = (this.$api.queries as any)[this.entity]?.get;
-    if (!query) {
-      notify('error', `database.BrowsePage: search query is missing for entity ${this.entity}.`);
-      return;
-    }
-    const result: any = await this.$api.query(this.loading, query, this.recordId);
-    if (result?.success) {
-      this.record = result.record;
-    } else {
-      this.loadingFailed = true;
-    }
+  computed: {
+    record (): null | any {
+      return this.getQueryState.value?.record;
+    },
+    loadingFailed ():boolean {
+      return !!this.getQueryState.error;
+    },
+  },
+  mounted () {
+    this.getQuery();
+  },
+  methods: {
+    getQuery () {
+      const queryBuilder = (this.$api.queries as any)[this.entity]?.get;
+      if (!queryBuilder) {
+        notify('error', 'database.ShowPage: get query is missing.', { entity: this.entity });
+        return;
+      }
+
+      this.$api.request(queryBuilder(this.recordId), this.getQueryState);
+    },
   },
 });
 </script>

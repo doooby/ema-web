@@ -21,7 +21,6 @@
 import Vue, { PropType } from 'vue';
 import UpdateRecordForm, { FormProps } from './UpdateRecordForm.vue';
 import { defineFormFields, FormField } from '../Form';
-import { ApiRequest } from '~/lib/api';
 import { notify } from '~/lib/notifier';
 
 export default Vue.extend({
@@ -44,28 +43,28 @@ export default Vue.extend({
       }));
       return defineFormFields(fields);
     },
-    queryGet (): (request: ApiRequest, recordId: number) => Promise<any> {
-      const query = (this.$api.queries as any)[this.entity]?.get;
-      if (!query) {
-        notify('error', `database.EditPage: get query is missing for entity ${this.entity}.`);
-        return () => Promise.resolve(null);
+    getQueryBuilder (): any {
+      const queryBuilder = (this.$api.queries as any)[this.entity]?.get;
+      if (!queryBuilder) {
+        notify('error', 'database.EditPage: get query is missing.', { entity: this.entity });
+        return;
       }
-      return query;
+      return queryBuilder;
     },
-    queryUpdate (): (request: ApiRequest, recordId: number) => Promise<any> {
-      const query = (this.$api.queries as any)[this.entity]?.update;
-      if (!query) {
-        notify('error', `database.EditPage: update query is missing for entity ${this.entity}.`);
-        return () => Promise.resolve(null);
+    updateQueryBuilder (): any {
+      const queryBuilder = (this.$api.queries as any)[this.entity]?.update;
+      if (!queryBuilder) {
+        notify('error', 'database.EditPage: update query is missing.', { entity: this.entity });
+        return;
       }
-      return query;
+      return queryBuilder;
     },
     formProps (): Readonly<FormProps> {
       return Object.freeze({
         id: Number(this.$route.params.id),
         fields: this.compiledFields,
-        requestGet: this.queryGet,
-        requestUpdate: this.queryUpdate,
+        getQuery: this.getQueryBuilder,
+        updateQuery: this.updateQueryBuilder,
       });
     },
   },

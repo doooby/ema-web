@@ -1,24 +1,24 @@
 <template>
   <div :class="$attrs.class">
-    <b-alert :show="!record.item && !record.failed" variant="info">
+    <b-alert :show="!record && !loadingFailed" variant="info">
       {{ $t('db.shared.loading') }}
     </b-alert>
-    <b-alert :show="record.failed" variant="warning">
+    <b-alert :show="loadingFailed" variant="warning">
       {{ $t('db.shared.record_not_found') }}
     </b-alert>
     <form-view
-      v-if="record.item"
+      v-if="record"
       v-model="formValues"
       :fields="form.fields"
-      :record="record.item"
+      :record="record"
     />
-    <div v-if="record.item" class="text-right">
-      <span v-if="updating.running">
+    <div v-if="record" class="text-right">
+      <span v-if="updateQueryState.running">
         {{ $t('db.shared.processing') }}
       </span>
       <b-button
         variant="success"
-        :disabled="updating.running"
+        :disabled="updateQueryState.running"
         @click="save"
       >
         {{ $t('db.shared.save') }}
@@ -33,24 +33,13 @@ import Vue, { PropType } from 'vue';
 import { createFormModel, formModelToRecordParams, FormField, View as FormView } from '~/components/Form';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import { RecordError, RecordGet, RecordChange } from '~/lib/api/mappers';
-import { ApiRequest, Params } from '~/lib/api';
-
-type RecordGetRequest = (
-  request: ApiRequest,
-  id: number,
-) => Promise<null | RecordGet<any>>;
-
-type RecordUpdateRequest = (
-  request: ApiRequest,
-  id: number,
-  params: Params,
-) => Promise<null | RecordChange>;
+import { QueryDefinition } from '~/lib/api';
 
 export interface FormProps {
   id: number;
   fields: FormField[];
-  requestGet: RecordGetRequest;
-  requestUpdate: RecordUpdateRequest;
+  getQuery: (...args: any[]) => QueryDefinition<RecordGet>;
+  updateQuery: (...args: any[]) => QueryDefinition<RecordChange>;
 }
 
 export default Vue.extend({
@@ -63,54 +52,53 @@ export default Vue.extend({
   },
   data () {
     return {
-      record: {
-        item: null as any,
-        request: this.$api.createRequestState(),
-        failed: false,
-      },
+      getQueryState: this.$api.newQueryState(),
       formValues: createFormModel(),
-      updating: this.$api.createRequestState(),
+      updateQueryState: this.$api.newQueryState<RecordChange>(),
       errors: null as null | RecordError[],
     };
+  },
+  computed: {
+    record (): null | any {
+      return this.getQueryState.value?.record;
+    },
+    loadingFailed ():boolean {
+      return !!this.getQueryState.error;
+    },
   },
   watch: {
     form () { this.reset(); },
   },
   async mounted () {
-    const { id, requestGet, fields } = this.form;
-    const result = await this.$api.query(this.record.request, requestGet, id);
-    if (result?.success) {
-      this.record.item = result.record;
-      this.formValues = createFormModel(fields, this.record.item);
-    } else {
-      this.record.failed = true;
+    const { fields } = this.form;
+    await this.getQuery();
+    if (this.record) {
+      this.formValues = createFormModel(fields, this.record);
     }
   },
   methods: {
+    async getQuery () {
+      const { id, getQuery } = this.form;
+      await this.$api.request(getQuery?.(id), this.getQueryState);
+    },
     async save () {
-      if (this.updating.running) return;
+      if (this.updateQueryState.running) return;
       this.errors = null;
-      const { id, requestUpdate } = this.form;
-      const params = formModelToRecordParams(this.form.fields, this.formValues);
-      const result = await this.$api.query(this.updating, requestUpdate, id, params);
+      const { id, updateQuery, fields } = this.form;
+      const params = formModelToRecordParams(fields, this.formValues);
+      const result = await this.$api.request(updateQuery?.(id, params), this.updateQueryState);
       if (result?.success) {
         this.$emit('updated', id);
       } else if (result?.errors) {
         this.errors = result.errors;
       } else {
-        this.errors = [
-          [ 'base', 'unknown fail' ],
-        ];
+        this.errors = [ [ 'base', 'unknown fail' ] ];
       }
     },
     reset () {
-      this.record = {
-        item: null as any,
-        request: this.$api.createRequestState(),
-        failed: false,
-      };
+      this.getQueryState.reset();
       this.formValues = createFormModel();
-      this.updating = this.$api.createRequestState();
+      this.updateQueryState.reset();
       this.errors = null;
     },
   },

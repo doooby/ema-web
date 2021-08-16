@@ -41,21 +41,21 @@ export default Vue.extend({
   data () {
     return {
       group: null as null | Group,
-      loading: this.$api.createRequestState(),
+      loading: undefined, // this.$gone__api.createRequestState(),
       loadingFailed: false,
       students: [] as Student[],
     };
   },
   async mounted () {
-    if (this.loading.running) return;
-    const result = await this.$api.query(
-      this.loading,
-      this.$api.queries.groups.get,
-      Number(this.$route.params.id),
-    );
-    if (result !== null) {
-      this.group = result.record;
-    }
+    // if (this.loading.running) return;
+    // const result = await this.$gone__api.query(
+    //   this.loading,
+    //   this.$gone__api.queries.groups.get,
+    //   Number(this.$route.params.id),
+    // );
+    // if (result !== null) {
+    //   this.group = result.record;
+    // }
   },
   methods: {
     onListingFailedToLoad () {

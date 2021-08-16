@@ -76,15 +76,15 @@ export default Vue.extend({
         { name: 'name', getText: (student: AssociatedRecord) => student.label },
       ],
       students: [] as AssociatedRecord[],
-      fetching: this.$api.createRequestState(),
+      fetching: undefined, // this.$gone__api.createRequestState(),
       originalStudentsIds: [] as number[],
       changed: false,
       additionShown: false,
       additionFields: defineFormFields([
         { name: 'student', control: { type: 'assoc', entity: 'students' } },
       ]),
-      updating: this.$api.createRequestState(),
-      fetchingStudentDetail: this.$api.createRequestState(),
+      updating: undefined, // this.$gone__api.createRequestState(),
+      fetchingStudentDetail: undefined, // this.$gone__api.createRequestState(),
     };
   },
   mounted () {
@@ -92,19 +92,19 @@ export default Vue.extend({
   },
   methods: {
     async fetchStudents () {
-      if (this.fetching.running) return;
-      const result = await this.$api.query(
-        this.fetching,
-        this.$api.queries.students.searchAssociated,
-        { group_id: this.group.id },
-      );
-      if (result !== null) {
-        this.students = [ ...result.records ];
-        this.originalStudentsIds = this.students.map(s => s.id);
-        this.$emit('loaded', this.students);
-      } else {
-        this.$emit('load-fail');
-      }
+      // if (this.fetching.running) return;
+      // const result = await this.$gone__api.query(
+      //   this.fetching,
+      //   this.$gone__api.queries.students.searchAssociated,
+      //   { group_id: this.group.id },
+      // );
+      // if (result !== null) {
+      //   this.students = [ ...result.records ];
+      //   this.originalStudentsIds = this.students.map(s => s.id);
+      //   this.$emit('loaded', this.students);
+      // } else {
+      //   this.$emit('load-fail');
+      // }
     },
     removeStudent (student: AssociatedRecord) {
       const index = this.students.indexOf(student);
@@ -115,36 +115,36 @@ export default Vue.extend({
       this.additionShown = true;
     },
     async onAddStudent ({ student }: { student: AssociatedRecord }) {
-      this.additionShown = false;
-      if (this.fetchingStudentDetail.running) return;
-      const result = await this.$api.query(
-        this.fetchingStudentDetail,
-        this.$api.queries.students.searchAssociated,
-        { id: student.id },
-      );
-      const record = result?.records?.[0];
-      if (record) {
-        if (!this.students.find(student => student.id === record.id)) {
-          this.students.push(record);
-          this.updateChangeStatus();
-        }
-      }
+      // this.additionShown = false;
+      // if (this.fetchingStudentDetail.running) return;
+      // const result = await this.$gone__api.query(
+      //   this.fetchingStudentDetail,
+      //   this.$gone__api.queries.students.searchAssociated,
+      //   { id: student.id },
+      // );
+      // const record = result?.records?.[0];
+      // if (record) {
+      //   if (!this.students.find(student => student.id === record.id)) {
+      //     this.students.push(record);
+      //     this.updateChangeStatus();
+      //   }
+      // }
     },
     updateChangeStatus () {
       const union = new Set([ ...this.originalStudentsIds, ...this.students.map(s => s.id) ]);
       this.changed = !(this.originalStudentsIds.length === union.size && this.students.length === union.size);
     },
     async save () {
-      if (this.updating.running) return;
-      const result = await this.$api.query(
-        this.updating,
-        this.$api.queries.groups.updateStudents,
-        this.group.id,
-        this.students.map(s => s.id),
-      );
-      if (result?.success) {
-        this.$router.push({ path: `/database/groups/${this.group.id}` });
-      }
+      // if (this.updating.running) return;
+      // const result = await this.$gone__api.query(
+      //   this.updating,
+      //   this.$gone__api.queries.groups.updateStudents,
+      //   this.group.id,
+      //   this.students.map(s => s.id),
+      // );
+      // if (result?.success) {
+      //   this.$router.push({ path: `/database/groups/${this.group.id}` });
+      // }
     },
   },
 });

@@ -7,9 +7,9 @@
       <div class="flex-fill text-truncate --assoc-control--text">
         {{ valueText }}
       </div>
-      <b-dropdown variant="secondary" right class="--assoc-control--dropdown" @show="onLoadOptions">
+      <b-dropdown variant="secondary" right class="--assoc-control--dropdown" @show="fetchOptions">
         <b-dropdown-item
-          v-for="{record, text} in options.items"
+          v-for="{record, text} in options"
           :key="record.id"
           @click="inItemSelected(record)"
         >
@@ -25,7 +25,6 @@ import Vue from 'vue';
 import { FIELD_PROPS } from '../constants';
 import { fieldCaptionGet } from '..';
 import { AssociationControl } from '~/components/Form/types';
-import { ApiRequest } from '~/lib/api';
 import { notify } from '~/lib/notifier';
 
 interface Item {
@@ -37,10 +36,8 @@ export default Vue.extend({
   props: FIELD_PROPS,
   data () {
     return {
-      options: {
-        items: null as null | Item[],
-        request: this.$api.createRequestState(),
-      },
+      options: null as null | Item[],
+      fetchQueryState: this.$api.newQueryState<any>(),
     };
   },
   computed: {
@@ -60,26 +57,26 @@ export default Vue.extend({
       }
       return '-';
     },
-    requestGetOptions (): (request: ApiRequest) => Promise<any> {
-      let errorMessage = null;
+    fetchQueryBuilder (): any {
       if (this.controlSettings) {
         const { entity } = this.controlSettings;
-        const query = (this.$api.queries as any)[entity]?.searchAssociated;
-        if (query) return query;
-        errorMessage = this.controlSettings.entity;
+        const queryBuilder = (this.$api.queries as any)[entity]?.searchAssociated;
+        if (queryBuilder) return queryBuilder;
       }
-      notify('error', `Form.controls.Association: query not found${errorMessage}`);
-      return () => Promise.resolve(null);
+
+      notify('error', 'Form.controls.Association: query not found', {
+        entity: this.controlSettings?.entity,
+      });
+      return null;
     },
   },
   methods: {
-    async onLoadOptions () {
-      if (!this.controlSettings) return;
-      if (this.options.items !== null) return;
-      if (this.options.request.running) return;
-      const result: any = await this.$api.query(this.options.request, this.requestGetOptions);
+    async fetchOptions () {
+      if (this.options !== null) return;
+      if (this.fetchQueryState.running) return;
+      const result = await this.$api.query(this.fetchQueryBuilder?.(), this.fetchQueryState);
       if (result !== null) {
-        this.options.items = result.records.map((record: any) => ({
+        Vue.options = result.records.map((record: any) => ({
           record,
           text: record.label,
         }));

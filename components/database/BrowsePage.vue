@@ -63,12 +63,22 @@ export default Vue.extend({
   },
   data () {
     return {
-      records: null as null | PaginatedRecords<any>,
-      searching: this.$api.createRequestState(),
       searchValues: createFormModel(),
+      searchQueryState: this.$api.newQueryState(),
     };
   },
   computed: {
+    searchQueryBuilder () {
+      const queryBuilder = (this.$api.queries as any)[this.entity]?.search;
+      if (!queryBuilder) {
+        notify('error', `database.BrowsePage: search query is missing for entity ${this.entity}.`);
+        return;
+      }
+      return queryBuilder;
+    },
+    records (): null | PaginatedRecords {
+      return this.searchQueryState.value;
+    },
     compiledSearchFields (): Readonly<FormField[]> {
       return defineFormFields(this.searchFields);
     },
@@ -84,36 +94,26 @@ export default Vue.extend({
   },
   watch: {
     entity () {
-      this.records = null;
-      this.searching = this.$api.createRequestState();
-      Vue.nextTick(() => this.search());
+      this.searchQueryState.reset();
+      Vue.nextTick(() => this.searchQuery());
     },
   },
   mounted () {
-    this.search();
+    this.searchQuery();
   },
   methods: {
-    async search (page = 1) {
-      if (this.searching.running) return;
-      const query = (this.$api.queries as any)[this.entity]?.search;
-      if (!query) {
-        notify('error', `database.BrowsePage: search query is missing for entity ${this.entity}.`);
-        return;
-      }
-      const result: any = await this.$api.query(this.searching, query, {
-        ...this.searchValues,
-        page,
-      });
-      if (result !== null) {
-        this.records = result;
-      }
-    },
     onSearch (value: FormValues) {
       this.searchValues = value;
-      this.search();
+      this.searchQuery();
     },
     onSelectPage (page: number) {
-      this.search(page);
+      this.searchQuery(page);
+    },
+    searchQuery (page?: number) {
+      this.$api.request(
+        this.searchQueryBuilder({ ...this.searchValues, page }),
+        this.searchQueryState,
+      );
     },
   },
 });

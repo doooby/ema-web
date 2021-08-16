@@ -17,7 +17,6 @@
 import Vue, { PropType } from 'vue';
 import { defineFormFields, FormField } from '~/components/Form';
 import CreateRecordForm, { FormProps } from '~/components/database/CreateRecordForm.vue';
-import { ApiRequest, Params } from '~/lib/api';
 import { notify } from '~/lib/notifier';
 
 export default Vue.extend({
@@ -39,18 +38,18 @@ export default Vue.extend({
       }));
       return defineFormFields(fields);
     },
-    queryCreate (): (request: ApiRequest, record: Params) => Promise<any> {
-      const query = (this.$api.queries as any)[this.entity]?.create;
-      if (!query) {
-        notify('error', `database.BrowsePage: create query is missing for entity ${this.entity}.`);
-        return () => Promise.resolve(null);
+    createQueryBuilder (): any {
+      const queryBuilder = (this.$api.queries as any)[this.entity]?.create;
+      if (!queryBuilder) {
+        notify('error', 'database.NewPage: create query is missing.', { entity: this.entity });
+        return;
       }
-      return query;
+      return queryBuilder;
     },
     formProps (): Readonly<FormProps> {
       return Object.freeze({
         fields: this.compiledFields,
-        requestCreate: this.queryCreate,
+        createQuery: this.createQueryBuilder,
       });
     },
   },

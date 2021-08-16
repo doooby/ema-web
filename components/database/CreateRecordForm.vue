@@ -8,12 +8,12 @@
       :fields="form.fields"
     />
     <div class="text-right">
-      <span v-if="creating.running">
+      <span v-if="createQueryState.running">
         processing...
       </span>
       <b-button
         variant="success"
-        :disabled="creating.running"
+        :disabled="createQueryState.running"
         @click="save"
       >
         Save
@@ -28,16 +28,11 @@ import Vue, { PropType } from 'vue';
 import { createFormModel, FormField, formModelToRecordParams, View as FormView } from '~/components/Form';
 import RecordErrors from './RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
-import { ApiRequest, Params } from '~/lib/api';
-
-type RecordCreateRequest = (
-  request: ApiRequest,
-  params: Params,
-) => Promise<null | RecordChange>;
+import { QueryDefinition } from '~/lib/api';
 
 export interface FormProps {
   fields: FormField[];
-  requestCreate: RecordCreateRequest;
+  createQuery: (...args: any[]) => QueryDefinition<RecordChange>;
 }
 
 export default Vue.extend({
@@ -58,7 +53,7 @@ export default Vue.extend({
   data () {
     return {
       formValues: createFormModel(),
-      creating: this.$api.createRequestState(),
+      createQueryState: this.$api.newQueryState<RecordChange>(),
       errors: null as null | RecordError[],
     };
   },
@@ -67,24 +62,22 @@ export default Vue.extend({
   },
   methods: {
     async save () {
-      if (this.creating.running) return;
+      if (this.createQueryState.running) return;
       this.errors = null;
-      const { requestCreate } = this.form;
-      const params = formModelToRecordParams(this.form.fields, this.formValues);
-      const result = await this.$api.query(this.creating, requestCreate, params);
+      const { createQuery, fields } = this.form;
+      const params = formModelToRecordParams(fields, this.formValues);
+      const result = await this.$api.request(createQuery?.(params), this.createQueryState);
       if (result?.success) {
         this.$emit('created');
       } else if (result?.errors) {
         this.errors = result.errors;
       } else {
-        this.errors = [
-          [ 'base', 'unknown fail' ],
-        ];
+        this.errors = [ [ 'base', 'unknown fail' ] ];
       }
     },
     reset () {
       this.formValues = createFormModel();
-      this.creating = this.$api.createRequestState();
+      this.createQueryState.reset();
       this.errors = null;
     },
   },

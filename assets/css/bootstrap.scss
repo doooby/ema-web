@@ -1,7 +1,9 @@
 $body-bg: var(--EMA-bg);
 //$body-color: $LIGHT-font;
 
-//$enable-shadows: false;
+$enable-shadows: false;
+$btn-focus-box-shadow: none;
+
 $enable-rounded: false;
 
 $input-bg: var(--EMA-controls);
@@ -21,7 +23,7 @@ $label-margin-bottom: px-size(1);
 //@import "~bootstrap/scss/tables";
 @import "~bootstrap/scss/forms";
 @import "~bootstrap/scss/buttons";
-//@import "~bootstrap/scss/transitions";
+//@import "~bootstrap/scss/transitions";1
 //@import "~bootstrap/scss/dropdown";
 //@import "~bootstrap/scss/button-group";
 @import "~bootstrap/scss/input-group";

@@ -1,5 +1,3 @@
-import path from 'path';
-
 const isDev = process.env.NODE_ENV !== 'production';
 
 export default {
@@ -71,8 +69,5 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    extend (config) {
-      config.resolve.alias['@c'] = path.join(__dirname, 'components');
-    },
   },
 };

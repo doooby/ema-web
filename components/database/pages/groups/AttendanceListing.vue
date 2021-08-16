@@ -50,7 +50,7 @@ export default Vue.extend({
       students: {} as AssociatedRecordsIndex,
       studentNameFilter: '',
       records: [] as Attendance[],
-      fetching: this.$api.createRequestState(),
+      fetching: undefined, // this.$gone__api.createRequestState(),
     };
   },
   computed: {
@@ -88,18 +88,18 @@ export default Vue.extend({
       return formatISO(date, { representation: 'date' });
     },
     async fetchRecords () {
-      if (this.fetching.running) return;
-      const result = await this.$api.query(
-        this.fetching,
-        this.$api.queries.groups.getAttendances,
-        this.group.id,
-        startOfWeek(this.date),
-        endOfWeek(this.date),
-      );
-      if (result !== null) {
-        this.students = result.students;
-        this.records = result.records;
-      }
+      // if (this.fetching.running) return;
+      // const result = await this.$gone__api.query(
+      //   this.fetching,
+      //   this.$gone__api.queries.groups.getAttendances,
+      //   this.group.id,
+      //   startOfWeek(this.date),
+      //   endOfWeek(this.date),
+      // );
+      // if (result !== null) {
+      //   this.students = result.students;
+      //   this.records = result.records;
+      // }
     },
     presenceText (student: AssociatedRecord, attendance: Attendance): string {
       const present = attendance.present_students.find(s => s.id === student.id);

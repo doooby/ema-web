@@ -1,5 +1,5 @@
 import * as mappers from './mappers';
-import { ApiRequest, Params, query } from '.';
+import { Params } from '.';
 import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
 
 const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
@@ -26,46 +26,41 @@ function mapSchool (value: any, associations?: Associations): School {
 
 const mapAssociations = createAssociationsMapper<Associations>('country');
 
-export function search (request: ApiRequest, params: Params) {
-  return query({
+export function search (params: Params) {
+  return {
     path: '/schools/search',
-    data: params,
-    request,
-    mapper: payload => mappers.paginatedRecords(payload, mapSchool, mapAssociations),
-  });
+    params,
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapSchool, mapAssociations),
+  };
 }
 
-export function searchAssociated (request: ApiRequest, params?: Params) {
-  return query({
+export function searchAssociated (params?: Params) {
+  return {
     path: '/schools/search?assoc=1',
-    data: params,
-    request,
-    mapper: payload => mappers.associatedRecords<School>(payload),
-  });
+    params,
+    mapper: (payload: any) => mappers.associatedRecords<School>(payload),
+  };
 }
 
-export function get (request: ApiRequest, schoolId: number) {
-  return query({
+export function get (schoolId: number) {
+  return {
     path: `/schools/${schoolId}`,
-    request,
-    mapper: payload => record(payload, mapSchool, mapAssociations),
-  });
+    mapper: (payload: any) => record(payload, mapSchool, mapAssociations),
+  };
 }
 
-export function create (request: ApiRequest, school: Params) {
-  return query({
+export function create (school: Params) {
+  return {
     path: '/schools/create',
-    data: { school },
-    request,
+    params: { school },
     mapper: mappers.changedRecord,
-  });
+  };
 }
 
-export function update (request: ApiRequest, schoolId: number, school: Params) {
-  return query({
+export function update (schoolId: number, school: Params) {
+  return {
     path: `/schools/${schoolId}/update`,
-    data: { school },
-    request,
+    params: { school },
     mapper: mappers.changedRecord,
-  });
+  };
 }
