@@ -24,6 +24,7 @@ export default Vue.extend({
   props: {
     entity: { type: String, required: true },
     fields: { type: Array as PropType<FormField[]>, required: true },
+    noDefaultRedirect: { type: Boolean, default: false },
   },
   computed: {
     title (): string {
@@ -54,8 +55,13 @@ export default Vue.extend({
     },
   },
   methods: {
-    onCreated () {
-      this.$router.push({ path: '/database' });
+    onCreated (recordId: Number) {
+      if (this.noDefaultRedirect) {
+        console.log({ recordId });
+        this.$emit('success', recordId);
+      } else {
+        this.$router.push({ path: '/database' });
+      }
     },
   },
 });

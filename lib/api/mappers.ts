@@ -9,6 +9,7 @@ export interface RecordGet<R=any> {
 
 export interface RecordChange {
   success: boolean;
+  record_id?: number;
   errors?: RecordError[];
 }
 
@@ -183,6 +184,7 @@ export function record<R, A> (
 export function changedRecord (value: any): RecordChange {
   return object(value, root => ({
     success: prop('success', root, val.boolean),
+    record_id: maybeProp('record_id', root, val.integer),
     errors: maybeProp('errors', root, errors => list(errors, error => tuple(error, errorValues => [
       prop('0', errorValues, val.string),
       prop('1', errorValues, val.string),

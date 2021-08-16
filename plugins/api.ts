@@ -112,7 +112,7 @@ export class ApiPlugin {
 }
 
 export default (context: Context, inject: (key: string, value: any) => void) => {
-  inject('api3', Object.freeze(new ApiPlugin(context)));
+  inject('api', Object.freeze(new ApiPlugin(context)));
 };
 
 declare module 'vue/types/vue' {

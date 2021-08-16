@@ -68,7 +68,7 @@ export default Vue.extend({
       const params = formModelToRecordParams(fields, this.formValues);
       const result = await this.$api.request(createQuery?.(params), this.createQueryState);
       if (result?.success) {
-        this.$emit('created');
+        this.$emit('created', result.record_id);
       } else if (result?.errors) {
         this.errors = result.errors;
       } else {

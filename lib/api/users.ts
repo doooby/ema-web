@@ -1,5 +1,5 @@
 import * as mappers from './mappers';
-import { ApiRequest, Params, query } from '.';
+import { Params } from '.';
 import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
 
 const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
@@ -26,37 +26,33 @@ function mapUser (value: any, associations?: Associations): User {
 
 const mapAssociations = createAssociationsMapper<Associations>('country');
 
-export function search (request: ApiRequest, params: Params) {
-  return query({
+export function search (params: Params) {
+  return {
     path: '/users/search',
-    data: params,
-    request,
-    mapper: payload => mappers.paginatedRecords(payload, mapUser, mapAssociations),
-  });
+    params,
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapUser, mapAssociations),
+  };
 }
 
-export function get (request: ApiRequest, userId: number) {
-  return query({
+export function get (userId: number) {
+  return {
     path: `/users/${userId}`,
-    request,
-    mapper: payload => record(payload, mapUser, mapAssociations),
-  });
+    mapper: (payload: any) => record(payload, mapUser, mapAssociations),
+  };
 }
 
-export function create (request: ApiRequest, user: Params) {
-  return query({
+export function create (user: Params) {
+  return {
     path: '/users/create',
-    data: { user },
-    request,
+    params: { user },
     mapper: mappers.changedRecord,
-  });
+  };
 }
 
-export function update (request: ApiRequest, userId: number, user: Params) {
-  return query({
+export function update (userId: number, user: Params) {
+  return {
     path: `/users/${userId}/update`,
-    data: { user },
-    request,
+    params: { user },
     mapper: mappers.changedRecord,
-  });
+  };
 }
