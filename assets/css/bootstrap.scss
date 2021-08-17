@@ -57,6 +57,7 @@ $label-margin-bottom: px-size(1);
   padding: 0 px-size(1);
   height: 22px;
   &.btn .b-icon.bi {
-    vertical-align: top;
+    font-size: 100%;
+    display: flex;
   }
 }

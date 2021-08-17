@@ -5,7 +5,7 @@
     :title="title"
   >
     <template #detail="{ record }">
-      DHY
+      <subjects-listing :course="record" />
     </template>
   </show-page>
 </template>
@@ -13,9 +13,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import ShowPage from '~/components/database/ShowPage.vue';
+import SubjectsListing from '~/components/database/pages/courses/SubjectsListing.vue';
 
 export default Vue.extend({
-  components: { ShowPage },
+  components: { ShowPage, SubjectsListing },
   layout: 'database',
   data () {
     return {

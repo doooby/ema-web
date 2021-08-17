@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="emb-2 d-flex align-items-center">
-      <strong>Courses Offered</strong>
+      <strong>Course's Subjects</strong>
       <b-button
         :variant="editable ? 'secondary' : 'outline-secondary'"
         class="btn-xs eml-3"
@@ -19,7 +19,7 @@
         :dataset="records"
       >
         <template #header-cell="{ column }">
-          {{ $t(`record.schools.${column.name}`) }}
+          {{ $t(`record.courses.${column.name}`) }}
         </template>
         <template #actions="{ dataItem }">
           <b-button
@@ -75,12 +75,12 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { Course, School } from '~/lib/records';
+import { Subject } from '~/lib/records';
 import { AssociatedRecord } from '~/lib/api/mappers';
 
 export default Vue.extend({
   props: {
-    school: { type: Object as PropType<School>, required: true },
+    course: { type: Object as PropType<Subject>, required: true },
   },
   data () {
     return {
@@ -88,8 +88,8 @@ export default Vue.extend({
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
         { name: 'id', cell: { type: 'link', entity: 'courses' }, size: 60 },
-        { name: 'course', getText: course => course.caption, size: 300 },
-        { name: 'education_level', getText: course => course.labels.education_level, size: 300 },
+        { name: 'subject', getText: subject => subject.caption, size: 300 },
+        { name: 'education_level', getText: subject => subject.labels.education_level, size: 300 },
       ],
       editable: false,
       changes: {
@@ -97,29 +97,29 @@ export default Vue.extend({
         addFormShown: false,
         addFormValues: {},
         addFormFields: [
-          { name: 'course', control: { type: 'assoc', entity: 'courses' } },
+          { name: 'subject', control: { type: 'assoc', entity: 'subjects' } },
         ],
-        addedCourses: [],
+        addedSubjects: [],
       },
       saveChangesQueryState: this.$api.newQueryState(),
     };
   },
   computed: {
-    fetchedRecords (): Course[] {
-      const fetchResult = this.fetchQueryState.value as { records: Array<AssociatedRecord<Course>> };
+    fetchedRecords (): Subject[] {
+      const fetchResult = this.fetchQueryState.value as { records: Array<AssociatedRecord<Subject>> };
       if (!fetchResult) {
         return [];
       }
 
       return fetchResult.records;
     },
-    records (): Course[] {
-      const { removeIds, addedCourses } = this.changes;
-      return addedCourses.concat(this.fetchedRecords).filter(record => !removeIds.includes(record.id));
+    records (): Subject[] {
+      const { removeIds, addedSubjects } = this.changes;
+      return addedSubjects.concat(this.fetchedRecords).filter(record => !removeIds.includes(record.id));
     },
     changed (): boolean {
-      const { removeIds, addedCourses } = this.changes;
-      return removeIds.length > 0 || addedCourses.length > 0;
+      const { removeIds, addedSubjects } = this.changes;
+      return removeIds.length > 0 || addedSubjects.length > 0;
     },
   },
   mounted () {
@@ -128,7 +128,7 @@ export default Vue.extend({
   methods: {
     fetch () {
       this.$api.request(
-        this.$api.queries.schools.searchCourses(this.school.id),
+        this.$api.queries.courses.searchSubjects(this.course.id),
         this.fetchQueryState,
       );
     },
@@ -136,19 +136,19 @@ export default Vue.extend({
       if (this.editable) {
         this.changes.addFormShown = false;
         this.changes.removeIds = [];
-        this.changes.addedCourses = [];
+        this.changes.addedSubjects = [];
       }
       this.editable = !this.editable;
     },
-    onRemove (course: Course) {
+    onRemove (subject: Subject) {
       if (this.saveChangesQueryState.running) return;
 
-      const { removeIds, addedCourses } = this.changes;
-      const inAdded = addedCourses.findIndex(addedCourse => addedCourse.id === course.id);
+      const { removeIds, addedSubjects } = this.changes;
+      const inAdded = addedSubjects.findIndex(addedSubject => addedSubject.id === subject.id);
       if (inAdded === -1) {
-        removeIds.push(course.id);
+        removeIds.push(subject.id);
       } else {
-        addedCourses.splice(inAdded, 1);
+        addedSubjects.splice(inAdded, 1);
       }
     },
     onShowAddForm () {
@@ -156,27 +156,27 @@ export default Vue.extend({
 
       this.changes.addFormShown = true;
     },
-    onAddFormChange ({ course }) {
+    onAddFormChange ({ subject }) {
       if (this.saveChangesQueryState.running) return;
 
       this.changes.addFormShown = false;
-      if (!this.records.find(addedCourse => addedCourse.id === course.id)) {
-        this.changes.addedCourses.push(course);
+      if (!this.records.find(addedSubject => addedSubject.id === subject.id)) {
+        this.changes.addedSubjects.push(subject);
       }
     },
     async saveChanges () {
-      const newIds = this.records.map(course => course.id);
+      const newIds = this.records.map(subject => subject.id);
       this.changes.addFormShown = false;
 
       await this.$api.request(
-        this.$api.queries.schools.update(this.school.id, {
-          new_courses_ids: newIds,
+        this.$api.queries.courses.update(this.course.id, {
+          new_subjects_ids: newIds,
         }),
         this.saveChangesQueryState,
       );
 
       this.changes.removeIds = [];
-      this.changes.addedCourses = [];
+      this.changes.addedSubjects = [];
       this.editable = false;
 
       this.fetchQueryState.value = null;

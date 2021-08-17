@@ -5,9 +5,6 @@
     :title="title"
   >
     <template #detail="{ record }">
-      <div>
-        ------------
-      </div>
       <courses-listing :school="record" />
     </template>
   </show-page>

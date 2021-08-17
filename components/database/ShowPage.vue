@@ -12,12 +12,13 @@
           <b-alert :show="loadingFailed" variant="warning">
             {{ $t('db.shared.record_not_found') }}
           </b-alert>
-          <h3 v-if="record">
+          <h3 v-if="record" class="d-flex align-items-center emb-6">
             {{ title.text(record) }}
             <edit-record-link
               v-if="title.showEditLink"
               :entity="entity"
               :record-id="recordId"
+              class="btn btn-outline-secondary btn-sm eml-4"
             />
           </h3>
           <slot
