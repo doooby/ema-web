@@ -4,7 +4,7 @@ import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } fr
 
 const { object, record, recordId, prop, assoc, val } = mappers;
 
-interface Course {
+interface Subject {
   id: number;
   name: string;
   education_level: AssociatedRecord;
@@ -14,7 +14,7 @@ interface Associations {
   education_level: AssociatedRecordsIndex,
 }
 
-function mapCourse (value: any, associations?: Associations): Course {
+function mapSubject (value: any, associations?: Associations): Subject {
   return object(value, root => ({
     id: recordId(root),
     name: prop('name', root, val.string),
@@ -26,39 +26,39 @@ const mapAssociations = createAssociationsMapper<Associations>('education_level'
 
 export function search (params: Params) {
   return {
-    path: '/courses/search',
+    path: '/subjects/search',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapCourse, mapAssociations),
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapSubject, mapAssociations),
   };
 }
 
 export function searchAssociated (params?: Params) {
   return {
-    path: '/courses/search?assoc=1',
+    path: '/subjects/search?assoc=1',
     params,
-    mapper: (payload: any) => mappers.associatedRecords<Course>(payload),
+    mapper: (payload: any) => mappers.associatedRecords<Subject>(payload),
   };
 }
 
-export function get (courseId: number) {
+export function get (subjectId: number) {
   return {
-    path: `/courses/${courseId}`,
-    mapper: (payload: any) => record(payload, mapCourse, mapAssociations),
+    path: `/subjects/${subjectId}`,
+    mapper: (payload: any) => record(payload, mapSubject, mapAssociations),
   };
 }
 
-export function create (course: Params) {
+export function create (subject: Params) {
   return {
-    path: '/courses/create',
-    params: { course },
+    path: '/subjects/create',
+    params: { subject },
     mapper: mappers.changedRecord,
   };
 }
 
-export function update (courseId: number, course: Params) {
+export function update (subjectId: number, subject: Params) {
   return {
-    path: `/courses/${courseId}/update`,
-    params: { course },
+    path: `/subjects/${subjectId}/update`,
+    params: { subject },
     mapper: mappers.changedRecord,
   };
 }

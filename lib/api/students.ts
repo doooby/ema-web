@@ -1,5 +1,5 @@
 import * as mappers from './mappers';
-import { ApiRequest, Params, query } from '.';
+import { Params } from '.';
 import {
   AssociatedRecord,
   AssociatedRecordsIndex,
@@ -117,46 +117,41 @@ export function disabilityToText ({ disability }: Student): string {
   return `status=${s}, diagnosis=${dd}, assistance needed=${nn}, provided=${pp}`;
 }
 
-export function search (request: ApiRequest, params: Params) {
-  return query({
+export function search (params: Params) {
+  return {
     path: '/students/search',
-    data: params,
-    request,
-    mapper: payload => mappers.paginatedRecords(payload, mapStudent, mapAssociations),
-  });
+    params,
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapStudent, mapAssociations),
+  };
 }
 
-export function searchAssociated (request: ApiRequest, params?: Params) {
-  return query({
+export function searchAssociated (params?: Params) {
+  return {
     path: '/students/search?assoc=1',
-    data: params,
-    request,
-    mapper: payload => mappers.associatedRecords<Student>(payload),
-  });
+    params,
+    mapper: (payload: any) => mappers.associatedRecords<Student>(payload),
+  };
 }
 
-export function get (request: ApiRequest, studentId: number) {
-  return query({
+export function get (studentId: number) {
+  return {
     path: `/students/${studentId}`,
-    request,
-    mapper: payload => record(payload, mapStudent, mapAssociations),
-  });
+    mapper: (payload: any) => record(payload, mapStudent, mapAssociations),
+  };
 }
 
-export function create (request: ApiRequest, student: Params) {
-  return query({
+export function create (student: Params) {
+  return {
     path: '/students/create',
-    data: { student },
-    request,
+    params: { student },
     mapper: mappers.changedRecord,
-  });
+  };
 }
 
-export function update (request: ApiRequest, studentId: number, student: Params) {
-  return query({
+export function update (studentId: number, student: Params) {
+  return {
     path: `/students/${studentId}/update`,
-    data: { student },
-    request,
+    params: { student },
     mapper: mappers.changedRecord,
-  });
+  };
 }

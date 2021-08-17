@@ -18,6 +18,7 @@ export default Vue.extend({
   computed: {
     fields (): FormField[] {
       return [
+        { name: 'country', control: { type: 'assoc', entity: 'countries' } },
         { name: 'login', control: 'text' },
         { name: 'full_name', control: 'text' },
       ];

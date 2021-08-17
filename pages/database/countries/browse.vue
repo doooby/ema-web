@@ -19,7 +19,7 @@ export default Vue.extend({
         { name: 'name', control: 'text' },
       ],
       tableColumns: [
-        { name: 'id', cell: { type: 'link', entity: 'countries' }, size: 60 },
+        { name: 'id' },
         { name: 'name' },
       ],
     };

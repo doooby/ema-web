@@ -18,14 +18,15 @@ export default Vue.extend({
   computed: {
     fields (): FormField[] {
       return [
+        { name: 'country', control: { type: 'assoc', entity: 'countries' } },
         { name: 'name', control: 'text' },
         { name: 'address', control: 'text' },
       ];
     },
   },
   methods: {
-    onSuccess (recordId: Number) {
-      this.$router.push({ path: `/database/schools/${recordId}` });
+    onSuccess () {
+      this.$router.push({ path: '/database/schools' });
     },
   },
 });

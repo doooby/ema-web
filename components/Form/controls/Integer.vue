@@ -45,6 +45,12 @@ export default Vue.extend({
       return this.$t(fieldCaptionGet(this.field)) as string;
     },
   },
+  watch: {
+    formValues (newValues) {
+      const value = Number(newValues[this.field.name]);
+      this.value = isNaN(value) ? '' : value;
+    },
+  },
   methods: {
     onInput (event: {target: HTMLInputElement}): void {
       const value = Number(event.target.value);

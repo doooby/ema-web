@@ -1,29 +1,39 @@
 <template>
   <browse-page
     entity="education_levels"
-    :search-fields="searchFields"
+    :search-fields="[]"
     :table-columns="tableColumns"
-  />
+  >
+    <template #actions="{ dataItem }">
+      <record-actions-cell
+        entity="education_levels"
+        :record="dataItem"
+        :edit="true"
+      />
+    </template>
+  </browse-page>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import BrowsePage from '~/components/database/BrowsePage.vue';
+import RecordActionsCell from '~/components/database/RecordActionsCell.vue';
 
 export default Vue.extend({
-  components: { BrowsePage },
+  components: { RecordActionsCell, BrowsePage },
   layout: 'database',
   data () {
     return {
-      searchFields: [
-        { name: 'name', control: 'text' },
-      ],
       tableColumns: [
+        { name: 'actions', slot: 'actions', headerText: false, size: 40 },
         { name: 'id', size: 60 },
-        { name: 'order' },
+        { name: 'country', getText: (record: any) => record.country.caption },
         { name: 'name' },
-        { name: 'start_age' },
+        { name: 'grade' },
+        { name: 'semesters' },
         { name: 'years_length' },
+        { name: 'start_age' },
+        { name: 'mandatory' },
       ],
     };
   },

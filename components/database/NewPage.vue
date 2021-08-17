@@ -57,7 +57,6 @@ export default Vue.extend({
   methods: {
     onCreated (recordId: Number) {
       if (this.noDefaultRedirect) {
-        console.log({ recordId });
         this.$emit('success', recordId);
       } else {
         this.$router.push({ path: '/database' });

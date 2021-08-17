@@ -5,9 +5,9 @@ import * as users from './users';
 
 import * as courses from './courses';
 import * as education_levels from './education_levels';
-import * as groups from './groups';
 import * as schools from './schools';
 import * as students from './students';
+import * as subjects from './subjects';
 
 export interface ApiRequest {
   running: boolean;
@@ -32,9 +32,9 @@ export const queries = {
 
   courses,
   education_levels,
-  groups,
   schools,
   students,
+  subjects,
 };
 
 // export async function query <V> (

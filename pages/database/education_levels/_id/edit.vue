@@ -1,6 +1,6 @@
 <template>
   <edit-page
-    entity="users"
+    entity="education_levels"
     :fields="fields"
     :no-default-redirect="true"
     @success="onSuccess"
@@ -19,14 +19,17 @@ export default Vue.extend({
     fields (): FormField[] {
       return [
         { name: 'country', control: { type: 'assoc', entity: 'countries' } },
-        { name: 'login', control: 'text' },
-        { name: 'full_name', control: 'text' },
+        { name: 'name', control: 'text' },
+        { name: 'grade', control: 'integer' },
+        { name: 'semesters', control: 'integer' },
+        { name: 'years_length', control: 'integer' },
+        { name: 'start_age', control: 'integer' },
       ];
     },
   },
   methods: {
     onSuccess () {
-      this.$router.push({ path: '/database/users/browse' });
+      this.$router.push({ path: '/database/education_levels/browse' });
     },
   },
 });

@@ -53,7 +53,7 @@ export default Vue.extend({
       if (!this.controlSettings) return '';
       const value = this.formValues[this.field.name];
       if (value) {
-        return value.label;
+        return value.caption;
       }
       return '-';
     },
@@ -74,11 +74,11 @@ export default Vue.extend({
     async fetchOptions () {
       if (this.options !== null) return;
       if (this.fetchQueryState.running) return;
-      const result = await this.$api.query(this.fetchQueryBuilder?.(), this.fetchQueryState);
+      const result = await this.$api.request(this.fetchQueryBuilder?.(), this.fetchQueryState);
       if (result !== null) {
-        Vue.options = result.records.map((record: any) => ({
+        this.options = result.records.map((record: any) => ({
           record,
-          text: record.label,
+          text: record.caption,
         }));
       }
     },

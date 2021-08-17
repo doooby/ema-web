@@ -30,6 +30,7 @@ export default Vue.extend({
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
         { name: 'id', size: 60 },
+        { name: 'country', getText: (user: any) => user.country.caption },
         { name: 'login' },
         { name: 'full_name' },
       ],

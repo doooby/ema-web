@@ -4,7 +4,7 @@
       :entity="column.cell.entity"
       :record-id="associatedRecord.id"
     >
-      {{ associatedRecord.label }}
+      {{ associatedRecord.caption }}
     </show-record-link>
   </div>
 </template>

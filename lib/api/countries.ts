@@ -1,5 +1,5 @@
 import * as mappers from './mappers';
-import { ApiRequest, Params, query } from '.';
+import { Params } from '.';
 
 const { object, recordId, prop, val } = mappers;
 
@@ -15,28 +15,33 @@ function mapCountry (value: any): Country {
   }));
 }
 
-export function search (request: ApiRequest, params: Params) {
-  return query({
+export function search (params: Params) {
+  return {
     path: '/countries/search',
-    data: params,
-    request,
-    mapper: payload => mappers.paginatedRecords(payload, mapCountry),
-  });
+    params,
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapCountry),
+  };
 }
 
-export function get (request: ApiRequest, countryId: number) {
-  return query({
+export function searchAssociated (params?: Params) {
+  return {
+    path: '/countries/search?assoc=1',
+    params,
+    mapper: (payload: any) => mappers.associatedRecords<Country>(payload),
+  };
+}
+
+export function get (countryId: number) {
+  return {
     path: `/countries/${countryId}`,
-    request,
-    mapper: payload => mappers.record(payload, mapCountry),
-  });
+    mapper: (payload: any) => mappers.record(payload, mapCountry),
+  };
 }
 
-export function create (request: ApiRequest, country: Params) {
-  return query({
+export function create (country: Params) {
+  return {
     path: '/countries/create',
-    data: { country },
-    request,
+    params: { country },
     mapper: mappers.changedRecord,
-  });
+  };
 }

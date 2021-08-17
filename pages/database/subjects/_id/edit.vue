@@ -1,6 +1,6 @@
 <template>
   <edit-page
-    entity="users"
+    entity="subjects"
     :fields="fields"
     :no-default-redirect="true"
     @success="onSuccess"
@@ -18,15 +18,14 @@ export default Vue.extend({
   computed: {
     fields (): FormField[] {
       return [
-        { name: 'country', control: { type: 'assoc', entity: 'countries' } },
-        { name: 'login', control: 'text' },
-        { name: 'full_name', control: 'text' },
+        { name: 'education_level', control: { type: 'assoc', entity: 'education_levels' } },
+        { name: 'name', control: 'text' },
       ];
     },
   },
   methods: {
     onSuccess () {
-      this.$router.push({ path: '/database/users/browse' });
+      this.$router.push({ path: '/database/subjects/browse' });
     },
   },
 });

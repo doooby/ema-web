@@ -1,15 +1,17 @@
 import * as mappers from './mappers';
-import { ApiRequest, Params, query } from '.';
+import { Params } from '.';
 import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
 
 const { object, record, recordId, prop, assoc, val } = mappers;
 
 interface EducationLevel {
   id: number;
-  order: number;
   name: string;
-  start_age: number;
+  grade: number;
+  semesters: number;
   years_length: number;
+  start_age: number;
+  mandatory: boolean;
   country: AssociatedRecord;
 }
 
@@ -20,47 +22,53 @@ interface Associations {
 function mapEducationLevel (value: any, associations?: Associations): EducationLevel {
   return object(value, root => ({
     id: recordId(root),
-    order: prop('order', root, val.integer),
     name: prop('name', root, val.string),
-    start_age: prop('start_age', root, val.integer),
+    grade: prop('grade', root, val.integer),
+    semesters: prop('semesters', root, val.integer),
     years_length: prop('years_length', root, val.integer),
+    start_age: prop('start_age', root, val.integer),
+    mandatory: prop('mandatory', root, val.boolean),
     country: assoc('country', root, associations?.country),
   }));
 }
 
 const mapAssociations = createAssociationsMapper<Associations>('country');
 
-export function search (request: ApiRequest, params: Params) {
-  return query({
+export function search (params: Params) {
+  return {
     path: '/education_levels/search',
-    data: params,
-    request,
-    mapper: payload => mappers.paginatedRecords(payload, mapEducationLevel, mapAssociations),
-  });
+    params,
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapEducationLevel, mapAssociations),
+  };
 }
 
-export function get (request: ApiRequest, educationLevelId: number) {
-  return query({
+export function searchAssociated (params?: Params) {
+  return {
+    path: '/education_levels/search?assoc=1',
+    params,
+    mapper: (payload: any) => mappers.associatedRecords<EducationLevel>(payload),
+  };
+}
+
+export function get (educationLevelId: number) {
+  return {
     path: `/education_levels/${educationLevelId}`,
-    request,
-    mapper: payload => record(payload, mapEducationLevel, mapAssociations),
-  });
+    mapper: (payload: any) => record(payload, mapEducationLevel, mapAssociations),
+  };
 }
 
-export function create (request: ApiRequest, EducationLevel: Params) {
-  return query({
+export function create (educationLevel: Params) {
+  return {
     path: '/education_levels/create',
-    data: { EducationLevel },
-    request,
+    params: { education_level: educationLevel },
     mapper: mappers.changedRecord,
-  });
+  };
 }
 
-export function update (request: ApiRequest, educationLevelId: number, EducationLevel: Params) {
-  return query({
+export function update (educationLevelId: number, educationLevel: Params) {
+  return {
     path: `/education_levels/${educationLevelId}/update`,
-    data: { EducationLevel },
-    request,
+    params: { education_level: educationLevel },
     mapper: mappers.changedRecord,
-  });
+  };
 }

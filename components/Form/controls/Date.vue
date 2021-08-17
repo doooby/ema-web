@@ -90,6 +90,12 @@ export default Vue.extend({
       this.onChange(date);
       if (!date) Vue.nextTick(() => { this.day = null; });
     },
+    formValues (newValues) {
+      const date = sanitizedDate(newValues[this.field.name]);
+      this.day = date ? date.getDate() : null;
+      this.month = date ? date.getMonth() + 1 : null;
+      this.year = date ? date.getFullYear() : null;
+    },
   },
   methods: {
     onChange (date: undefined | Date): void {

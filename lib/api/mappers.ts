@@ -23,7 +23,7 @@ export interface PaginatedRecords<R=any> {
 
 export interface AssociatedRecord<R=any> {
   id: number;
-  label: string;
+  caption: string;
   record?: R;
 }
 
@@ -134,6 +134,7 @@ export function recordId (parent: any): number {
 export function assocId (parent: any, associationName: string): number {
   const propName = `${associationName}_id`;
   const value = parent[propName];
+  console.log(parent, propName);
   if (typeof value !== 'number') throw new MappingError(`invalid association id ${propName}`);
   return value;
 }
@@ -222,7 +223,7 @@ export function associatedRecords<R> (value: any): { records: AssociatedRecord<R
 export function mapAssociatedRecord<R=any> (value: any): AssociatedRecord<R> {
   return object(value, root => ({
     id: recordId(root),
-    label: prop('label', root, val.string),
+    caption: prop('caption', root, val.string),
   }));
 }
 
