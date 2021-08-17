@@ -17,6 +17,9 @@
         :dataset="computedDataSet"
         :templates="computedCellTemplates"
       />
+      <tbody v-if="$slots.footer">
+        <slot name="footer" />
+      </tbody>
     </table>
   </div>
 </template>

@@ -52,3 +52,11 @@ $label-margin-bottom: px-size(1);
 .col-form-label {
   padding: 0;
 }
+
+.btn-xs {
+  padding: 0 px-size(1);
+  height: 22px;
+  &.btn .b-icon.bi {
+    vertical-align: top;
+  }
+}

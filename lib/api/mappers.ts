@@ -1,5 +1,7 @@
 import { parseISO as parseDate } from 'date-fns';
 
+type Labels = { [name: string]: undefined | string };
+
 export type RecordError = [ string, string ];
 
 export interface RecordGet<R=any> {
@@ -24,8 +26,11 @@ export interface PaginatedRecords<R=any> {
 export interface AssociatedRecord<R=any> {
   id: number;
   caption: string;
+  labels: Labels;
   record?: R;
 }
+
+export type ManyAssociatedRecords<R=any> = Array<AssociatedRecord<R>>;
 
 export type AssociatedRecordsIndex<R=any> = { [id: string]: undefined | AssociatedRecord<R> }
 
@@ -104,14 +109,20 @@ export function maybeProp<V> (
   return prop(name, parent, map);
 }
 
-export function mandatoryProp<V> (
+export function unsafeProp<V> (
   name: string,
   parent: { [prop: string]: any },
+  defaultValue: V,
+  map: (value: any) => V,
 ): V {
-  return prop(name, parent, (value) => {
-    if (value === null || value === undefined) throw new MappingError('missing prop');
-    return value;
-  });
+  const value = parent[name];
+  if (!value) return defaultValue;
+
+  try {
+    return map(value);
+  } catch (error) {
+    return defaultValue;
+  }
 }
 
 export function assoc<A> (
@@ -134,7 +145,6 @@ export function recordId (parent: any): number {
 export function assocId (parent: any, associationName: string): number {
   const propName = `${associationName}_id`;
   const value = parent[propName];
-  console.log(parent, propName);
   if (typeof value !== 'number') throw new MappingError(`invalid association id ${propName}`);
   return value;
 }
@@ -182,6 +192,16 @@ export function record<R, A> (
   });
 }
 
+export function recordLabels (value: any): Readonly<Labels> {
+  return object(value, (root) => {
+    const labels: Labels = {};
+    for (const [ name, value ] of Object.entries(root)) {
+      labels[name] = String(value);
+    }
+    return labels;
+  });
+}
+
 export function changedRecord (value: any): RecordChange {
   return object(value, root => ({
     success: prop('success', root, val.boolean),
@@ -224,6 +244,7 @@ export function mapAssociatedRecord<R=any> (value: any): AssociatedRecord<R> {
   return object(value, root => ({
     id: recordId(root),
     caption: prop('caption', root, val.string),
+    labels: unsafeProp('labels', root, {}, value => recordLabels(value)),
   }));
 }
 

@@ -20,9 +20,18 @@ export default Vue.extend({
   computed: {
     caption (): string {
       const textGet = this.column.cell!.text;
-      if (textGet) return textGet(this.dataItem);
+      if (textGet) return safeGetText(textGet, this.dataItem);
       return this.dataItem[this.column.name];
     },
   },
 });
+
+function safeGetText (getText: any, dataItem: any): any {
+  try {
+    return getText?.(dataItem);
+  } catch (err) {
+    utils.notify('error', err, { 'DataTable.cells.RecordLinkCell': 'getText failed' });
+    return null;
+  }
+}
 </script>

@@ -4,7 +4,7 @@ import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } fr
 
 const { object, record, recordId, prop, assoc, val } = mappers;
 
-interface Course {
+export interface Course {
   id: number;
   name: string;
   education_level: AssociatedRecord;

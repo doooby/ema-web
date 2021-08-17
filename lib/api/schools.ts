@@ -1,10 +1,11 @@
 import * as mappers from './mappers';
 import { Params } from '.';
 import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
+import { Course } from '~/lib/records';
 
 const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 
-interface School {
+export interface School {
   id: number;
   name: string;
   address?: string;
@@ -39,6 +40,13 @@ export function searchAssociated (params?: Params) {
     path: '/schools/search?assoc=1',
     params,
     mapper: (payload: any) => mappers.associatedRecords<School>(payload),
+  };
+}
+
+export function searchCourses (schoolId: number) {
+  return {
+    path: `/schools/${schoolId}/search_courses?assoc=1`,
+    mapper: (payload: any) => mappers.associatedRecords<Course>(payload),
   };
 }
 

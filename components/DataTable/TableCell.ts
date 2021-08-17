@@ -22,7 +22,7 @@ export default Vue.extend({
     }
 
     const { name, getText } = props.column;
-    const textValue = getText ? getText(dataItem) : dataItem?.[name];
+    const textValue = getText ? safeGetText(getText, dataItem) : dataItem?.[name];
     return createElement(
       'div',
       {
@@ -34,6 +34,15 @@ export default Vue.extend({
     );
   },
 });
+
+function safeGetText (getText: any, dataItem: any): any {
+  try {
+    return getText?.(dataItem);
+  } catch (err) {
+    utils.notify('error', err, { 'DataTable.TableCell': 'getText failed' });
+    return null;
+  }
+}
 
 function sanitizeText (text: any): undefined | string {
   switch (typeof text) {
