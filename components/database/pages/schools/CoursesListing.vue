@@ -87,8 +87,8 @@ export default Vue.extend({
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
         { name: 'id', cell: { type: 'link', entity: 'courses' }, size: 60 },
-        { name: 'course', getText: course => course.caption, size: 300 },
-        { name: 'education_level', getText: course => course.labels.education_level, size: 300 },
+        { name: 'course', getText: (course: any) => course.caption, size: 300 },
+        { name: 'education_level', getText: (course: any) => course.labels.education_level, size: 300 },
       ],
       editable: false,
       changes: {

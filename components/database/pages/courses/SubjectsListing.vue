@@ -87,18 +87,18 @@ export default Vue.extend({
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
         { name: 'id', cell: { type: 'link', entity: 'courses' }, size: 60 },
-        { name: 'subject', getText: subject => subject.caption, size: 300 },
-        { name: 'education_level', getText: subject => subject.labels.education_level, size: 300 },
+        { name: 'subject', getText: (subject: any) => subject.caption, size: 300 },
+        { name: 'education_level', getText: (subject: any) => subject.labels.education_level, size: 300 },
       ],
       editable: false,
       changes: {
-        removeIds: [],
+        removeIds: [] as number[],
         addFormShown: false,
         addFormValues: {},
         addFormFields: [
           { name: 'subject', control: { type: 'assoc', entity: 'subjects' } },
         ],
-        addedSubjects: [],
+        addedSubjects: [] as any[],
       },
       saveChangesQueryState: this.$api.newQueryState(),
     };
@@ -155,7 +155,7 @@ export default Vue.extend({
 
       this.changes.addFormShown = true;
     },
-    onAddFormChange ({ subject }) {
+    onAddFormChange ({ subject }: any) {
       if (this.saveChangesQueryState.running) return;
 
       this.changes.addFormShown = false;
