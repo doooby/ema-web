@@ -14,12 +14,12 @@
     <b-modal v-model="modalShown" centered hide-footer :title="labelText">
       <b-list-group>
         <b-list-group-item
-          v-for="record in options"
-          :key="record.id"
+          v-for="option in options"
+          :key="option.value"
           button
-          @click="onItemSelected(record)"
+          @click="onItemSelected(option)"
         >
-          {{ record.caption }}
+          {{ option.caption }}
         </b-list-group-item>
       </b-list-group>
       <b-alert variant="secondary" :show="options === null || options.length === 0">
@@ -33,7 +33,7 @@
 import Vue from 'vue';
 import { FIELD_PROPS } from '../constants';
 import { fieldCaptionGet } from '..';
-import { AssociationControl } from '~/components/Form/types';
+import { ListControl } from '~/components/Form/types';
 
 export default Vue.extend({
   props: FIELD_PROPS,
@@ -44,54 +44,35 @@ export default Vue.extend({
     };
   },
   computed: {
-    controlSettings (): null | AssociationControl {
+    controlSettings (): null | ListControl {
       const control = this.field.control;
-      if (typeof control !== 'object' || control.type !== 'assoc') return null;
-      return control as AssociationControl;
+      if (typeof control !== 'object' || control.type !== 'list') return null;
+      return control as ListControl;
     },
     labelText (): string {
       return this.$t(fieldCaptionGet(this.field)) as string;
     },
     valueText (): string {
-      if (!this.controlSettings) return '';
+      if (!this.options) return '';
       const value = this.formValues[this.field.name];
-      if (value) {
-        return value.caption;
+      const option = value && this.options.find(option => option.value === value);
+      if (option) {
+        return option.caption;
       }
       return '';
     },
-    options (): null | any[] {
-      if (this.fetchQueryState.value) {
-        return this.fetchQueryState.value.records;
-      } else {
-        return null;
-      }
-    },
-    fetchQueryBuilder (): any {
-      if (this.controlSettings) {
-        const { entity } = this.controlSettings;
-        const queryBuilder = (this.$api.queries as any)[entity]?.searchAssociated;
-        if (queryBuilder) return queryBuilder;
-      }
-
-      utils.notify('error', 'Form.controls.Association: query not found', {
-        entity: this.controlSettings?.entity,
-      });
-      return null;
+    options (): any[] {
+      if (!this.controlSettings) return [];
+      return this.controlSettings.options;
     },
   },
   methods: {
     onChevronClick () {
-      this.fetchOptions();
       this.modalShown = true;
     },
-    fetchOptions () {
-      if (this.fetchQueryState.running) return;
-      this.$api.request(this.fetchQueryBuilder?.(), this.fetchQueryState);
-    },
-    onItemSelected (record: any) {
+    onItemSelected (option: any) {
       this.modalShown = false;
-      this.$emit('change', record);
+      this.$emit('change', option.value);
     },
   },
 });

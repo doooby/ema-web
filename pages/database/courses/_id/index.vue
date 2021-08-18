@@ -5,6 +5,11 @@
     :title="title"
   >
     <template #detail="{ record }">
+      <div class="emb-6">
+        <strong>Education Level:</strong>
+        {{ record.education_level.caption }}
+        <code class="eml-2">[{{ record.education_level.id }}]</code>
+      </div>
       <subjects-listing :course="record" />
     </template>
   </show-page>

@@ -8,6 +8,7 @@ import CalendarControl from './controls/Calendar.vue';
 import DateControl from './controls/Date.vue';
 import IntegerControl from './controls/Integer.vue';
 import TextControl from './controls/Text.vue';
+import ListControl from './controls/List.vue';
 
 const controlComponents: { [name: string]: any } = {
   assoc: AssociationControl,
@@ -15,6 +16,7 @@ const controlComponents: { [name: string]: any } = {
   date: DateControl,
   integer: IntegerControl,
   text: TextControl,
+  list: ListControl,
 };
 
 function getControl (field: FormField): null | Vue.Component {
