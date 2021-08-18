@@ -75,8 +75,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { Course, School } from '~/lib/records';
-import { AssociatedRecord } from '~/lib/api/mappers';
+import { School } from '~/lib/records';
 
 export default Vue.extend({
   props: {
@@ -93,27 +92,27 @@ export default Vue.extend({
       ],
       editable: false,
       changes: {
-        removeIds: [],
+        removeIds: [] as number[],
         addFormShown: false,
         addFormValues: {},
         addFormFields: [
           { name: 'course', control: { type: 'assoc', entity: 'courses' } },
         ],
-        addedCourses: [],
+        addedCourses: [] as any[],
       },
       saveChangesQueryState: this.$api.newQueryState(),
     };
   },
   computed: {
-    fetchedRecords (): Course[] {
-      const fetchResult = this.fetchQueryState.value as { records: Array<AssociatedRecord<Course>> };
+    fetchedRecords (): any[] {
+      const fetchResult = this.fetchQueryState.value as { records: any[] };
       if (!fetchResult) {
         return [];
       }
 
       return fetchResult.records;
     },
-    records (): Course[] {
+    records (): any[] {
       const { removeIds, addedCourses } = this.changes;
       return addedCourses.concat(this.fetchedRecords).filter(record => !removeIds.includes(record.id));
     },
@@ -140,7 +139,7 @@ export default Vue.extend({
       }
       this.editable = !this.editable;
     },
-    onRemove (course: Course) {
+    onRemove (course: any) {
       if (this.saveChangesQueryState.running) return;
 
       const { removeIds, addedCourses } = this.changes;
@@ -156,7 +155,7 @@ export default Vue.extend({
 
       this.changes.addFormShown = true;
     },
-    onAddFormChange ({ course }) {
+    onAddFormChange ({ course }: any) {
       if (this.saveChangesQueryState.running) return;
 
       this.changes.addFormShown = false;

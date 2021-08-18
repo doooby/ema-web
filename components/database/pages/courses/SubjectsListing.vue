@@ -75,12 +75,11 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { Subject } from '~/lib/records';
-import { AssociatedRecord } from '~/lib/api/mappers';
+import { Course } from '~/lib/records';
 
 export default Vue.extend({
   props: {
-    course: { type: Object as PropType<Subject>, required: true },
+    course: { type: Object as PropType<Course>, required: true },
   },
   data () {
     return {
@@ -105,15 +104,15 @@ export default Vue.extend({
     };
   },
   computed: {
-    fetchedRecords (): Subject[] {
-      const fetchResult = this.fetchQueryState.value as { records: Array<AssociatedRecord<Subject>> };
+    fetchedRecords (): any[] {
+      const fetchResult = this.fetchQueryState.value as { records: any[] };
       if (!fetchResult) {
         return [];
       }
 
       return fetchResult.records;
     },
-    records (): Subject[] {
+    records (): any[] {
       const { removeIds, addedSubjects } = this.changes;
       return addedSubjects.concat(this.fetchedRecords).filter(record => !removeIds.includes(record.id));
     },
@@ -140,7 +139,7 @@ export default Vue.extend({
       }
       this.editable = !this.editable;
     },
-    onRemove (subject: Subject) {
+    onRemove (subject: any) {
       if (this.saveChangesQueryState.running) return;
 
       const { removeIds, addedSubjects } = this.changes;
