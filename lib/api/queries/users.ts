@@ -1,21 +1,10 @@
-import * as mappers from './mappers';
-import { Params } from '.';
-import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
+import { Params } from '..';
+import * as mappers from '../mappers';
+import { User, UserAssociations } from '~/lib/records';
 
 const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 
-export interface User {
-  id: number;
-  login: string;
-  full_name?: string;
-  country: AssociatedRecord;
-}
-
-interface Associations {
-  country: AssociatedRecordsIndex,
-}
-
-function mapUser (value: any, associations?: Associations): User {
+function mapUser (value: any, associations?: UserAssociations): User {
   return object(value, root => ({
     id: recordId(root),
     login: prop('login', root, val.string),
@@ -24,7 +13,7 @@ function mapUser (value: any, associations?: Associations): User {
   }));
 }
 
-const mapAssociations = createAssociationsMapper<Associations>('country');
+const mapAssociations = mappers.createAssociationsMapper<UserAssociations>('country');
 
 export function search (params: Params) {
   return {

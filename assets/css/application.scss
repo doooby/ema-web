@@ -1,5 +1,3 @@
-@use "sass:map";
-
 $LIGHT-controls: #C2C0BF;
 $LIGHT-font: #000000;
 
@@ -19,24 +17,39 @@ $gl-sizes: (
   8: 40,
 );
 
+$sizing-large-x-y-sizes: (
+  9: 50,
+  10: 60,
+  11: 76,
+  12: 94,
+  13: 120,
+  14: 146,
+  15: 180,
+  16: 214,
+  17: 260,
+  18: 306,
+);
+
+$font-line-heights: (
+  '075': 0.75rem !important,
+  '085': 0.85rem !important,
+  '1': 1rem !important,
+  '15': 1.15rem !important,
+  '25': 1.25rem !important,
+  '50': 1.50rem !important,
+  '75': 1.75rem !important,
+);
+
+@function size($size) {
+  @return map-get($gl-sizes, $size);
+}
+
 @function px ($value) {
   @return #{$value}px;
 }
 
 @function px-size($size) {
   @return #{size($size)}px;
-}
-
-//@function px-big-size($multiplier) {
-//  @return #{big-size($multiplier)}px;
-//}
-
-@function size($size) {
-  @return map-get($gl-sizes, $size);
-}
-
-@function big-size($multiplier) {
-  @return $multiplier * size(6);
 }
 
 :root {
@@ -47,47 +60,7 @@ $gl-sizes: (
 
 @import 'bootstrap';
 @import '~bootstrap-vue/src/index';
-
-@mixin button-like {
-  cursor: pointer;
-  user-select: none;
-}
-
-.button-like {
-  @include button-like;
-}
-
-@each $prop, $abbrev in (margin: m, padding: p) {
-  @each $size, $value in $gl-sizes {
-    .e#{$abbrev}-#{$size} { #{$prop}: px($value) !important; }
-    .e#{$abbrev}t-#{$size}, .e#{$abbrev}y-#{$size} { #{$prop}-top: px($value) !important; }
-    .e#{$abbrev}r-#{$size}, .e#{$abbrev}x-#{$size} { #{$prop}-right: px($value) !important; }
-    .e#{$abbrev}b-#{$size}, .e#{$abbrev}y-#{$size} { #{$prop}-bottom: px($value) !important; }
-    .e#{$abbrev}l-#{$size}, .e#{$abbrev}x-#{$size} { #{$prop}-left: px($value) !important; }
-  }
-}
-
-@each $size, $value in (
-  map.merge($gl-sizes, (
-    9: 50,
-    10: 60,
-    11: 76,
-    12: 94,
-    13: 120,
-    14: 146,
-    15: 180,
-    16: 214,
-    17: 260,
-    18: 306,
-  ))
-) {
-  .ew-#{$size} { width: px($value) !important; }
-}
-
-.control-like {
-  background-color: var(--EMA-controls);
-  border: $input-border-width solid $input-border-color;
-}
+@import 'custom';
 
 @import 'layouts/database';
 

@@ -18,9 +18,8 @@
 import Vue from 'vue';
 import { formatISO } from 'date-fns';
 import BrowsePage from '~/components/database/BrowsePage.vue';
-import { Student } from '~/lib/records';
 import RecordActionsCell from '~/components/database/RecordActionsCell.vue';
-import { caregivers_cfwToText, disabilityToText } from '~/lib/api/students';
+import { Student, student } from '~/lib/records';
 
 export default Vue.extend({
   components: { RecordActionsCell, BrowsePage },
@@ -47,13 +46,13 @@ export default Vue.extend({
         { name: 'caregivers_en', getText: (student: Student) => student.caregivers_en?.join(', ') },
         { name: 'caregivers', getText: (student: Student) => student.caregivers_en?.join(', ') },
         { name: 'caregivers_contact' },
-        { name: 'caregivers_cfw', getText: caregivers_cfwToText },
+        { name: 'caregivers_cfw', getText: student.caregivers_cfwToText },
         { name: 'out_of_school' },
         { name: 'enrolment_on', getText: ({ enrolment_on }: Student) => formatDate(enrolment_on) },
         { name: 'completion_on', getText: ({ completion_on }: Student) => formatDate(completion_on) },
         { name: 'dropped_out_on', getText: ({ dropped_out_on }: Student) => formatDate(dropped_out_on) },
         { name: 'drop_out_reason' },
-        { name: 'disability', getText: disabilityToText },
+        { name: 'disability', getText: student.disabilityToText },
       ],
     };
   },

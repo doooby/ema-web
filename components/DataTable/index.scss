@@ -24,6 +24,14 @@
         }
       }
     }
+
+    tbody {
+      tr {
+        &:hover {
+          background-color: $gray-200;
+        }
+      }
+    }
   }
 
   .single-row-cell {

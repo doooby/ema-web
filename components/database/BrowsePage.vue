@@ -29,6 +29,7 @@
           class="col"
           :columns="tableColumns"
           :dataset="records ? records.records : []"
+          :query-state="searchQueryState"
           :templates="columnTemplates"
         >
           <template #header-cell="{ column }">
@@ -95,21 +96,21 @@ export default Vue.extend({
   watch: {
     entity () {
       this.searchQueryState.reset();
-      Vue.nextTick(() => this.searchQuery());
+      Vue.nextTick(() => this.search());
     },
   },
   mounted () {
-    this.searchQuery();
+    this.search();
   },
   methods: {
     onSearch (value: FormValues) {
       this.searchValues = value;
-      this.searchQuery();
+      this.search();
     },
     onSelectPage (page: number) {
-      this.searchQuery(page);
+      this.search(page);
     },
-    searchQuery (page?: number) {
+    search (page?: number) {
       this.$api.request(
         this.searchQueryBuilder({ ...this.searchValues, page }),
         this.searchQueryState,

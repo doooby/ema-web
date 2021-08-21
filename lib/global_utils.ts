@@ -10,7 +10,6 @@ export function notify (
   switch (type) {
     case 'error':
       console.error(message);
-      console.log(context);
       break;
   }
 }

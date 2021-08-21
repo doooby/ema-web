@@ -1,74 +1,39 @@
 <template>
   <div>
     <div class="emb-2 d-flex align-items-center">
-      <strong>Course's Subjects</strong>
+      <strong class="flex-fill">Course's Subjects</strong>
       <b-button
         :variant="editable ? 'secondary' : 'outline-secondary'"
         class="btn-xs eml-3"
         title="Edit"
-        @click="onToggleEditable"
+        @click="editable = !editable"
       >
-        <b-icon icon="pencil" />
+        <div class="d-flex align-items-center">
+          <b-icon icon="pencil" />
+          <span v-if="editable" class="eml-3 line-1">
+            cancel
+          </span>
+        </div>
       </b-button>
     </div>
-
     <div class="row no-gutters">
-      <data-table-view
+      <editable-records-listing
         class="col"
-        :columns="tableColumns"
-        :dataset="records"
+        :original-records="originalRecords"
+        :table-columns="tableColumns"
+        :editable="editable"
+        @commitChanges="onCommitChanges"
       >
         <template #header-cell="{ column }">
           {{ $t(`record.courses.${column.name}`) }}
         </template>
-        <template #actions="{ dataItem }">
-          <b-button
-            v-if="editable"
-            variant="outline-danger"
-            class="btn-xs"
-            title="Remove"
-            @click="onRemove(dataItem)"
-          >
-            <b-icon icon="dash" />
-          </b-button>
+        <template #edit-form="{ onInputCallback }">
+          <form-view
+            :fields="addFormFields"
+            @input="onInputCallback($event.subject, { hideForm: true })"
+          />
         </template>
-        <template v-if="editable" #footer>
-          <tr>
-            <td>
-              <b-button
-                variant="outline-primary"
-                class="btn-xs"
-                title="Add"
-                :disabled="changes.addFormShown"
-                @click="onShowAddForm"
-              >
-                <b-icon icon="plus" />
-              </b-button>
-            </td>
-            <td :colspan="tableColumns.length">
-              <div v-if="changes.addFormShown" class="ew-14">
-                <form-view
-                  :value="changes.addFormValues"
-                  :fields="changes.addFormFields"
-                  @input="onAddFormChange"
-                />
-              </div>
-            </td>
-          </tr>
-          <tr v-if="changed">
-            <td :colspan="tableColumns.length + 1">
-              <div class="d-flex justify-content-end">
-                <b-button
-                  variant="success"
-                  @click="saveChanges"
-                >
-                  Save Changes
-                </b-button>
-              </div>
-            </td>
-          </tr>
-        </template>
-      </data-table-view>
+      </editable-records-listing>
     </div>
   </div>
 </template>
@@ -76,8 +41,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { Course } from '~/lib/records';
+import EditableRecordsListing from '~/components/database/EditableRecordsListing.vue';
 
 export default Vue.extend({
+  components: { EditableRecordsListing },
   props: {
     course: { type: Object as PropType<Course>, required: true },
   },
@@ -85,40 +52,20 @@ export default Vue.extend({
     return {
       fetchQueryState: this.$api.newQueryState(),
       tableColumns: [
-        { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-        { name: 'id', cell: { type: 'link', entity: 'courses' }, size: 60 },
+        { name: 'id', cell: { type: 'link', entity: 'subjects' }, size: 60 },
         { name: 'subject', getText: (subject: any) => subject.caption, size: 300 },
         { name: 'education_level', getText: (subject: any) => subject.labels.education_level, size: 300 },
       ],
       editable: false,
-      changes: {
-        removeIds: [] as number[],
-        addFormShown: false,
-        addFormValues: {},
-        addFormFields: [
-          { name: 'subject', control: { type: 'assoc', entity: 'subjects' } },
-        ],
-        addedSubjects: [] as any[],
-      },
+      addFormFields: [
+        { name: 'subject', control: { type: 'assoc', entity: 'subjects' } },
+      ],
       saveChangesQueryState: this.$api.newQueryState(),
     };
   },
   computed: {
-    fetchedRecords (): any[] {
-      const fetchResult = this.fetchQueryState.value as { records: any[] };
-      if (!fetchResult) {
-        return [];
-      }
-
-      return fetchResult.records;
-    },
-    records (): any[] {
-      const { removeIds, addedSubjects } = this.changes;
-      return addedSubjects.concat(this.fetchedRecords).filter(record => !removeIds.includes(record.id));
-    },
-    changed (): boolean {
-      const { removeIds, addedSubjects } = this.changes;
-      return removeIds.length > 0 || addedSubjects.length > 0;
+    originalRecords (): any[] {
+      return this.fetchQueryState.value?.records || [];
     },
   },
   mounted () {
@@ -131,41 +78,8 @@ export default Vue.extend({
         this.fetchQueryState,
       );
     },
-    onToggleEditable () {
-      if (this.editable) {
-        this.changes.addFormShown = false;
-        this.changes.removeIds = [];
-        this.changes.addedSubjects = [];
-      }
-      this.editable = !this.editable;
-    },
-    onRemove (subject: any) {
-      if (this.saveChangesQueryState.running) return;
-
-      const { removeIds, addedSubjects } = this.changes;
-      const inAdded = addedSubjects.findIndex(addedSubject => addedSubject.id === subject.id);
-      if (inAdded === -1) {
-        removeIds.push(subject.id);
-      } else {
-        addedSubjects.splice(inAdded, 1);
-      }
-    },
-    onShowAddForm () {
-      if (this.saveChangesQueryState.running) return;
-
-      this.changes.addFormShown = true;
-    },
-    onAddFormChange ({ subject }: any) {
-      if (this.saveChangesQueryState.running) return;
-
-      this.changes.addFormShown = false;
-      if (!this.records.find(addedSubject => addedSubject.id === subject.id)) {
-        this.changes.addedSubjects.push(subject);
-      }
-    },
-    async saveChanges () {
-      const newIds = this.records.map(subject => subject.id);
-      this.changes.addFormShown = false;
+    async onCommitChanges (newRecords: any[]) {
+      const newIds = newRecords.map(subject => subject.id);
 
       await this.$api.request(
         this.$api.queries.courses.update(this.course.id, {
@@ -174,11 +88,7 @@ export default Vue.extend({
         this.saveChangesQueryState,
       );
 
-      this.changes.removeIds = [];
-      this.changes.addedSubjects = [];
       this.editable = false;
-
-      this.fetchQueryState.value = null;
       this.fetch();
     },
   },

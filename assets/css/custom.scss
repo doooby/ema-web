@@ -1,0 +1,16 @@
+@mixin button-like {
+  cursor: pointer;
+  user-select: none;
+}
+
+@import 'custom/sizing';
+@import 'custom/font';
+
+.button-like {
+  @include button-like;
+}
+
+.control-like {
+  background-color: var(--EMA-controls);
+  border: $input-border-width solid $input-border-color;
+}

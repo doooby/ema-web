@@ -1,12 +1,8 @@
-import * as mappers from './mappers';
-import { Params } from '.';
+import { Params } from '..';
+import * as mappers from '../mappers';
+import { Country } from '~/lib/records';
 
 const { object, recordId, prop, val } = mappers;
-
-export interface Country {
-  id: number;
-  name: string;
-}
 
 function mapCountry (value: any): Country {
   return object(value, root => ({

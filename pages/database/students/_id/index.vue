@@ -159,7 +159,7 @@
 import Vue from 'vue';
 import ShowPage from '~/components/database/ShowPage.vue';
 import { formatISO } from 'date-fns';
-import { caregivers_cfwToText, disabilityToText } from '~/lib/api/students';
+import { student } from '~/lib/records';
 
 export default Vue.extend({
   components: { ShowPage },
@@ -178,8 +178,8 @@ export default Vue.extend({
       if (!date) return '';
       return formatISO(date, { representation: 'date' });
     },
-    caregivers_cfwToText,
-    disabilityToText,
+    caregivers_cfwToText: student.caregivers_cfwToText,
+    disabilityToText: student.disabilityToText,
   },
 });
 </script>

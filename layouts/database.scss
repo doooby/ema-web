@@ -1,5 +1,5 @@
 body.body-database {
-  $menu-width: big-size(8);
+  $menu-width: 8 * size(6);
   $menu-border-width: 1;
   .page-body {
     position: relative;

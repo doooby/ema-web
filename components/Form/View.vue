@@ -25,7 +25,7 @@ export default Vue.extend({
     domIdBase: { type: String, default: '' },
     record: { type: Object as any, default: null },
     fields: { type: Array as PropType<Readonly<FormField[]>>, required: true },
-    value: { type: Object as PropType<FormValues>, required: true },
+    value: { type: Object as PropType<FormValues>, default: {} },
   },
   computed: {
     className (): string {

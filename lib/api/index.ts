@@ -1,14 +1,5 @@
 import 'vue';
 
-import * as countries from './countries';
-import * as users from './users';
-
-import * as courses from './courses';
-import * as education_levels from './education_levels';
-import * as schools from './schools';
-import * as students from './students';
-import * as subjects from './subjects';
-
 export interface ApiRequest {
   running: boolean;
   canceled: boolean;
@@ -26,16 +17,25 @@ export interface QueryDefinition<V = unknown> {
   mapper: (payload: any) => V;
 }
 
-export const queries = {
-  countries,
-  users,
+export interface RequestState <V = unknown> {
+  running: boolean;
+  fail: null | string;
+  error: null | Error;
+  value: null | V;
+  reset(): void;
+}
 
-  courses,
-  education_levels,
-  schools,
-  students,
-  subjects,
-};
+export interface RequestOptions {
+  headers?: { [header: string]: string };
+  data?: any;
+}
+
+export interface RequestResponse {
+  ok: boolean;
+  error?: Error;
+  message?: string;
+  payload?: any;
+}
 
 // export async function query <V> (
 //   options: FetchOptions & {

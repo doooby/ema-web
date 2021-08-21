@@ -1,22 +1,10 @@
-import * as mappers from './mappers';
-import { Params } from '.';
-import { AssociatedRecord, AssociatedRecordsIndex, createAssociationsMapper } from './mappers';
-import { Course } from '~/lib/records';
+import { Params } from '..';
+import * as mappers from '../mappers';
+import { School, SchoolAssociations, Course } from '~/lib/records';
 
 const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 
-export interface School {
-  id: number;
-  name: string;
-  address?: string;
-  country: AssociatedRecord;
-}
-
-interface Associations {
-  country: AssociatedRecordsIndex,
-}
-
-function mapSchool (value: any, associations?: Associations): School {
+function mapSchool (value: any, associations?: SchoolAssociations): School {
   return object(value, root => ({
     id: recordId(root),
     name: prop('name', root, val.string),
@@ -25,7 +13,7 @@ function mapSchool (value: any, associations?: Associations): School {
   }));
 }
 
-const mapAssociations = createAssociationsMapper<Associations>('country');
+const mapAssociations = mappers.createAssociationsMapper<SchoolAssociations>('country');
 
 export function search (params: Params) {
   return {

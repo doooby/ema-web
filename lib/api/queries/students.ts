@@ -1,63 +1,14 @@
-import * as mappers from './mappers';
-import { Params } from '.';
-import {
-  AssociatedRecord,
-  AssociatedRecordsIndex,
-  createAssociationsMapper,
-  list,
-  maybeProp,
-} from './mappers';
+import { Params } from '..';
+import * as mappers from '../mappers';
+import { Student, StudentAssociations } from '~/lib/records';
 
-const { object, record, recordId, prop, assoc, val } = mappers;
-
-export interface Student {
-  id: number;
-  country: AssociatedRecord;
-  first_name_en: string;
-  last_name_en: string;
-  first_name?: string;
-  last_name?: string;
-  born_on?: Date;
-  gender?: string;
-  language?: string;
-  address?: string;
-  residency?: string;
-  distance_school_km?: number;
-  distance_school_time?: number;
-  caregivers_en?: string[];
-  caregivers?: string[];
-  caregivers_contact?: string;
-  caregivers_cfw?: { v: 0 } | { v: 1, h: string };
-  out_of_school?: number;
-  enrolment_on?: Date;
-  completion_on?: Date;
-  dropped_out_on?: Date;
-  drop_out_reason?: string;
-  disability?: {
-    s: string;
-    d?: 0 | 1;
-    n?: 1;
-    p?: 1;
-  };
-}
-
-interface Associations {
-  country: AssociatedRecordsIndex,
-}
-
-export const StudentResidencyOptions = Object.freeze([
-  'resident',
-  'idp',
-  'host',
-  'resettled',
-  'returnee',
-]);
+const { object, record, recordId, prop, maybeProp, assoc, val, list } = mappers;
 
 function mapMaybeItemOfList (value: any, list: any[]): any {
   return list.includes(value) ? value : undefined;
 }
 
-function mapStudent (value: any, associations?: Associations): Student {
+function mapStudent (value: any, associations?: StudentAssociations): Student {
   return object(value, root => ({
     id: recordId(root),
     country: assoc('country', root, associations?.country),
@@ -100,22 +51,7 @@ function mapStudent (value: any, associations?: Associations): Student {
   }));
 }
 
-const mapAssociations = createAssociationsMapper<Associations>('country');
-
-export function caregivers_cfwToText ({ caregivers_cfw }: Student): string {
-  if (!caregivers_cfw) return '';
-  if (caregivers_cfw.v === 1) return `CFW=1, humansis_id=${caregivers_cfw.h}`;
-  return 'CFW=0';
-}
-
-export function disabilityToText ({ disability }: Student): string {
-  if (!disability) return '';
-  const { s, d, n, p } = disability;
-  const dd = d === 1 ? d : (d === 0 ? 0 : 'n/a');
-  const nn = n === 1 ? n : 0;
-  const pp = p === 1 ? p : 0;
-  return `status=${s}, diagnosis=${dd}, assistance needed=${nn}, provided=${pp}`;
-}
+const mapAssociations = mappers.createAssociationsMapper<StudentAssociations>('country');
 
 export function search (params: Params) {
   return {

@@ -1,31 +1,17 @@
 import { Context } from '@nuxt/types';
-import { queries, QueryDefinition } from '~/lib/api';
+import { QueryDefinition, RequestOptions, RequestResponse, RequestState } from '~/lib/api'
+import queries from '~/lib/api/queries';
 import { safeMap } from '~/lib/api/mappers';
-import { notify } from '~/lib/notifier';
 
-interface RequestState <V = unknown> {
-  running: boolean;
-  fail: null | string;
-  error: null | Error;
-  value: null | V;
-  reset(): void;
-}
-
-interface RequestOptions {
-  headers?: { [header: string]: string };
-  data?: any;
-}
-
-interface RequestResponse {
-  ok: boolean;
-  error?: Error;
-  message?: string;
-  payload?: any;
-}
+import ModifiableRecordsList from '~/lib/api/ModifiableRecordsList';
 
 export class ApiPlugin {
   baseUrl: string;
   queries = queries;
+
+  helpers = {
+    ModifiableRecordsList,
+  };
 
   constructor (context: Context) {
     this.baseUrl = context.$config.apiBaseUrl;
@@ -54,7 +40,7 @@ export class ApiPlugin {
     state.reset();
 
     if (!definition) {
-      notify('error', 'api query definition not given');
+      utils.notify('error', 'api query definition not given');
       return null;
     }
 
@@ -65,7 +51,7 @@ export class ApiPlugin {
     if (!response.ok) {
       state.error = response.error!;
       if (response.message) state.fail = response.message;
-      notify('error', 'api query failed', response);
+      utils.notify('error', 'api query failed', response);
       state.running = false;
       return null;
     }
@@ -74,7 +60,7 @@ export class ApiPlugin {
     if (mappingResult instanceof Error) {
       state.error = mappingResult;
       state.fail = 'invalid_data';
-      notify('error', mappingResult, response.payload);
+      utils.notify('error', mappingResult, response.payload);
       state.running = false;
       return null;
     }

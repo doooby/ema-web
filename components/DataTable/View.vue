@@ -12,6 +12,15 @@
           <slot name="header-cell" :column="column" />
         </template>
       </table-head>
+      <tbody v-if="computedDataSet.length === 0 && queryState && queryState.error">
+        <tr>
+          <td :colspan="columns.length + 1">
+            <b-alert variant="warning" show class="m-0">
+              Fetching DataSet failed.
+            </b-alert>
+          </td>
+        </tr>
+      </tbody>
       <table-body
         :columns="columns"
         :dataset="computedDataSet"
@@ -32,6 +41,7 @@ import TableColgroup from './TableColgroup.vue';
 import TableHead from './TableHead.vue';
 import TableBody from './TableBody.vue';
 import { notify } from '~/lib/notifier';
+import { RequestState } from '~/lib/api';
 
 export default Vue.extend({
   components: { TableColgroup, TableHead, TableBody },
@@ -39,6 +49,7 @@ export default Vue.extend({
     columns: { type: Array as PropType<DataTable.Column[]>, required: true },
     templates: { type: Object as PropType<{ [name: string]: any }>, default: undefined },
     dataset: { type: Array as PropType<any[]>, required: true },
+    queryState: { type: Object as PropType<RequestState>, default: undefined },
   },
   data () {
     return {
