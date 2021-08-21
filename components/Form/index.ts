@@ -1,10 +1,11 @@
 import { formatISO } from 'date-fns';
 import View from './View.vue';
-import { FormField, FormValues } from './types';
+import { FormField, FormField2, FormValues } from './types';
 import { notify } from '~/lib/notifier';
 
 export {
   FormField,
+  FormField2,
   FormValues,
 };
 

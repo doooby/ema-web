@@ -1,6 +1,6 @@
 <template>
   <b-form-group
-    :label="labelText"
+    :label="label"
   >
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center">
@@ -27,7 +27,7 @@
           :options="yearOptions"
         />
       </div>
-      <div v-if="field.data && field.data.deletable">
+      <div v-if="deletable">
         <b-button
           variant="default"
           class="eml-4 epx-2 control-like"
@@ -45,7 +45,6 @@ import Vue from 'vue';
 import { times, reverse, padStart } from 'lodash';
 import { parseISO as parseDate } from 'date-fns';
 import { FIELD_PROPS } from '../constants';
-import { fieldCaptionGet } from '..';
 import { BIconX } from 'bootstrap-vue';
 
 const DAY_OPTIONS = times(31, val => val + 1);
@@ -56,7 +55,7 @@ export default Vue.extend({
   components: { BIconX },
   props: FIELD_PROPS,
   data () {
-    const date = sanitizedDate(this.formValues[this.field.name]);
+    const date = sanitizedDate(this.formValues[this.field[0]]);
     return {
       day: date ? date.getDate() : null,
       month: date ? date.getMonth() + 1 : null,
@@ -67,8 +66,8 @@ export default Vue.extend({
     };
   },
   computed: {
-    labelText (): string {
-      return this.$t(fieldCaptionGet(this.field)) as string;
+    deletable (): undefined | boolean {
+      return this.field[2]?.deletable;
     },
   },
   watch: {
@@ -91,7 +90,7 @@ export default Vue.extend({
       if (!date) Vue.nextTick(() => { this.day = null; });
     },
     formValues (newValues) {
-      const date = sanitizedDate(newValues[this.field.name]);
+      const date = sanitizedDate(newValues[this.field[0]]);
       this.day = date ? date.getDate() : null;
       this.month = date ? date.getMonth() + 1 : null;
       this.year = date ? date.getFullYear() : null;

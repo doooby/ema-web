@@ -1,6 +1,6 @@
 <template>
   <b-form-group
-    :label="labelText"
+    :label="label"
     :label-for="domId"
   >
     <b-form-datepicker
@@ -17,16 +17,12 @@
 import Vue from 'vue';
 import { parseISO as parseDate } from 'date-fns';
 import { FIELD_PROPS } from '../constants';
-import { fieldCaptionGet } from '..';
 
 export default Vue.extend({
   props: FIELD_PROPS,
   computed: {
-    labelText (): string {
-      return this.$t(fieldCaptionGet(this.field)) as string;
-    },
     sanitizedValue (): undefined | Date {
-      const rawValue = this.formValues[this.field.name];
+      const rawValue = this.formValues[this.field[0]];
       return (rawValue instanceof Date && !isNaN(rawValue as any))
         ? rawValue
         : undefined;

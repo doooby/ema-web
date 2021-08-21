@@ -1,6 +1,6 @@
 <template>
   <b-form-group
-    :label="labelText"
+    :label="label"
     :label-for="domId"
   >
     <div class="d-flex" @click="onChevronClick">
@@ -32,8 +32,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { FIELD_PROPS } from '../constants';
-import { fieldCaptionGet } from '..';
-import { ListControl } from '~/components/Form/types';
 
 export default Vue.extend({
   props: FIELD_PROPS,
@@ -44,26 +42,17 @@ export default Vue.extend({
     };
   },
   computed: {
-    controlSettings (): null | ListControl {
-      const control = this.field.control;
-      if (typeof control !== 'object' || control.type !== 'list') return null;
-      return control as ListControl;
-    },
-    labelText (): string {
-      return this.$t(fieldCaptionGet(this.field)) as string;
-    },
     valueText (): string {
       if (!this.options) return '';
-      const value = this.formValues[this.field.name];
+      const value = this.formValues[this.field[0]];
       const option = value && this.options.find(option => option.value === value);
       if (option) {
         return option.caption;
       }
       return '';
     },
-    options (): any[] {
-      if (!this.controlSettings) return [];
-      return this.controlSettings.options;
+    options (): Array<{ value: string, caption: string }> {
+      return this.field[2]?.options || [];
     },
   },
   methods: {

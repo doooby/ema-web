@@ -2,13 +2,13 @@
   <div :class="className">
     <form-field
       v-for="field in fields"
-      :key="field.name"
-      :dom-id="domIdBase + field.name"
+      :key="fieldName(field)"
+      :dom-id="buildFieldDomId(field)"
       :record="record"
       :field="field"
       :form-values="value"
-      @change="change"
-      @commit="commit"
+      @change="onChange"
+      @commit="onCommit"
     />
   </div>
 </template>
@@ -17,14 +17,14 @@
 import Vue, { PropType } from 'vue';
 import classNames from 'classnames';
 import FormFieldComponent from './Field';
-import { FormField, FormValues } from './types';
+import { FormField, FormField2, FormValues } from './types';
 
 export default Vue.extend({
   components: { FormField: FormFieldComponent },
   props: {
-    domIdBase: { type: String, default: '' },
+    domId: { type: String, default: '' },
     record: { type: Object as any, default: null },
-    fields: { type: Array as PropType<Readonly<FormField[]>>, required: true },
+    fields: { type: Array as PropType<Readonly<FormField[] | FormField2[]>>, required: true },
     value: { type: Object as PropType<FormValues>, default: {} },
   },
   computed: {
@@ -36,13 +36,21 @@ export default Vue.extend({
     },
   },
   methods: {
-    change ({ field, value }: { field: FormField, value: any }): void {
+    fieldName (field: FormField | FormField2) {
+      return Array.isArray(field) ? field[0] : field.name;
+    },
+    buildFieldDomId (field: FormField | FormField2) {
+      const name = this.fieldName(field);
+      return this.domId ? `${this.domId}_${name}` : name;
+    },
+    onChange ({ field, value }: { field: FormField | FormField2, value: any }): void {
+      const name = this.fieldName(field);
       this.$emit('input', Object.freeze({
         ...this.value,
-        [field.name]: value,
+        [name]: value,
       }));
     },
-    commit () {
+    onCommit () {
       this.$emit('commit');
     },
   },

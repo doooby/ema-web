@@ -1,12 +1,12 @@
 <template>
   <b-form-group
-    :label="labelText"
+    :label="label"
     :label-for="domId"
   >
     <div class="input-group">
-      <div v-if="field.labels && field.labels.left" class="input-group-prepend">
+      <div v-if="leftLabelText" class="input-group-prepend">
         <span class="input-group-text">
-          {{ field.labels.left }}
+          {{ leftLabelText }}
         </span>
       </div>
       <input
@@ -17,9 +17,9 @@
         @blur="onBlur"
         @keypress.ctrl.enter="onCommit"
       >
-      <div v-if="field.labels && field.labels.right" class="input-group-append">
+      <div v-if="rightLabelText" class="input-group-append">
         <span class="input-group-text">
-          {{ field.labels.right }}
+          {{ rightLabelText }}
         </span>
       </div>
     </div>
@@ -29,16 +29,24 @@
 <script lang="ts">
 import Vue from 'vue';
 import { FIELD_PROPS } from '../constants';
-import { fieldCaptionGet } from '..';
 
 export default Vue.extend({
   props: FIELD_PROPS,
   computed: {
-    labelText (): string {
-      return this.$t(fieldCaptionGet(this.field)) as string;
+    leftLabelText (): undefined | string {
+      const leftLabel = this.field[2]?.leftLabel;
+      if (!leftLabel) return undefined;
+      if (typeof leftLabel === 'function') return leftLabel();
+      return String(leftLabel);
+    },
+    rightLabelText (): undefined | string {
+      const rightLabel = this.field[2]?.rightLabel;
+      if (!rightLabel) return undefined;
+      if (typeof rightLabel === 'function') return rightLabel();
+      return String(rightLabel);
     },
     sanitizedValue (): string {
-      const rawValue = this.formValues[this.field.name];
+      const rawValue = this.formValues[this.field[0]];
       return rawValue ? String(rawValue) : '';
     },
   },

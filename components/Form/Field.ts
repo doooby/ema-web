@@ -1,5 +1,5 @@
 import Vue, { VNode } from 'vue';
-import { FormField } from './types';
+import { FormField, FormField2 } from './types';
 import { FIELD_PROPS } from './constants';
 
 import VoidControl from './controls/Void.vue';
@@ -19,7 +19,11 @@ const controlComponents: { [name: string]: any } = {
   list: ListControl,
 };
 
-function getControl (field: FormField): null | Vue.Component {
+function getControl (field: FormField | FormField2): null | Vue.Component {
+  if (Array.isArray(field)) {
+    return controlComponents[field[1]] || null;
+  }
+
   const control = field.control;
   let component;
   if (typeof control === 'object') {
@@ -34,13 +38,13 @@ function getControl (field: FormField): null | Vue.Component {
 export default Vue.extend({
   functional: true,
   props: FIELD_PROPS,
-  render (createElement, { props, listeners }): VNode {
+  render (createElement, { props, listeners, parent }): VNode {
     const control = getControl(props.field);
     if (control === null) return createElement(VoidControl);
     return createElement(
       control,
       {
-        props,
+        props: { ...props, label: getLabelText(props.field, parent) },
         on: {
           change (value: any) {
             (listeners.change as any)?.({ field: props.field, value });
@@ -53,3 +57,18 @@ export default Vue.extend({
     );
   },
 });
+
+function getLabelText (field: FormField | FormField2, parent: any): string {
+  if (Array.isArray(field)) {
+    const [ name, , opts ] = field;
+    if (!opts?.label) return name;
+    if (typeof opts.label === 'function') return opts.label();
+    return String(opts.label);
+  } else {
+    return parent.$t(fieldCaptionGet(field)) as string;
+  }
+}
+
+function fieldCaptionGet (field: FormField): string {
+  return field.caption || `form.field.${field.name}`;
+}
