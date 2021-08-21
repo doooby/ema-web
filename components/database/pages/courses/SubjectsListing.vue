@@ -52,7 +52,7 @@ export default Vue.extend({
     return {
       fetchQueryState: this.$api.newQueryState(),
       tableColumns: [
-        { name: 'id', cell: { type: 'link', entity: 'subjects' }, size: 60 },
+        { name: 'id', cell: { type: 'link', entity: 'subjects', onlyId: true }, size: 60 },
         { name: 'subject', getText: (subject: any) => subject.caption, size: 300 },
         { name: 'education_level', getText: (subject: any) => subject.labels.education_level, size: 300 },
       ],

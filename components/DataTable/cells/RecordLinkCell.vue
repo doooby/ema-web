@@ -1,6 +1,10 @@
 <template>
   <div class="single-row-cell">
+    <code v-if="column.cell.onlyId">
+      [{{ dataItem.id }}]
+    </code>
     <show-record-link
+      v-else
       :entity="column.cell.entity"
       :record-id="dataItem.id"
     >

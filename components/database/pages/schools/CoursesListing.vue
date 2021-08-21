@@ -42,7 +42,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { School } from '~/lib/records';
-import EditableRecordsListing from '~/components/database/EditableRecordsListing.vue'
+import EditableRecordsListing from '~/components/database/EditableRecordsListing.vue';
 
 export default Vue.extend({
   components: { EditableRecordsListing },
