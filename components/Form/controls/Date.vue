@@ -44,7 +44,7 @@
 import Vue from 'vue';
 import { times, reverse, padStart } from 'lodash';
 import { parseISO as parseDate } from 'date-fns';
-import { FIELD_PROPS } from '../constants';
+import { FIELD_PROPS } from '..';
 import { BIconX } from 'bootstrap-vue';
 
 const DAY_OPTIONS = times(31, val => val + 1);

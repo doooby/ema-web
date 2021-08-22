@@ -26,7 +26,7 @@ import Vue, { PropType } from 'vue';
 import {
   createFormModel,
   View as FormView,
-  FormField2,
+  FormField,
   formToRecordParams,
 } from '~/components/Form';
 import RecordErrors from '~/components/database/RecordErrors.vue';
@@ -37,7 +37,7 @@ export default Vue.extend({
   props: {
     title: { type: String, required: true },
     record: { type: Object as PropType<any>, required: true },
-    formFields: { type: Array as PropType<FormField2 []>, required: true },
+    formFields: { type: Array as PropType<FormField []>, required: true },
     persistQuery: { type: Function, required: true },
   },
   data () {

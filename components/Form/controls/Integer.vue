@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS } from '../constants';
+import { FIELD_PROPS } from '..';
 
 export default Vue.extend({
   props: FIELD_PROPS,

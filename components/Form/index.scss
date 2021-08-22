@@ -1,6 +1,19 @@
 .form {
-  .--assoc-control--text {
+  .association--text {
     background-color: $input-bg;
     @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
+  }
+
+  .fields-group-row {
+    &.-small {
+      > * {
+        margin-right: px-size(3);
+      }
+    }
+
+    > * {
+      margin-right: px-size(6);
+      &:last-child{ margin-right: 0; }
+    }
   }
 }

@@ -4,7 +4,7 @@
     :label-for="domId"
   >
     <div class="d-flex" @click="onChevronClick">
-      <div class="flex-fill text-truncate --assoc-control--text">
+      <div class="flex-fill text-truncate association--text">
         {{ valueText }}
       </div>
       <b-button variant="secondary">
@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS } from '../constants';
+import { FIELD_PROPS } from '..';
 
 export default Vue.extend({
   props: FIELD_PROPS,

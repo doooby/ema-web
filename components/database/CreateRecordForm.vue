@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { createFormModel, FormField2, formToRecordParams, View as FormView } from '~/components/Form'
+import { createFormModel, FormField, formToRecordParams, View as FormView } from '~/components/Form'
 import RecordErrors from './RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
 
@@ -36,7 +36,7 @@ export default Vue.extend({
   },
   props: {
     title: { type: String, required: true },
-    formFields: { type: Array as PropType<FormField2 []>, required: true },
+    formFields: { type: Array as PropType<FormField []>, required: true },
     persistQuery: { type: Function, required: true },
   },
   data () {

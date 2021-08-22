@@ -30,13 +30,13 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import UpdateRecordForm from './UpdateRecordForm.vue';
-import { FormField2 } from '../Form';
+import { FormField } from '../Form';
 
 export default Vue.extend({
   components: { UpdateRecordForm },
   props: {
     entity: { type: String, required: true },
-    fields: { type: Array as PropType<FormField2[]>, required: true },
+    fields: { type: Array as PropType<FormField[]>, required: true },
     noDefaultRedirect: { type: Boolean, default: false },
   },
   data () {
@@ -53,7 +53,7 @@ export default Vue.extend({
     record (): undefined | any {
       return this.fetchQueryState.value?.record;
     },
-    mappedFields (): FormField2[] {
+    mappedFields (): FormField[] {
       return this.fields.map(([ name, type, opts ]) => [
         name,
         type,

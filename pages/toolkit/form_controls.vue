@@ -53,15 +53,19 @@ export default Vue.extend({
       inlineForm: {
         value: {},
         fields: [
-          [ null, 'group-row', {
+          [ 'group-small', 'group-row', {
+            small: true,
             fields: [
               [ 'list', 'list', { options: LIST_OPTIONS } ],
+              [ 'text', 'text' ],
+              [ 'text2', 'text' ],
             ],
           } ],
-          [ 'sub_group', 'group-row', {
+          [ 'group', 'group-row', {
             scoped: true,
             fields: [
               [ 'list', 'list', { options: LIST_OPTIONS } ],
+              [ 'text', 'text' ],
             ],
           } ],
         ],

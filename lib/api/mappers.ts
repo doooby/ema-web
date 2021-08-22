@@ -30,8 +30,6 @@ export interface AssociatedRecord<R=any> {
   record?: R;
 }
 
-export type ManyAssociatedRecords<R=any> = Array<AssociatedRecord<R>>;
-
 export type AssociatedRecordsIndex<R=any> = { [id: string]: undefined | AssociatedRecord<R> }
 
 export class MappingError extends Error {
@@ -192,7 +190,7 @@ export function record<R, A> (
   });
 }
 
-export function recordLabels (value: any): Readonly<Labels> {
+export function recordLabels (value: any): Labels {
   return object(value, (root) => {
     const labels: Labels = {};
     for (const [ name, value ] of Object.entries(root)) {

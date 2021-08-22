@@ -16,14 +16,14 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { FormField2 } from '~/components/Form';
+import { FormField } from '~/components/Form';
 import CreateRecordForm from '~/components/database/CreateRecordForm.vue';
 
 export default Vue.extend({
   components: { CreateRecordForm },
   props: {
     entity: { type: String, required: true },
-    fields: { type: Array as PropType<FormField2[]>, required: true },
+    fields: { type: Array as PropType<FormField[]>, required: true },
     noDefaultRedirect: { type: Boolean, default: false },
   },
   computed: {
@@ -32,7 +32,7 @@ export default Vue.extend({
         entity: this.$t(`record.${this.entity}.meta.s`),
       }) as string;
     },
-    mappedFields (): FormField2[] {
+    mappedFields (): FormField[] {
       return this.fields.map(([ name, type, opts ]) => [
         name,
         type,

@@ -1,28 +1,21 @@
 import Vue, { VNode } from 'vue';
-import { FormField2 } from './types';
-import { FIELD_PROPS } from './constants';
-
+import { FormField, FIELD_PROPS } from '.';
 import VoidControl from './controls/Void.vue';
-import AssociationControl from './controls/Association.vue';
-import CalendarControl from './controls/Calendar.vue';
-import DateControl from './controls/Date.vue';
-import IntegerControl from './controls/Integer.vue';
-import TextControl from './controls/Text.vue';
-import ListControl from './controls/List.vue';
+import { buildControlComponentsIndex } from '~/components/Form/controls';
 
-const controlComponents: { [name: string]: any } = {
-  assoc: AssociationControl,
-  calendar: CalendarControl,
-  date: DateControl,
-  integer: IntegerControl,
-  text: TextControl,
-  list: ListControl,
-};
-
-function getControl (field: FormField2): null | Vue.Component {
+let componentsIndex: any = null;
+function getControl (field: FormField): null | Vue.Component {
+  if (!componentsIndex) componentsIndex = buildControlComponentsIndex();
   const type = field[1];
   if (type === 'custom') return (field[2] as any)?.component || null;
-  return controlComponents[type] || null;
+  return componentsIndex[type] || null;
+}
+
+function getLabelText (field: FormField): string {
+  const [ name, , opts ] = field;
+  if (!opts?.label) return name;
+  if (typeof opts.label === 'function') return opts.label();
+  return String(opts.label);
 }
 
 export default Vue.extend({
@@ -47,10 +40,3 @@ export default Vue.extend({
     );
   },
 });
-
-function getLabelText (field: FormField2): string {
-  const [ name, , opts ] = field;
-  if (!opts?.label) return name;
-  if (typeof opts.label === 'function') return opts.label();
-  return String(opts.label);
-}

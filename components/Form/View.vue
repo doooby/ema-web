@@ -17,14 +17,14 @@
 import Vue, { PropType } from 'vue';
 import classNames from 'classnames';
 import FormFieldComponent from './Field';
-import { FormField2, FormValues } from './types';
+import { FormField, FormValues } from '.';
 
 export default Vue.extend({
   components: { FormField: FormFieldComponent },
   props: {
     domId: { type: String, default: '' },
     record: { type: Object as any, default: null },
-    fields: { type: Array as PropType<Readonly<FormField2[]>>, required: true },
+    fields: { type: Array as PropType<FormField[]>, required: true },
     value: { type: Object as PropType<FormValues>, default: () => ({}) },
   },
   computed: {
@@ -36,11 +36,11 @@ export default Vue.extend({
     },
   },
   methods: {
-    buildFieldDomId (field: FormField2) {
+    buildFieldDomId (field: FormField) {
       const name = field[0];
       return this.domId ? `${this.domId}_${name}` : name;
     },
-    onChange ({ field, value }: { field: FormField2, value: any }): void {
+    onChange ({ field, value }: { field: FormField, value: any }): void {
       const name = field[0];
       this.$emit('input', Object.freeze({
         ...this.value,
