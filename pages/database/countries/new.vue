@@ -1,6 +1,6 @@
 <template>
   <new-page
-    entity="users"
+    entity="countries"
     :fields="fields"
     :no-default-redirect="true"
     @created="onCreated"
@@ -17,15 +17,13 @@ export default Vue.extend({
   computed: {
     fields () {
       return [
-        [ 'country', 'assoc', { entity: 'countries' } ],
-        [ 'login', 'text' ],
-        [ 'full_name', 'text' ],
+        [ 'name', 'text' ],
       ];
     },
   },
   methods: {
     onCreated () {
-      this.$router.push({ path: '/database/users/browse' });
+      this.$router.push({ path: '/database/countries/browse' });
     },
   },
 });

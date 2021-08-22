@@ -1,6 +1,6 @@
 <template>
   <b-form-group
-    :label="labelText"
+    :label="label"
     :label-for="domId"
   >
     <div class="d-flex" @click="onChevronClick">
@@ -11,7 +11,7 @@
         <b-icon icon="chevron-down" />
       </b-button>
     </div>
-    <b-modal v-model="modalShown" centered hide-footer :title="labelText">
+    <b-modal v-model="modalShown" centered hide-footer :title="label">
       <b-list-group>
         <b-list-group-item
           v-for="record in options"
@@ -32,8 +32,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import { FIELD_PROPS } from '../constants';
-import { fieldCaptionGet } from '..';
-import { AssociationControl } from '~/components/Form/types';
 
 export default Vue.extend({
   props: FIELD_PROPS,
@@ -44,21 +42,9 @@ export default Vue.extend({
     };
   },
   computed: {
-    controlSettings (): null | AssociationControl {
-      const control = this.field.control;
-      if (typeof control !== 'object' || control.type !== 'assoc') return null;
-      return control as AssociationControl;
-    },
-    labelText (): string {
-      return this.$t(fieldCaptionGet(this.field)) as string;
-    },
     valueText (): string {
-      if (!this.controlSettings) return '';
-      const value = this.formValues[this.field.name];
-      if (value) {
-        return value.caption;
-      }
-      return '';
+      const value = this.formValues[this.field[0]];
+      return value ? value.caption : '';
     },
     options (): null | any[] {
       if (this.fetchQueryState.value) {
@@ -67,16 +53,12 @@ export default Vue.extend({
         return null;
       }
     },
-    fetchQueryBuilder (): any {
-      if (this.controlSettings) {
-        const { entity } = this.controlSettings;
-        const queryBuilder = (this.$api.queries as any)[entity]?.searchAssociated;
-        if (queryBuilder) return queryBuilder;
-      }
+    fetchQuery (): any {
+      const entity = (this.field[2] as any)?.entity;
+      const query = entity && (this.$api.queries as any)[entity]?.searchAssociated;
+      if (query) return query;
 
-      utils.notify('error', 'Form.controls.Association: query not found', {
-        entity: this.controlSettings?.entity,
-      });
+      utils.raise(new Error(`Form.controls.Association: query not found for entity ${entity}`));
       return null;
     },
   },
@@ -87,7 +69,7 @@ export default Vue.extend({
     },
     fetchOptions () {
       if (this.fetchQueryState.running) return;
-      this.$api.request(this.fetchQueryBuilder?.(), this.fetchQueryState);
+      this.$api.request(this.fetchQuery?.(), this.fetchQueryState);
     },
     onItemSelected (record: any) {
       this.modalShown = false;

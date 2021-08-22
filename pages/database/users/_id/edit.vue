@@ -10,17 +10,16 @@
 <script lang="ts">
 import Vue from 'vue';
 import EditPage from '~/components/database/EditPage.vue';
-import { FormField } from '~/components/Form';
 
 export default Vue.extend({
   components: { EditPage },
   layout: 'database',
   computed: {
-    fields (): FormField[] {
+    fields () {
       return [
-        { name: 'country', control: { type: 'assoc', entity: 'countries' } },
-        { name: 'login', control: 'text' },
-        { name: 'full_name', control: 'text' },
+        [ 'country', 'assoc', { entity: 'countries' } ],
+        [ 'login', 'text' ],
+        [ 'full_name', 'text' ],
       ];
     },
   },

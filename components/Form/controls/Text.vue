@@ -34,13 +34,13 @@ export default Vue.extend({
   props: FIELD_PROPS,
   computed: {
     leftLabelText (): undefined | string {
-      const leftLabel = this.field[2]?.leftLabel;
+      const leftLabel = (this.field[2] as any)?.leftLabel;
       if (!leftLabel) return undefined;
       if (typeof leftLabel === 'function') return leftLabel();
       return String(leftLabel);
     },
     rightLabelText (): undefined | string {
-      const rightLabel = this.field[2]?.rightLabel;
+      const rightLabel = (this.field[2] as any)?.rightLabel;
       if (!rightLabel) return undefined;
       if (typeof rightLabel === 'function') return rightLabel();
       return String(rightLabel);

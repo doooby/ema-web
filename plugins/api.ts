@@ -1,5 +1,5 @@
 import { Context } from '@nuxt/types';
-import { QueryDefinition, RequestOptions, RequestResponse, RequestState } from '~/lib/api'
+import { QueryDefinition, RequestOptions, RequestResponse, RequestState } from '~/lib/api';
 import queries from '~/lib/api/queries';
 import { safeMap } from '~/lib/api/mappers';
 

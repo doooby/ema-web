@@ -67,7 +67,7 @@ export default Vue.extend({
   },
   computed: {
     deletable (): undefined | boolean {
-      return this.field[2]?.deletable;
+      return (this.field[2] as any)?.deletable;
     },
   },
   watch: {

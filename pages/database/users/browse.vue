@@ -25,11 +25,11 @@ export default Vue.extend({
   data () {
     return {
       searchFields: [
-        { name: 'name', control: 'text' },
+        [ 'name', 'text' ],
       ],
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-        { name: 'id', size: 60 },
+        { name: 'id', cell: { type: 'link', entity: 'subjects', onlyId: true }, size: 60 },
         { name: 'country', getText: (user: any) => user.country.caption },
         { name: 'login' },
         { name: 'full_name' },

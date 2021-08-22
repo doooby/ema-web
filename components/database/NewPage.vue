@@ -5,7 +5,8 @@
         <create-record-form
           class="col-md-8 col-lg-4"
           :title="title"
-          :form="formProps"
+          :form-fields="mappedFields"
+          :persist-query="saveQuery"
           @created="onCreated"
         />
       </div>
@@ -15,15 +16,14 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { defineFormFields, FormField } from '~/components/Form';
-import CreateRecordForm, { FormProps } from '~/components/database/CreateRecordForm.vue';
-import { notify } from '~/lib/notifier';
+import { FormField2 } from '~/components/Form';
+import CreateRecordForm from '~/components/database/CreateRecordForm.vue';
 
 export default Vue.extend({
   components: { CreateRecordForm },
   props: {
     entity: { type: String, required: true },
-    fields: { type: Array as PropType<FormField[]>, required: true },
+    fields: { type: Array as PropType<FormField2[]>, required: true },
     noDefaultRedirect: { type: Boolean, default: false },
   },
   computed: {
@@ -32,32 +32,26 @@ export default Vue.extend({
         entity: this.$t(`record.${this.entity}.meta.s`),
       }) as string;
     },
-    compiledFields (): FormField[] {
-      const fields = this.fields.map(field => ({
-        ...field,
-        caption: field.caption || `record.${this.entity}.${field.name}`,
-      }));
-      return defineFormFields(fields);
+    mappedFields (): FormField2[] {
+      return this.fields.map(([ name, type, opts ]) => [
+        name,
+        type,
+        { ...(opts || {}), label: () => { return this.$t(`record.${this.entity}.${name}`) as string; } },
+      ]);
     },
-    createQueryBuilder (): any {
-      const queryBuilder = (this.$api.queries as any)[this.entity]?.create;
-      if (!queryBuilder) {
-        notify('error', 'database.NewPage: create query is missing.', { entity: this.entity });
-        return;
-      }
-      return queryBuilder;
-    },
-    formProps (): Readonly<FormProps> {
-      return Object.freeze({
-        fields: this.compiledFields,
-        createQuery: this.createQueryBuilder,
-      });
+    saveQuery (): any {
+      const entity = this.entity;
+      const query = (this.$api.queries as any)[entity]?.create;
+      if (query) return query;
+      return function () {
+        utils.raise(new Error(`database.NewPage: create query is missing for ${entity}`));
+      };
     },
   },
   methods: {
     onCreated (recordId: Number) {
       if (this.noDefaultRedirect) {
-        this.$emit('success', recordId);
+        this.$emit('created', recordId);
       } else {
         this.$router.push({ path: '/database' });
       }

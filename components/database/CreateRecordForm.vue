@@ -5,7 +5,7 @@
     </h2>
     <form-view
       v-model="formValues"
-      :fields="form.fields"
+      :fields="formFields"
     />
     <div class="text-right">
       <span v-if="createQueryState.running">
@@ -25,15 +25,9 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { createFormModel, FormField, formModelToRecordParams, View as FormView } from '~/components/Form';
+import { createFormModel, FormField2, formToRecordParams, View as FormView } from '~/components/Form'
 import RecordErrors from './RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
-import { QueryDefinition } from '~/lib/api';
-
-export interface FormProps {
-  fields: FormField[];
-  createQuery: (...args: any[]) => QueryDefinition<RecordChange>;
-}
 
 export default Vue.extend({
   components: {
@@ -41,32 +35,30 @@ export default Vue.extend({
     RecordErrors,
   },
   props: {
-    form: {
-      type: Object as PropType<Readonly<FormProps>>,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
+    title: { type: String, required: true },
+    formFields: { type: Array as PropType<FormField2 []>, required: true },
+    persistQuery: { type: Function, required: true },
   },
   data () {
     return {
-      formValues: createFormModel(),
+      formValues: createFormModel(this.formFields),
       createQueryState: this.$api.newQueryState<RecordChange>(),
       errors: null as null | RecordError[],
     };
   },
   watch: {
-    form () { this.reset(); },
+    formFields () { this.reset(); },
+    persistQuery () { this.reset(); },
   },
   methods: {
     async save () {
       if (this.createQueryState.running) return;
       this.errors = null;
-      const { createQuery, fields } = this.form;
-      const params = formModelToRecordParams(fields, this.formValues);
-      const result = await this.$api.request(createQuery?.(params), this.createQueryState);
+      const params = formToRecordParams(this.formFields, this.formValues);
+      const result = await this.$api.request(
+        this.persistQuery(params),
+        this.createQueryState,
+      );
       if (result?.success) {
         this.$emit('created', result.record_id);
       } else if (result?.errors) {
@@ -76,7 +68,7 @@ export default Vue.extend({
       }
     },
     reset () {
-      this.formValues = createFormModel();
+      this.formValues = createFormModel(this.formFields);
       this.createQueryState.reset();
       this.errors = null;
     },

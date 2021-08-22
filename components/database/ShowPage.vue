@@ -6,10 +6,10 @@
           <h2 class="text-center">
             {{ $t(`record.${entity}.meta.s`) }}
           </h2>
-          <b-alert :show="!record && !loadingFailed" variant="info">
+          <b-alert :show="!record && !getQueryState.error" variant="info">
             {{ $t('db.shared.loading') }}
           </b-alert>
-          <b-alert :show="loadingFailed" variant="warning">
+          <b-alert :show="getQueryState.error" variant="warning">
             {{ $t('db.shared.record_not_found') }}
           </b-alert>
           <h3 v-if="record" class="d-flex align-items-center emb-6">
@@ -68,9 +68,6 @@ export default Vue.extend({
   computed: {
     record (): null | any {
       return this.getQueryState.value?.record;
-    },
-    loadingFailed ():boolean {
-      return !!this.getQueryState.error;
     },
   },
   mounted () {

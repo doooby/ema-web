@@ -3,7 +3,7 @@
     <div class="page-menu">
       <search-form
         :value="searchValues"
-        :fields="compiledSearchFields"
+        :fields="searchFields"
         @search="onSearch"
       />
     </div>
@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { FormField, defineFormFields, createFormModel, FormValues } from '~/components/Form';
+import { createFormModel, FormValues, FormField2 } from '~/components/Form';
 import { DataTable, DataTableView } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';
@@ -58,7 +58,7 @@ export default Vue.extend({
   components: { SearchForm, DataTableView, RecordsPagination },
   props: {
     entity: { type: String, required: true },
-    searchFields: { type: Array as PropType<FormField[]>, required: true },
+    searchFields: { type: Array as PropType<FormField2[]>, required: true },
     tableColumns: { type: Array as PropType<DataTable.Column[]>, required: true },
     recordActions: { type: Object as PropType<RecordActions>, default: null },
   },
@@ -79,9 +79,6 @@ export default Vue.extend({
     },
     records (): null | PaginatedRecords {
       return this.searchQueryState.value;
-    },
-    compiledSearchFields (): Readonly<FormField[]> {
-      return defineFormFields(this.searchFields);
     },
     columnTemplates (): { [name: string]: any } {
       const templates = {} as { [name: string]: any };

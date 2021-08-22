@@ -16,10 +16,10 @@ export default Vue.extend({
   data () {
     return {
       searchFields: [
-        { name: 'name', control: 'text' },
+        [ 'name', 'text' ],
       ],
       tableColumns: [
-        { name: 'id' },
+        { name: 'id', cell: { type: 'link', entity: 'subjects', onlyId: true }, size: 60 },
         { name: 'name' },
       ],
     };

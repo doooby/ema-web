@@ -6,9 +6,19 @@
           <h2 class="text-center">
             {{ title }}
           </h2>
+          <b-alert :show="!record && !fetchQueryState.error" variant="info">
+            {{ $t('db.shared.loading') }}
+          </b-alert>
+          <b-alert :show="fetchQueryState.error" variant="warning">
+            {{ $t('db.shared.record_not_found') }}
+          </b-alert>
           <update-record-form
-            :form="formProps"
+            v-if="record"
             :title="title"
+            :record="record"
+            :form-fields="mappedFields"
+            :fetch-query="fetchQuery"
+            :persist-query="saveQuery"
             @updated="onUpdated"
           />
         </div>
@@ -19,16 +29,20 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import UpdateRecordForm, { FormProps } from './UpdateRecordForm.vue';
-import { defineFormFields, FormField } from '../Form';
-import { notify } from '~/lib/notifier';
+import UpdateRecordForm from './UpdateRecordForm.vue';
+import { FormField2 } from '../Form';
 
 export default Vue.extend({
   components: { UpdateRecordForm },
   props: {
     entity: { type: String, required: true },
-    fields: { type: Array as PropType<FormField[]>, required: true },
+    fields: { type: Array as PropType<FormField2[]>, required: true },
     noDefaultRedirect: { type: Boolean, default: false },
+  },
+  data () {
+    return {
+      fetchQueryState: this.$api.newQueryState(),
+    };
   },
   computed: {
     title (): string {
@@ -36,45 +50,58 @@ export default Vue.extend({
         entity: this.$t(`record.${this.entity}.meta.s`),
       }) as string;
     },
-    compiledFields (): FormField[] {
-      const fields = this.fields.map(field => ({
-        ...field,
-        caption: field.caption || `record.${this.entity}.${field.name}`,
-      }));
-      return defineFormFields(fields);
+    record (): undefined | any {
+      return this.fetchQueryState.value?.record;
     },
-    getQueryBuilder (): any {
-      const queryBuilder = (this.$api.queries as any)[this.entity]?.get;
-      if (!queryBuilder) {
-        notify('error', 'database.EditPage: get query is missing.', { entity: this.entity });
-        return;
-      }
-      return queryBuilder;
+    mappedFields (): FormField2[] {
+      return this.fields.map(([ name, type, opts ]) => [
+        name,
+        type,
+        { ...(opts || {}), label: () => { return this.$t(`record.${this.entity}.${name}`) as string; } },
+      ]);
     },
-    updateQueryBuilder (): any {
-      const queryBuilder = (this.$api.queries as any)[this.entity]?.update;
-      if (!queryBuilder) {
-        notify('error', 'database.EditPage: update query is missing.', { entity: this.entity });
-        return;
-      }
-      return queryBuilder;
+    fetchQuery (): any {
+      const entity = this.entity;
+      const query = (this.$api.queries as any)[entity]?.get;
+      if (query) return () => query(this.$route.params.id);
+      return function () {
+        utils.raise(new Error(`database.EditPage: create query is missing for ${entity}`));
+      };
     },
-    formProps (): Readonly<FormProps> {
-      return Object.freeze({
-        id: Number(this.$route.params.id),
-        fields: this.compiledFields,
-        getQuery: this.getQueryBuilder,
-        updateQuery: this.updateQueryBuilder,
-      });
+    saveQuery (): any {
+      const entity = this.entity;
+      const query = (this.$api.queries as any)[entity]?.update;
+      if (query) return (params: any) => query(this.$route.params.id, params);
+      return function () {
+        utils.raise(new Error(`database.EditPage: create query is missing for ${entity}`));
+      };
     },
   },
+  watch: {
+    fetchQuery () {
+      this.reset();
+    },
+  },
+  mounted () {
+    this.fetchRecord();
+  },
   methods: {
+    async fetchRecord () {
+      await this.$api.request(
+        this.fetchQuery(),
+        this.fetchQueryState,
+      );
+    },
     onUpdated (recordId: Number) {
       if (this.noDefaultRedirect) {
         this.$emit('success', recordId);
       } else {
         this.$router.push({ path: '/database' });
       }
+    },
+    reset () {
+      this.fetchQueryState.reset();
+      this.fetchRecord();
     },
   },
 });

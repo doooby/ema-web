@@ -11,7 +11,7 @@
         <b-icon icon="chevron-down" />
       </b-button>
     </div>
-    <b-modal v-model="modalShown" centered hide-footer :title="labelText">
+    <b-modal v-model="modalShown" centered hide-footer :title="label">
       <b-list-group>
         <b-list-group-item
           v-for="option in options"
@@ -52,7 +52,7 @@ export default Vue.extend({
       return '';
     },
     options (): Array<{ value: string, caption: string }> {
-      return this.field[2]?.options || [];
+      return (this.field[2] as any)?.options || [];
     },
   },
   methods: {
