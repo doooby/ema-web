@@ -2,7 +2,7 @@
   <div :class="className">
     <form-field
       v-for="field in fields"
-      :key="fieldName(field)"
+      :key="field[0]"
       :dom-id="buildFieldDomId(field)"
       :record="record"
       :field="field"
@@ -17,14 +17,14 @@
 import Vue, { PropType } from 'vue';
 import classNames from 'classnames';
 import FormFieldComponent from './Field';
-import { FormField, FormField2, FormValues } from './types';
+import { FormField2, FormValues } from './types';
 
 export default Vue.extend({
   components: { FormField: FormFieldComponent },
   props: {
     domId: { type: String, default: '' },
     record: { type: Object as any, default: null },
-    fields: { type: Array as PropType<Readonly<FormField[] | FormField2[]>>, required: true },
+    fields: { type: Array as PropType<Readonly<FormField2[]>>, required: true },
     value: { type: Object as PropType<FormValues>, default: {} },
   },
   computed: {
@@ -36,15 +36,12 @@ export default Vue.extend({
     },
   },
   methods: {
-    fieldName (field: FormField | FormField2) {
-      return Array.isArray(field) ? field[0] : field.name;
-    },
-    buildFieldDomId (field: FormField | FormField2) {
-      const name = this.fieldName(field);
+    buildFieldDomId (field: FormField2) {
+      const name = field[0];
       return this.domId ? `${this.domId}_${name}` : name;
     },
-    onChange ({ field, value }: { field: FormField | FormField2, value: any }): void {
-      const name = this.fieldName(field);
+    onChange ({ field, value }: { field: FormField2, value: any }): void {
+      const name = field[0];
       this.$emit('input', Object.freeze({
         ...this.value,
         [name]: value,

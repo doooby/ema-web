@@ -10,7 +10,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import EditPage from '~/components/database/EditPage.vue';
-import { FormField } from '~/components/Form';
 import DisabilityField from '~/components/database/pages/students/DisabilityField.vue';
 
 const genderOptions = [
@@ -27,7 +26,7 @@ export default Vue.extend({
   components: { EditPage },
   layout: 'database',
   computed: {
-    fields (): FormField[] {
+    fields () {
       return [
         { name: 'first_name_en', control: 'text', labels: { right: this.$t('misc.language.en') as string } },
         { name: 'last_name_en', control: 'text', labels: { right: this.$t('misc.language.en') as string } },
