@@ -5,7 +5,7 @@
     :title="title"
   >
     <template #detail="{ record }">
-      <courses-listing :school="record" />
+<!--      <courses-listing :school="record" />-->
     </template>
   </show-page>
 </template>
@@ -25,7 +25,6 @@ export default Vue.extend({
         text: (record: any) => record.name,
         showEditLink: true,
       },
-      fetchCoursesQueryState: this.$api.newQueryState(),
     };
   },
 });

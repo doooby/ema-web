@@ -2,10 +2,8 @@
   <div class="single-row-cell">
     <show-record-link
       :entity="column.cell.entity"
-      :record-id="associatedRecord.id"
-    >
-      {{ associatedRecord.caption }}
-    </show-record-link>
+      :record="associatedRecord"
+    />
   </div>
 </template>
 

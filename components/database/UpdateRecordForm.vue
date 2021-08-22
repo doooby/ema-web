@@ -60,7 +60,7 @@ export default Vue.extend({
         this.persistQueryState,
       );
       if (result?.success) {
-        this.$emit('updated');
+        this.$emit('updated', this.record);
       } else if (result?.errors) {
         this.errors = result.errors;
       } else {

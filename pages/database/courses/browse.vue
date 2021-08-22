@@ -25,7 +25,7 @@ export default Vue.extend({
   data () {
     return {
       searchFields: [
-        { name: 'name', control: 'text' },
+        [ 'name', 'text' ],
       ],
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },

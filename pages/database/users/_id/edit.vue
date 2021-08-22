@@ -3,7 +3,7 @@
     entity="users"
     :fields="fields"
     :no-default-redirect="true"
-    @success="onSuccess"
+    @updated="onUpdated"
   />
 </template>
 
@@ -24,7 +24,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    onSuccess () {
+    onUpdated () {
       this.$router.push({ path: '/database/users/browse' });
     },
   },

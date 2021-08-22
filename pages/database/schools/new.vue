@@ -3,30 +3,29 @@
     entity="schools"
     :fields="fields"
     :no-default-redirect="true"
-    @success="onSuccess"
+    @created="onCreated"
   />
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import NewPage from '~/components/database/NewPage.vue';
-import { FormField } from '~/components/Form';
 
 export default Vue.extend({
   components: { NewPage },
   layout: 'database',
   computed: {
-    fields (): FormField[] {
+    fields () {
       return [
-        { name: 'country', control: { type: 'assoc', entity: 'countries' } },
-        { name: 'name', control: 'text' },
-        { name: 'address', control: 'text' },
+        [ 'country', 'assoc', { entity: 'countries' } ],
+        [ 'name', 'text' ],
+        [ 'address', 'text' ],
       ];
     },
   },
   methods: {
-    onSuccess () {
-      this.$router.push({ path: '/database/schools' });
+    onCreated (recordId: Number) {
+      this.$router.push({ path: `/database/schools/${recordId}` });
     },
   },
 });

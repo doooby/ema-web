@@ -92,9 +92,9 @@ export default Vue.extend({
         this.fetchQueryState,
       );
     },
-    onUpdated (recordId: Number) {
+    onUpdated (record: any) {
       if (this.noDefaultRedirect) {
-        this.$emit('success', recordId);
+        this.$emit('updated', record);
       } else {
         this.$router.push({ path: '/database' });
       }

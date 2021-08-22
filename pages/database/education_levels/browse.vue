@@ -26,13 +26,13 @@ export default Vue.extend({
     return {
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-        { name: 'id', size: 60 },
+        { name: 'id', cell: { type: 'link', entity: 'education_levels', onlyId: true }, size: 60 },
         { name: 'country', getText: (record: any) => record.country.caption },
         { name: 'name' },
         { name: 'grade' },
-        { name: 'semesters' },
-        { name: 'years_length' },
         { name: 'start_age' },
+        { name: 'years_length' },
+        { name: 'semesters' },
         { name: 'mandatory' },
       ],
     };

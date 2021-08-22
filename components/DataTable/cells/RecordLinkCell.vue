@@ -6,10 +6,8 @@
     <show-record-link
       v-else
       :entity="column.cell.entity"
-      :record-id="dataItem.id"
-    >
-      {{ caption }}
-    </show-record-link>
+      :record="{ id: dataItem.id, caption: caption }"
+    />
   </div>
 </template>
 
