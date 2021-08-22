@@ -20,7 +20,9 @@ const controlComponents: { [name: string]: any } = {
 };
 
 function getControl (field: FormField2): null | Vue.Component {
-  return controlComponents[field[1]] || null;
+  const type = field[1];
+  if (type === 'custom') return (field[2] as any)?.component || null;
+  return controlComponents[type] || null;
 }
 
 export default Vue.extend({
