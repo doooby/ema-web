@@ -24,6 +24,11 @@ export default class ModifiableRecordsList<R extends { id: number }> {
   }
 
   add (record: R) {
+    const indexInRemoved = this.removedIds.indexOf(record.id);
+    if (indexInRemoved !== -1) {
+      this.removedIds.splice(indexInRemoved, 1);
+      return;
+    }
     if (!this.getRecords().find(addedRecord => addedRecord.id === record.id)) {
       this.addedRecords.push(record);
     }

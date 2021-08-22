@@ -5,7 +5,7 @@
     :title="title"
   >
     <template #detail="{ record }">
-<!--      <courses-listing :school="record" />-->
+      <courses-listing :school="record" />
     </template>
   </show-page>
 </template>

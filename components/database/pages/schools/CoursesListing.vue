@@ -31,7 +31,7 @@
         <template #edit-form="{ onInputCallback }">
           <form-view
             :fields="addFormFields"
-            @input="onInputCallback($event.subject, { hideForm: true })"
+            @input="onInputCallback($event.course, { hideForm: true })"
           />
         </template>
       </editable-records-listing>
@@ -59,7 +59,7 @@ export default Vue.extend({
       ],
       editable: false,
       addFormFields: [
-        { name: 'course', control: { type: 'assoc', entity: 'courses' } },
+        [ 'course', 'assoc', { entity: 'courses' } ],
       ],
       saveChangesQueryState: this.$api.newQueryState(),
     };
