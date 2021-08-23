@@ -32,7 +32,7 @@ export default Vue.extend({
       const { name, pages } = this.resource;
       return pages.map(page => ({
         name: page,
-        text: this.$t(`db.pages.${page}`) as string,
+        text: this.$t(`db.pages.${page || 'index'}`) as string,
         path: resourcePath(name, page),
       }));
     },

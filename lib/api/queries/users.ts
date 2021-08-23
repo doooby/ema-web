@@ -15,15 +15,15 @@ function mapUser (value: any, associations?: UserAssociations): User {
 
 const mapAssociations = mappers.createAssociationsMapper<UserAssociations>('country');
 
-export function search (params: Params) {
+export function index (params: Params) {
   return {
-    path: '/users/search',
+    path: '/users',
     params,
     mapper: (payload: any) => mappers.paginatedRecords(payload, mapUser, mapAssociations),
   };
 }
 
-export function get (userId: number) {
+export function show (userId: number) {
   return {
     path: `/users/${userId}`,
     mapper: (payload: any) => record(payload, mapUser, mapAssociations),
@@ -43,5 +43,15 @@ export function update (userId: number, user: Params) {
     path: `/users/${userId}/update`,
     params: { user },
     mapper: mappers.changedRecord,
+  };
+}
+
+export function deleteRecord (userId: number) {
+  return {
+    method: 'DELETE',
+    path: `/users/${userId}`,
+    mapper: (payload: any) => object(payload, root => ({
+      success: prop('success', root, val.boolean),
+    })),
   };
 }

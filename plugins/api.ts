@@ -1,7 +1,7 @@
 import { Context } from '@nuxt/types';
 import { QueryDefinition, RequestOptions, RequestResponse, RequestState } from '~/lib/api';
 import queries from '~/lib/api/queries';
-import { safeMap } from '~/lib/api/mappers';
+import { MappingError } from '~/lib/api/mappers'
 
 import ModifiableRecordsList from '~/lib/api/ModifiableRecordsList';
 
@@ -33,6 +33,13 @@ export class ApiPlugin {
     return state;
   }
 
+  async request2<V = unknown> (
+    state: RequestState<V>,
+    definition: undefined | QueryDefinition<V>,
+  ): Promise<null | V> {
+    return await this.request(definition, state);
+  }
+
   async request<V = unknown> (
     definition: undefined | QueryDefinition<V>,
     state: RequestState<V>,
@@ -56,7 +63,13 @@ export class ApiPlugin {
       return null;
     }
 
-    const mappingResult = safeMap<V>(response.payload, mapper);
+    let mappingResult;
+    try {
+      mappingResult = mapper(response.payload);
+    } catch (error) {
+      if (error instanceof MappingError) error.finalize();
+      return error;
+    }
     if (mappingResult instanceof Error) {
       state.error = mappingResult;
       state.fail = 'invalid_data';

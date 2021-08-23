@@ -143,6 +143,7 @@ export default {
       search_placeholder: 'search resource',
     },
     pages: {
+      index: 'Browse',
       browse: 'Browse',
       new: 'Add New Record',
       groups: {

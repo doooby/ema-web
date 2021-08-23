@@ -25,7 +25,7 @@ export default Vue.extend({
   },
   methods: {
     onUpdated () {
-      this.$router.push({ path: '/database/users/browse' });
+      this.$router.push({ path: '/database/users' });
     },
   },
 });

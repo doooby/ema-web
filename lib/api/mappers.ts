@@ -167,15 +167,6 @@ export const val = {
   },
 };
 
-export function safeMap<T> (value: any, map: (value: any) => T): Error | T {
-  try {
-    return map(value);
-  } catch (error) {
-    if (error instanceof MappingError) error.finalize();
-    return error;
-  }
-}
-
 export function record<R, A> (
   value: any,
   mapRecord: (value: any, associations?: A) => R,
