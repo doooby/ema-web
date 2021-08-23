@@ -14,6 +14,9 @@
         @click="$emit('select', $event)"
       >
         {{ record.caption }}
+        <div v-for="(label, i) in record.labels" :key="i">
+          <small>{{ label }}</small>
+        </div>
       </b-list-group-item>
     </b-list-group>
     <b-alert variant="secondary" :show="options === null || options.length === 0">

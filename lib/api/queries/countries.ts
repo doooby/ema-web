@@ -2,12 +2,13 @@ import { Params } from '..';
 import * as mappers from '../mappers';
 import { Country } from '~/lib/records';
 
-const { object, recordId, prop, val } = mappers;
+const { object, recordId, prop, maybeProp, val, list } = mappers;
 
 function mapCountry (value: any): Country {
   return object(value, root => ({
     id: recordId(root),
     name: prop('name', root, val.string),
+    local_names: maybeProp('local_names', root, names => list(names, val.string)) || [],
   }));
 }
 

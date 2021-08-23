@@ -17,7 +17,7 @@ export default Vue.extend({
   computed: {
     fields () {
       return [
-        [ 'country', 'assoc', { entity: 'countries' } ],
+        [ 'country', 'associatedRecord', { entity: 'countries' } ],
         [ 'login', 'text' ],
         [ 'full_name', 'text' ],
       ];
