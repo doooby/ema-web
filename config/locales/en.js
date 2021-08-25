@@ -56,6 +56,7 @@ export default {
     courses: {
       meta: records.courses,
       id: shared.record.id,
+      education_level: records.education_levels.s,
       name: shared.record.name,
       grade: 'grade',
       country: records.countries.s,

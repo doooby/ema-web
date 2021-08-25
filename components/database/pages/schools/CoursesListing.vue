@@ -59,7 +59,7 @@ export default Vue.extend({
       ],
       editable: false,
       addFormFields: [
-        [ 'course', 'assoc', { entity: 'courses' } ],
+        [ 'course', 'associatedRecord', { entity: 'courses' } ],
       ],
       saveChangesQueryState: this.$api.newQueryState(),
     };

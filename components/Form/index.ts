@@ -50,6 +50,11 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
       case 'text':
         params[name] = values[name] || '';
         break;
+      case 'list': {
+        const value = values[name];
+        params[name] = value === undefined ? '' : value;
+        break;
+      }
       case 'assoc':
       case 'associatedRecord':
         params[(opts as any)?.paramsName || `${name}_id`] = values[name]?.id;

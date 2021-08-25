@@ -10,6 +10,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import NewPage from '~/components/database/NewPage.vue';
+import { semesterGroup } from '~/lib/records';
 
 export default Vue.extend({
   components: { NewPage },
@@ -20,7 +21,7 @@ export default Vue.extend({
         [ 'school', 'associatedRecord', { entity: 'schools' } ],
         [ 'course', 'associatedRecord', { entity: 'courses' } ],
         [ 'name', 'text' ],
-        [ 'year_start', 'integer' ],
+        [ 'year_start', 'list', { options: semesterGroup.startYearOptions } ],
         [ 'semester', 'integer' ],
       ];
     },
