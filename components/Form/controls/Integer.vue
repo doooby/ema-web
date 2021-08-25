@@ -14,6 +14,7 @@
         type="text"
         class="form-control"
         :value="value"
+        autocomplete="off"
         @input="onInput"
         @blur="onBlur"
         @keypress.ctrl.enter="onCommit"
@@ -34,9 +35,8 @@ import { FIELD_PROPS } from '..';
 export default Vue.extend({
   props: FIELD_PROPS,
   data () {
-    const value = Number(this.formValues[this.field[0]]);
     return {
-      value: isNaN(value) ? '' : value,
+      value: sanitizeValue(this.formValues[this.field[0]]),
     };
   },
   computed: {
@@ -55,15 +55,20 @@ export default Vue.extend({
   },
   watch: {
     formValues (newValues) {
-      const value = Number(newValues[this.field[0]]);
-      this.value = isNaN(value) ? '' : value;
+      this.value = sanitizeValue(newValues[this.field[0]]);
     },
   },
   methods: {
     onInput (event: {target: HTMLInputElement}): void {
-      const value = Number(event.target.value);
-      if (!isNaN(value)) this.value = value;
-      else event.target.value = String(this.value);
+      const { target } = event;
+      if (target.value === '') {
+        this.value = undefined;
+        return;
+      }
+
+      const newValue = sanitizeValue(target.value);
+      if (newValue === undefined && this.value !== undefined) return;
+      this.value = newValue;
     },
     onBlur (): void {
       this.$emit('change', this.value);
@@ -73,4 +78,10 @@ export default Vue.extend({
     },
   },
 });
+
+function sanitizeValue (value: any): undefined | number {
+  if (value === undefined || value === '') return undefined;
+  value = Number(value);
+  return isNaN(value) ? undefined : value;
+}
 </script>

@@ -14,6 +14,7 @@
         type="text"
         class="form-control"
         :value="sanitizedValue"
+        autocomplete="off"
         @blur="onBlur"
         @keypress.ctrl.enter="onCommit"
       >

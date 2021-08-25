@@ -40,19 +40,21 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
       case 'date': {
         const date = values[name];
         params[name] = date ? formatISO(date, { representation: 'date' }) : '';
-        continue;
+        break;
       }
       case 'integer':
+        params[name] = values[name];
+        break;
       case 'text':
         params[name] = values[name] || '';
-        continue;
+        break;
       case 'assoc':
       case 'associatedRecord':
         params[(opts as any)?.paramsName || `${name}_id`] = values[name]?.id;
-        continue;
+        break;
       case 'custom':
         params[name] = values[name] || null;
-        continue;
+        break;
       default:
         utils.raise(new Error(`Form: field ${name} ${control} cannot be mapped to param`));
     }

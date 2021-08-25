@@ -10,9 +10,10 @@ const records = {
   users: { s: 'user', p: 'users' },
   courses: { s: 'course', p: 'courses' },
   education_levels: { s: 'education level', p: 'education levels' },
-  groups: { s: 'group', p: 'groups' },
+  semester_groups: { s: 'class', p: 'classes' },
   schools: { s: 'school', p: 'schools' },
   students: { s: 'student', p: 'students' },
+  subjects: { s: 'subject', p: 'subjects' },
 };
 
 const common = {
@@ -66,11 +67,12 @@ export default {
       start_age: 'start_age',
       years_length: 'years_length',
     },
-    groups: {
-      meta: records.groups,
+    semester_groups: {
+      meta: records.semester_groups,
       id: shared.record.id,
       name: shared.record.name,
-      year: 'year',
+      year_start: 'year',
+      semester: 'semester',
       course: records.courses.s,
       school: records.schools.s,
       students: records.students.p,
@@ -115,6 +117,11 @@ export default {
         n: 'Assistance Needed',
         p: 'Assistance Provided',
       },
+    },
+    subjects: {
+      meta: records.subjects,
+      id: shared.record.id,
+      name: shared.record.name,
     },
   },
   db: {

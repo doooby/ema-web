@@ -3,10 +3,12 @@
     <nuxt-link to="/database">
       {{ $t('db.menu.index_link') }}
     </nuxt-link>
+    <hr>
     <current-resource-menu
       v-if="currentResource"
       :resource="currentResource"
     />
+    <hr>
     <resources-listing />
   </div>
 </template>
