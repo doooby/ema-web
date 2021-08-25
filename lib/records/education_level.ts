@@ -3,7 +3,7 @@ import * as mappers from '~/lib/api/mappers';
 export interface EducationLevel {
   id: number;
   name: string;
-  grade: number;
+  level: number;
   semesters: number;
   years_length: number;
   start_age: number;

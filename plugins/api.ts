@@ -63,19 +63,16 @@ export class ApiPlugin {
       return null;
     }
 
-    let mappingResult;
+    let mappingResult = null;
     try {
       mappingResult = mapper(response.payload);
     } catch (error) {
       if (error instanceof MappingError) error.finalize();
-      return error;
     }
     if (mappingResult instanceof Error) {
       state.error = mappingResult;
       state.fail = 'invalid_data';
       utils.notify('error', mappingResult, response.payload);
-      state.running = false;
-      return null;
     }
 
     state.value = mappingResult;

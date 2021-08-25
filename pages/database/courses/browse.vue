@@ -32,6 +32,7 @@ export default Vue.extend({
         { name: 'id', cell: { type: 'link', entity: 'courses' }, size: 60 },
         { name: 'education_level', getText: (record: any) => record.education_level.caption },
         { name: 'name' },
+        { name: 'grade' },
       ],
     };
   },

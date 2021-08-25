@@ -42,9 +42,11 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
         params[name] = date ? formatISO(date, { representation: 'date' }) : '';
         break;
       }
-      case 'integer':
-        params[name] = values[name];
+      case 'integer': {
+        const value = values[name];
+        params[name] = isNaN(value) ? '' : value;
         break;
+      }
       case 'text':
         params[name] = values[name] || '';
         break;

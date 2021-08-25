@@ -8,7 +8,7 @@ function mapEducationLevel (value: any, associations?: EducationLevelAssociation
   return object(value, root => ({
     id: recordId(root),
     name: prop('name', root, val.string),
-    grade: prop('grade', root, val.integer),
+    level: prop('level', root, val.integer),
     semesters: prop('semesters', root, val.integer),
     years_length: prop('years_length', root, val.integer),
     start_age: prop('start_age', root, val.integer),

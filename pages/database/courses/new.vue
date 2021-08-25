@@ -19,6 +19,7 @@ export default Vue.extend({
       return [
         [ 'education_level', 'assoc', { entity: 'education_levels' } ],
         [ 'name', 'text' ],
+        [ 'grade', 'integer' ],
       ];
     },
   },

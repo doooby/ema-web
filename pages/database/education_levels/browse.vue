@@ -29,7 +29,7 @@ export default Vue.extend({
         { name: 'id', cell: { type: 'link', entity: 'education_levels', onlyId: true }, size: 60 },
         { name: 'country', getText: (record: any) => record.country.caption },
         { name: 'name' },
-        { name: 'grade' },
+        { name: 'level' },
         { name: 'start_age' },
         { name: 'years_length' },
         { name: 'semesters' },

@@ -8,6 +8,7 @@ function mapCourse (value: any, associations?: CourseAssociations): Course {
   return object(value, root => ({
     id: recordId(root),
     name: prop('name', root, val.string),
+    grade: prop('grade', root, val.integer),
     education_level: assoc('education_level', root, associations?.education_level),
   }));
 }

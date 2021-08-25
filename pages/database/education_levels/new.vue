@@ -19,7 +19,7 @@ export default Vue.extend({
       return [
         [ 'country', 'associatedRecord', { entity: 'countries' } ],
         [ 'name', 'text' ],
-        [ 'grade', 'integer' ],
+        [ 'level', 'integer' ],
         [ 'start_age', 'integer' ],
         [ 'years_length', 'integer' ],
         [ 'semesters', 'integer' ],
