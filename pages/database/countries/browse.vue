@@ -21,7 +21,6 @@ export default Vue.extend({
       tableColumns: [
         { name: 'id', cell: { type: 'link', entity: 'subjects', onlyId: true }, size: 60 },
         { name: 'name' },
-        { name: 'local_names', getText: (record: any) => record.local_names.join(', '), size: 400 },
       ],
     };
   },
