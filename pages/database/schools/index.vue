@@ -31,6 +31,7 @@ export default Vue.extend({
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
         { name: 'id', cell: { type: 'link', entity: 'schools' }, size: 60 },
         { name: 'country', getText: (record: any) => record.country.caption },
+        { name: 'name_en' },
         { name: 'name' },
         { name: 'address' },
       ],

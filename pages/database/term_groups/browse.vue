@@ -1,12 +1,12 @@
 <template>
   <browse-page
-    entity="semester_groups"
+    entity="term_groups"
     :search-fields="[]"
     :table-columns="tableColumns"
   >
     <template #actions="{ dataItem }">
       <record-actions-cell
-        entity="semester_groups"
+        entity="term_groups"
         :record="dataItem"
         :edit="true"
       />
@@ -26,12 +26,12 @@ export default Vue.extend({
     return {
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-        { name: 'id', cell: { type: 'link', entity: 'semester_groups' }, size: 60 },
+        { name: 'id', cell: { type: 'link', entity: 'term_groups' }, size: 60 },
         { name: 'school', getText: (record: any) => record.school.caption },
         { name: 'course', getText: (record: any) => record.course.caption },
         { name: 'name' },
         { name: 'year_start' },
-        { name: 'semester' },
+        { name: 'term' },
       ],
     };
   },

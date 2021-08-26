@@ -2,17 +2,17 @@ import { Params } from '..';
 import * as mappers from '../mappers';
 import { EducationLevel, EducationLevelAssociations } from '~/lib/records';
 
-const { object, record, recordId, prop, assoc, val } = mappers;
+const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 
 function mapEducationLevel (value: any, associations?: EducationLevelAssociations): EducationLevel {
   return object(value, root => ({
     id: recordId(root),
     name: prop('name', root, val.string),
-    level: prop('level', root, val.integer),
-    semesters: prop('semesters', root, val.integer),
-    years_length: prop('years_length', root, val.integer),
-    start_age: prop('start_age', root, val.integer),
-    mandatory: prop('mandatory', root, val.boolean),
+    level: maybeProp('level', root, val.integer),
+    terms_per_year: maybeProp('terms_per_year', root, val.integer),
+    years_length: maybeProp('years_length', root, val.integer),
+    start_age: maybeProp('start_age', root, val.integer),
+    mandatory: maybeProp('mandatory', root, val.boolean),
     country: assoc('country', root, associations?.country),
   }));
 }

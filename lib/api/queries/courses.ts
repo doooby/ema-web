@@ -2,13 +2,14 @@ import { Params } from '..';
 import * as mappers from '../mappers';
 import { Course, CourseAssociations, Subject } from '~/lib/records';
 
-const { object, record, recordId, prop, assoc, val } = mappers;
+const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 
 function mapCourse (value: any, associations?: CourseAssociations): Course {
   return object(value, root => ({
     id: recordId(root),
-    name: prop('name', root, val.string),
-    grade: prop('grade', root, val.integer),
+    name_en: prop('name_en', root, val.string),
+    name: maybeProp('name', root, val.string),
+    grade: maybeProp('grade', root, val.integer),
     education_level: assoc('education_level', root, associations?.education_level),
   }));
 }

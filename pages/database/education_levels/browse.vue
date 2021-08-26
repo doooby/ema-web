@@ -32,7 +32,7 @@ export default Vue.extend({
         { name: 'level' },
         { name: 'start_age' },
         { name: 'years_length' },
-        { name: 'semesters' },
+        { name: 'terms_per_year' },
         { name: 'mandatory' },
       ],
     };

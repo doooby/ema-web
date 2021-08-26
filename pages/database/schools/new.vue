@@ -18,6 +18,7 @@ export default Vue.extend({
     fields () {
       return [
         [ 'country', 'associatedRecord', { entity: 'countries' } ],
+        [ 'name_en', 'text' ],
         [ 'name', 'text' ],
         [ 'address', 'text' ],
       ];

@@ -68,11 +68,13 @@ export class ApiPlugin {
       mappingResult = mapper(response.payload);
     } catch (error) {
       if (error instanceof MappingError) error.finalize();
+      mappingResult = error;
     }
     if (mappingResult instanceof Error) {
       state.error = mappingResult;
       state.fail = 'invalid_data';
       utils.notify('error', mappingResult, response.payload);
+      mappingResult = null;
     }
 
     state.value = mappingResult;

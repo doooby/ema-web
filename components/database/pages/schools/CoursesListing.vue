@@ -54,8 +54,9 @@ export default Vue.extend({
       fetchQueryState: this.$api.newQueryState(),
       tableColumns: [
         { name: 'id', cell: { type: 'link', entity: 'courses' }, size: 60 },
-        { name: 'course', getText: (course: any) => course.caption, size: 300 },
-        { name: 'education_level', getText: (course: any) => course.labels.education_level, size: 300 },
+        { name: 'course', getText: (course: any) => course.caption, size: 200 },
+        { name: 'name_local', getText: (course: any) => course.labels.name_local, size: 200 },
+        { name: 'education_level', getText: (course: any) => course.labels.education_level, size: 200 },
       ],
       editable: false,
       addFormFields: [

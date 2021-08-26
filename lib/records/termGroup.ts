@@ -1,20 +1,20 @@
 import * as mappers from '~/lib/api/mappers';
 
-export interface SemesterGroup {
+export interface TermGroup {
   id: number;
   name: string
   year_start: number;
-  semester: number;
+  term?: number;
   school: mappers.AssociatedRecord;
   course: mappers.AssociatedRecord;
 }
 
-export interface SemesterGroupAssociations {
+export interface TermGroupAssociations {
   school: mappers.AssociatedRecordsIndex,
   course: mappers.AssociatedRecordsIndex,
 }
 
-export const semesterGroup = {
+export const termGroup = {
   startYearOptions: [
     { value: 2018, caption: 2018 },
     { value: 2019, caption: 2019 },

@@ -2,12 +2,13 @@ import { Params } from '..';
 import * as mappers from '../mappers';
 import { Subject } from '~/lib/records';
 
-const { object, record, recordId, prop, val } = mappers;
+const { object, record, recordId, prop, maybeProp, val } = mappers;
 
 function mapSubject (value: any): Subject {
   return object(value, root => ({
     id: recordId(root),
-    name: prop('name', root, val.string),
+    name_en: prop('name_en', root, val.string),
+    name: maybeProp('name', root, val.string),
   }));
 }
 

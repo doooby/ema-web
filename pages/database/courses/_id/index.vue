@@ -6,6 +6,9 @@
   >
     <template #detail="{ record }">
       <div class="emb-6">
+        <record-detail-value label="Name:">
+          {{ record.name }}
+        </record-detail-value>
         <record-detail-value label="Education Level:">
           {{ record.education_level.caption }}
           <code class="eml-2">[{{ record.education_level.id }}]</code>
@@ -32,7 +35,7 @@ export default Vue.extend({
     return {
       recordId: Number(this.$route.params.id),
       title: {
-        text: (record: any) => record.name,
+        text: (record: any) => record.name_en,
         showEditLink: true,
       },
     };

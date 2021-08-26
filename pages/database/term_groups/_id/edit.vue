@@ -1,19 +1,18 @@
 <template>
-  <new-page
-    entity="semester_groups"
+  <edit-page
+    entity="term_groups"
     :fields="fields"
     :no-default-redirect="true"
-    @created="onCreated"
+    @updated="onUpdated"
   />
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import NewPage from '~/components/database/NewPage.vue';
-import { semesterGroup } from '~/lib/records';
+import EditPage from '~/components/database/EditPage.vue';
 
 export default Vue.extend({
-  components: { NewPage },
+  components: { EditPage },
   layout: 'database',
   computed: {
     fields () {
@@ -21,14 +20,14 @@ export default Vue.extend({
         [ 'school', 'associatedRecord', { entity: 'schools' } ],
         [ 'course', 'associatedRecord', { entity: 'courses' } ],
         [ 'name', 'text' ],
-        [ 'year_start', 'list', { options: semesterGroup.startYearOptions } ],
-        [ 'semester', 'integer' ],
+        [ 'year_start', 'integer' ],
+        [ 'term', 'integer' ],
       ];
     },
   },
   methods: {
-    onCreated (recordId: Number) {
-      this.$router.push({ path: `/database/semester_groups/${recordId}` });
+    onUpdated (record: any) {
+      this.$router.push({ path: `/database/term_groups/${record.id}` });
     },
   },
 });

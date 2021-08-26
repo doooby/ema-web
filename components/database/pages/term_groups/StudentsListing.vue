@@ -74,7 +74,7 @@ export default Vue.extend({
   methods: {
     fetch () {
       this.$api.request(
-        this.$api.queries.semester_groups.searchStudents(this.school.id),
+        this.$api.queries.term_groups.searchStudents(this.school.id),
         this.fetchQueryState,
       );
     },
@@ -82,7 +82,7 @@ export default Vue.extend({
       const newIds = newRecords.map(subject => subject.id);
 
       await this.$api.request(
-        this.$api.queries.semester_groups.update(this.school.id, {
+        this.$api.queries.term_groups.update(this.school.id, {
           new_students_ids: newIds,
         }),
         this.saveChangesQueryState,

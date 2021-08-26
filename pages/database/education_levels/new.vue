@@ -22,7 +22,7 @@ export default Vue.extend({
         [ 'level', 'integer' ],
         [ 'start_age', 'integer' ],
         [ 'years_length', 'integer' ],
-        [ 'semesters', 'integer' ],
+        [ 'terms_per_year', 'integer' ],
       ];
     },
   },

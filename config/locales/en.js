@@ -1,6 +1,7 @@
 const shared = {
   record: {
     id: 'id',
+    name_en: 'english name',
     name: 'name',
   },
 };
@@ -10,7 +11,7 @@ const records = {
   users: { s: 'user', p: 'users' },
   courses: { s: 'course', p: 'courses' },
   education_levels: { s: 'education level', p: 'education levels' },
-  semester_groups: { s: 'class', p: 'classes' },
+  term_groups: { s: 'class', p: 'classes' },
   schools: { s: 'school', p: 'schools' },
   students: { s: 'student', p: 'students' },
   subjects: { s: 'subject', p: 'subjects' },
@@ -58,6 +59,7 @@ export default {
       id: shared.record.id,
       education_level: records.education_levels.s,
       name: shared.record.name,
+      name_en: shared.record.name_en,
       grade: 'grade',
       country: records.countries.s,
     },
@@ -69,14 +71,14 @@ export default {
       level: 'level',
       start_age: 'start age',
       years_length: 'years length',
-      semesters: 'semesters count',
+      terms_per_year: 'terms per year',
     },
-    semester_groups: {
-      meta: records.semester_groups,
+    term_groups: {
+      meta: records.term_groups,
       id: shared.record.id,
       name: shared.record.name,
       year_start: 'year',
-      semester: 'semester',
+      term: 'term',
       course: records.courses.s,
       school: records.schools.s,
       students: records.students.p,
@@ -126,6 +128,7 @@ export default {
       meta: records.subjects,
       id: shared.record.id,
       name: shared.record.name,
+      name_en: shared.record.name_en,
     },
   },
   db: {

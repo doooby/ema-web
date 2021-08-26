@@ -1,6 +1,6 @@
 <template>
   <show-page
-    entity="semester_groups"
+    entity="term_groups"
     :record-id="recordId"
     :title="title"
   >
@@ -21,8 +21,8 @@
         <record-detail-value label="Year">
           {{ record.year_start }}
         </record-detail-value>
-        <record-detail-value label="Semester">
-          {{ record.semester }}
+        <record-detail-value label="Terms Per Year">
+          {{ record.terms_per_year }}
         </record-detail-value>
       </div>
       <students-listing :school="record" />
@@ -34,7 +34,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import ShowPage from '~/components/database/ShowPage.vue';
-import StudentsListing from '~/components/database/pages/semester_groups/StudentsListing.vue';
+import StudentsListing from '~/components/database/pages/term_groups/StudentsListing.vue';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import RecordDetailValue from '~/components/database/RecordDetailValue.vue';
 

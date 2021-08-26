@@ -10,7 +10,7 @@ export const dbPages: Resource[] = [
   { name: 'subjects', pages: [ 'browse', 'new' ] },
   { name: 'courses', pages: [ 'browse', 'new' ] },
   { name: 'schools', pages: [ '', 'new' ] },
-  { name: 'semester_groups', pages: [ 'browse', 'new' ] },
+  { name: 'term_groups', pages: [ 'browse', 'new' ] },
   { name: 'students', pages: [ 'browse', 'new' ] },
 ];
 

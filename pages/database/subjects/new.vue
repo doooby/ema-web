@@ -17,6 +17,7 @@ export default Vue.extend({
   computed: {
     fields () {
       return [
+        [ 'name_en', 'text' ],
         [ 'name', 'text' ],
       ];
     },

@@ -18,6 +18,7 @@ export default Vue.extend({
     fields () {
       return [
         [ 'education_level', 'associatedRecord', { entity: 'education_levels' } ],
+        [ 'name_en', 'text' ],
         [ 'name', 'text' ],
         [ 'grade', 'integer' ],
       ];

@@ -7,7 +7,8 @@ const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 function mapSchool (value: any, associations?: SchoolAssociations): School {
   return object(value, root => ({
     id: recordId(root),
-    name: prop('name', root, val.string),
+    name_en: prop('name_en', root, val.string),
+    name: maybeProp('name', root, val.string),
     address: maybeProp('address', root, val.string),
     country: assoc('country', root, associations?.country),
   }));
