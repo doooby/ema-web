@@ -17,7 +17,6 @@ export default Vue.extend({
   computed: {
     fields () {
       return [
-        [ 'education_level', 'assoc', { entity: 'education_levels' } ],
         [ 'name', 'text' ],
       ];
     },

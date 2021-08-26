@@ -47,6 +47,7 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
         params[name] = values[name] || '';
         continue;
       case 'assoc':
+      case 'associatedRecord':
         params[(opts as any)?.paramsName || `${name}_id`] = values[name]?.id;
         continue;
       case 'custom':

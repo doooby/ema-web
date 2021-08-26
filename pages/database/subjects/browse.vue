@@ -30,7 +30,6 @@ export default Vue.extend({
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
         { name: 'id', cell: { type: 'link', entity: 'subjects', onlyId: true }, size: 60 },
-        { name: 'education_level', getText: (record: any) => record.education_level.caption },
         { name: 'name' },
       ],
     };

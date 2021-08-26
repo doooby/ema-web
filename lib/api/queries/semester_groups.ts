@@ -10,11 +10,12 @@ function mapSemesterGroup (value: any, associations?: SemesterGroupAssociations)
     name: prop('name', root, val.string),
     year_start: prop('year_start', root, val.integer),
     semester: prop('semester', root, val.integer),
+    school: assoc('school', root, associations?.school),
     course: assoc('course', root, associations?.course),
   }));
 }
 
-const mapAssociations = mappers.createAssociationsMapper<SemesterGroupAssociations>('course');
+const mapAssociations = mappers.createAssociationsMapper<SemesterGroupAssociations>('school', 'course');
 
 export function search (params: Params) {
   return {

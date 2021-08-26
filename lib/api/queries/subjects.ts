@@ -1,30 +1,27 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { Subject, SubjectAssociations } from '~/lib/records';
+import { Subject } from '~/lib/records';
 
-const { object, record, recordId, prop, assoc, val } = mappers;
+const { object, record, recordId, prop, val } = mappers;
 
-function mapSubject (value: any, associations?: SubjectAssociations): Subject {
+function mapSubject (value: any): Subject {
   return object(value, root => ({
     id: recordId(root),
     name: prop('name', root, val.string),
-    education_level: assoc('education_level', root, associations?.education_level),
   }));
 }
 
-const mapAssociations = mappers.createAssociationsMapper<SubjectAssociations>('education_level');
-
-export function search (params: Params) {
+export function index (params: Params) {
   return {
-    path: '/subjects/search',
+    path: '/subjects',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapSubject, mapAssociations),
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapSubject),
   };
 }
 
 export function searchAssociated (params?: Params) {
   return {
-    path: '/subjects/search?assoc=1',
+    path: '/subjects?assoc=1',
     params,
     mapper: (payload: any) => mappers.associatedRecords<Subject>(payload),
   };
@@ -33,7 +30,7 @@ export function searchAssociated (params?: Params) {
 export function get (subjectId: number) {
   return {
     path: `/subjects/${subjectId}`,
-    mapper: (payload: any) => record(payload, mapSubject, mapAssociations),
+    mapper: (payload: any) => record(payload, mapSubject),
   };
 }
 

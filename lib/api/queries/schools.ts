@@ -25,7 +25,7 @@ export function index (params: Params) {
 
 export function searchAssociated (params?: Params) {
   return {
-    path: '/schools/search?assoc=1',
+    path: '/schools?assoc=1',
     params,
     mapper: (payload: any) => mappers.associatedRecords<School>(payload),
   };

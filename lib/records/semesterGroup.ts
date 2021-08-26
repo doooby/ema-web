@@ -5,9 +5,11 @@ export interface SemesterGroup {
   name: string
   year_start: number;
   semester: number;
+  school: mappers.AssociatedRecord;
   course: mappers.AssociatedRecord;
 }
 
 export interface SemesterGroupAssociations {
+  school: mappers.AssociatedRecordsIndex,
   course: mappers.AssociatedRecordsIndex,
 }

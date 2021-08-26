@@ -17,7 +17,8 @@ export default Vue.extend({
   computed: {
     fields () {
       return [
-        [ 'course', 'assoc', { entity: 'courses' } ],
+        [ 'school', 'associatedRecord', { entity: 'schools' } ],
+        [ 'course', 'associatedRecord', { entity: 'courses' } ],
         [ 'name', 'text' ],
         [ 'year_start', 'integer' ],
         [ 'semester', 'integer' ],

@@ -11,7 +11,7 @@
         v-for="record in options"
         :key="record.id"
         button
-        @click="$emit('select', $event)"
+        @click="$emit('select', record)"
       >
         {{ record.caption }}
         <div v-for="(label, i) in record.labels" :key="i">
@@ -53,13 +53,14 @@ export default Vue.extend({
   mounted () {
     this.fetchOptions();
     setTimeout(
-      () => this.$el.querySelector('#name').focus(),
+      () => (this.$el.querySelector('#name') as any)?.focus(),
       200,
     );
   },
   methods: {
     onInputDebounced: debounce(
       function (searchValue) {
+        // @ts-ignore
         this.fetchOptions(searchValue);
       },
       800,
