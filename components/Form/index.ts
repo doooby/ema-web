@@ -61,7 +61,7 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
         params[(opts as any)?.paramsName || `${name}_id`] = values[name]?.id;
         break;
       case 'custom':
-        params[name] = values[name] || null;
+        params[name] = values[name];
         break;
       default:
         utils.raise(new Error(`Form: field ${name} ${control} cannot be mapped to param`));

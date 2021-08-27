@@ -7,7 +7,7 @@ let componentsIndex: any = null;
 function getControl (field: FormField): null | Vue.Component {
   if (!componentsIndex) componentsIndex = buildControlComponentsIndex();
   const type = field[1];
-  if (type === 'custom') return (field[2] as any)?.component || null;
+  if (type === 'custom') return (field[2] as any)?.control || null;
   return componentsIndex[type] || null;
 }
 

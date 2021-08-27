@@ -11,6 +11,7 @@
 import Vue from 'vue';
 import NewPage from '~/components/database/NewPage.vue';
 import { student } from '~/lib/records';
+import AssigntToCourseControl from '~/components/database/pages/students/AssigntToCourseControl.vue';
 
 export default Vue.extend({
   components: { NewPage },
@@ -18,6 +19,7 @@ export default Vue.extend({
   computed: {
     fields () {
       return [
+        [ 'country', 'associatedRecord', { entity: 'countries' } ],
         [ 'first_name_en', 'text', { leftLabel: () => { return this.$t('misc.language.en') as string; } } ],
         [ 'last_name_en', 'text', { leftLabel: () => { return this.$t('misc.language.en') as string; } } ],
         [ 'first_name', 'text' ],
@@ -52,6 +54,7 @@ export default Vue.extend({
         [ 'assistance_needed', 'selectMultiple', { options: student.assistanceNeededOptions } ],
         [ 'oos_before', 'integer', { rightLabel: () => 'months' } ],
         [ 'enrolment_on', 'date', { deletable: true } ],
+        [ 'assign_to_course', 'custom', { control: AssigntToCourseControl } ],
       ];
     },
   },
