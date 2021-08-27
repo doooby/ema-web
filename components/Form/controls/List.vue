@@ -38,7 +38,6 @@ export default Vue.extend({
   data () {
     return {
       modalShown: false,
-      fetchQueryState: this.$api.newQueryState<any>(),
     };
   },
   computed: {

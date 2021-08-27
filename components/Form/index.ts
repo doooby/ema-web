@@ -48,6 +48,7 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
         break;
       }
       case 'text':
+      case 'selectMultiple':
         params[name] = values[name] || '';
         break;
       case 'list': {

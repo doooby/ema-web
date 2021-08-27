@@ -15,7 +15,7 @@ export interface TermGroupAssociations {
 }
 
 export const termGroup = {
-  startYearOptions: [
+  startYearOptions: Object.freeze([
     { value: 2018, caption: 2018 },
     { value: 2019, caption: 2019 },
     { value: 2020, caption: 2020 },
@@ -27,5 +27,5 @@ export const termGroup = {
     { value: 2026, caption: 2026 },
     { value: 2027, caption: 2027 },
     { value: 2028, caption: 2028 },
-  ],
+  ]),
 };

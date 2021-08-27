@@ -8,6 +8,7 @@ import IntegerControl from './Integer.vue';
 import TextControl from './Text.vue';
 import ControlledTextControl from './ControlledText.vue';
 import ListControl from './List.vue';
+import SelectMultipleControl from './SelectMultiple.vue';
 
 export const buildControlComponentsIndex: () => { [name: string]: any } = () => ({
   assoc: AssociationControl,
@@ -18,6 +19,7 @@ export const buildControlComponentsIndex: () => { [name: string]: any } = () => 
   text: TextControl,
   controlledText: ControlledTextControl,
   list: ListControl,
+  selectMultiple: SelectMultipleControl,
 
   // 'group-row': FieldsGroupRow,
 });

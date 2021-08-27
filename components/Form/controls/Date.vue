@@ -6,25 +6,28 @@
       <div class="d-flex align-items-center">
         {{ $t('form.field.date.day') }}
         <b-form-select
-          v-model="day"
+          :value="day"
           class="eml-2 epx-2 ew-9 control-like"
           :options="dayOptions"
+          @input="onDayChanged"
         />
       </div>
       <div class="d-flex align-items-center">
         {{ $t('form.field.date.month') }}
         <b-form-select
-          v-model="month"
+          :value="month"
           class="eml-2 epx-2 ew-9 control-like"
           :options="monthOptions"
+          @input="onMonthChanged"
         />
       </div>
       <div class="d-flex align-items-center">
         {{ $t('form.field.date.year') }}
         <b-form-select
-          v-model="year"
+          :value="year"
           class="eml-2 epx-2 ew-11 control-like"
           :options="yearOptions"
+          @input="onYearChanged"
         />
       </div>
       <div v-if="deletable">
@@ -49,7 +52,7 @@ import { BIconX } from 'bootstrap-vue';
 
 const DAY_OPTIONS = times(31, val => val + 1);
 const MONTHS_OPTIONS = times(12, val => val + 1);
-const YEARS_OPTIONS = reverse(times(50, val => 2020 - val));
+const YEARS_OPTIONS = reverse(times(50, val => 2030 - val));
 
 export default Vue.extend({
   components: { BIconX },
@@ -57,6 +60,7 @@ export default Vue.extend({
   data () {
     const date = sanitizedDate(this.formValues[this.field[0]]);
     return {
+      date,
       day: date ? date.getDate() : null,
       month: date ? date.getMonth() + 1 : null,
       year: date ? date.getFullYear() : null,
@@ -71,32 +75,49 @@ export default Vue.extend({
     },
   },
   watch: {
-    day (day: any) {
-      if (typeof day !== 'number') return;
-      const date = buildDate(this.year, this.month, day);
-      this.onChange(date);
-      if (!date) Vue.nextTick(() => { this.day = null; });
-    },
-    month (month: any) {
-      if (typeof month !== 'number') return;
-      const date = buildDate(this.year, month, this.day);
-      this.onChange(date);
-      if (!date) Vue.nextTick(() => { this.day = null; });
-    },
-    year (year: any) {
-      if (typeof year !== 'number') return;
-      const date = buildDate(year, this.month, this.day);
-      this.onChange(date);
-      if (!date) Vue.nextTick(() => { this.day = null; });
-    },
+    // day (day: any) {
+    //   // if (typeof day !== 'number') return;
+    //   const date = buildDate(this.year, this.month, day);
+    //   this.onChange(date);
+    //   // if (!date) Vue.nextTick(() => { this.day = null; });
+    // },
+    // month (month: any) {
+    //   // if (typeof month !== 'number') return;
+    //   const date = buildDate(this.year, month, this.day);
+    //   this.onChange(date);
+    //   // if (!date) Vue.nextTick(() => { this.day = null; });
+    // },
+    // year (year: any) {
+    //   // if (typeof year !== 'number') return;
+    //   const date = buildDate(year, this.month, this.day);
+    //   this.onChange(date);
+    //   // if (!date) Vue.nextTick(() => { this.day = null; });
+    // },
     formValues (newValues) {
       const date = sanitizedDate(newValues[this.field[0]]);
+      this.date = date;
       this.day = date ? date.getDate() : null;
       this.month = date ? date.getMonth() + 1 : null;
       this.year = date ? date.getFullYear() : null;
     },
   },
   methods: {
+    onDayChanged (value: any) {
+      this.day = value;
+      // console.log('fuuu', this.day);
+      const date = buildDate(this.year, this.month, value);
+      if (date) this.onChange(date);
+    },
+    onMonthChanged (value: any) {
+      this.month = value;
+      const date = buildDate(this.year, value, this.day);
+      if (date) this.onChange(date);
+    },
+    onYearChanged (value: any) {
+      this.year = value;
+      const date = buildDate(value, this.month, this.day);
+      if (date) this.onChange(date);
+    },
     onChange (date: undefined | Date): void {
       this.$emit('change', date);
     },
@@ -104,6 +125,7 @@ export default Vue.extend({
       this.day = null;
       this.month = null;
       this.year = null;
+      this.onChange(undefined);
     },
   },
 });

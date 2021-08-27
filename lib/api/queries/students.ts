@@ -2,11 +2,11 @@ import { Params } from '..';
 import * as mappers from '../mappers';
 import { Student, StudentAssociations } from '~/lib/records';
 
-const { object, record, recordId, prop, maybeProp, assoc, val, list } = mappers;
+const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
 
-function mapMaybeItemOfList (value: any, list: any[]): any {
-  return list.includes(value) ? value : undefined;
-}
+// function mapMaybeItemOfList (value: any, list: any[]): any {
+//   return list.includes(value) ? value : undefined;
+// }
 
 function mapStudent (value: any, associations?: StudentAssociations): Student {
   return object(value, root => ({
@@ -18,36 +18,34 @@ function mapStudent (value: any, associations?: StudentAssociations): Student {
     last_name: maybeProp('last_name', root, val.string),
     born_on: maybeProp('born_on', root, val.date),
     gender: maybeProp('gender', root, val.string),
-    language: maybeProp('language', root, val.string),
-    address: maybeProp('address', root, val.string),
     residency: maybeProp('residency', root, val.string),
-    distance_school_km: maybeProp('distance_school_km', root, val.integer),
+    language: maybeProp('language', root, val.string),
+    region: maybeProp('region', root, val.string),
+    address: maybeProp('address', root, val.string),
+    distance_school_km: maybeProp('distance_school_km', root, val.string),
     distance_school_time: maybeProp('distance_school_time', root, val.integer),
-    caregivers_en: maybeProp('caregivers_en', root, caregivers => list(caregivers, val.string)),
-    caregivers: maybeProp('caregivers', root, caregivers => list(caregivers, val.string)),
-    caregivers_contact: maybeProp('caregivers_contact', root, val.string),
-    caregivers_cfw: maybeProp('caregivers_cfw', root, (value) => {
-      if (typeof value !== 'object') return undefined;
-      const { v, h } = value;
-      if (v === 0) return { v };
-      if (v === 1) return { v, h: String(h) };
-      return undefined;
-    }),
-    out_of_school: maybeProp('out_of_school', root, val.integer),
+    transportation: maybeProp('transportation', root, val.string),
+    mother_first_name_en: maybeProp('mother_first_name_en', root, val.string),
+    mother_last_name_en: maybeProp('mother_last_name_en', root, val.string),
+    mother_first_name: maybeProp('mother_first_name', root, val.string),
+    mother_last_name: maybeProp('mother_last_name', root, val.string),
+    father_first_name_en: maybeProp('father_first_name_en', root, val.string),
+    father_last_name_en: maybeProp('father_last_name_en', root, val.string),
+    father_first_name: maybeProp('father_first_name', root, val.string),
+    father_last_name: maybeProp('father_last_name', root, val.string),
+    caregiver_first_name_en: maybeProp('caregiver_first_name_en', root, val.string),
+    caregiver_last_name_en: maybeProp('caregiver_last_name_en', root, val.string),
+    caregiver_first_name: maybeProp('caregiver_first_name', root, val.string),
+    caregiver_last_name: maybeProp('caregiver_last_name', root, val.string),
+    caregiver_id: maybeProp('caregiver_id', root, val.string),
+    caregiver_contact: maybeProp('caregiver_contact', root, val.string),
+    caregiver_cfw: maybeProp('caregiver_cfw', root, val.string),
+    caregiver_humansis: maybeProp('caregiver_humansis', root, val.string),
+    disability: maybeProp('disability', root, val.string),
+    disability_diagnosis: maybeProp('disability_diagnosis', root, val.string),
+    assistance_needed: maybeProp('assistance_needed', root, val.string),
+    oos_before: maybeProp('oos_before', root, val.integer),
     enrolment_on: maybeProp('enrolment_on', root, val.date),
-    completion_on: maybeProp('completion_on', root, val.date),
-    dropped_out_on: maybeProp('dropped_out_on', root, val.date),
-    drop_out_reason: maybeProp('drop_out_reason', root, val.string),
-    disability: maybeProp('disability', root, (value) => {
-      if (typeof value !== 'object') return undefined;
-      const { s, d, n, p } = value;
-      return {
-        s: String(s),
-        d: mapMaybeItemOfList(d, [ 0, 1 ]),
-        n: mapMaybeItemOfList(n, [ 1 ]),
-        p: mapMaybeItemOfList(p, [ 1 ]),
-      };
-    }),
   }));
 }
 
