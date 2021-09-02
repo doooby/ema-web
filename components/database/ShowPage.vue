@@ -6,10 +6,10 @@
           <h2 class="text-center">
             {{ $t(`record.${entity}.meta.s`) }}
           </h2>
-          <b-alert :show="!record && !getQueryState.error" variant="info">
+          <b-alert :show="!record && !getQueryState.fail" variant="info">
             {{ $t('db.shared.loading') }}
           </b-alert>
-          <b-alert :show="getQueryState.error" variant="warning">
+          <b-alert :show="getQueryState.fail" variant="warning">
             {{ $t('db.shared.record_not_found') }}
           </b-alert>
           <h3 v-if="record" class="d-flex align-items-center emb-6">

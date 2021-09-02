@@ -12,7 +12,7 @@
           <slot name="header-cell" :column="column" />
         </template>
       </table-head>
-      <tbody v-if="computedDataSet.length === 0 && queryState && queryState.error">
+      <tbody v-if="computedDataSet.length === 0 && queryState && queryState.fail">
         <tr>
           <td :colspan="columns.length + 1">
             <b-alert variant="warning" show class="m-0">

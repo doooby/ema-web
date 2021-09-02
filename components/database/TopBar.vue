@@ -26,7 +26,7 @@
         <template #button-content>
           <b-icon-gear variant="light" />
         </template>
-        <b-dropdown-item href="#">
+        <b-dropdown-item @click="onShowLoginModal">
           <b-icon-person class="emr-2" />
           {{ $t('db.top_bar.menu.login') }}
         </b-dropdown-item>
@@ -40,9 +40,15 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 import { BIconGear, BIconHouseDoorFill, BIconServer, BIconPerson, BIconGlobe2 } from 'bootstrap-vue';
 
-export default {
+export default Vue.extend({
   components: { BIconGear, BIconHouseDoorFill, BIconServer, BIconPerson, BIconGlobe2 },
-};
+  methods: {
+    onShowLoginModal () {
+      this.$store.commit('user/showLoginModal');
+    },
+  },
+});
 </script>

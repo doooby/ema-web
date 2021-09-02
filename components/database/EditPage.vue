@@ -6,10 +6,10 @@
           <h2 class="text-center">
             {{ title }}
           </h2>
-          <b-alert :show="!record && !fetchQueryState.error" variant="info">
+          <b-alert :show="!record && !fetchQueryState.fail" variant="info">
             {{ $t('db.shared.loading') }}
           </b-alert>
-          <b-alert :show="fetchQueryState.error" variant="warning">
+          <b-alert :show="fetchQueryState.fail" variant="warning">
             {{ $t('db.shared.record_not_found') }}
           </b-alert>
           <update-record-form

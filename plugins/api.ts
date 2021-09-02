@@ -1,13 +1,15 @@
 import { Context } from '@nuxt/types';
+import { Store } from 'vuex';
 import { QueryDefinition, RequestOptions, RequestResponse, RequestState } from '~/lib/api';
 import queries from '~/lib/api/queries';
-import { MappingError } from '~/lib/api/mappers'
+import { MappingError } from '~/lib/api/mappers';
 
 import ModifiableRecordsList from '~/lib/api/ModifiableRecordsList';
 
 export class ApiPlugin {
   baseUrl: string;
   queries = queries;
+  store: Store<any>;
 
   helpers = {
     ModifiableRecordsList,
@@ -15,6 +17,7 @@ export class ApiPlugin {
 
   constructor (context: Context) {
     this.baseUrl = context.$config.apiBaseUrl;
+    this.store = context.store;
   }
 
   newQueryState<V = any> (): RequestState<V> {
@@ -63,7 +66,7 @@ export class ApiPlugin {
       return null;
     }
 
-    let mappingResult = null;
+    let mappingResult;
     try {
       mappingResult = mapper(response.payload);
     } catch (error) {
@@ -97,9 +100,13 @@ export class ApiPlugin {
       const rawResponse = await globalThis.fetch(this.baseUrl + path, nativeOptions);
       const { ok, message, payload }: RequestResponse = await rawResponse.json();
       if (!ok) {
+        if (message === 'authn_fail') {
+          this.store.commit('user/authenticationFail');
+        }
+
         return {
           ok,
-          message: 'api.error.' + (message || 'undefined_error'),
+          message: message || 'unknown_error',
         };
       }
       return { ok, payload, message };
