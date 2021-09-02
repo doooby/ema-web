@@ -25,7 +25,7 @@ export default {
   publicRuntimeConfig: {
     apiBaseUrl: (isDev
       ? 'http://localhost:3071/web'
-      : 'https://ema-v2-server.herokuapp.com/web'
+      : 'https://server.ema-monitoring.org/web'
     ),
   },
 
