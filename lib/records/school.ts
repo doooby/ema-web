@@ -5,6 +5,7 @@ export interface School {
   name_en: string;
   name?: string;
   address?: string;
+  project?: string;
   country: mappers.AssociatedRecord;
 }
 

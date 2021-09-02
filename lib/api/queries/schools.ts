@@ -10,6 +10,7 @@ function mapSchool (value: any, associations?: SchoolAssociations): School {
     name_en: prop('name_en', root, val.string),
     name: maybeProp('name', root, val.string),
     address: maybeProp('address', root, val.string),
+    project: maybeProp('project', root, val.string),
     country: assoc('country', root, associations?.country),
   }));
 }

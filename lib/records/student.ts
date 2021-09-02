@@ -11,6 +11,7 @@ export interface Student {
   gender?: string;
   residency?: string;
   language?: string;
+  nationality?: string;
   region?: string;
   address?: string;
   distance_school_km?: string;
@@ -29,6 +30,8 @@ export interface Student {
   caregiver_first_name?: string;
   caregiver_last_name?: string;
   caregiver_id?: string;
+  caregiver_gender?: string;
+  caregiver_relation?: string;
   caregiver_contact?: string;
   caregiver_cfw?: string;
   caregiver_humansis?: string;
@@ -37,10 +40,15 @@ export interface Student {
   assistance_needed?: string;
   oos_before?: number;
   enrolment_on?: Date;
+  notes?: string;
 }
 
 export interface StudentAssociations {
   country: mappers.AssociatedRecordsIndex,
+}
+
+function mapOptions (list: string[]) {
+  return list.map((value, index) => ({ value: String(index), caption: value }));
 }
 
 export const student = {
@@ -50,26 +58,25 @@ export const student = {
     { value: 'o', caption: 'Other' },
   ]),
 
-  residencyOptions: Object.freeze([
-    'Resident',
+  residencyOptions: Object.freeze(mapOptions([
     'IDP',
-    'Host',
+    'Host/Resident',
     'Resettled',
     'Returnee',
     'Unknown',
-  ].map(value => ({ value, caption: value }))),
+  ])),
 
-  distanceToSchool: Object.freeze([
-    '>1 Km',
+  distanceToSchool: Object.freeze(mapOptions([
+    '< 1 Km',
     '1-2 Km',
     '3-5 Km',
     '5-10 Km',
-    '<10 Km',
-    '<15 Km',
-    '<20 Km',
-  ].map(value => ({ value, caption: value }))),
+    '> 10 Km',
+    '> 15 Km',
+    '> 20 Km',
+  ])),
 
-  typeOfTransportationOptions: Object.freeze([
+  typeOfTransportationOptions: Object.freeze(mapOptions([
     'Walk',
     'Bike',
     'Motorbike / car',
@@ -77,6 +84,16 @@ export const student = {
     'Public transport',
     'Other',
     'Unknown',
+  ])),
+
+  caregiverRelationOption: Object.freeze([
+    'father',
+    'mother',
+    'brother',
+    'sister',
+    'uncle',
+    'aunt',
+    'other',
   ].map(value => ({ value, caption: value }))),
 
   disabilityOptions: Object.freeze([
@@ -138,4 +155,48 @@ export const student = {
   //   const pp = p === 1 ? p : 0;
   //   return `status=${s}, diagnosis=${dd}, assistance needed=${nn}, provided=${pp}`;
   // },
+
+  entityControls (context: any): any[] {
+    return [
+      [ 'country', 'associatedRecord', { entity: 'countries' } ],
+      [ 'first_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
+      [ 'last_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
+      [ 'first_name', 'text' ],
+      [ 'last_name', 'text' ],
+      [ 'born_on', 'date' ],
+      [ 'gender', 'list', { options: student.genderOptions } ],
+      [ 'nationality', 'text' ],
+      [ 'language', 'text' ],
+      [ 'residency', 'list', { options: student.residencyOptions } ],
+      [ 'region', 'text' ],
+      [ 'address', 'text' ],
+      [ 'distance_school_km', 'list', { options: student.distanceToSchool } ],
+      [ 'distance_school_time', 'text', { rightLabel: () => context.$t('misc.time.min') } ],
+      [ 'transportation', 'list', { options: student.typeOfTransportationOptions } ],
+      [ 'mother_first_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
+      [ 'mother_last_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
+      [ 'mother_first_name', 'text' ],
+      [ 'mother_last_name', 'text' ],
+      [ 'father_first_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
+      [ 'father_last_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
+      [ 'father_first_name', 'text' ],
+      [ 'father_last_name', 'text' ],
+      [ 'caregiver_first_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
+      [ 'caregiver_last_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
+      [ 'caregiver_first_name', 'text' ],
+      [ 'caregiver_last_name', 'text' ],
+      [ 'caregiver_relation', 'list', { options: student.caregiverRelationOption } ],
+      [ 'caregiver_id', 'text' ],
+      [ 'caregiver_gender', 'list', { options: student.genderOptions } ],
+      [ 'caregiver_contact', 'text' ],
+      [ 'caregiver_cfw', 'list', { options: [ 'yes', 'no' ].map(value => ({ value, caption: value })) } ],
+      [ 'caregiver_humansis', 'text' ],
+      [ 'disability', 'list', { options: student.disabilityOptions } ],
+      [ 'disability_diagnosis', 'list', { options: student.disabilityDiagnosis } ],
+      [ 'assistance_needed', 'selectMultiple', { options: student.assistanceNeededOptions } ],
+      [ 'oos_before', 'integer', { rightLabel: () => 'months' } ],
+      [ 'enrolment_on', 'date', { deletable: true } ],
+      [ 'notes', 'textMultiline' ],
+    ];
+  },
 };

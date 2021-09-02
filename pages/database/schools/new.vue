@@ -21,6 +21,7 @@ export default Vue.extend({
         [ 'name_en', 'text' ],
         [ 'name', 'text' ],
         [ 'address', 'text' ],
+        [ 'project', 'text' ],
       ];
     },
   },
