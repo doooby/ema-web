@@ -1,0 +1,13 @@
+version: '3'
+services:
+
+  app:
+    image: "${STACK_NAME}--app:release"
+    env_file:
+      - "${STACK_PATH}/.env"
+    command: PORT=3000 yarn start
+    restart: unless-stopped
+    ports:
+      - 3011:3000
+    volumes:
+      - "${STACK_PATH}/tmp:/var/stack_tmp"
