@@ -3,9 +3,12 @@ services:
 
   app:
     image: "${STACK_NAME}--app:release"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
     env_file:
       - "${STACK_PATH}/.env"
-    command: PORT=3000 yarn start
+    command: yarn start
     restart: unless-stopped
     ports:
       - 3011:3000
