@@ -1,4 +1,9 @@
-const isDev = process.env.NODE_ENV !== 'production';
+const isProduction = process.env.NODE_ENV !== 'production';
+
+const serverHostName = process.env.SERVER_HOST_NAME;
+if (isProduction && !serverHostName) {
+  throw new Error('SERVER_HOST_NAME is missing');
+}
 
 export default {
   server: {
@@ -23,9 +28,10 @@ export default {
   },
 
   publicRuntimeConfig: {
-    apiBaseUrl: (isDev
-      ? 'http://localhost:3071/web'
-      : 'https://server.ema-monitoring.org/web'
+    apiBaseUrl: (isProduction
+      ? `https://${serverHostName}/web`
+      : 'http://localhost:3071/web'
+      // : 'https://server.ema-monitoring.org/web'
     ),
   },
 
