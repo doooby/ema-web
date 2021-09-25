@@ -163,6 +163,9 @@ export default {
       groups: {
         edit_students: 'Edit Students',
       },
+      users: {
+        change_pass: 'Change Password',
+      },
     },
     browse: {
       search: 'search',

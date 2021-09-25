@@ -8,7 +8,7 @@
       <record-actions-cell
         entity="users"
         :record="dataItem"
-        :edit="true"
+        :actions="actions"
       />
     </template>
   </browse-page>
@@ -29,10 +29,14 @@ export default Vue.extend({
       ],
       tableColumns: [
         { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-        { name: 'id', cell: { type: 'link', entity: 'subjects', onlyId: true }, size: 60 },
+        { name: 'id', cell: { type: 'link', entity: 'users' }, size: 60 },
         { name: 'country', getText: (user: any) => user.country.caption },
         { name: 'login' },
+        { name: 'full_name_en' },
         { name: 'full_name' },
+      ],
+      actions: [
+        { action: 'edit', icon: 'pencil', t: 'db.shared.edit' },
       ],
     };
   },

@@ -1,6 +1,4 @@
-export function afterTimeout (time: number): Promise<void> {
-  return new Promise<void>(resolve => setTimeout(resolve, time));
-}
+import { formatISO } from 'date-fns';
 
 export function raise (error: Error) {
   notify('error', error);
@@ -19,6 +17,11 @@ export function notify (
   }
 }
 
-export function waitFor (time: number): Promise<void> {
+export function forTimeout (time: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, time));
+}
+
+export function formatDate (date?: Date): string {
+  if (!date) return '';
+  return formatISO(date, { representation: 'date' });
 }

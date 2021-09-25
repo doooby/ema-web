@@ -75,9 +75,10 @@ export default Vue.extend({
   },
   methods: {
     async getQuery () {
-      const queryBuilder = (this.$api.queries as any)[this.entity]?.get;
+      const entityQueries = (this.$api.queries as any)[this.entity];
+      const queryBuilder = entityQueries?.get || entityQueries?.show;
       if (!queryBuilder) {
-        notify('error', 'database.ShowPage: get query is missing.', { entity: this.entity });
+        notify('error', 'database.ShowPage: get/show query is missing.', { entity: this.entity });
         return;
       }
 

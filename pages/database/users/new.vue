@@ -19,13 +19,14 @@ export default Vue.extend({
       return [
         [ 'country', 'associatedRecord', { entity: 'countries' } ],
         [ 'login', 'text' ],
+        [ 'full_name_en', 'text' ],
         [ 'full_name', 'text' ],
       ];
     },
   },
   methods: {
-    onCreated () {
-      this.$router.push({ path: '/database/users' });
+    onCreated (recordId: Number) {
+      this.$router.push({ path: `/database/users/${recordId}` });
     },
   },
 });

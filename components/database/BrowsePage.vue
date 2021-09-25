@@ -73,7 +73,7 @@ export default Vue.extend({
       const entityQueries = (this.$api.queries as any)[this.entity];
       const queryBuilder = entityQueries?.search || entityQueries?.index;
       if (!queryBuilder) {
-        notify('error', `database.BrowsePage: search query is missing for entity ${this.entity}.`);
+        notify('error', `database.BrowsePage: search/index query is missing for entity ${this.entity}.`);
         return;
       }
       return queryBuilder;

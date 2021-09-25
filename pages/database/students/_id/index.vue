@@ -238,7 +238,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import ShowPage from '~/components/database/ShowPage.vue';
-import { formatISO } from 'date-fns';
 import { student } from '~/lib/records';
 import RecordDetailValue from '~/components/database/RecordDetailValue.vue';
 
@@ -255,10 +254,7 @@ export default Vue.extend({
     };
   },
   methods: {
-    formatDate (date?: Date): string {
-      if (!date) return '';
-      return formatISO(date, { representation: 'date' });
-    },
+    formatDate: utils.formatDate,
     assistanceNeededSelected: student.assistanceNeededSelected,
     // caregivers_cfwToText: student.caregivers_cfwToText,
     // disabilityToText: student.disabilityToText,

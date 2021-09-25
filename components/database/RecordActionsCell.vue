@@ -18,6 +18,14 @@
         <b-icon-pencil variant="secondary" />
         {{ $t('db.shared.edit') }}
       </b-dropdown-item>
+      <b-dropdown-item
+        v-for="{ action, icon, iconVariant, t } in actions"
+        :key="action"
+        :to="`/database/${entity}/${record.id}/${action}`"
+      >
+        <b-icon :icon="icon" :variant="iconVariant || 'secondary'" />
+        {{ $t(t) }}
+      </b-dropdown-item>
     </b-dropdown>
   </div>
 </template>
@@ -26,12 +34,20 @@
 import Vue, { PropType } from 'vue';
 import { BIconThreeDotsVertical, BIconPencil } from 'bootstrap-vue';
 
+interface Action {
+  action: string;
+  icon: string;
+  iconVariant?: string;
+  t: string;
+}
+
 export default Vue.extend({
   components: { BIconThreeDotsVertical, BIconPencil },
   props: {
     entity: { type: String, required: true },
     record: { type: Object as PropType<any>, required: true },
     edit: { type: Boolean, default: false },
+    actions: { type: Array as PropType<Action[]>, default: [] },
   },
 });
 </script>
