@@ -165,6 +165,8 @@ export default {
       },
       users: {
         change_pass: 'Change Password',
+        lock: 'Lock Access',
+        unlock: 'Unlock Access',
       },
     },
     browse: {

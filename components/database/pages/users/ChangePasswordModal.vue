@@ -1,7 +1,7 @@
 <template>
   <b-modal
     :visible="value"
-    :title="$t('db.pages.change_pass')"
+    :title="$t('db.pages.users.change_pass')"
     @show="onShow"
     @hidden="onHidden"
     @ok="onSubmit"
@@ -54,7 +54,7 @@ export default Vue.extend({
         this.$api.queries.users.changePassword(this.record.id, password),
         this.$api.newQueryState(),
       );
-      console.log(result);
+
       if (result?.success) {
         this.onHidden();
       } else {

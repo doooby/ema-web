@@ -25,6 +25,7 @@
             v-if="record"
             name="detail"
             :record="record"
+            :reloadRecord="reloadRecord"
           />
         </div>
       </div>
@@ -63,6 +64,7 @@ export default Vue.extend({
   data () {
     return {
       getQueryState: this.$api.newQueryState(),
+      reloadRecord: () => this.getQuery(),
     };
   },
   computed: {

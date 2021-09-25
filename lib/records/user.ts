@@ -5,6 +5,7 @@ export interface User {
   login: string;
   full_name_en?: string;
   full_name?: string;
+  lock?: string;
   country: mappers.AssociatedRecord;
 }
 

@@ -10,6 +10,7 @@ function mapUser (value: any, associations?: UserAssociations): User {
     login: prop('login', root, val.string),
     full_name_en: maybeProp('full_name_en', root, val.string),
     full_name: maybeProp('full_name', root, val.string),
+    lock: maybeProp('lock', root, val.string),
     country: assoc('country', root, associations?.country),
   }));
 }
@@ -50,9 +51,7 @@ export function update (userId: number, user: Params) {
 export function deleteRecord (userId: number) {
   return {
     path: `/users/${userId}/destroy`,
-    mapper: (payload: any) => object(payload, root => ({
-      success: prop('success', root, val.boolean),
-    })),
+    mapper: mappers.changedRecord,
   };
 }
 
@@ -60,6 +59,14 @@ export function changePassword (userId: number, password: string) {
   return {
     path: `/users/${userId}/change_password`,
     params: { password },
+    mapper: mappers.changedRecord,
+  };
+}
+
+export function lock (userId: number, params: { lock: boolean, wipe_password: boolean }) {
+  return {
+    path: `/users/${userId}/lock`,
+    params,
     mapper: mappers.changedRecord,
   };
 }
