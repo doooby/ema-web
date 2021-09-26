@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import {
-  createFormModel,
+  prefilledFormValues,
   View as FormView,
   FormField,
   formToRecordParams,
@@ -42,7 +42,7 @@ export default Vue.extend({
   },
   data () {
     return {
-      formValues: createFormModel(this.formFields, this.record),
+      formValues: prefilledFormValues(this.formFields, this.record),
       persistQueryState: this.$api.newQueryState<RecordChange>(),
       errors: null as null | RecordError[],
     };
@@ -68,7 +68,7 @@ export default Vue.extend({
       }
     },
     reset () {
-      this.formValues = createFormModel(this.formFields, this.record);
+      this.formValues = prefilledFormValues(this.formFields, this.record);
       this.persistQueryState.reset();
       this.errors = null;
     },

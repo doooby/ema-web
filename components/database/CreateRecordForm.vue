@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { createFormModel, FormField, formToRecordParams, View as FormView } from '~/components/Form'
+import { prefilledFormValues, FormField, formToRecordParams, View as FormView } from '~/components/Form'
 import RecordErrors from './RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
 
@@ -41,7 +41,7 @@ export default Vue.extend({
   },
   data () {
     return {
-      formValues: createFormModel(this.formFields),
+      formValues: prefilledFormValues(this.formFields),
       createQueryState: this.$api.newQueryState<RecordChange>(),
       errors: null as null | RecordError[],
     };
@@ -68,7 +68,7 @@ export default Vue.extend({
       }
     },
     reset () {
-      this.formValues = createFormModel(this.formFields);
+      this.formValues = prefilledFormValues(this.formFields);
       this.createQueryState.reset();
       this.errors = null;
     },

@@ -5,14 +5,23 @@ export function raise (error: Error) {
   throw error;
 }
 
+export function warn (message: string) {
+  notify('warn', message);
+}
+
 export function notify (
-  type: 'error',
+  type: 'error' | 'warn',
   message: string | Error,
   context?: any,
 ): void {
   switch (type) {
     case 'error':
+      // eslint-disable-next-line no-console
       console.error(message);
+      break;
+    case 'warn':
+      // eslint-disable-next-line no-console
+      console.log(message);
       break;
   }
 }

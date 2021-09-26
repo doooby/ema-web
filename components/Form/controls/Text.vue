@@ -1,7 +1,7 @@
 <template>
   <b-form-group
-    :label="label"
-    :label-for="domId"
+    :label="labelTranslation"
+    :label-for="domIdBase"
   >
     <div class="input-group">
       <div v-if="leftLabelText" class="input-group-prepend">
@@ -10,7 +10,7 @@
         </span>
       </div>
       <input
-        :id="domId"
+        :id="domIdBase"
         type="text"
         class="form-control"
         :value="sanitizedValue"
@@ -29,10 +29,25 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS } from '..';
+import { FIELD_PROPS2, FormField, FormValues } from '..';
+import ControlMixin from '../ControlMixin';
+
+export const meta = {
+  name: 'text',
+  mapValues (field: FormField, record: any, values: FormValues = {}) {
+    const name = field[0];
+    values[name] = record[name];
+    return values;
+  },
+  mapRecord (field: FormField, values: FormValues, record: any = {}) {
+    const name = field[0];
+    record[name] = values[name] || '';
+  },
+};
 
 export default Vue.extend({
-  props: FIELD_PROPS,
+  mixins: [ ControlMixin ],
+  props: FIELD_PROPS2,
   computed: {
     leftLabelText (): undefined | string {
       const leftLabel = (this.field[2] as any)?.leftLabel;
@@ -53,12 +68,9 @@ export default Vue.extend({
   },
   methods: {
     onBlur (event: {target: HTMLInputElement}) {
-      this.$emit('change', event.target.value);
+      this.context.onChange({ [this.field[0]]: event.target.value });
     },
-    onCommit (event: {target: HTMLInputElement}) {
-      this.$emit('change', event.target.value);
-      this.$emit('commit');
-    },
+    onCommit (event: {target: HTMLInputElement}) {},
   },
 });
 </script>

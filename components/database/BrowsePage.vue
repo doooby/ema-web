@@ -2,7 +2,6 @@
   <div class="page-content -has-submenu">
     <div class="page-menu">
       <search-form
-        :value="searchValues"
         :fields="searchFields"
         @search="onSearch"
       />
@@ -43,7 +42,7 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { createFormModel, FormValues, FormField } from '~/components/Form';
+import { FormValues, FormField } from '~/components/Form';
 import { DataTable, DataTableView } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';
@@ -64,7 +63,7 @@ export default Vue.extend({
   },
   data () {
     return {
-      searchValues: createFormModel(),
+      searchValues: {},
       searchQueryState: this.$api.newQueryState(),
     };
   },
