@@ -27,19 +27,19 @@
 <!--  components: { FormField: FormFieldComponent },-->
 <!--  props: FIELD_PROPS,-->
 <!--  data () {-->
-<!--    const value = Number(this.formValues[this.field[0]]);-->
+<!--    const value = Number(this.formValues[this.field.name]);-->
 <!--    return {-->
 <!--      value: isNaN(value) ? '' : value,-->
 <!--    };-->
 <!--  },-->
 <!--  computed: {-->
 <!--    fields (): FormField[] {-->
-<!--      return (this.field[2] as any)?.fields || [];-->
+<!--      return this.field.options.fields || [];-->
 <!--    },-->
 <!--    classNames () {-->
 <!--      return classNames(-->
 <!--        'd-flex fields-group-row',-->
-<!--        (this.field[2] as any)?.small && '-small',-->
+<!--        this.field.options.small && '-small',-->
 <!--      );-->
 <!--    },-->
 <!--  },-->

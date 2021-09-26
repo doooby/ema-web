@@ -27,21 +27,19 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS2, FormField, FormValues } from '..';
+import { FIELD_PROPS, FormFieldType, FormField, FormValues } from '..';
 import ControlMixin from '../ControlMixin';
 
 import AssociatedRecordSearch from './AssociatedRecord/AssociatedRecordSearch.vue';
 
-export const meta = {
+export const type: Omit<FormFieldType, 'control'> = {
   name: 'associatedRecord',
-  mapValues (field: FormField, record: any, values: FormValues = {}) {
-    const name = field[0];
+  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
     values[name] = record[name] ?? undefined;
     return values;
   },
-  mapRecord (field: FormField, values: FormValues, record: any = {}) {
-    const [ name, , opts ] = field;
-    record[(opts as any)?.paramsName || `${name}_id`] = values[name]?.id;
+  mapToRecord ({ name, options }: FormField, values: FormValues, record: any = {}) {
+    record[options.paramsName || `${name}_id`] = values[name]?.id;
     return record;
   },
 };
@@ -49,7 +47,7 @@ export const meta = {
 export default Vue.extend({
   components: { AssociatedRecordSearch },
   mixins: [ ControlMixin ],
-  props: FIELD_PROPS2,
+  props: FIELD_PROPS,
   data () {
     return {
       modalShown: false,
@@ -57,14 +55,14 @@ export default Vue.extend({
   },
   computed: {
     selectedRecord (): undefined | any {
-      return this.formValues[this.field[0]] ?? undefined;
+      return this.formValues[this.field.name] ?? undefined;
     },
     valueText (): string {
       const value = this.selectedRecord;
       return value ? value.caption : '';
     },
     fetchQuery (): any {
-      const entity = (this.field[2] as any)?.entity;
+      const entity = this.field.options.entity;
       const query = entity && (this.$api.queries as any)[entity]?.searchAssociated;
       if (query) return query;
 
@@ -78,7 +76,7 @@ export default Vue.extend({
     },
     onItemSelected (record: any) {
       this.modalShown = false;
-      this.context.onChange({ [this.field[0]]: record });
+      this.context.onChange({ [this.field.name]: record });
     },
   },
 });

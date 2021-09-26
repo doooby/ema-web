@@ -16,18 +16,16 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS2, FormField, FormValues } from '..';
+import { FIELD_PROPS, FormFieldType, FormField, FormValues } from '..';
 import ControlMixin from '../ControlMixin';
 
-export const meta = {
+export const type: Omit<FormFieldType, 'control'> = {
   name: 'textMultiline',
-  mapValues (field: FormField, record: any, values: FormValues = {}) {
-    const name = field[0];
+  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
     values[name] = record[name] ?? undefined;
     return values;
   },
-  mapRecord (field: FormField, values: FormValues, record: any = {}) {
-    const name = field[0];
+  mapToRecord ({ name }: FormField, values: FormValues, record: any = {}) {
     record[name] = values[name] || '';
     return record;
   },
@@ -35,16 +33,16 @@ export const meta = {
 
 export default Vue.extend({
   mixins: [ ControlMixin ],
-  props: FIELD_PROPS2,
+  props: FIELD_PROPS,
   computed: {
     sanitizedValue (): string {
-      const rawValue = this.formValues[this.field[0]];
+      const rawValue = this.formValues[this.field.name];
       return rawValue ? String(rawValue) : '';
     },
   },
   methods: {
     onBlur (event: {target: HTMLTextAreaElement}) {
-      this.context.onChange({ [this.field[0]]: event.target.value });
+      this.context.onChange({ [this.field.name]: event.target.value });
     },
   },
 });

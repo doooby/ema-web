@@ -2,7 +2,7 @@
   <div>
     <div>
       <form-group
-        :fields="searchFields"
+        :fields-definitions="searchFields"
         @input="onInputDebounced"
       />
     </div>

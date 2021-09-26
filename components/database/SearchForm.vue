@@ -3,7 +3,7 @@
     <h5> {{ $t('db.browse.search') }} </h5>
     <form-group
       :value="searchValues"
-      :fields="fields"
+      :fields-definitions="fields"
       @input="onInput"
     />
     <div class="d-flex flex-row-reverse">
@@ -15,14 +15,14 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
 import { BIconSearch } from 'bootstrap-vue';
 import { FormField, FormValues } from '~/components/Form';
 
 export default Vue.extend({
   components: { BIconSearch },
   props: {
-    fields: { type: Array as PropType<FormField[]>, required: true },
+    fields: { type: Array as Vue.PropType<FormField[]>, required: true },
   },
   data () {
     return {

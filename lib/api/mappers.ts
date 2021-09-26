@@ -169,14 +169,14 @@ export const val = {
 
 export function record<R, A> (
   value: any,
-  mapRecord: (value: any, associations?: A) => R,
+  mapToRecord: (value: any, associations?: A) => R,
   mapAssociations?: (value: any) => A,
 ): RecordGet<R> {
   return object(value, (root) => {
     const associations = mapAssociations && prop('associations', root, mapAssociations);
     return {
       success: prop('success', root, val.boolean),
-      record: prop('record', root, record => mapRecord(record, associations)),
+      record: prop('record', root, record => mapToRecord(record, associations)),
     };
   });
 }
@@ -204,14 +204,14 @@ export function changedRecord (value: any): RecordChange {
 
 export function paginatedRecords<R, A> (
   value: any,
-  mapRecord: (value: any, associations?: A) => R,
+  mapToRecord: (value: any, associations?: A) => R,
   mapAssociations?: (value: any) => A,
 ): PaginatedRecords<R> {
   return object(value, (root) => {
     const associations = mapAssociations && prop('associations', root, mapAssociations);
     const records = prop('records', root, records => list(
       records,
-      item => mapRecord(item, associations),
+      item => mapToRecord(item, associations),
     ));
     return {
       records,

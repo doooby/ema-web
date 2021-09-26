@@ -1,32 +1,46 @@
-import { FormField } from '..';
+import { FormFieldType } from '..';
 
-import AssociatedRecordControl, { meta as AssociatedRecordControlMeta } from './AssociatedRecord.vue';
-import CalendarControl, { meta as CalendarControlMeta } from './Calendar.vue';
-import ControlledTextControl, { meta as ControlledTextControlMeta } from './ControlledText.vue';
-import DateControl, { meta as DateControlMeta } from './Date.vue';
-import IntegerControl, { meta as IntegerControlMeta } from './Integer.vue';
-import ListControl, { meta as ListControlMeta } from './List.vue';
-import TextControl, { meta as TextControlMeta } from './Text.vue';
-import TextMultilineControl, { meta as TextMultilineControlMeta } from './TextMultiline.vue';
+import AssociatedRecordControl, { type as AssociatedRecordControlType } from './AssociatedRecord.vue';
+import CalendarControl, { type as CalendarControlType } from './Calendar.vue';
+import ControlledTextControl, { type as ControlledTextControlType } from './ControlledText.vue';
+import DateControl, { type as DateControlType } from './Date.vue';
+import IntegerControl, { type as IntegerControlType } from './Integer.vue';
+import ListControl, { type as ListControlType } from './List.vue';
+import TextControl, { type as TextControlType } from './Text.vue';
+import TextMultilineControl, { type as TextMultilineControlType } from './TextMultiline.vue';
 
-const ControlsIndex = {} as { [name: string]: any };
+import VoidControl, { type as VoidControlType } from './Void.vue';
 
-export function getControlType (field: FormField): undefined | any {
-  return ControlsIndex[field[1]];
+const controlsIndex = {} as { [name: string]: undefined | FormFieldType };
+export const voidFieldType: FormFieldType = {
+  ...VoidControlType,
+  control: VoidControl,
+};
+
+export function getControlType (type: string | FormFieldType): FormFieldType {
+  const typeOfType = typeof type;
+  if (typeOfType === 'object') return type as FormFieldType;
+  if (typeOfType === 'string') {
+    const knownType = controlsIndex[type as string];
+    if (knownType) return knownType;
+  }
+
+  utils.warn('Form controls - unknown type', type);
+  return voidFieldType;
 }
 
-function add (meta: any, control: any) {
-  ControlsIndex[meta.name] = {
+function add (type: any, control: any) {
+  controlsIndex[type.name] = {
+    ...type,
     control,
-    meta,
   };
 }
 
-add(AssociatedRecordControlMeta, AssociatedRecordControl);
-add(CalendarControlMeta, CalendarControl);
-add(ControlledTextControlMeta, ControlledTextControl);
-add(DateControlMeta, DateControl);
-add(IntegerControlMeta, IntegerControl);
-add(ListControlMeta, ListControl);
-add(TextControlMeta, TextControl);
-add(TextMultilineControlMeta, TextMultilineControl);
+add(AssociatedRecordControlType, AssociatedRecordControl);
+add(CalendarControlType, CalendarControl);
+add(ControlledTextControlType, ControlledTextControl);
+add(DateControlType, DateControl);
+add(IntegerControlType, IntegerControl);
+add(ListControlType, ListControl);
+add(TextControlType, TextControl);
+add(TextMultilineControlType, TextMultilineControl);

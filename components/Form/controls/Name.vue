@@ -42,23 +42,23 @@
 <!--      return `${this.domId}_en`;-->
 <!--    },-->
 <!--    leftLabelText (): undefined | string {-->
-<!--      const leftLabel = (this.field[2] as any)?.leftLabel;-->
+<!--      const leftLabel = this.field.options.leftLabel;-->
 <!--      if (!leftLabel) return undefined;-->
 <!--      if (typeof leftLabel === 'function') return leftLabel();-->
 <!--      return String(leftLabel);-->
 <!--    },-->
 <!--    rightLabelText (): undefined | string {-->
-<!--      const rightLabel = (this.field[2] as any)?.rightLabel;-->
+<!--      const rightLabel = this.field.options.rightLabel;-->
 <!--      if (!rightLabel) return undefined;-->
 <!--      if (typeof rightLabel === 'function') return rightLabel();-->
 <!--      return String(rightLabel);-->
 <!--    },-->
 <!--    sanitizedValue (): string {-->
-<!--      const rawValue = this.formValues[this.field[0]];-->
+<!--      const rawValue = this.formValues[this.field.name];-->
 <!--      return rawValue ? String(rawValue) : '';-->
 <!--    },-->
 <!--    sanitizedValueEn (): string {-->
-<!--      const rawValue = this.formValues[`${this.field[0]}_en`];-->
+<!--      const rawValue = this.formValues[`${this.field.name}_en`];-->
 <!--      return rawValue ? String(rawValue) : '';-->
 <!--    },-->
 <!--  },-->

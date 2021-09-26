@@ -47,7 +47,7 @@
 import Vue from 'vue';
 import { times, reverse, padStart } from 'lodash';
 import { parseISO as parseDate } from 'date-fns';
-import { FIELD_PROPS2, FormField, FormValues } from '..';
+import { FIELD_PROPS, FormFieldType, FormField, FormValues } from '..';
 import { BIconX } from 'bootstrap-vue';
 import ControlMixin from '../ControlMixin';
 
@@ -55,15 +55,13 @@ const DAY_OPTIONS = times(31, val => val + 1);
 const MONTHS_OPTIONS = times(12, val => val + 1);
 const YEARS_OPTIONS = reverse(times(50, val => 2030 - val));
 
-export const meta = {
+export const type: Omit<FormFieldType, 'control'> = {
   name: 'date',
-  mapValues (field: FormField, record: any, values: FormValues = {}) {
-    const name = field[0];
+  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
     values[name] = utils.sanitizedDate(record[name]);
     return values;
   },
-  mapRecord (field: FormField, values: FormValues, record: any = {}) {
-    const name = field[0];
+  mapToRecord ({ name }: FormField, values: FormValues, record: any = {}) {
     const date = values[name];
     record[name] = date ? utils.formatDate(date) : '';
     record[name] = values[name] || '';
@@ -74,9 +72,9 @@ export const meta = {
 export default Vue.extend({
   components: { BIconX },
   mixins: [ ControlMixin ],
-  props: FIELD_PROPS2,
+  props: FIELD_PROPS,
   data () {
-    const date = utils.sanitizedDate(this.formValues[this.field[0]]);
+    const date = utils.sanitizedDate(this.formValues[this.field.name]);
     return {
       date,
       day: date ? date.getDate() : null,
@@ -89,7 +87,7 @@ export default Vue.extend({
   },
   computed: {
     deletable (): undefined | boolean {
-      return (this.field[2] as any)?.deletable;
+      return this.field.options.deletable;
     },
   },
   watch: {
@@ -112,7 +110,7 @@ export default Vue.extend({
     //   // if (!date) Vue.nextTick(() => { this.day = null; });
     // },
     formValues (newValues) {
-      const date = utils.sanitizedDate(newValues[this.field[0]]);
+      const date = utils.sanitizedDate(newValues[this.field.name]);
       this.date = date;
       this.day = date ? date.getDate() : null;
       this.month = date ? date.getMonth() + 1 : null;
@@ -136,7 +134,7 @@ export default Vue.extend({
       if (date) this.onChange(date);
     },
     onChange (date: undefined | Date): void {
-      this.context.onChange({ [this.field[0]]: date });
+      this.context.onChange({ [this.field.name]: date });
     },
     onClear (): void {
       this.day = null;

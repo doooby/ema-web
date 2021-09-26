@@ -25,7 +25,13 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { prefilledFormValues, FormField, formToRecordParams, View as FormView } from '~/components/Form'
+import {
+  prefilledFormValues,
+  FormField,
+  formToRecordParams,
+  View as FormView,
+  FormFieldDefinition,
+} from '~/components/Form';
 import RecordErrors from './RecordErrors.vue';
 import { RecordError, RecordChange } from '~/lib/api/mappers';
 
@@ -36,7 +42,7 @@ export default Vue.extend({
   },
   props: {
     title: { type: String, required: true },
-    formFields: { type: Array as PropType<FormField []>, required: true },
+    formFields: { type: Array as PropType<FormFieldDefinition[]>, required: true },
     persistQuery: { type: Function, required: true },
   },
   data () {

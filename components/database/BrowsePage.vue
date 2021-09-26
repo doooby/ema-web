@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
 import { FormValues, FormField } from '~/components/Form';
 import { DataTable, DataTableView } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
@@ -57,9 +57,9 @@ export default Vue.extend({
   components: { SearchForm, DataTableView, RecordsPagination },
   props: {
     entity: { type: String, required: true },
-    searchFields: { type: Array as PropType<FormField[]>, required: true },
-    tableColumns: { type: Array as PropType<DataTable.Column[]>, required: true },
-    recordActions: { type: Object as PropType<RecordActions>, default: null },
+    searchFields: { type: Array as Vue.PropType<FormField[]>, required: true },
+    tableColumns: { type: Array as Vue.PropType<DataTable.Column[]>, required: true },
+    recordActions: { type: Object as Vue.PropType<RecordActions>, default: null },
   },
   data () {
     return {

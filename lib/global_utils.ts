@@ -5,8 +5,8 @@ export function raise (error: Error) {
   throw error;
 }
 
-export function warn (message: string) {
-  notify('warn', message);
+export function warn (message: string, context?: any) {
+  notify('warn', message, context);
 }
 
 export function notify (
@@ -22,6 +22,8 @@ export function notify (
     case 'warn':
       // eslint-disable-next-line no-console
       console.error(message);
+      // eslint-disable-next-line no-console
+      if (context) console.log('warn context: ', context);
       break;
   }
 }

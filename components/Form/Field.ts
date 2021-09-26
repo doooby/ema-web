@@ -1,13 +1,6 @@
 import Vue from 'vue';
-import { FormField, FormGroupContext, FormValues } from '.';
+import { FormGroupContext, FormValues } from '.';
 import VoidControl from './controls/Void.vue';
-import { getControlType } from '~/components/Form/controls';
-
-function getControl (field: FormField): null | Vue.Component {
-  const type = field[1];
-  if (type === 'custom') return (field[2] as any)?.control || null;
-  return getControlType(field)?.control || null;
-}
 
 export default Vue.extend({
   functional: true,
@@ -19,13 +12,11 @@ export default Vue.extend({
   render (createElement, { props }): Vue.VNode {
     const { name, context, values } = props;
     const field = context.field(name);
-    const control = field && getControl(field);
-    if (control === null) {
-      utils.warn(`Form.Field can't find control ${field?.[1] || 'N/A'} for field ${name}`);
+    if (!field) {
       return createElement(VoidControl);
     }
     return createElement(
-      control,
+      field.type.control,
       { props: { field, context, formValues: values } },
     );
   },

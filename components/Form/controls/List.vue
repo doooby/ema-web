@@ -39,20 +39,18 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS2, FormField, FormValues } from '..';
+import { FIELD_PROPS, FormFieldType, FormField, FormValues } from '..';
 import ControlMixin from '../ControlMixin';
 
 type Option = { value: string, caption: string };
 
-export const meta = {
+export const type: Omit<FormFieldType, 'control'> = {
   name: 'list',
-  mapValues (field: FormField, record: any, values: FormValues = {}) {
-    const name = field[0];
+  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
     values[name] = record[name] ?? undefined;
     return values;
   },
-  mapRecord (field: FormField, values: FormValues, record: any = {}) {
-    const name = field[0];
+  mapToRecord ({ name }: FormField, values: FormValues, record: any = {}) {
     const value = values[name];
     record[name] = value === undefined ? '' : value;
     return record;
@@ -61,7 +59,7 @@ export const meta = {
 
 export default Vue.extend({
   mixins: [ ControlMixin ],
-  props: FIELD_PROPS2,
+  props: FIELD_PROPS,
   data () {
     return {
       modalShown: false,
@@ -70,7 +68,7 @@ export default Vue.extend({
   computed: {
     selected (): undefined | Option {
       if (!this.options) return undefined;
-      const value = this.formValues[this.field[0]];
+      const value = this.formValues[this.field.name];
       const option = value && this.options.find(option => option.value === value);
       return option || undefined;
     },
@@ -78,7 +76,7 @@ export default Vue.extend({
       return this.selected?.caption ?? '';
     },
     options (): Array<Option> {
-      return (this.field[2] as any)?.options ?? [];
+      return this.field.options.options ?? [];
     },
   },
   methods: {
@@ -87,7 +85,7 @@ export default Vue.extend({
     },
     onItemSelected (option: Option) {
       this.modalShown = false;
-      this.context.onChange({ [this.field[0]]: option.value });
+      this.context.onChange({ [this.field.name]: option.value });
     },
   },
 });

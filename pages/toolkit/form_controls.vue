@@ -2,7 +2,7 @@
   <form-group
     v-model="formValues"
     class="container"
-    :fields="formFields"
+    :fields-definitions="formFields"
   >
     <template #layout="{ context, values }">
       <div class="row">
