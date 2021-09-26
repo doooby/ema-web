@@ -17,21 +17,21 @@
 import Vue from 'vue';
 import { parseISO as parseDate } from 'date-fns';
 import { FIELD_PROPS2, FormField, FormValues } from '..';
-import { formatDate } from '~/lib/global_utils';
 import ControlMixin from '../ControlMixin';
 
 export const meta = {
   name: 'calendar',
   mapValues (field: FormField, record: any, values: FormValues = {}) {
     const name = field[0];
-    values[name] = sanitizedDate(record[name]);
+    values[name] = utils.sanitizedDate(record[name]);
     return values;
   },
   mapRecord (field: FormField, values: FormValues, record: any = {}) {
     const name = field[0];
     const date = values[name];
-    record[name] = date ? formatDate(date) : '';
+    record[name] = date ? utils.formatDate(date) : '';
     record[name] = values[name] || '';
+    return record;
   },
 };
 export default Vue.extend({

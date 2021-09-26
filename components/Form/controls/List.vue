@@ -11,21 +11,28 @@
         <b-icon icon="chevron-down" />
       </b-button>
     </div>
-    <b-modal v-model="modalShown" centered hide-footer :title="labelTranslation">
-      <b-list-group>
-        <b-list-group-item
-          v-for="option in options"
-          :key="option.value"
-          :active="selected === option"
-          button
-          @click="onItemSelected(option)"
-        >
-          {{ option.caption }}
-        </b-list-group-item>
-      </b-list-group>
-      <b-alert variant="secondary" :show="options === null || options.length === 0">
-        empty
-      </b-alert>
+    <b-modal
+      v-model="modalShown"
+      centered
+      hide-footer
+      :title="labelTranslation"
+    >
+      <div v-if="modalShown">
+        <b-list-group>
+          <b-list-group-item
+            v-for="option in options"
+            :key="option.value"
+            :active="selected === option"
+            button
+            @click="onItemSelected(option)"
+          >
+            {{ option.caption }}
+          </b-list-group-item>
+        </b-list-group>
+        <b-alert variant="secondary" :show="options === null || options.length === 0">
+          empty
+        </b-alert>
+      </div>
     </b-modal>
   </b-form-group>
 </template>
@@ -48,6 +55,7 @@ export const meta = {
     const name = field[0];
     const value = values[name];
     record[name] = value === undefined ? '' : value;
+    return record;
   },
 };
 
@@ -60,8 +68,8 @@ export default Vue.extend({
     };
   },
   computed: {
-    selected (): Option {
-      if (!this.options) return '';
+    selected (): undefined | Option {
+      if (!this.options) return undefined;
       const value = this.formValues[this.field[0]];
       const option = value && this.options.find(option => option.value === value);
       return option || undefined;

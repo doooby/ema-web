@@ -50,7 +50,6 @@ import { parseISO as parseDate } from 'date-fns';
 import { FIELD_PROPS2, FormField, FormValues } from '..';
 import { BIconX } from 'bootstrap-vue';
 import ControlMixin from '../ControlMixin';
-import { formatDate } from '~/lib/global_utils';
 
 const DAY_OPTIONS = times(31, val => val + 1);
 const MONTHS_OPTIONS = times(12, val => val + 1);
@@ -60,14 +59,15 @@ export const meta = {
   name: 'date',
   mapValues (field: FormField, record: any, values: FormValues = {}) {
     const name = field[0];
-    values[name] = sanitizedDate(record[name]);
+    values[name] = utils.sanitizedDate(record[name]);
     return values;
   },
   mapRecord (field: FormField, values: FormValues, record: any = {}) {
     const name = field[0];
     const date = values[name];
-    record[name] = date ? formatDate(date) : '';
+    record[name] = date ? utils.formatDate(date) : '';
     record[name] = values[name] || '';
+    return record;
   },
 };
 
@@ -76,7 +76,7 @@ export default Vue.extend({
   mixins: [ ControlMixin ],
   props: FIELD_PROPS2,
   data () {
-    const date = sanitizedDate(this.formValues[this.field[0]]);
+    const date = utils.sanitizedDate(this.formValues[this.field[0]]);
     return {
       date,
       day: date ? date.getDate() : null,
@@ -112,7 +112,7 @@ export default Vue.extend({
     //   // if (!date) Vue.nextTick(() => { this.day = null; });
     // },
     formValues (newValues) {
-      const date = sanitizedDate(newValues[this.field[0]]);
+      const date = utils.sanitizedDate(newValues[this.field[0]]);
       this.date = date;
       this.day = date ? date.getDate() : null;
       this.month = date ? date.getMonth() + 1 : null;
@@ -147,15 +147,9 @@ export default Vue.extend({
   },
 });
 
-function sanitizedDate (date: any): undefined | Date {
-  return (date instanceof Date && !isNaN(date as any))
-    ? date
-    : undefined;
-}
-
 function buildDate (year: any, month: any, day: any): undefined | Date {
   month = month && padStart(month.toString(), 2, '0');
   day = day && padStart(day.toString(), 2, '0');
-  return sanitizedDate(parseDate(`${year}-${month}-${day}`));
+  return utils.sanitizedDate(parseDate(`${year}-${month}-${day}`));
 }
 </script>

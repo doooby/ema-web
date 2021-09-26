@@ -6,48 +6,50 @@
     @show="onShow"
     @hidden="onHidden"
   >
-    <div v-if="currentUser">
-      <b-alert :show="currentUser !== null" variant="primary">
-        You are already logged-in as {{ currentUser.login }} <br>
-        <strong>{{ currentUser.name_en }}</strong> <br>
-        <small>{{ currentUser.name }}</small>
-      </b-alert>
-      <div class="text-right">
-        <b-button variant="warning" @click="onLogOut">
-          Log out
-        </b-button>
+    <div v-if="shown">
+      <div v-if="currentUser">
+        <b-alert :show="currentUser !== null" variant="primary">
+          You are already logged-in as {{ currentUser.login }} <br>
+          <strong>{{ currentUser.name_en }}</strong> <br>
+          <small>{{ currentUser.name }}</small>
+        </b-alert>
+        <div class="text-right">
+          <b-button variant="warning" @click="onLogOut">
+            Log out
+          </b-button>
+        </div>
       </div>
+      <b-form v-else @submit="onLoginSubmit">
+        <b-form-group
+          label="Login"
+          label-for="login-login"
+        >
+          <b-form-input
+            id="input-1"
+            v-model="form.login"
+            type="text"
+          />
+        </b-form-group>
+        <b-form-group
+          label="Password"
+          label-for="login-password"
+        >
+          <b-form-input
+            id="login-password"
+            v-model="form.password"
+            type="password"
+          />
+        </b-form-group>
+        <div class="text-right">
+          <b-button type="submit" variant="primary">
+            Login
+          </b-button>
+        </div>
+        <b-alert :show="form.error !== null" variant="danger" class="emt-4">
+          {{ form.error }}
+        </b-alert>
+      </b-form>
     </div>
-    <b-form v-else @submit="onLoginSubmit">
-      <b-form-group
-        label="Login"
-        label-for="login-login"
-      >
-        <b-form-input
-          id="input-1"
-          v-model="form.login"
-          type="text"
-        />
-      </b-form-group>
-      <b-form-group
-        label="Password"
-        label-for="login-password"
-      >
-        <b-form-input
-          id="login-password"
-          v-model="form.password"
-          type="password"
-        />
-      </b-form-group>
-      <div class="text-right">
-        <b-button type="submit" variant="primary">
-          Login
-        </b-button>
-      </div>
-      <b-alert :show="form.error !== null" variant="danger" class="emt-4">
-        {{ form.error }}
-      </b-alert>
-    </b-form>
   </b-modal>
 </template>
 

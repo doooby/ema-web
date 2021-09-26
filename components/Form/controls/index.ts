@@ -1,18 +1,13 @@
 import { FormField } from '..';
 
-// import AssociationControl from './Association.vue';
-// import AssociatedRecordControl from './AssociatedRecord.vue';
-// import CalendarControl from './Calendar.vue';
-// import DateControl from './Date.vue';
-// import IntegerControl from './Integer.vue';
+import AssociatedRecordControl, { meta as AssociatedRecordControlMeta } from './AssociatedRecord.vue';
 import CalendarControl, { meta as CalendarControlMeta } from './Calendar.vue';
+import ControlledTextControl, { meta as ControlledTextControlMeta } from './ControlledText.vue';
 import DateControl, { meta as DateControlMeta } from './Date.vue';
+import IntegerControl, { meta as IntegerControlMeta } from './Integer.vue';
 import ListControl, { meta as ListControlMeta } from './List.vue';
 import TextControl, { meta as TextControlMeta } from './Text.vue';
-// import TextMultilineControl from './TextMultiline.vue';
-// import ControlledTextControl from './ControlledText.vue';
-
-// import SelectMultipleControl from './SelectMultiple.vue';
+import TextMultilineControl, { meta as TextMultilineControlMeta } from './TextMultiline.vue';
 
 const ControlsIndex = {} as { [name: string]: any };
 
@@ -27,21 +22,11 @@ function add (meta: any, control: any) {
   };
 }
 
+add(AssociatedRecordControlMeta, AssociatedRecordControl);
 add(CalendarControlMeta, CalendarControl);
+add(ControlledTextControlMeta, ControlledTextControl);
 add(DateControlMeta, DateControl);
+add(IntegerControlMeta, IntegerControl);
 add(ListControlMeta, ListControl);
 add(TextControlMeta, TextControl);
-
-// export const buildControlComponentsIndex: () => { [name: string]: any } = () => ({
-//   assoc: AssociationControl,
-//   associatedRecord: AssociatedRecordControl,
-//   calendar: CalendarControl,
-//   date: DateControl,
-//   integer: IntegerControl,
-//   textMultiline: TextMultilineControl,
-//   controlledText: ControlledTextControl,
-//   list: ListControl,
-//   selectMultiple: SelectMultipleControl,
-//
-//   // 'group-row': FieldsGroupRow,
-// });
+add(TextMultilineControlMeta, TextMultilineControl);

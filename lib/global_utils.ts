@@ -21,7 +21,7 @@ export function notify (
       break;
     case 'warn':
       // eslint-disable-next-line no-console
-      console.log(message);
+      console.error(message);
       break;
   }
 }
@@ -33,4 +33,10 @@ export function forTimeout (time: number): Promise<void> {
 export function formatDate (date?: Date): string {
   if (!date) return '';
   return formatISO(date, { representation: 'date' });
+}
+
+export function sanitizedDate (date: any): undefined | Date {
+  return (date instanceof Date && !isNaN(date as any))
+    ? date
+    : undefined;
 }

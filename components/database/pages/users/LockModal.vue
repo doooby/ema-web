@@ -6,24 +6,26 @@
     @hidden="onHidden"
     @ok="onSubmit"
   >
-    <div v-if="record.lock">
-      <p>
-        Unlocking the user enables access to EMA. Are you sure?
-        <br>
-        ( If password was cleared, you need to set new one. )
-      </p>
-    </div>
-    <div v-else>
-      <p>
-        Locking the user prevents access to EMA. Are you sure?
-      </p>
-      <b-form-checkbox
-        id="checkbox-1"
-        v-model="form.wipePassword"
-        name="clear_pass"
-      >
-        Also clear password
-      </b-form-checkbox>
+    <div v-if="value">
+      <div v-if="record.lock">
+        <p>
+          Unlocking the user enables access to EMA. Are you sure?
+          <br>
+          ( If password was cleared, you need to set new one. )
+        </p>
+      </div>
+      <div v-else>
+        <p>
+          Locking the user prevents access to EMA. Are you sure?
+        </p>
+        <b-form-checkbox
+          id="checkbox-1"
+          v-model="form.wipePassword"
+          name="clear_pass"
+        >
+          Also clear password
+        </b-form-checkbox>
+      </div>
     </div>
   </b-modal>
 </template>

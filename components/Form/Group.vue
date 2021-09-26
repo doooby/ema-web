@@ -26,7 +26,7 @@ import FormFieldComponent from './Field';
 export default Vue.extend({
   components: { FormField: FormFieldComponent },
   props: {
-    value: { type: Object as PropType<FormValues>, required: true },
+    value: { type: Object as PropType<FormValues>, default: () => Object.freeze({}) },
     fields: { type: Array as PropType<FormField[]>, required: true },
     namePrefix: { type: String, default: '' },
     labelPrefix: { type: String, default: 'form.fields' },
@@ -49,7 +49,7 @@ export default Vue.extend({
         fieldLabelKey: (name: string) => `${this.labelPrefix}.${name}`,
         field: (name: string): undefined | FormField => {
           const field = this.fieldsIndex[name];
-          if (!field) utils.warn(`Form.Group cann't find field ${name}`);
+          if (!field) utils.warn(`Form.Group can't find field ${name}`);
           return field;
         },
         onChange: (changes: FormValues) => {

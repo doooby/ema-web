@@ -1,4 +1,4 @@
-import Vue, { PropType, VNode } from 'vue';
+import Vue from 'vue';
 import { FormField, FormGroupContext, FormValues } from '.';
 import VoidControl from './controls/Void.vue';
 import { getControlType } from '~/components/Form/controls';
@@ -13,14 +13,17 @@ export default Vue.extend({
   functional: true,
   props: {
     name: { type: String, required: true },
-    context: { type: Object as PropType<FormGroupContext>, required: true },
-    values: { type: Object as PropType<FormValues>, required: true },
+    context: { type: Object as Vue.PropType<FormGroupContext>, required: true },
+    values: { type: Object as Vue.PropType<FormValues>, required: true },
   },
-  render (createElement, { props }): VNode {
+  render (createElement, { props }): Vue.VNode {
     const { name, context, values } = props;
     const field = context.field(name);
     const control = field && getControl(field);
-    if (control === null) return createElement(VoidControl);
+    if (control === null) {
+      utils.warn(`Form.Field can't find control ${field?.[1] || 'N/A'} for field ${name}`);
+      return createElement(VoidControl);
+    }
     return createElement(
       control,
       { props: { field, context, formValues: values } },

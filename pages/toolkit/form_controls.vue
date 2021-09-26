@@ -7,13 +7,10 @@
     <template #layout="{ context, values }">
       <div class="row">
         <div class="col-md-6 col-lg-4">
-          <form-field
-            v-for="name in [ 'basic_text', 'basic_list', 'basic_date', 'basic_calendar' ]"
-            :key="name"
-            :values="values"
-            :context="context"
-            :name="name"
-          />
+          <form-field name="basic_text" :context="context" :values="values" />
+          <form-field name="basic_list" :context="context" :values="values" />
+          <form-field name="basic_date" :context="context" :values="values" />
+          <form-field name="basic_calendar" :context="context" :values="values" />
         </div>
         <div class="col-md-6 col-lg-8">
           <!--        <form-view-->
@@ -25,10 +22,12 @@
       <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-md-6 col-lg-4">
-          <!--        <form-view-->
-          <!--          v-model="functionalitiesForm.value"-->
-          <!--          :fields="functionalitiesForm.fields"-->
-          <!--        />-->
+          <form-field name="opts_text_with_left_side" :context="context" :values="values" />
+          <form-field name="opts_text_with_right_side" :context="context" :values="values" />
+          <form-field name="opts_integer_with_left_side" :context="context" :values="values" />
+          <form-field name="opts_integer_with_right_side" :context="context" :values="values" />
+          <form-field name="more_text_multiline" :context="context" :values="values" />
+          <form-field name="more_association_country" :context="context" :values="values" />
         </div>
         <div class="col-md-6 col-lg-4">
           col 2
@@ -59,47 +58,17 @@ export default Vue.extend({
         [ 'basic_list', 'list', { options: LIST_OPTIONS } ],
         [ 'basic_date', 'date' ],
         [ 'basic_calendar', 'calendar' ],
+
+        [ 'opts_text_with_left_side', 'text', { leftLabel: () => this.$t('misc.language.en') } ],
+        [ 'opts_text_with_right_side', 'text', { rightLabel: 'right' } ],
+        [ 'opts_integer_with_left_side', 'integer', { leftLabel: '$' } ],
+        [ 'opts_integer_with_right_side', 'integer', { rightLabel: 'Kč' } ],
+
+        [ 'more_text_multiline', 'textMultiline' ],
+        [ 'more_association_country', 'associatedRecord', { entity: 'countries' } ],
+        // [ 'opts_date_deletable', 'date', { deletable: true } ],
+        // [ 'opts_calendar_deletable', 'calendar', { deletable: true } ],
       ],
-      // basicsForm: {
-      //   value: {},
-      //   fields: [
-      //     [ 'text', 'text' ],
-      //     [ 'list', 'list', { options: LIST_OPTIONS } ],
-      //     [ 'date', 'date' ],
-      //     [ 'calendar', 'calendar' ],
-      //   ],
-      // },
-      // inlineForm: {
-      //   value: {},
-      //   fields: [
-      //     [ 'group-small', 'group-row', {
-      //       small: true,
-      //       fields: [
-      //         [ 'list', 'list', { options: LIST_OPTIONS } ],
-      //         [ 'text', 'text' ],
-      //         [ 'text2', 'text' ],
-      //       ],
-      //     } ],
-      //     [ 'group', 'group-row', {
-      //       scoped: true,
-      //       fields: [
-      //         [ 'list', 'list', { options: LIST_OPTIONS } ],
-      //         [ 'text', 'text' ],
-      //       ],
-      //     } ],
-      //   ],
-      // },
-      // functionalitiesForm: {
-      //   value: {},
-      //   fields: [
-      //     [ 'text_with_left_side', 'text', { leftLabel: () => this.$t('misc.language.en') } ],
-      //     [ 'text_with_right_side', 'text', { rightLabel: 'right' } ],
-      //     [ 'integer_with_left_side', 'integer', { leftLabel: '$' } ],
-      //     [ 'integer_with_right_side', 'integer', { rightLabel: 'Kč' } ],
-      //     [ 'date', 'date', { deletable: true } ],
-      //     [ 'calendar', 'calendar' ],
-      //   ],
-      // },
     };
   },
   watch: {

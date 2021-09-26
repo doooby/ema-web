@@ -42,6 +42,7 @@ export const meta = {
   mapRecord (field: FormField, values: FormValues, record: any = {}) {
     const name = field[0];
     record[name] = values[name] || '';
+    return record;
   },
 };
 
@@ -70,7 +71,7 @@ export default Vue.extend({
     onBlur (event: {target: HTMLInputElement}) {
       this.context.onChange({ [this.field[0]]: event.target.value });
     },
-    onCommit (event: {target: HTMLInputElement}) {},
+    onCommit () {},
   },
 });
 </script>
