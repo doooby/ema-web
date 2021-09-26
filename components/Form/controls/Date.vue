@@ -47,7 +47,7 @@
 import Vue from 'vue';
 import { times, reverse, padStart } from 'lodash';
 import { parseISO as parseDate } from 'date-fns';
-import { FIELD_PROPS, FormFieldType, FormField, FormValues } from '..';
+import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
 import { BIconX } from 'bootstrap-vue';
 import ControlMixin from '../ControlMixin';
 
@@ -72,7 +72,11 @@ export const type: Omit<FormFieldType, 'control'> = {
 export default Vue.extend({
   components: { BIconX },
   mixins: [ ControlMixin ],
-  props: FIELD_PROPS,
+  props: {
+    field: { type: Object as Vue.PropType<FormField>, required: true },
+    context: { type: Object as Vue.PropType<FormGroupContext>, required: true },
+    formValues: { type: Object as Vue.PropType<FormValues>, required: true },
+  },
   data () {
     const date = utils.sanitizedDate(this.formValues[this.field.name]);
     return {

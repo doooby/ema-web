@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS, FormFieldType, FormField, FormValues } from '..';
+import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
 import ControlMixin from '../ControlMixin';
 
 import AssociatedRecordSearch from './AssociatedRecord/AssociatedRecordSearch.vue';
@@ -47,7 +47,11 @@ export const type: Omit<FormFieldType, 'control'> = {
 export default Vue.extend({
   components: { AssociatedRecordSearch },
   mixins: [ ControlMixin ],
-  props: FIELD_PROPS,
+  props: {
+    field: { type: Object as Vue.PropType<FormField>, required: true },
+    context: { type: Object as Vue.PropType<FormGroupContext>, required: true },
+    formValues: { type: Object as Vue.PropType<FormValues>, required: true },
+  },
   data () {
     return {
       modalShown: false,

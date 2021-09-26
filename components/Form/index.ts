@@ -1,6 +1,5 @@
 import View from './View.vue';
-import Vue from 'vue';
-import { getControlType } from './controls';
+import { controlsIndex, voidFieldType } from './controls';
 
 interface FieldOptions {
   [option: string]: any;
@@ -8,6 +7,10 @@ interface FieldOptions {
 
 // eslint-disable-next-line no-use-before-define
 export type FormFieldDefinition = [ string, (string | FormFieldType), FieldOptions? ];
+
+export interface FormValues {
+  [field: string]: any;
+}
 
 export interface FormField {
   name: string;
@@ -19,14 +22,8 @@ export interface FormField {
 export interface FormFieldType {
   name: string;
   control: any;
-  // eslint-disable-next-line no-use-before-define
   mapToValues(field: FormField, record: any, values: FormValues): FormValues;
-  // eslint-disable-next-line no-use-before-define
   mapToRecord(field: FormField, values: FormValues, record: any): any;
-}
-
-export interface FormValues {
-  [field: string]: any;
 }
 
 export interface FormGroupContext {
@@ -36,12 +33,17 @@ export interface FormGroupContext {
   onChange(changes: FormValues): void;
 }
 
-export const FIELD_PROPS = {
-  // @ts-ignore
-  field: { type: Array as Vue.PropType<FormField>, required: true },
-  context: { type: Object as Vue.PropType<FormGroupContext>, required: true },
-  formValues: { type: Object as Vue.PropType<FormValues>, required: true },
-};
+function getControlType (type: string | FormFieldType): FormFieldType {
+  const typeOfType = typeof type;
+  if (typeOfType === 'object') return type as FormFieldType;
+  if (typeOfType === 'string') {
+    const knownType = controlsIndex[type as string];
+    if (knownType) return knownType;
+  }
+
+  utils.warn('Form controls - unknown type', type);
+  return voidFieldType;
+}
 
 export function buildFormFields (fields: FormFieldDefinition[]): FormField[] {
   return fields.map(([ name, type, options ]) => ({

@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS, FormFieldType, FormField, FormValues } from '..';
+import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
 import ControlMixin from '../ControlMixin';
 
 export const type: Omit<FormFieldType, 'control'> = {
@@ -33,7 +33,11 @@ export const type: Omit<FormFieldType, 'control'> = {
 
 export default Vue.extend({
   mixins: [ ControlMixin ],
-  props: FIELD_PROPS,
+  props: {
+    field: { type: Object as Vue.PropType<FormField>, required: true },
+    context: { type: Object as Vue.PropType<FormGroupContext>, required: true },
+    formValues: { type: Object as Vue.PropType<FormValues>, required: true },
+  },
   computed: {
     sanitizedValue (): string {
       const rawValue = this.formValues[this.field.name];
