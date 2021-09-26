@@ -1,6 +1,5 @@
-import { formatISO } from 'date-fns';
 import View from './View.vue';
-import { PropType } from 'vue';
+import Vue from 'vue';
 import { getControlType } from './controls';
 
 interface FormFieldOptions {
@@ -16,7 +15,7 @@ export interface FormValues {
 export interface FormGroupContext {
   namePrefix(name: string): string,
   fieldLabelKey(name: string): string,
-  field(name: string): FormField;
+  field(name: string): undefined | FormField;
   onChange(changes: FormValues): void;
 }
 
@@ -25,15 +24,15 @@ export interface FormGroupContext {
 //   label: { type: String, default: '' },
 //   record: { type: Object as any, default: null },
 //   // @ts-ignore
-//   field: { type: Array as PropType<FormField>, required: true },
-//   formValues: { type: Object as PropType<FormValues>, required: true },
+//   field: { type: Array as Vue.PropType<FormField>, required: true },
+//   formValues: { type: Object as Vue.PropType<FormValues>, required: true },
 // };
 
 export const FIELD_PROPS2 = {
   // @ts-ignore
-  field: { type: Array as PropType<FormField>, required: true },
-  context: { type: Object as PropType<FormGroupContext>, required: true },
-  formValues: { type: Object as PropType<FormValues>, required: true },
+  field: { type: Array as Vue.PropType<FormField>, required: true },
+  context: { type: Object as Vue.PropType<FormGroupContext>, required: true },
+  formValues: { type: Object as Vue.PropType<FormValues>, required: true },
 };
 
 export function prefilledFormValues (fields: FormField[], record: any = {}): FormValues {

@@ -19,7 +19,7 @@ export default Vue.extend({
   render (createElement, { props }): VNode {
     const { name, context, values } = props;
     const field = context.field(name);
-    const control = getControl(field);
+    const control = field && getControl(field);
     if (control === null) return createElement(VoidControl);
     return createElement(
       control,

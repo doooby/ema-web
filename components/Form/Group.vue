@@ -1,7 +1,7 @@
 <template>
   <div :class="className">
     <slot
-      v-if="$slots.layout"
+      v-if="$scopedSlots.layout"
       name="layout"
       :context="groupContext"
       :values="value"
@@ -39,7 +39,7 @@ export default Vue.extend({
       );
     },
     fieldsIndex (): { [field: string]: undefined | FormField } {
-      const index = {};
+      const index = {} as any;
       for (const field of this.fields) index[field[0]] = field;
       return index;
     },

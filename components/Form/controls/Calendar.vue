@@ -1,10 +1,10 @@
 <template>
   <b-form-group
-    :label="label"
-    :label-for="domId"
+    :label="labelTranslation"
+    :label-for="domIdBase"
   >
     <b-form-datepicker
-      :id="domId"
+      :id="domIdBase"
       :value="sanitizedValue"
       label-no-date-selected=""
       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
@@ -16,10 +16,27 @@
 <script lang="ts">
 import Vue from 'vue';
 import { parseISO as parseDate } from 'date-fns';
-import { FIELD_PROPS } from '..';
+import { FIELD_PROPS2, FormField, FormValues } from '..';
+import { formatDate } from '~/lib/global_utils';
+import ControlMixin from '../ControlMixin';
 
+export const meta = {
+  name: 'calendar',
+  mapValues (field: FormField, record: any, values: FormValues = {}) {
+    const name = field[0];
+    values[name] = sanitizedDate(record[name]);
+    return values;
+  },
+  mapRecord (field: FormField, values: FormValues, record: any = {}) {
+    const name = field[0];
+    const date = values[name];
+    record[name] = date ? formatDate(date) : '';
+    record[name] = values[name] || '';
+  },
+};
 export default Vue.extend({
-  props: FIELD_PROPS,
+  mixins: [ ControlMixin ],
+  props: FIELD_PROPS2,
   computed: {
     sanitizedValue (): undefined | Date {
       const rawValue = this.formValues[this.field[0]];
@@ -31,7 +48,7 @@ export default Vue.extend({
   methods: {
     onDateChange (rawDate: string) {
       const date = parseDate(rawDate);
-      this.$emit('change', isNaN(date as any) ? undefined : date);
+      this.context.onChange({ [this.field[0]]: isNaN(date as any) ? undefined : date });
     },
   },
 });

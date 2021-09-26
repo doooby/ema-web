@@ -11,7 +11,7 @@
 import Vue from 'vue';
 import NewPage from '~/components/database/NewPage.vue';
 import { student } from '~/lib/records';
-import AssigntToCourseControl from '~/components/database/pages/students/AssigntToCourseControl.vue';
+// import AssigntToCourseControl from '~/components/database/pages/students/AssigntToCourseControl.vue';
 
 export default Vue.extend({
   components: { NewPage },
@@ -20,7 +20,7 @@ export default Vue.extend({
     fields () {
       return [
         ...student.entityControls(this),
-        [ 'assign_to_course', 'custom', { control: AssigntToCourseControl } ],
+        // [ 'assign_to_course', 'custom', { control: AssigntToCourseControl } ],
       ];
     },
   },

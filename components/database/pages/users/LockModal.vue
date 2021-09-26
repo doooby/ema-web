@@ -34,7 +34,7 @@ import Vue from 'vue';
 export default Vue.extend({
   props: {
     value: { type: Boolean, required: true },
-    record: { type: Object as any, required: true },
+    record: { type: Object as Vue.PropType<any>, required: true },
   },
   data () {
     return {

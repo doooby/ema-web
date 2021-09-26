@@ -17,10 +17,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { BIconSearch } from 'bootstrap-vue';
-import { FormField, FormValues, View as FormView } from '~/components/Form';
+import { FormField, FormValues } from '~/components/Form';
 
 export default Vue.extend({
-  components: { BIconSearch, FormView },
+  components: { BIconSearch },
   props: {
     fields: { type: Array as PropType<FormField[]>, required: true },
   },

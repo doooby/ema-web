@@ -1,7 +1,7 @@
 <template>
   <b-form-group
-    :label="label"
-    :label-for="domId"
+    :label="labelTranslation"
+    :label-for="domIdBase"
   >
     <div class="d-flex" @click="onChevronClick">
       <div class="flex-fill text-truncate association--text">
@@ -11,11 +11,12 @@
         <b-icon icon="chevron-down" />
       </b-button>
     </div>
-    <b-modal v-model="modalShown" centered hide-footer :title="label">
+    <b-modal v-model="modalShown" centered hide-footer :title="labelTranslation">
       <b-list-group>
         <b-list-group-item
           v-for="option in options"
           :key="option.value"
+          :active="selected === option"
           button
           @click="onItemSelected(option)"
         >
@@ -31,36 +32,54 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FIELD_PROPS } from '..';
+import { FIELD_PROPS2, FormField, FormValues } from '..';
+import ControlMixin from '../ControlMixin';
+
+type Option = { value: string, caption: string };
+
+export const meta = {
+  name: 'list',
+  mapValues (field: FormField, record: any, values: FormValues = {}) {
+    const name = field[0];
+    values[name] = record[name] ?? undefined;
+    return values;
+  },
+  mapRecord (field: FormField, values: FormValues, record: any = {}) {
+    const name = field[0];
+    const value = values[name];
+    record[name] = value === undefined ? '' : value;
+  },
+};
 
 export default Vue.extend({
-  props: FIELD_PROPS,
+  mixins: [ ControlMixin ],
+  props: FIELD_PROPS2,
   data () {
     return {
       modalShown: false,
     };
   },
   computed: {
-    valueText (): string {
+    selected (): Option {
       if (!this.options) return '';
       const value = this.formValues[this.field[0]];
       const option = value && this.options.find(option => option.value === value);
-      if (option) {
-        return option.caption;
-      }
-      return '';
+      return option || undefined;
     },
-    options (): Array<{ value: string, caption: string }> {
-      return (this.field[2] as any)?.options || [];
+    valueText (): string {
+      return this.selected?.caption ?? '';
+    },
+    options (): Array<Option> {
+      return (this.field[2] as any)?.options ?? [];
     },
   },
   methods: {
     onChevronClick () {
       this.modalShown = true;
     },
-    onItemSelected (option: any) {
+    onItemSelected (option: Option) {
       this.modalShown = false;
-      this.$emit('change', option.value);
+      this.context.onChange({ [this.field[0]]: option.value });
     },
   },
 });

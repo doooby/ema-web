@@ -1,6 +1,6 @@
 <template>
   <b-form-group
-    :label="label"
+    :label="labelTranslation"
   >
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center">
@@ -47,16 +47,34 @@
 import Vue from 'vue';
 import { times, reverse, padStart } from 'lodash';
 import { parseISO as parseDate } from 'date-fns';
-import { FIELD_PROPS } from '..';
+import { FIELD_PROPS2, FormField, FormValues } from '..';
 import { BIconX } from 'bootstrap-vue';
+import ControlMixin from '../ControlMixin';
+import { formatDate } from '~/lib/global_utils';
 
 const DAY_OPTIONS = times(31, val => val + 1);
 const MONTHS_OPTIONS = times(12, val => val + 1);
 const YEARS_OPTIONS = reverse(times(50, val => 2030 - val));
 
+export const meta = {
+  name: 'date',
+  mapValues (field: FormField, record: any, values: FormValues = {}) {
+    const name = field[0];
+    values[name] = sanitizedDate(record[name]);
+    return values;
+  },
+  mapRecord (field: FormField, values: FormValues, record: any = {}) {
+    const name = field[0];
+    const date = values[name];
+    record[name] = date ? formatDate(date) : '';
+    record[name] = values[name] || '';
+  },
+};
+
 export default Vue.extend({
   components: { BIconX },
-  props: FIELD_PROPS,
+  mixins: [ ControlMixin ],
+  props: FIELD_PROPS2,
   data () {
     const date = sanitizedDate(this.formValues[this.field[0]]);
     return {
@@ -104,7 +122,6 @@ export default Vue.extend({
   methods: {
     onDayChanged (value: any) {
       this.day = value;
-      // console.log('fuuu', this.day);
       const date = buildDate(this.year, this.month, value);
       if (date) this.onChange(date);
     },
@@ -119,7 +136,7 @@ export default Vue.extend({
       if (date) this.onChange(date);
     },
     onChange (date: undefined | Date): void {
-      this.$emit('change', date);
+      this.context.onChange({ [this.field[0]]: date });
     },
     onClear (): void {
       this.day = null;

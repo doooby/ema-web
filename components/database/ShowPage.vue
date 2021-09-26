@@ -62,9 +62,10 @@ export default Vue.extend({
     },
   },
   data () {
+    const anyThis = this as any;
     return {
       getQueryState: this.$api.newQueryState(),
-      reloadRecord: () => this.getQuery(),
+      reloadRecord: () => anyThis.getQuery(),
     };
   },
   computed: {

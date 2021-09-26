@@ -36,7 +36,7 @@ export const meta = {
   name: 'text',
   mapValues (field: FormField, record: any, values: FormValues = {}) {
     const name = field[0];
-    values[name] = record[name];
+    values[name] = record[name] ?? undefined;
     return values;
   },
   mapRecord (field: FormField, values: FormValues, record: any = {}) {
