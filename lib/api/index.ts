@@ -36,14 +36,3 @@ export interface RequestResponse {
   message?: string;
   payload?: any;
 }
-
-// export async function query <V> (
-//   options: FetchOptions & {
-//     path: string,
-//     request: ApiRequest,
-//     mapper: (payload: any) => V,
-//   },
-// ): Promise<null | V> {
-//   const response = await fetch(options.path, options);
-//   return processResponse(options.request, response, options.mapper);
-// }

@@ -25,8 +25,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    onUpdated (recordId: Number) {
-      this.$router.push({ path: `/database/users/${recordId}` });
+    onUpdated (record: any) {
+      this.$router.push({ path: `/database/users/${record.id}` });
     },
   },
 });

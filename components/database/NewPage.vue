@@ -20,14 +20,14 @@
       <div class="row justify-content-md-center">
         <div class="col-md-8 col-lg-4 text-right">
           <span v-if="createQueryState.running">
-            processing...
+            {{ $t('db.shared.processing') }}
           </span>
           <b-button
             variant="success"
             :disabled="createQueryState.running"
             @click="save"
           >
-            Save
+            {{ $t('db.shared.save') }}
           </b-button>
         </div>
       </div>
