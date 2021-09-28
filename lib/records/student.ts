@@ -1,4 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
+import * as dbFields from '~/components/database/controls';
 
 export interface Student {
   id: number;
@@ -158,11 +159,9 @@ export const student = {
 
   entityControls (context: any): any[] {
     return [
-      [ 'country', 'associatedRecord', { entity: 'countries' } ],
-      [ 'first_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
-      [ 'last_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
-      [ 'first_name', 'text' ],
-      [ 'last_name', 'text' ],
+      [ 'country', dbFields.AssociatedRecord, { entity: 'countries' } ],
+      [ 'first_name', dbFields.Name ],
+      [ 'last_name', dbFields.Name ],
       [ 'born_on', 'date' ],
       [ 'gender', 'list', { options: student.genderOptions } ],
       [ 'nationality', 'text' ],
@@ -173,18 +172,12 @@ export const student = {
       [ 'distance_school_km', 'list', { options: student.distanceToSchool } ],
       [ 'distance_school_time', 'text', { rightLabel: () => context.$t('misc.time.min') } ],
       [ 'transportation', 'list', { options: student.typeOfTransportationOptions } ],
-      [ 'mother_first_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
-      [ 'mother_last_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
-      [ 'mother_first_name', 'text' ],
-      [ 'mother_last_name', 'text' ],
-      [ 'father_first_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
-      [ 'father_last_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
-      [ 'father_first_name', 'text' ],
-      [ 'father_last_name', 'text' ],
-      [ 'caregiver_first_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
-      [ 'caregiver_last_name_en', 'text', { leftLabel: () => context.$t('misc.language.en') } ],
-      [ 'caregiver_first_name', 'text' ],
-      [ 'caregiver_last_name', 'text' ],
+      [ 'mother_first_name', dbFields.Name ],
+      [ 'mother_last_name', dbFields.Name ],
+      [ 'father_first_name', dbFields.Name ],
+      [ 'father_last_name', dbFields.Name ],
+      [ 'caregiver_first_name', dbFields.Name ],
+      [ 'caregiver_last_name', dbFields.Name ],
       [ 'caregiver_relation', 'list', { options: student.caregiverRelationOption } ],
       [ 'caregiver_id', 'text' ],
       [ 'caregiver_gender', 'list', { options: student.genderOptions } ],

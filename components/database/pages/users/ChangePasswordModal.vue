@@ -6,21 +6,25 @@
     @hidden="onHidden"
     @ok="onSubmit"
   >
-    <div v-if="value">
-      <b-form-group
-        label="password"
-        label-for="password-new"
-      >
-        <b-form-input
-          id="password-new"
-          v-model="form.password"
-          type="password"
-        />
-      </b-form-group>
-      <b-alert :show="form.error !== null" variant="danger" class="emt-4">
-        {{ form.error }}
-      </b-alert>
-    </div>
+    <b-form-group
+      v-if="value"
+      label="password"
+      label-for="password-new"
+    >
+      <b-form-input
+        id="password-new"
+        v-model="form.password"
+        type="password"
+      />
+    </b-form-group>
+    <b-alert
+      v-if="form.error !== null"
+      show
+      variant="danger"
+      class="emt-4"
+    >
+      {{ form.error }}
+    </b-alert>
   </b-modal>
 </template>
 

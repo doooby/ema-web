@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
 import { BIconThreeDotsVertical, BIconPencil } from 'bootstrap-vue';
 
 interface Action {
@@ -45,9 +45,9 @@ export default Vue.extend({
   components: { BIconThreeDotsVertical, BIconPencil },
   props: {
     entity: { type: String, required: true },
-    record: { type: Object as PropType<any>, required: true },
+    record: { type: Object as Vue.PropType<any>, required: true },
     edit: { type: Boolean, default: false },
-    actions: { type: Array as PropType<Action[]>, default: [] },
+    actions: { type: Array as Vue.PropType<Action[]>, default: () => [] },
   },
 });
 </script>

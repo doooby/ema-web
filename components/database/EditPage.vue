@@ -2,30 +2,41 @@
   <div class="page-content">
     <div class="container">
       <div class="row justify-content-md-center">
-        <h2 class="col-md-8 col-lg-4">
+        <h2 class="col-md-8 col-lg-6">
           {{ title }}
         </h2>
       </div>
       <div v-if="!record && !fetchQueryState.fail" class="row justify-content-md-center">
-        <div class="col-md-8 col-lg-4">
+        <div class="col-md-8 col-lg-6">
           <b-alert show variant="info">
             {{ $t('db.shared.loading') }}
           </b-alert>
         </div>
       </div>
-      <div class="row justify-content-md-center">
+
+      <form-group
+        v-if="$scopedSlots.layout"
+        v-model="formValues"
+        class="row justify-content-md-center"
+        :fields="formFields"
+      >
+        <template #layout="{ context, values }">
+          <slot name="layout" :context="context" :values="values" />
+        </template>
+      </form-group>
+      <div
+        v-else
+        class="row justify-content-md-center"
+      >
         <form-group
           v-model="formValues"
-          :class="$scopedSlots.layout ? '' : 'col-md-8 col-lg-4'"
+          class="col-md-8 col-lg-6"
           :fields="formFields"
-        >
-          <template v-if="$scopedSlots.layout" #layout="{ context, values }">
-            <slot name="layout" :context="context" :values="values" />
-          </template>
-        </form-group>
+        />
       </div>
+
       <div class="row justify-content-md-center">
-        <div class="col-md-8 col-lg-4 text-right">
+        <div class="col-md-8 col-lg-6 text-right">
           <span v-if="saveQueryState.running">
             {{ $t('db.shared.processing') }}
           </span>
@@ -39,7 +50,7 @@
         </div>
       </div>
       <div class="row justify-content-md-center">
-        <div class="col-md-8 col-lg-4">
+        <div class="col-md-8 col-lg-6">
           <record-errors :errors="errors" />
         </div>
       </div>

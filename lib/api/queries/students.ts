@@ -55,23 +55,15 @@ function mapStudent (value: any, associations?: StudentAssociations): Student {
 
 const mapAssociations = mappers.createAssociationsMapper<StudentAssociations>('country');
 
-export function search (params: Params) {
+export function index (params: Params) {
   return {
-    path: '/students/search',
+    path: '/students',
     params,
     mapper: (payload: any) => mappers.paginatedRecords(payload, mapStudent, mapAssociations),
   };
 }
 
-export function searchAssociated (params?: Params) {
-  return {
-    path: '/students/search?assoc=1',
-    params,
-    mapper: (payload: any) => mappers.associatedRecords<Student>(payload),
-  };
-}
-
-export function get (studentId: number) {
+export function show (studentId: number) {
   return {
     path: `/students/${studentId}`,
     mapper: (payload: any) => record(payload, mapStudent, mapAssociations),

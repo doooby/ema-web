@@ -3,36 +3,39 @@
     :label="labelTranslation"
     :label-for="domIdBase"
   >
-    <div class="d-flex" @click="onChevronClick">
+    <div class="d-flex">
       <div class="flex-fill text-truncate association--text">
         {{ valueText }}
       </div>
-      <b-button variant="secondary">
+      <b-button v-if="optionsInModal" @click="onChevronClick">
         <b-icon icon="chevron-down" />
       </b-button>
     </div>
     <b-modal
+      v-if="optionsInModal"
       v-model="modalShown"
       centered
       hide-footer
       :title="labelTranslation"
     >
-      <div v-if="modalShown">
-        <b-list-group>
-          <b-list-group-item
-            v-for="option in options"
-            :key="option.value"
-            :active="selected === option"
-            button
-            @click="onItemSelected(option)"
-          >
-            {{ option.caption }}
-          </b-list-group-item>
-        </b-list-group>
-        <b-alert variant="secondary" :show="options === null || options.length === 0">
-          empty
-        </b-alert>
-      </div>
+      <b-list-group v-if="modalShown">
+        <b-list-group-item
+          v-for="option in options"
+          :key="option.value"
+          :active="selected === option"
+          button
+          @click="onItemSelected(option)"
+        >
+          {{ option.caption }}
+        </b-list-group-item>
+      </b-list-group>
+      <b-alert
+        v-if="options === null || options.length === 0"
+        show
+        variant="secondary"
+      >
+        empty
+      </b-alert>
     </b-modal>
   </b-form-group>
 </template>
@@ -70,6 +73,10 @@ export default Vue.extend({
     };
   },
   computed: {
+    optionsInModal (): boolean {
+      // return !!this.field.options.modal;
+      return true;
+    },
     selected (): undefined | Option {
       if (!this.options) return undefined;
       const value = this.formValues[this.field.name];
