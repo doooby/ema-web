@@ -13,7 +13,7 @@
         :id="domIdBase"
         type="text"
         class="form-control"
-        :value="value"
+        :value="toInputValue(value)"
         autocomplete="off"
         @input="onInput"
         @blur="onBlur"
@@ -39,7 +39,7 @@ export const type: Omit<FormFieldType, 'control'> = {
     values[name] = sanitizeValue(record[name]);
     return values;
   },
-  mapToRecord ({ name }: FormField, values: FormValues, record: any = {}) {
+  mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
     record[name] = values[name] || '';
     return record;
   },
@@ -58,6 +58,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    formValue (): undefined | number {
+      return sanitizeValue(this.formValues[this.field.name]);
+    },
     leftLabelText (): undefined | string {
       const leftLabel = this.field.options.leftLabel;
       if (!leftLabel) return undefined;
@@ -72,20 +75,19 @@ export default Vue.extend({
     },
   },
   watch: {
-    formValues (newValues) {
-      this.value = sanitizeValue(newValues[this.field.name]);
+    formValue (newValue) {
+      this.value = newValue;
     },
   },
   methods: {
+    toInputValue (value: undefined | number): string {
+      return value === undefined ? '' : String(value);
+    },
     onInput (event: {target: HTMLInputElement}): void {
-      const { target } = event;
-      if (target.value === '') {
-        this.value = undefined;
-        return;
-      }
-
-      const newValue = sanitizeValue(target.value);
-      if (newValue === undefined && this.value !== undefined) return;
+      let newValue: any = event.target.value;
+      newValue = newValue.replace(/[^0-9]/g, '');
+      newValue = sanitizeValue(newValue);
+      event.target.value = this.toInputValue(newValue);
       this.value = newValue;
     },
     onBlur (): void {

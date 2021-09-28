@@ -23,7 +23,7 @@ export interface FormFieldType {
   name: string;
   control: any;
   mapToValues(field: FormField, record: any, values: FormValues): FormValues;
-  mapToRecord(field: FormField, values: FormValues, record: any): any;
+  mapToRecordParams(field: FormField, values: FormValues, record: any): any;
 }
 
 export interface FormGroupContext {
@@ -58,17 +58,13 @@ export function prefilledFormValues (fields: FormField[], record: any = {}): For
   for (const field of fields) {
     field.type.mapToValues(field, record, values);
   }
-  return changedFormValues(values);
-}
-
-export function changedFormValues (values: FormValues): FormValues {
-  return Object.freeze(values);
+  return values;
 }
 
 export function formToRecordParams (fields: FormField[], values: FormValues): FormValues {
   const params = {} as FormValues;
   for (const field of fields) {
-    field.type.mapToRecord(field, values, params);
+    field.type.mapToRecordParams(field, values, params);
   }
   return params;
 }

@@ -20,13 +20,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import classNames from 'classnames';
-import { buildFormFields, changedFormValues, FormField, FormFieldDefinition, FormGroupContext, FormValues } from '.';
+import { buildFormFields, FormField, FormFieldDefinition, FormGroupContext, FormValues } from '.';
 import FormFieldComponent from './Field';
 
 export default Vue.extend({
   components: { FormField: FormFieldComponent },
   props: {
-    value: { type: Object as Vue.PropType<FormValues>, default: () => Object.freeze({}) },
+    value: { type: Object as Vue.PropType<FormValues>, default: () => ({}) },
     fields: { type: Array as Vue.PropType<FormField[]>, default: undefined },
     fieldsDefinitions: { type: Array as Vue.PropType<FormFieldDefinition[]>, default: undefined },
     namePrefix: { type: String, default: '' },
@@ -59,7 +59,21 @@ export default Vue.extend({
           return field;
         },
         onChange: (changes: FormValues) => {
-          this.$emit('input', changedFormValues({ ...this.value, ...changes }));
+          const values = this.value;
+          let newObject = false;
+          let changed = false;
+
+          for (const [ property, value ] of Object.entries(changes)) {
+            if (!Object.prototype.hasOwnProperty.call(values, property)) newObject = true;
+            else if (values[property] === value) continue;
+            values[property] = value;
+            changed = true;
+          }
+
+          if (changed) {
+            this.$emit('input', newObject ? { ...values } : values);
+            this.$emit('change');
+          }
         },
       };
     },

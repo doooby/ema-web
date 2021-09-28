@@ -39,7 +39,7 @@ export default Vue.extend({
     return {
       fetchQueryState: this.$api.newQueryState<any>(),
       searchFields: [
-        [ 'name', 'controlledText', { leftLabel: '🔍' } ],
+        [ 'name', 'text', { leftLabel: '🔍', interactive: true } ],
       ],
     };
   },

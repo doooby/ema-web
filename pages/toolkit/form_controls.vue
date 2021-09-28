@@ -3,6 +3,7 @@
     v-model="formValues"
     class="container"
     :fields-definitions="formFields"
+    @change="onChange"
   >
     <template #layout="{ context, values }">
       <div class="row">
@@ -20,19 +21,20 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-2"></div>
+        <div class="col-lg-2" />
         <div class="col-md-6 col-lg-4">
           <form-field name="opts_text_with_left_side" :context="context" :values="values" />
           <form-field name="opts_text_with_right_side" :context="context" :values="values" />
           <form-field name="opts_integer_with_left_side" :context="context" :values="values" />
           <form-field name="opts_integer_with_right_side" :context="context" :values="values" />
+          <form-field name="more_text_interactive" :context="context" :values="values" />
           <form-field name="more_text_multiline" :context="context" :values="values" />
           <form-field name="more_association_country" :context="context" :values="values" />
         </div>
         <div class="col-md-6 col-lg-4">
           col 2
         </div>
-        <div class="col-lg-2"></div>
+        <div class="col-lg-2" />
       </div>
     </template>
   </form-group>
@@ -49,10 +51,10 @@ const LIST_OPTIONS = [
 export default Vue.extend({
   data () {
     return {
-      formValues: Object.freeze({
+      formValues: {
         basic_text: 'some text',
         basic_list: 'opt2',
-      }),
+      },
       formFields: [
         [ 'basic_text', 'text' ],
         [ 'basic_list', 'list', { options: LIST_OPTIONS } ],
@@ -64,6 +66,7 @@ export default Vue.extend({
         [ 'opts_integer_with_left_side', 'integer', { leftLabel: '$' } ],
         [ 'opts_integer_with_right_side', 'integer', { rightLabel: 'Kč' } ],
 
+        [ 'more_text_interactive', 'text', { interactive: true } ],
         [ 'more_text_multiline', 'textMultiline' ],
         [ 'more_association_country', 'associatedRecord', { entity: 'countries' } ],
         // [ 'opts_date_deletable', 'date', { deletable: true } ],
@@ -71,9 +74,9 @@ export default Vue.extend({
       ],
     };
   },
-  watch: {
-    formValues (newValue) {
-      console.log(newValue);
+  methods: {
+    onChange () {
+      console.log({ ...this.formValues });
     },
   },
 });

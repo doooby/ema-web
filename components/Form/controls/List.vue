@@ -50,7 +50,7 @@ export const type: Omit<FormFieldType, 'control'> = {
     values[name] = record[name] ?? undefined;
     return values;
   },
-  mapToRecord ({ name }: FormField, values: FormValues, record: any = {}) {
+  mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
     const value = values[name];
     record[name] = value === undefined ? '' : value;
     return record;

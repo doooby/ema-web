@@ -25,7 +25,7 @@ export const type: Omit<FormFieldType, 'control'> = {
     values[name] = utils.sanitizedDate(record[name]);
     return values;
   },
-  mapToRecord ({ name }: FormField, values: FormValues, record: any = {}) {
+  mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
     const date = values[name];
     record[name] = date ? utils.formatDate(date) : '';
     record[name] = values[name] || '';

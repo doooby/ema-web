@@ -15,7 +15,7 @@
         class="form-control"
         :value="sanitizedValue"
         autocomplete="off"
-        @blur="onBlur"
+        v-on="interactive ? { input: onInput} : { blur: onInput }"
         @keypress.ctrl.enter="onCommit"
       >
       <div v-if="rightLabelText" class="input-group-append">
@@ -38,7 +38,7 @@ export const type: Omit<FormFieldType, 'control'> = {
     values[name] = record[name] ?? undefined;
     return values;
   },
-  mapToRecord ({ name }: FormField, values: FormValues, record: any = {}) {
+  mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
     record[name] = values[name] || '';
     return record;
   },
@@ -70,8 +70,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    onBlur (event: {target: HTMLInputElement}) {
-      this.context.onChange({ [this.field.name]: event.target.value });
+    onInput (event: {target: HTMLInputElement}) {
+      (this as any).debouncedOnChange({ [this.field.name]: event.target.value });
     },
     onCommit () {},
   },

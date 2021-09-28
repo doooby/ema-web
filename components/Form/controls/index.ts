@@ -1,6 +1,5 @@
 import AssociatedRecordControl, { type as AssociatedRecordControlType } from './AssociatedRecord.vue';
 import CalendarControl, { type as CalendarControlType } from './Calendar.vue';
-import ControlledTextControl, { type as ControlledTextControlType } from './ControlledText.vue';
 import DateControl, { type as DateControlType } from './Date.vue';
 import IntegerControl, { type as IntegerControlType } from './Integer.vue';
 import ListControl, { type as ListControlType } from './List.vue';
@@ -25,7 +24,6 @@ function add (type: any, control: any) {
 
 add(AssociatedRecordControlType, AssociatedRecordControl);
 add(CalendarControlType, CalendarControl);
-add(ControlledTextControlType, ControlledTextControl);
 add(DateControlType, DateControl);
 add(IntegerControlType, IntegerControl);
 add(ListControlType, ListControl);
