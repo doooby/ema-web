@@ -1,4 +1,3 @@
-import View from './View.vue';
 import { controlsIndex, voidFieldType } from './controls';
 
 interface FieldOptions {
@@ -20,8 +19,8 @@ export interface FormField {
 }
 
 export interface FormFieldType {
-  name: string;
-  control: any;
+  name?: string;
+  control?: any;
   mapToValues(field: FormField, record: any, values: FormValues): FormValues;
   mapToRecordParams(field: FormField, values: FormValues, record: any): any;
 }
@@ -35,7 +34,13 @@ export interface FormGroupContext {
 
 function getControlType (type: string | FormFieldType): FormFieldType {
   const typeOfType = typeof type;
-  if (typeOfType === 'object') return type as FormFieldType;
+  if (typeOfType === 'object') {
+    const customType = type as FormFieldType;
+    if (!customType.control) {
+      utils.warn('Form controls - custom type is missing control component', customType);
+    }
+    return customType;
+  }
   if (typeOfType === 'string') {
     const knownType = controlsIndex[type as string];
     if (knownType) return knownType;
@@ -68,7 +73,3 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
   }
   return params;
 }
-
-export {
-  View,
-};

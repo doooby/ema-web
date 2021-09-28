@@ -1,0 +1,47 @@
+<template>
+  <form-group
+    v-model="formValues"
+    class="container"
+    :fields-definitions="formFields"
+    @change="onChange"
+  >
+    <template #layout="{ context, values }">
+      <div class="row">
+        <div class="col-lg-2" />
+        <div class="col-md-6 col-lg-4">
+          <form-field name="association_country" :context="context" :values="values" />
+          <form-field name="name" :context="context" :values="values" />
+        </div>
+        <div class="col-md-6 col-lg-4">
+          col 2
+        </div>
+        <div class="col-lg-2" />
+      </div>
+    </template>
+  </form-group>
+</template>
+
+<script lang="ts">
+import Vue from 'vue';
+import * as dbFields from '~/components/database/controls';
+
+export default Vue.extend({
+  data () {
+    return {
+      formValues: {
+        basic_text: 'some text',
+        basic_list: 'opt2',
+      },
+      formFields: [
+        [ 'association_country', dbFields.AssociatedRecord, { entity: 'countries' } ],
+        [ 'name', dbFields.Name ],
+      ],
+    };
+  },
+  methods: {
+    onChange () {
+      console.log({ ...this.formValues });
+    },
+  },
+});
+</script>

@@ -9,7 +9,7 @@ import Vue from 'vue';
 import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
 import ControlMixin from '../ControlMixin';
 
-export const type: Omit<FormFieldType, 'control'> = {
+export const type: FormFieldType = {
   name: 'void',
   mapToValues (_field: FormField, _record: any, values: FormValues = {}) {
     return values;

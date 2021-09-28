@@ -15,7 +15,7 @@
       hide-footer
       :title="labelTranslation"
     >
-      <associated-record-search
+      <search-modal
         v-if="modalShown"
         :fetch-query="fetchQuery"
         :selected-id="selectedRecord && selectedRecord.id"
@@ -27,13 +27,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
-import ControlMixin from '../ControlMixin';
+import { FormFieldType, FormField, FormValues, FormGroupContext } from '~/components/Form';
+import ControlMixin from '~/components/Form/ControlMixin';
 
-import AssociatedRecordSearch from './AssociatedRecord/AssociatedRecordSearch.vue';
+import SearchModal from './SearchModal.vue';
 
-export const type: Omit<FormFieldType, 'control'> = {
-  name: 'associatedRecord',
+export const type: FormFieldType = {
   mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
     values[name] = record[name] ?? undefined;
     return values;
@@ -45,7 +44,7 @@ export const type: Omit<FormFieldType, 'control'> = {
 };
 
 export default Vue.extend({
-  components: { AssociatedRecordSearch },
+  components: { SearchModal },
   mixins: [ ControlMixin ],
   props: {
     field: { type: Object as Vue.PropType<FormField>, required: true },

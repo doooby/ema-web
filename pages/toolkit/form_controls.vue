@@ -29,7 +29,6 @@
           <form-field name="opts_integer_with_right_side" :context="context" :values="values" />
           <form-field name="more_text_interactive" :context="context" :values="values" />
           <form-field name="more_text_multiline" :context="context" :values="values" />
-          <form-field name="more_association_country" :context="context" :values="values" />
         </div>
         <div class="col-md-6 col-lg-4">
           col 2
@@ -68,7 +67,6 @@ export default Vue.extend({
 
         [ 'more_text_interactive', 'text', { interactive: true } ],
         [ 'more_text_multiline', 'textMultiline' ],
-        [ 'more_association_country', 'associatedRecord', { entity: 'countries' } ],
         // [ 'opts_date_deletable', 'date', { deletable: true } ],
         // [ 'opts_calendar_deletable', 'calendar', { deletable: true } ],
       ],

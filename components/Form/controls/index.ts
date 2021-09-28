@@ -1,4 +1,3 @@
-import AssociatedRecordControl, { type as AssociatedRecordControlType } from './AssociatedRecord.vue';
 import CalendarControl, { type as CalendarControlType } from './Calendar.vue';
 import DateControl, { type as DateControlType } from './Date.vue';
 import IntegerControl, { type as IntegerControlType } from './Integer.vue';
@@ -16,13 +15,15 @@ export const voidFieldType = {
 };
 
 function add (type: any, control: any) {
+  if (!type.name) throw new Error(`missing type.name: ${type.name}`);
+  if (controlsIndex[type.name]) throw new Error(`duplicate type.name: ${type.name}`);
   controlsIndex[type.name] = {
     ...type,
     control,
   };
 }
 
-add(AssociatedRecordControlType, AssociatedRecordControl);
+// add(AssociatedRecordControlType, AssociatedRecordControl);
 add(CalendarControlType, CalendarControl);
 add(DateControlType, DateControl);
 add(IntegerControlType, IntegerControl);

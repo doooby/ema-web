@@ -44,7 +44,7 @@ import ControlMixin from '../ControlMixin';
 
 type Option = { value: string, caption: string };
 
-export const type: Omit<FormFieldType, 'control'> = {
+export const type: FormFieldType = {
   name: 'list',
   mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
     values[name] = record[name] ?? undefined;

@@ -19,7 +19,7 @@ import { parseISO as parseDate } from 'date-fns';
 import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
 import ControlMixin from '../ControlMixin';
 
-export const type: Omit<FormFieldType, 'control'> = {
+export const type: FormFieldType = {
   name: 'calendar',
   mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
     values[name] = utils.sanitizedDate(record[name]);

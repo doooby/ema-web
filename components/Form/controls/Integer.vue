@@ -33,7 +33,7 @@ import Vue from 'vue';
 import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
 import ControlMixin from '../ControlMixin';
 
-export const type: Omit<FormFieldType, 'control'> = {
+export const type: FormFieldType = {
   name: 'integer',
   mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
     values[name] = sanitizeValue(record[name]);
