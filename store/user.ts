@@ -7,7 +7,9 @@ import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
 })
 export default class ApiModule extends VuexModule {
   currentUser: null | any = null;
+
   loginModalShown: boolean = false;
+  languageModalShown: boolean = false;
 
   @Mutation
   setCurrentUser (user: null | any) {
@@ -27,5 +29,15 @@ export default class ApiModule extends VuexModule {
   @Mutation
   hideLoginModal () {
     this.loginModalShown = false;
+  }
+
+  @Mutation
+  showLanguageModal () {
+    this.languageModalShown = true;
+  }
+
+  @Mutation
+  hideLanguageModal () {
+    this.languageModalShown = false;
   }
 }

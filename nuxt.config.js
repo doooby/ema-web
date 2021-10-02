@@ -67,6 +67,7 @@ export default {
     [ 'nuxt-i18n', {
       locales: [
         { code: 'en', file: 'en.js' },
+        { code: 'cs', file: '_async.js' },
       ],
       defaultLocale: 'en',
       lazy: true,

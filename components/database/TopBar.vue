@@ -30,11 +30,14 @@
           <b-icon-person class="emr-2" />
           {{ $t('db.top_bar.menu.login') }}
         </b-dropdown-item>
-        <b-dropdown-item href="#">
+
+        <b-dropdown-item @click="onShowLanguageModal">
           <b-icon-globe2 class="emr-2" />
           {{ $t('db.top_bar.menu.language') }}
         </b-dropdown-item>
       </b-dropdown>
+      <login-modal />
+      <language-modal />
     </div>
   </div>
 </template>
@@ -42,12 +45,25 @@
 <script lang="ts">
 import Vue from 'vue';
 import { BIconGear, BIconHouseDoorFill, BIconServer, BIconPerson, BIconGlobe2 } from 'bootstrap-vue';
+import LoginModal from '~/components/LoginModal.vue';
+import LanguageModal from '~/components/LanguageModal.vue';
 
 export default Vue.extend({
-  components: { BIconGear, BIconHouseDoorFill, BIconServer, BIconPerson, BIconGlobe2 },
+  components: {
+    BIconGear,
+    BIconHouseDoorFill,
+    BIconServer,
+    BIconPerson,
+    BIconGlobe2,
+    LoginModal,
+    LanguageModal,
+  },
   methods: {
     onShowLoginModal () {
       this.$store.commit('user/showLoginModal');
+    },
+    onShowLanguageModal () {
+      this.$store.commit('user/showLanguageModal');
     },
   },
 });
