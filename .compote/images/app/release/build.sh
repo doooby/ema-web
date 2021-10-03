@@ -1,14 +1,4 @@
 set -e
-yarn install --silent
+
+NODE_ENV=development yarn install --silent
 yarn build
-
-# $1 - dir path
-# $2 - archive path
-function archive_dir {
-  [ -f $2 ] && rm $2
-  tar -zcf $2 $1
-}
-
-echo "packing the build ..."
-archive_dir node_modules tmp/build/node_modules.tar.gz
-archive_dir .nuxt tmp/build/nuxt.tar.gz
