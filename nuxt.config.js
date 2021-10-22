@@ -1,14 +1,12 @@
-const isProduction = process.env.NODE_ENV === 'production';
-
-const serverHostName = process.env.SERVER_HOST_NAME;
-if (isProduction && !serverHostName) {
-  throw new Error('SERVER_HOST_NAME is missing');
+let serverHostName = process.env.SERVER_URL || 'http://localhost:3070';
+if (serverHostName.endsWith('/')) {
+  serverHostName = serverHostName.substring(0, serverHostName.length - 1);
 }
 
 export default {
   server: {
     host: process.env.HOST || 'localhost',
-    port: process.env.PORT || 3070,
+    port: process.env.PORT || 3072,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -27,12 +25,12 @@ export default {
     ],
   },
 
+  router: {
+    base: '/web/',
+  },
+
   publicRuntimeConfig: {
-    apiBaseUrl: (isProduction
-      ? `https://${serverHostName}/web`
-      : 'http://localhost:3071/web'
-      // : 'https://server.ema-monitoring.org/web'
-    ),
+    apiBaseUrl: `${serverHostName}/api/web`,
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
