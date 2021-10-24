@@ -1,23 +1,14 @@
 import { Context } from '@nuxt/types';
-import { Store } from 'vuex';
-import { QueryDefinition, RequestOptions, RequestResponse, RequestState } from '~/lib/api';
+import { QueryDefinition, RequestResponse, RequestState } from '~/lib/api';
 import queries from '~/lib/api/queries';
 import { MappingError } from '~/lib/api/mappers';
 
-import ModifiableRecordsList from '~/lib/api/ModifiableRecordsList';
-
 export class ApiPlugin {
-  baseUrl: string;
   queries = queries;
-  store: Store<any>;
-
-  helpers = {
-    ModifiableRecordsList,
-  };
+  context: Context;
 
   constructor (context: Context) {
-    this.baseUrl = context.$config.apiBaseUrl;
-    this.store = context.store;
+    this.context = context;
   }
 
   newQueryState<V = any> (): RequestState<V> {
@@ -36,13 +27,6 @@ export class ApiPlugin {
     return state;
   }
 
-  async request2<V = unknown> (
-    state: RequestState<V>,
-    definition: undefined | QueryDefinition<V>,
-  ): Promise<null | V> {
-    return await this.request(definition, state);
-  }
-
   async request<V = unknown> (
     definition: undefined | QueryDefinition<V>,
     state: RequestState<V>,
@@ -57,7 +41,7 @@ export class ApiPlugin {
     const { path, params, mapper } = definition;
     state.running = true;
 
-    const response = await this.processRequest(path, { data: params });
+    const response = await this.processRequest(path, params);
     if (!response.ok) {
       state.error = response.error!;
       if (response.message) state.fail = response.message;
@@ -71,6 +55,7 @@ export class ApiPlugin {
       mappingResult = mapper(response.payload);
     } catch (error) {
       if (error instanceof MappingError) error.finalize();
+      else throw error;
       mappingResult = error;
     }
     if (mappingResult instanceof Error) {
@@ -85,23 +70,31 @@ export class ApiPlugin {
     return mappingResult;
   }
 
-  async processRequest (path: string, options?: RequestOptions): Promise<RequestResponse> {
-    const nativeOptions: any = {
+  async processRequest (path: string, postData?: any): Promise<RequestResponse> {
+    const headers: any = {
+      'Content-Type': 'application/json',
+    };
+
+    if (this.context.req) {
+      headers.Cookie = this.context.req.headers.cookie;
+    }
+
+    const options: any = {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      },
-      body: options?.data && JSON.stringify(options.data),
+      headers,
+      body: (postData ? JSON.stringify(postData) : undefined),
     };
 
     try {
-      const rawResponse = await globalThis.fetch(this.baseUrl + path, nativeOptions);
+      const rawResponse = await globalThis.fetch(
+        this.context.$config.apiBaseUrl + path,
+        options,
+      );
       const { ok, message, payload }: RequestResponse = await rawResponse.json();
       if (!ok) {
         if (message === 'authn_fail') {
-          this.store.commit('user/authenticationFail');
+          this.context.store.commit('user/authenticationFail');
         }
 
         return {

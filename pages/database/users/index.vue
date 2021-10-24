@@ -1,6 +1,5 @@
 <template>
   <browse-page
-    entity="users"
     :search-fields="searchFields"
     :table-columns="tableColumns"
   >
@@ -18,10 +17,11 @@
 import Vue from 'vue';
 import BrowsePage from '~/components/database/BrowsePage.vue';
 import RecordActionsCell from '~/components/database/RecordActionsCell.vue';
+import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 
 export default Vue.extend({
   components: { RecordActionsCell, BrowsePage },
-  layout: 'database',
+  mixins: [ DatabasePageMixin ],
   data () {
     return {
       searchFields: [

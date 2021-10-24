@@ -6,7 +6,10 @@
         @search="onSearch"
       />
     </div>
-    <div class="container-fluid emy-4">
+    <div v-if="!pageAllowed" class="container-fluid emy-4">
+      nope
+    </div>
+    <div v-else class="container-fluid emy-4">
       <div class="border-primary row no-gutters emb-2">
         <div class="col-xl-4">
           {{ $t('db.records_count') }}: {{ records ? records.total : 0 }}
@@ -48,6 +51,7 @@ import SearchForm from './SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';
 import { notify } from '~/lib/notifier';
 import { PaginatedRecords } from '~/lib/api/mappers';
+import { mapGetters } from 'vuex';
 
 interface RecordActions {
   edit?: boolean;
@@ -56,7 +60,6 @@ interface RecordActions {
 export default Vue.extend({
   components: { SearchForm, DataTableView, RecordsPagination },
   props: {
-    entity: { type: String, required: true },
     searchFields: { type: Array as Vue.PropType<FormField[]>, required: true },
     tableColumns: { type: Array as Vue.PropType<DataTable.Column[]>, required: true },
     recordActions: { type: Object as Vue.PropType<RecordActions>, default: null },
@@ -68,11 +71,16 @@ export default Vue.extend({
     };
   },
   computed: {
+    ...mapGetters({
+      entity: 'dbPage/entity',
+      pageAllowed: 'dbPage/allowed',
+    }),
     searchQueryBuilder () {
-      const entityQueries = (this.$api.queries as any)[this.entity];
+      const entity = this.entity;
+      const entityQueries = (this.$api.queries as any)[entity];
       const queryBuilder = entityQueries?.search || entityQueries?.index;
       if (!queryBuilder) {
-        notify('error', `database.BrowsePage: search/index query is missing for entity ${this.entity}.`);
+        notify('error', `database.BrowsePage: search/index query is missing for entity ${entity}.`);
         return;
       }
       return queryBuilder;
@@ -97,7 +105,7 @@ export default Vue.extend({
     },
   },
   mounted () {
-    this.search();
+    if (this.pageAllowed) this.search();
   },
   methods: {
     onSearch (value: FormValues) {

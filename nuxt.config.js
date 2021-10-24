@@ -1,3 +1,5 @@
+// const isProduction = process.env.NODE_ENV === 'production';
+
 let serverHostName = process.env.SERVER_URL || 'http://localhost:3070';
 if (serverHostName.endsWith('/')) {
   serverHostName = serverHostName.substring(0, serverHostName.length - 1);

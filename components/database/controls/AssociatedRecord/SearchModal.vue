@@ -69,7 +69,10 @@ export default Vue.extend({
     ),
     fetchOptions (params: any = undefined) {
       if (this.fetchQueryState.running) return;
-      this.$api.request2(this.fetchQueryState, this.fetchQuery?.(params));
+      this.$api.request(
+        this.fetchQuery?.(params),
+        this.fetchQueryState,
+      );
     },
   },
 });

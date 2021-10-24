@@ -25,11 +25,6 @@ export interface RequestState <V = unknown> {
   reset(): void;
 }
 
-export interface RequestOptions {
-  headers?: { [header: string]: string };
-  data?: any;
-}
-
 export interface RequestResponse {
   ok: boolean;
   error?: Error;

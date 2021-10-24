@@ -5,7 +5,7 @@ import { Module, VuexModule, Mutation } from 'vuex-module-decorators';
   stateFactory: true,
   namespaced: true,
 })
-export default class ApiModule extends VuexModule {
+export default class UserModule extends VuexModule {
   currentUser: null | any = null;
 
   loginModalShown: boolean = false;

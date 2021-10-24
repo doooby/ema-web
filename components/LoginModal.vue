@@ -73,15 +73,15 @@ export default Vue.extend({
       shown: (state: any) => state.user.loginModalShown,
     }),
   },
-  async mounted () {
-    const result = await this.$api.request(
-      this.$api.queries.session.show(),
-      this.$api.newQueryState(),
-    );
-    if (result) {
-      this.$store.commit('user/setCurrentUser', result);
-    }
-  },
+  // async mounted () {
+  //   const result = await this.$api.request(
+  //     this.$api.queries.session.show(),
+  //     this.$api.newQueryState(),
+  //   );
+  //   if (result) {
+  //     this.$store.commit('user/setCurrentUser', result);
+  //   }
+  // },
   methods: {
     onShow () {
       this.form.login = '';
