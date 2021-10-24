@@ -44,83 +44,81 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { FormValues, FormField } from '~/components/Form';
 import { DataTable, DataTableView } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';
 import { notify } from '~/lib/notifier';
 import { PaginatedRecords } from '~/lib/api/mappers';
-import { mapGetters } from 'vuex';
 
-interface RecordActions {
-  edit?: boolean;
-}
-
-export default Vue.extend({
+@Component({
   components: { SearchForm, DataTableView, RecordsPagination },
-  props: {
-    searchFields: { type: Array as Vue.PropType<FormField[]>, required: true },
-    tableColumns: { type: Array as Vue.PropType<DataTable.Column[]>, required: true },
-    recordActions: { type: Object as Vue.PropType<RecordActions>, default: null },
-  },
-  data () {
-    return {
-      searchValues: {},
-      searchQueryState: this.$api.newQueryState(),
-    };
-  },
-  computed: {
-    ...mapGetters({
-      entity: 'dbPage/entity',
-      pageAllowed: 'dbPage/allowed',
-    }),
-    searchQueryBuilder () {
-      const entity = this.entity;
-      const entityQueries = (this.$api.queries as any)[entity];
-      const queryBuilder = entityQueries?.search || entityQueries?.index;
-      if (!queryBuilder) {
-        notify('error', `database.BrowsePage: search/index query is missing for entity ${entity}.`);
-        return;
-      }
-      return queryBuilder;
-    },
-    records (): null | PaginatedRecords {
-      return this.searchQueryState.value;
-    },
-    columnTemplates (): { [name: string]: any } {
-      const templates = {} as { [name: string]: any };
-      for (const column of this.tableColumns) {
-        if (!column.slot) continue;
-        const slot = this.$scopedSlots[column.slot];
-        if (slot) templates[column.name] = slot;
-      }
-      return templates;
-    },
-  },
-  watch: {
-    entity () {
-      this.searchQueryState.reset();
-      Vue.nextTick(() => this.search());
-    },
-  },
+})
+export default class BrowsePage extends Vue {
+  @Prop({ required: true }) readonly searchFields!: FormField[];
+  @Prop({ required: true }) readonly tableColumns!: DataTable.Column[];
+
+  searchValues = {};
+  searchQueryState = this.$api.newQueryState();
+
   mounted () {
     if (this.pageAllowed) this.search();
-  },
-  methods: {
-    onSearch (value: FormValues) {
-      this.searchValues = value;
-      this.search();
-    },
-    onSelectPage (page: number) {
-      this.search(page);
-    },
-    search (page?: number) {
-      this.$api.request(
-        this.searchQueryBuilder({ ...this.searchValues, page }),
-        this.searchQueryState,
-      );
-    },
-  },
-});
+  }
+
+  get entity (): string {
+    return this.$store.getters['dbPage/entity'];
+  }
+
+  get pageAllowed (): boolean {
+    return this.$store.getters['dbPage/allowed'];
+  }
+
+  get searchQueryBuilder () {
+    const entity = this.entity;
+    const entityQueries = (this.$api.queries as any)[entity];
+    const queryBuilder = entityQueries?.search || entityQueries?.index;
+    if (!queryBuilder) {
+      notify('error', `database.BrowsePage: search/index query is missing for entity ${entity}.`);
+      return;
+    }
+    return queryBuilder;
+  }
+
+  get records (): null | PaginatedRecords {
+    return this.searchQueryState.value;
+  }
+
+  get columnTemplates (): { [name: string]: any } {
+    const templates = {} as { [name: string]: any };
+    for (const column of this.tableColumns) {
+      if (!column.slot) continue;
+      const slot = this.$scopedSlots[column.slot];
+      if (slot) templates[column.name] = slot;
+    }
+    return templates;
+  }
+
+  @Watch('entity')
+  onEntityChanged () {
+    this.searchQueryState.reset();
+    Vue.nextTick(() => this.search());
+  }
+
+  onSearch (value: FormValues) {
+    this.searchValues = value;
+    this.search();
+  }
+
+  onSelectPage (page: number) {
+    this.search(page);
+  }
+
+  search (page?: number) {
+    this.$api.request(
+      this.searchQueryBuilder({ ...this.searchValues, page }),
+      this.searchQueryState,
+    );
+  }
+}
 </script>
