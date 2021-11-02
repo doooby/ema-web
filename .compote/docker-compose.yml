@@ -11,6 +11,6 @@ services:
     command: yarn start
     restart: unless-stopped
     ports:
-      - ${WEB_PORT}:3000
+      - ${APP_SERVICE_PORT}:3000
     volumes:
       - ${STACK_PATH}/tmp:/var/stack_tmp
