@@ -59,108 +59,122 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import { buildFormFields, FormFieldDefinition, formToRecordParams, prefilledFormValues } from '../Form';
 import { RecordChange, RecordError } from '~/lib/api/mappers';
 
-export default Vue.extend({
+@Component({
   components: { RecordErrors },
-  props: {
-    entity: { type: String, required: true },
-    fields: { type: Array as Vue.PropType<FormFieldDefinition[]>, required: true },
-    noDefaultRedirect: { type: Boolean, default: false },
-  },
-  data () {
-    const formFields = buildFormFields(this.fields);
-    return {
-      formFields,
-      formValues: prefilledFormValues(formFields),
-      fetchQueryState: this.$api.newQueryState(),
-      saveQueryState: this.$api.newQueryState<RecordChange>(),
-      errors: null as null | RecordError[],
-    };
-  },
-  computed: {
-    title (): string {
-      return this.$t('db.edit.title', {
-        entity: this.$t(`record.${this.entity}.meta.s`),
-      }) as string;
-    },
-    recordId () {
-      const route = this.$route as any;
-      return route.params.id;
-    },
-    record (): undefined | any {
-      return this.fetchQueryState.value?.record;
-    },
-    fetchQuery (): any {
-      const entity = this.entity;
-      const query = (this.$api.queries as any)[entity]?.show;
-      if (query) return () => query(this.recordId);
-      return function () {
-        utils.raise(new Error(`database.EditPage: fetch query is missing for ${entity}`));
-      };
-    },
-    saveQuery (): any {
-      const entity = this.entity;
-      const query = (this.$api.queries as any)[entity]?.update;
-      if (query) return (params: any) => query(this.recordId, params);
-      return function () {
-        utils.raise(new Error(`database.EditPage: update query is missing for ${entity}`));
-      };
-    },
-  },
-  watch: {
-    entity () { this.reset(); },
-    recordId () { this.reset(); },
-    fields () { this.reset(); },
-    record (newValue: any) {
-      if (newValue) this.formValues = prefilledFormValues(this.formFields, newValue);
-    },
-  },
+})
+export default class EditPage extends Vue {
+  @Prop({ required: true }) readonly entity!: string;
+  @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
+  @Prop() readonly noDefaultRedirect = false;
+
+  formFields = buildFormFields(this.fields);
+  formValues = prefilledFormValues(this.formFields);
+  fetchQueryState = this.$api.newQueryState();
+  saveQueryState = this.$api.newQueryState<RecordChange>();
+  errors = null as null | RecordError[];
+
   mounted () {
     this.fetchRecord();
-  },
-  methods: {
-    reset () {
-      const formFields = buildFormFields(this.fields);
-      this.formFields = formFields;
-      this.formValues = prefilledFormValues(formFields);
-      this.fetchQueryState.reset();
-      this.saveQueryState.reset();
-      this.errors = null;
-      this.fetchRecord();
-    },
-    async fetchRecord () {
-      await this.$api.request(
-        this.fetchQuery(),
-        this.fetchQueryState,
-      );
-    },
-    async save () {
-      if (this.saveQueryState.running) return;
-      this.errors = null;
-      const params = formToRecordParams(this.formFields, this.formValues);
-      const result = await this.$api.request(
-        this.saveQuery(params),
-        this.saveQueryState,
-      );
-      if (result?.success) {
-        this.onUpdated(this.record);
-      } else if (result?.errors) {
-        this.errors = result.errors;
-      } else {
-        this.errors = [ [ 'base', 'unknown fail' ] ];
-      }
-    },
-    onUpdated (record: any) {
-      if (this.noDefaultRedirect) {
-        this.$emit('updated', record);
-      } else {
-        this.$router.push({ path: '/database' });
-      }
-    },
-  },
-});
+  }
+
+  @Watch('entity')
+  onEntityChanged () {
+    this.reset();
+  }
+
+  @Watch('recordId')
+  onRecordIdChanged () {
+    this.reset();
+  }
+
+  @Watch('fields')
+  onFieldsChanged () {
+    this.reset();
+  }
+
+  @Watch('record')
+  onRecordChanged (newValue: any) {
+    if (newValue) this.formValues = prefilledFormValues(this.formFields, newValue);
+  }
+
+  get title (): string {
+    return this.$t('db.edit.title', {
+      entity: this.$t(`record.${this.entity}.meta.s`),
+    }) as string;
+  }
+
+  get recordId () {
+    const route = this.$route as any;
+    return route.params.id;
+  }
+
+  get record (): undefined | any {
+    return this.fetchQueryState.value?.record;
+  }
+
+  get fetchQuery (): any {
+    const entity = this.entity;
+    const query = (this.$api.queries as any)[entity]?.show;
+    if (query) return () => query(this.recordId);
+    return function () {
+      utils.raise(new Error(`database.EditPage: fetch query is missing for ${entity}`));
+    };
+  }
+
+  get saveQuery (): any {
+    const entity = this.entity;
+    const query = (this.$api.queries as any)[entity]?.update;
+    if (query) return (params: any) => query(this.recordId, params);
+    return function () {
+      utils.raise(new Error(`database.EditPage: update query is missing for ${entity}`));
+    };
+  }
+
+  reset () {
+    const formFields = buildFormFields(this.fields);
+    this.formFields = formFields;
+    this.formValues = prefilledFormValues(formFields);
+    this.fetchQueryState.reset();
+    this.saveQueryState.reset();
+    this.errors = null;
+    this.fetchRecord();
+  }
+
+  async fetchRecord () {
+    await this.$api.request(
+      this.fetchQuery(),
+      this.fetchQueryState,
+    );
+  }
+
+  async save () {
+    if (this.saveQueryState.running) return;
+    this.errors = null;
+    const params = formToRecordParams(this.formFields, this.formValues);
+    const result = await this.$api.request(
+      this.saveQuery(params),
+      this.saveQueryState,
+    );
+    if (result?.success) {
+      this.onUpdated(this.record);
+    } else if (result?.errors) {
+      this.errors = result.errors;
+    } else {
+      this.errors = [ [ 'base', 'unknown fail' ] ];
+    }
+  }
+
+  onUpdated (record: any) {
+    if (this.noDefaultRedirect) {
+      this.$emit('updated', record);
+    } else {
+      this.$router.push({ path: '/database' });
+    }
+  }
+}
 </script>
