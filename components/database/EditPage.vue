@@ -1,6 +1,11 @@
 <template>
   <div class="page-content">
-    <div class="container">
+    <div v-if="!pageAllowed" class="container-fluid emy-4">
+      <b-alert show variant="info">
+        {{ $t('db.shared.not_admissible') }}
+      </b-alert>
+    </div>
+    <div v-else class="container">
       <div class="row justify-content-md-center">
         <h2 class="col-md-8 col-lg-6">
           {{ title }}
@@ -42,7 +47,7 @@
           </span>
           <b-button
             variant="success"
-            :disabled="saveQueryState.running"
+            :disabled="!record || saveQueryState.running"
             @click="save"
           >
             {{ $t('db.shared.save') }}
@@ -70,7 +75,7 @@ import { RecordChange, RecordError } from '~/lib/api/mappers';
 export default class EditPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
-  @Prop() readonly noDefaultRedirect = false;
+  @Prop({ default: () => false }) readonly noDefaultRedirect!: boolean;
 
   formFields = buildFormFields(this.fields);
   formValues = prefilledFormValues(this.formFields);
@@ -79,7 +84,7 @@ export default class EditPage extends Vue {
   errors = null as null | RecordError[];
 
   mounted () {
-    this.fetchRecord();
+    if (this.pageAllowed) this.fetchRecord();
   }
 
   @Watch('entity')
@@ -100,6 +105,10 @@ export default class EditPage extends Vue {
   @Watch('record')
   onRecordChanged (newValue: any) {
     if (newValue) this.formValues = prefilledFormValues(this.formFields, newValue);
+  }
+
+  get pageAllowed (): boolean {
+    return this.$store.getters['dbPage/allowed'];
   }
 
   get title (): string {

@@ -43,28 +43,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
 import ShowPage from '~/components/database/ShowPage.vue';
 import RecordDetailValue from '~/components/database/RecordDetailValue.vue';
 import ChangePasswordModal from '~/components/database/pages/users/ChangePasswordModal.vue';
 import LockModal from '~/components/database/pages/users/LockModal.vue';
+import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 
-export default Vue.extend({
+@Component({
   components: { ShowPage, RecordDetailValue, ChangePasswordModal, LockModal },
-  layout: 'database',
-  data () {
-    return {
-      recordId: Number(this.$route.params.id),
-      title: {
-        text: (record: any) => `${record.full_name_en} - ${record.login}`,
-        showEditLink: true,
-      },
-      changePassModalShown: false,
-      lockModalShown: false,
-    };
-  },
-  methods: {
-    formatDate: utils.formatDate,
-  },
-});
+})
+export default class extends DatabasePageMixin {
+  recordId = Number(this.$route.params.id);
+  changePassModalShown = false;
+  lockModalShown = false;
+  title = {
+    text: (record: any) => `${record.full_name_en} - ${record.login}`,
+    showEditLink: true,
+  };
+}
 </script>

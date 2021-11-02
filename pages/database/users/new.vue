@@ -8,26 +8,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import NewPage from '~/components/database/NewPage.vue';
+import { Component } from 'vue-property-decorator';
+import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 
-export default Vue.extend({
+@Component({
   components: { NewPage },
-  layout: 'database',
-  computed: {
-    fields () {
-      return [
-        [ 'country', 'associatedRecord', { entity: 'countries' } ],
-        [ 'login', 'text' ],
-        [ 'full_name_en', 'text' ],
-        [ 'full_name', 'text' ],
-      ];
-    },
-  },
-  methods: {
-    onCreated (recordId: Number) {
-      this.$router.push({ path: `/database/users/${recordId}` });
-    },
-  },
-});
+})
+export default class extends DatabasePageMixin {
+  fields = [
+    [ 'country', 'associatedRecord', { entity: 'countries' } ],
+    [ 'login', 'text' ],
+    [ 'full_name_en', 'text' ],
+    [ 'full_name', 'text' ],
+  ];
+
+  onCreated (recordId: Number) {
+    this.$router.push({ path: `/database/users/${recordId}` });
+  }
+}
 </script>

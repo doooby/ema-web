@@ -1,6 +1,11 @@
 <template>
   <div class="page-content">
-    <div class="container">
+    <div v-if="!pageAllowed" class="container-fluid emy-4">
+      <b-alert show variant="info">
+        {{ $t('db.shared.not_admissible') }}
+      </b-alert>
+    </div>
+    <div v-else class="container">
       <div class="row justify-content-md-center">
         <h2 class="col-md-8 col-lg-4">
           {{ title }}
@@ -52,7 +57,7 @@ import RecordErrors from './RecordErrors.vue';
 export default class NewPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
-  @Prop() readonly noDefaultRedirect = false;
+  @Prop({ default: () => false }) readonly noDefaultRedirect!: boolean;
 
   formFields = buildFormFields(this.fields);
   formValues = prefilledFormValues(this.formFields);
@@ -67,6 +72,10 @@ export default class NewPage extends Vue {
   @Watch('fields')
   onFieldsChanged () {
     this.reset();
+  }
+
+  get pageAllowed (): boolean {
+    return this.$store.getters['dbPage/allowed'];
   }
 
   get title (): string {

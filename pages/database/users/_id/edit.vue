@@ -8,26 +8,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
 import EditPage from '~/components/database/EditPage.vue';
+import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 
-export default Vue.extend({
+@Component({
   components: { EditPage },
-  layout: 'database',
-  computed: {
-    fields () {
-      return [
-        [ 'country', 'associatedRecord', { entity: 'countries' } ],
-        [ 'login', 'text' ],
-        [ 'full_name_en', 'text' ],
-        [ 'full_name', 'text' ],
-      ];
-    },
-  },
-  methods: {
-    onUpdated (record: any) {
-      this.$router.push({ path: `/database/users/${record.id}` });
-    },
-  },
-});
+})
+export default class extends DatabasePageMixin {
+  fields = [
+    [ 'country', 'associatedRecord', { entity: 'countries' } ],
+    [ 'login', 'text' ],
+    [ 'full_name_en', 'text' ],
+    [ 'full_name', 'text' ],
+  ];
+
+  onUpdated (record: any) {
+    this.$router.push({ path: `/database/users/${record.id}` });
+  }
+}
 </script>

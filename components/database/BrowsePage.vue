@@ -7,7 +7,9 @@
       />
     </div>
     <div v-if="!pageAllowed" class="container-fluid emy-4">
-      nope
+      <b-alert show variant="info">
+        {{ $t('db.shared.not_admissible') }}
+      </b-alert>
     </div>
     <div v-else class="container-fluid emy-4">
       <div class="border-primary row no-gutters emb-2">

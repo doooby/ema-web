@@ -1,11 +1,12 @@
 import { Context } from '@nuxt/types';
+import { Component, Vue } from 'vue-property-decorator';
 
 interface Page {
   entity: string;
   action: string;
 }
 
-const DatabasePageMixin = {
+@Component({
   layout: 'database',
   async asyncData ({ app, route, store }: Context) {
     const page = parseRoute(route.path);
@@ -24,9 +25,8 @@ const DatabasePageMixin = {
       store.commit('user/setCurrentUser', session.user);
     }
   },
-};
-
-export default DatabasePageMixin;
+})
+export default class DatabasePageMixin extends Vue {}
 
 function parseRoute (path: string): Page {
   const groups = path.match(/^\/database\/(\w+)(?:\/([\w\d]+))?\/?/);
