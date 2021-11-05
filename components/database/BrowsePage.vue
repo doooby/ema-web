@@ -73,6 +73,17 @@ export default class BrowsePage extends Vue {
   searchValues = {};
   searchQueryState = this.$api.newQueryState();
 
+  @Watch('entity')
+  onEntityChanged () {
+    this.searchQueryState.reset();
+    this.updatePage();
+  }
+
+  @Watch('isPageAllowed')
+  onPageAllowedChanged () {
+    this.updatePage();
+  }
+
   mounted () {
     this.updatePage();
   }
@@ -104,17 +115,6 @@ export default class BrowsePage extends Vue {
       if (slot) templates[column.name] = slot;
     }
     return templates;
-  }
-
-  @Watch('entity')
-  onEntityChanged () {
-    this.searchQueryState.reset();
-    Vue.nextTick(() => this.search());
-  }
-
-  @Watch('isPageAllowed')
-  onPageAllowedChanged () {
-    this.updatePage();
   }
 
   onSearch (value: FormValues) {

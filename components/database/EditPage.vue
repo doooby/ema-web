@@ -1,6 +1,6 @@
 <template>
   <div class="page-content">
-    <div v-if="!pageAllowed" class="container-fluid emy-4">
+    <div v-if="!isPageAllowed" class="container-fluid emy-4">
       <b-alert show variant="info">
         {{ $t('db.shared.not_admissible') }}
       </b-alert>
@@ -48,7 +48,7 @@
           <b-button
             variant="success"
             :disabled="!record || saveQueryState.running"
-            @click="save"
+            @click="saveRecord"
           >
             {{ $t('db.shared.save') }}
           </b-button>
@@ -75,7 +75,6 @@ import { RecordChange, RecordError } from '~/lib/api/mappers';
 export default class EditPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
-  @Prop({ default: () => false }) readonly noDefaultRedirect!: boolean;
 
   formFields = buildFormFields(this.fields);
   formValues = prefilledFormValues(this.formFields);
@@ -83,23 +82,12 @@ export default class EditPage extends Vue {
   saveQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordError[];
 
-  mounted () {
-    if (this.pageAllowed) this.fetchRecord();
-  }
-
+  @Watch('isPageAllowed')
   @Watch('entity')
-  onEntityChanged () {
-    this.reset();
-  }
-
   @Watch('recordId')
-  onRecordIdChanged () {
-    this.reset();
-  }
-
   @Watch('fields')
-  onFieldsChanged () {
-    this.reset();
+  onPageChanged () {
+    this.updatePage();
   }
 
   @Watch('record')
@@ -107,7 +95,11 @@ export default class EditPage extends Vue {
     if (newValue) this.formValues = prefilledFormValues(this.formFields, newValue);
   }
 
-  get pageAllowed (): boolean {
+  mounted () {
+    this.updatePage();
+  }
+
+  get isPageAllowed (): boolean {
     return this.$store.getters['session/isPageAllowed'];
   }
 
@@ -144,24 +136,30 @@ export default class EditPage extends Vue {
     };
   }
 
-  reset () {
+  onUpdated (record: any) {
+    if (this.$listeners.updated) {
+      this.$emit('updated', record);
+    } else {
+      this.$router.push({ path: '/database' });
+    }
+  }
+
+  async updatePage () {
     const formFields = buildFormFields(this.fields);
     this.formFields = formFields;
     this.formValues = prefilledFormValues(formFields);
     this.fetchQueryState.reset();
     this.saveQueryState.reset();
     this.errors = null;
-    this.fetchRecord();
+    if (this.isPageAllowed) {
+      await this.$api.request(
+        this.fetchQuery(),
+        this.fetchQueryState,
+      );
+    }
   }
 
-  async fetchRecord () {
-    await this.$api.request(
-      this.fetchQuery(),
-      this.fetchQueryState,
-    );
-  }
-
-  async save () {
+  async saveRecord () {
     if (this.saveQueryState.running) return;
     this.errors = null;
     const params = formToRecordParams(this.formFields, this.formValues);
@@ -175,14 +173,6 @@ export default class EditPage extends Vue {
       this.errors = result.errors;
     } else {
       this.errors = [ [ 'base', 'unknown fail' ] ];
-    }
-  }
-
-  onUpdated (record: any) {
-    if (this.noDefaultRedirect) {
-      this.$emit('updated', record);
-    } else {
-      this.$router.push({ path: '/database' });
     }
   }
 }

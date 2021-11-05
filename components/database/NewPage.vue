@@ -1,6 +1,6 @@
 <template>
   <div class="page-content">
-    <div v-if="!pageAllowed" class="container-fluid emy-4">
+    <div v-if="!isPageAllowed" class="container-fluid emy-4">
       <b-alert show variant="info">
         {{ $t('db.shared.not_admissible') }}
       </b-alert>
@@ -30,7 +30,7 @@
           <b-button
             variant="success"
             :disabled="createQueryState.running"
-            @click="save"
+            @click="saveRecord"
           >
             {{ $t('db.shared.save') }}
           </b-button>
@@ -57,24 +57,24 @@ import RecordErrors from './RecordErrors.vue';
 export default class NewPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
-  @Prop({ default: () => false }) readonly noDefaultRedirect!: boolean;
 
   formFields = buildFormFields(this.fields);
   formValues = prefilledFormValues(this.formFields);
   createQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordError[];
 
+  @Watch('isPageAllowed')
   @Watch('entity')
-  onEntityChanged () {
-    this.reset();
-  }
-
   @Watch('fields')
-  onFieldsChanged () {
-    this.reset();
+  onPageChanged () {
+    this.updatePage();
   }
 
-  get pageAllowed (): boolean {
+  mounted () {
+    this.updatePage();
+  }
+
+  get isPageAllowed (): boolean {
     return this.$store.getters['session/isPageAllowed'];
   }
 
@@ -93,7 +93,15 @@ export default class NewPage extends Vue {
     };
   }
 
-  reset () {
+  onCreated (recordId: any) {
+    if (this.$listeners.created) {
+      this.$emit('created', recordId);
+    } else {
+      this.$router.push({ path: `/database/${this.entity}` });
+    }
+  }
+
+  updatePage () {
     const formFields = buildFormFields(this.fields);
     this.formFields = formFields;
     this.formValues = prefilledFormValues(formFields);
@@ -101,7 +109,7 @@ export default class NewPage extends Vue {
     this.errors = null;
   }
 
-  async save () {
+  async saveRecord () {
     if (this.createQueryState.running) return;
     this.errors = null;
     const params = formToRecordParams(this.formFields, this.formValues);
@@ -115,14 +123,6 @@ export default class NewPage extends Vue {
       this.errors = result.errors;
     } else {
       this.errors = [ [ 'base', 'unknown fail' ] ];
-    }
-  }
-
-  onCreated (recordId: any) {
-    if (this.noDefaultRedirect) {
-      this.$emit('created', recordId);
-    } else {
-      this.$router.push({ path: '/database' });
     }
   }
 }

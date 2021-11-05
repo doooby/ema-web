@@ -1,9 +1,10 @@
 <template>
   <show-page
     entity="users"
-    :record-id="recordId"
-    :title="title"
   >
+    <template #title="{ record }">
+      {{ record.full_name_en }} - {{ record.login }}
+    </template>
     <template #detail="{ record, reloadRecord }">
       <div class="emb-6">
         <b-alert v-if="record.lock" show variant="info">
@@ -26,7 +27,7 @@
         </record-detail-value>
         <record-detail-value label="Lock">
           <div v-if="record.lock">
-
+            is locked
           </div>
           <b-button @click="lockModalShown = true">
             {{ $t(`db.pages.users.${record.lock ? 'un' : ''}lock`) }}
@@ -44,22 +45,17 @@
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
+import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 import ShowPage from '~/components/database/ShowPage.vue';
 import RecordDetailValue from '~/components/database/RecordDetailValue.vue';
 import ChangePasswordModal from '~/components/database/pages/users/ChangePasswordModal.vue';
 import LockModal from '~/components/database/pages/users/LockModal.vue';
-import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 
 @Component({
   components: { ShowPage, RecordDetailValue, ChangePasswordModal, LockModal },
 })
 export default class extends DatabasePageMixin {
-  recordId = Number(this.$route.params.id);
   changePassModalShown = false;
   lockModalShown = false;
-  title = {
-    text: (record: any) => `${record.full_name_en} - ${record.login}`,
-    showEditLink: true,
-  };
 }
 </script>

@@ -15,7 +15,7 @@ import Vue from 'vue';
 export default Vue.extend({
   props: {
     entity: { type: String, required: true },
-    recordId: { type: Number, required: true },
+    recordId: { type: String, required: true },
   },
 });
 </script>

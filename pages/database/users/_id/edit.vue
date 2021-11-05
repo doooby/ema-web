@@ -2,7 +2,6 @@
   <edit-page
     entity="users"
     :fields="fields"
-    :no-default-redirect="true"
     @updated="onUpdated"
   />
 </template>

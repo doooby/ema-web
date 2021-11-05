@@ -2,7 +2,6 @@
   <new-page
     entity="users"
     :fields="fields"
-    :no-default-redirect="true"
     @created="onCreated"
   />
 </template>
