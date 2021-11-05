@@ -75,7 +75,7 @@ export default class NewPage extends Vue {
   }
 
   get pageAllowed (): boolean {
-    return this.$store.getters['dbPage/allowed'];
+    return this.$store.getters['session/isPageAllowed'];
   }
 
   get title (): string {

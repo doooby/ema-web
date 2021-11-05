@@ -30,18 +30,18 @@ export const mapUserAssociations = mappers.createAssociationsMapper<UserAssociat
   'country',
 );
 
-export interface UserDetail {
+export interface SessionUser {
   id: number;
   login: string;
-  full_name_en?: string;
-  full_name?: string;
+  name_en?: string;
+  name?: string;
 }
 
-export function mapUserDetail (value: any): UserDetail {
+export function mapSessionUser (value: any): SessionUser {
   return object(value, root => ({
     id: recordId(root),
     login: prop('login', root, val.string),
-    full_name_en: maybeProp('full_name_en', root, val.string),
-    full_name: maybeProp('full_name', root, val.string),
+    name_en: maybeProp('name_en', root, val.string),
+    name: maybeProp('name', root, val.string),
   }));
 }

@@ -34,7 +34,7 @@
 import Vue from 'vue';
 import { BIconThreeDotsVertical, BIconPencil } from 'bootstrap-vue';
 
-interface Action {
+export interface Action {
   action: string;
   icon: string;
   iconVariant?: string;

@@ -1,26 +1,19 @@
 <template>
   <browse-page
+    entity="users"
     :search-fields="searchFields"
     :table-columns="tableColumns"
-  >
-    <template #actions="{ dataItem }">
-      <record-actions-cell
-        entity="users"
-        :record="dataItem"
-        :actions="actions"
-      />
-    </template>
-  </browse-page>
+    :actions="actions"
+  />
 </template>
 
 <script lang="ts">
-import BrowsePage from '~/components/database/BrowsePage.vue';
-import RecordActionsCell from '~/components/database/RecordActionsCell.vue';
-import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 import { Component } from 'vue-property-decorator';
+import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
+import BrowsePage from '~/components/database/BrowsePage.vue';
 
 @Component({
-  components: { RecordActionsCell, BrowsePage },
+  components: { BrowsePage },
 })
 export default class extends DatabasePageMixin {
   searchFields = [

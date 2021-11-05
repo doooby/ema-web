@@ -6,7 +6,7 @@
         @search="onSearch"
       />
     </div>
-    <div v-if="!pageAllowed" class="container-fluid emy-4">
+    <div v-if="!isPageAllowed" class="container-fluid emy-4">
       <b-alert show variant="info">
         {{ $t('db.shared.not_admissible') }}
       </b-alert>
@@ -39,6 +39,13 @@
           <template #header-cell="{ column }">
             {{ $t(`record.${entity}.${column.name}`) }}
           </template>
+          <template v-if="actions" #actions="{ dataItem }">
+            <record-actions-cell
+              entity="users"
+              :record="dataItem"
+              :actions="actions"
+            />
+          </template>
         </data-table-view>
       </div>
     </div>
@@ -52,27 +59,26 @@ import { DataTable } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';
 import { PaginatedRecords } from '~/lib/api/mappers';
+import RecordActionsCell, { Action as ActionItem } from '~/components/database/RecordActionsCell.vue';
 
 @Component({
-  components: { SearchForm, RecordsPagination },
+  components: { SearchForm, RecordsPagination, RecordActionsCell },
 })
 export default class BrowsePage extends Vue {
+  @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly searchFields!: FormField[];
   @Prop({ required: true }) readonly tableColumns!: DataTable.Column[];
+  @Prop({ default: () => [] }) readonly actions!: ActionItem[];
 
   searchValues = {};
   searchQueryState = this.$api.newQueryState();
 
   mounted () {
-    if (this.pageAllowed) this.search();
+    this.updatePage();
   }
 
-  get entity (): string {
-    return this.$store.getters['dbPage/entity'];
-  }
-
-  get pageAllowed (): boolean {
-    return this.$store.getters['dbPage/allowed'];
+  get isPageAllowed (): boolean {
+    return this.$store.getters['session/isPageAllowed'];
   }
 
   get searchQueryBuilder () {
@@ -106,6 +112,11 @@ export default class BrowsePage extends Vue {
     Vue.nextTick(() => this.search());
   }
 
+  @Watch('isPageAllowed')
+  onPageAllowedChanged () {
+    this.updatePage();
+  }
+
   onSearch (value: FormValues) {
     this.searchValues = value;
     this.search();
@@ -113,6 +124,11 @@ export default class BrowsePage extends Vue {
 
   onSelectPage (page: number) {
     this.search(page);
+  }
+
+  updatePage () {
+    if (this.isPageAllowed) this.search();
+    else this.searchQueryState.reset();
   }
 
   search (page?: number) {

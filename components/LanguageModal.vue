@@ -35,7 +35,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      shown: (state: any) => state.user.languageModalShown,
+      shown: (state: any) => state.session.languageModalShown,
     }),
     currentLocale () {
       return this.$i18n.locale;
@@ -43,7 +43,7 @@ export default Vue.extend({
   },
   methods: {
     onHidden () {
-      this.$store.commit('user/hideLanguageModal');
+      this.$store.commit('session/hideLanguageModal');
     },
     onSelectLocale (locale: string) {
       this.$i18n.setLocale(locale);

@@ -9,8 +9,8 @@
     <div v-if="shown">
       <div v-if="currentUser">
         <b-alert :show="currentUser !== null" variant="primary">
-          You are already logged-in as {{ currentUser.login }} <br>
-          <strong>{{ currentUser.name_en }}</strong> <br>
+          You are already logged-in:<br>
+          <i>{{ currentUser.login }}</i> - <strong>{{ currentUser.name_en }}</strong><br>
           <small>{{ currentUser.name }}</small>
         </b-alert>
         <div class="text-right">
@@ -69,19 +69,10 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      currentUser: (state: any) => state.user.currentUser,
-      shown: (state: any) => state.user.loginModalShown,
+      currentUser: (state: any) => state.session.currentUser,
+      shown: (state: any) => state.session.loginModalShown,
     }),
   },
-  // async mounted () {
-  //   const result = await this.$api.request(
-  //     this.$api.queries.session.show(),
-  //     this.$api.newQueryState(),
-  //   );
-  //   if (result) {
-  //     this.$store.commit('user/setCurrentUser', result);
-  //   }
-  // },
   methods: {
     onShow () {
       this.form.login = '';
@@ -89,7 +80,7 @@ export default Vue.extend({
       this.form.error = null;
     },
     onHidden () {
-      this.$store.commit('user/hideLoginModal');
+      if (this.shown) this.$store.commit('session/hideLoginModal');
     },
     async onLoginSubmit (event: any) {
       event.preventDefault();
@@ -99,9 +90,12 @@ export default Vue.extend({
         this.$api.queries.session.login({ login, password }),
         this.$api.newQueryState(),
       );
+      await this.$store.dispatch('session/fetchSession', {
+        path: this.$route.path,
+        api: this.$api,
+      });
       if (result) {
-        this.$store.commit('user/setCurrentUser', result);
-        this.$store.commit('user/hideLoginModal');
+        this.$store.commit('session/hideLoginModal');
       } else {
         this.form.error = 'invalid login';
       }
@@ -111,7 +105,10 @@ export default Vue.extend({
         this.$api.queries.session.logout(),
         this.$api.newQueryState(),
       );
-      this.$store.commit('user/setCurrentUser', null);
+      await this.$store.dispatch('session/fetchSession', {
+        path: this.$route.path,
+        api: this.$api,
+      });
     },
   },
 });

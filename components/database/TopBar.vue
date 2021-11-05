@@ -60,10 +60,10 @@ export default Vue.extend({
   },
   methods: {
     onShowLoginModal () {
-      this.$store.commit('user/showLoginModal');
+      this.$store.commit('session/showLoginModal');
     },
     onShowLanguageModal () {
-      this.$store.commit('user/showLanguageModal');
+      this.$store.commit('session/showLanguageModal');
     },
   },
 });
