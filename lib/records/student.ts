@@ -1,5 +1,6 @@
 import * as mappers from '~/lib/api/mappers';
 import * as dbFields from '~/components/database/controls';
+import { FormFieldDefinition } from '~/components/Form';
 
 export interface Student {
   id: number;
@@ -157,7 +158,7 @@ export const student = {
   //   return `status=${s}, diagnosis=${dd}, assistance needed=${nn}, provided=${pp}`;
   // },
 
-  entityControls (context: any): any[] {
+  entityControls ({ $t }: any): FormFieldDefinition[] {
     return [
       [ 'country', dbFields.AssociatedRecord, { entity: 'countries' } ],
       [ 'first_name', dbFields.Name ],
@@ -170,7 +171,7 @@ export const student = {
       [ 'region', 'text' ],
       [ 'address', 'text' ],
       [ 'distance_school_km', 'list', { options: student.distanceToSchool } ],
-      [ 'distance_school_time', 'text', { rightLabel: () => context.$t('misc.time.min') } ],
+      [ 'distance_school_time', 'text', { rightLabel: () => $t('misc.time.min') } ],
       [ 'transportation', 'list', { options: student.typeOfTransportationOptions } ],
       [ 'mother_first_name', dbFields.Name ],
       [ 'mother_last_name', dbFields.Name ],

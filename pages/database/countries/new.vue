@@ -2,29 +2,25 @@
   <new-page
     entity="countries"
     :fields="fields"
-    :no-default-redirect="true"
     @created="onCreated"
   />
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import NewPage from '~/components/database/NewPage.vue';
+import { Component } from 'vue-property-decorator';
+import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 
-export default Vue.extend({
+@Component({
   components: { NewPage },
-  layout: 'database',
-  computed: {
-    fields () {
-      return [
-        [ 'name', 'text' ],
-      ];
-    },
-  },
-  methods: {
-    onCreated () {
-      this.$router.push({ path: '/database/countries/browse' });
-    },
-  },
-});
+})
+export default class extends DatabasePageMixin {
+  fields = [
+    [ 'name', 'text' ],
+  ];
+
+  onCreated (recordId: Number) {
+    this.$router.push({ path: `/database/countries/${recordId}` });
+  }
+}
 </script>

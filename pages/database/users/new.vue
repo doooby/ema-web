@@ -10,16 +10,14 @@
 import NewPage from '~/components/database/NewPage.vue';
 import { Component } from 'vue-property-decorator';
 import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
+import { user } from '~/lib/records';
 
 @Component({
   components: { NewPage },
 })
 export default class extends DatabasePageMixin {
   fields = [
-    [ 'country', 'associatedRecord', { entity: 'countries' } ],
-    [ 'login', 'text' ],
-    [ 'full_name_en', 'text' ],
-    [ 'full_name', 'text' ],
+    ...user.entityControls(),
   ];
 
   onCreated (recordId: Number) {

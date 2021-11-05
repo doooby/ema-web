@@ -10,16 +10,14 @@
 import { Component } from 'vue-property-decorator';
 import EditPage from '~/components/database/EditPage.vue';
 import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
+import { user } from '~/lib/records';
 
 @Component({
   components: { EditPage },
 })
 export default class extends DatabasePageMixin {
   fields = [
-    [ 'country', 'associatedRecord', { entity: 'countries' } ],
-    [ 'login', 'text' ],
-    [ 'full_name_en', 'text' ],
-    [ 'full_name', 'text' ],
+    ...user.entityControls(),
   ];
 
   onUpdated (record: any) {
