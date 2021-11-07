@@ -5,7 +5,6 @@ import { Component, Vue } from 'vue-property-decorator';
   layout: 'database',
   async asyncData (context: Context) {
     await context.store.dispatch('session/fetchSession', {
-      path: context.route.path,
       api: context.app.$api,
     });
   },

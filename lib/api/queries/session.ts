@@ -14,18 +14,9 @@ function mapSession (value: any): Session {
   }));
 }
 
-export function show (requestedAllowance?: { entity: string, action: string }) {
-  let admission: any;
-  if (requestedAllowance) {
-    const { entity, action } = requestedAllowance;
-    admission = [ entity, action ];
-  }
-
+export function show () {
   return {
     path: '/session/show',
-    params: {
-      admission,
-    },
     mapper: mapSession,
   };
 }

@@ -94,7 +94,7 @@ export class ApiPlugin {
       const { ok, message, payload }: RequestResponse = await rawResponse.json();
       if (!ok) {
         if (message === 'authn_fail') {
-          this.context.store.commit('session/authenticationFail');
+          this.context.store.commit('session/requestAuthnFailed');
         }
 
         return {

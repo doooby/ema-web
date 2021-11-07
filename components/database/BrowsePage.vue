@@ -89,7 +89,7 @@ export default class BrowsePage extends Vue {
   }
 
   get isPageAllowed (): boolean {
-    return this.$store.getters['session/isPageAllowed'];
+    return this.$store.state.session.currentUser;
   }
 
   get searchQueryBuilder () {

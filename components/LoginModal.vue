@@ -91,7 +91,6 @@ export default Vue.extend({
         this.$api.newQueryState(),
       );
       await this.$store.dispatch('session/fetchSession', {
-        path: this.$route.path,
         api: this.$api,
       });
       if (result) {
@@ -106,7 +105,6 @@ export default Vue.extend({
         this.$api.newQueryState(),
       );
       await this.$store.dispatch('session/fetchSession', {
-        path: this.$route.path,
         api: this.$api,
       });
     },
