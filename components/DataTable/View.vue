@@ -40,7 +40,6 @@ import { DataTable } from '.';
 import TableColgroup from './TableColgroup.vue';
 import TableHead from './TableHead.vue';
 import TableBody from './TableBody.vue';
-import { notify } from '~/lib/notifier';
 import { RequestState } from '~/lib/api';
 
 export default Vue.extend({
@@ -67,7 +66,7 @@ export default Vue.extend({
       const dataset = this.dataset as any;
       const validItems = dataset.filter((item: any) => item?.id);
       if (validItems.length < dataset.length) {
-        notify('error', 'DataTable: some item of given dataset are missing an id.');
+        utils.warn('DataTable: some item of given dataset are missing an id.');
       }
       return validItems;
     },

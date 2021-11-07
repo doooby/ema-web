@@ -97,7 +97,7 @@ export default class BrowsePage extends Vue {
     const entityQueries = (this.$api.queries as any)[entity];
     const queryBuilder = entityQueries?.search || entityQueries?.index;
     if (!queryBuilder) {
-      utils.notify('error', `database.BrowsePage: search/index query is missing for entity ${entity}.`);
+      utils.warn(`database.BrowsePage: search/index query is missing for entity ${entity}.`);
       return;
     }
     return queryBuilder;

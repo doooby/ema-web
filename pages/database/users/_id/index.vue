@@ -14,7 +14,7 @@
           {{ record.full_name_en }}, {{ record.full_name }}
         </record-detail-value>
         <record-detail-value label="Country">
-          {{ record.country.caption }}
+          {{ record.country && record.country.caption }}
         </record-detail-value>
         <record-detail-value label="Password">
           <b-button @click="changePassModalShown = true">
@@ -37,6 +37,9 @@
             :record="record"
             @recordChanged="reloadRecord"
           />
+        </record-detail-value>
+        <record-detail-value label="Is Root">
+          {{ record.is_root ? 'Yes': 'No' }}
         </record-detail-value>
       </div>
     </template>

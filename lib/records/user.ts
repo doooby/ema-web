@@ -2,7 +2,7 @@ import * as mappers from '~/lib/api/mappers';
 import * as dbFields from '~/components/database/controls';
 import { FormFieldDefinition } from '~/components/Form';
 
-const { object, recordId, prop, maybeProp, assoc, val } = mappers;
+const { object, recordId, prop, maybeProp, maybeAssoc, val } = mappers;
 
 export interface User {
   id: number;
@@ -10,7 +10,8 @@ export interface User {
   full_name_en?: string;
   full_name?: string;
   lock?: string;
-  country: mappers.AssociatedRecord;
+  country?: mappers.AssociatedRecord;
+  is_root: boolean;
 }
 
 export interface UserAssociations {
@@ -24,7 +25,8 @@ export function mapUser (value: any, associations?: UserAssociations): User {
     full_name_en: maybeProp('full_name_en', root, val.string),
     full_name: maybeProp('full_name', root, val.string),
     lock: maybeProp('lock', root, val.string),
-    country: assoc('country', root, associations?.country),
+    country: maybeAssoc('country', root, associations?.country),
+    is_root: prop('is_root', root, val.boolean),
   }));
 }
 
@@ -51,10 +53,11 @@ export function mapSessionUser (value: any): SessionUser {
 export const user = {
   entityControls (): FormFieldDefinition[] {
     return [
-      [ 'country', dbFields.AssociatedRecord, { entity: 'countries' } ],
+      [ 'country', dbFields.AssociatedRecord, { entity: 'countries', optional: true } ],
       [ 'login', 'text' ],
       [ 'full_name_en', 'text' ],
       [ 'full_name', 'text' ],
+      [ 'is_root', 'boolean' ],
     ];
   },
 };

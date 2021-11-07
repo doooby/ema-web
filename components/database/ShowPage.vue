@@ -40,7 +40,6 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EditRecordLink from '~/components/database/EditRecordLink.vue';
-import { notify } from '~/lib/notifier';
 
 @Component({
   components: { EditRecordLink },
@@ -86,7 +85,7 @@ export default class ShowPage extends Vue {
     const entityQueries = (this.$api.queries as any)[this.entity];
     const queryBuilder = entityQueries?.get || entityQueries?.show;
     if (!queryBuilder) {
-      notify('error', 'database.ShowPage: get/show query is missing.', { entity: this.entity });
+      utils.warn('database.ShowPage: get/show query is missing.', { entity: this.entity });
       return;
     }
 

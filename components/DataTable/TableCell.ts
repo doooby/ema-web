@@ -1,6 +1,7 @@
 import Vue, { VNode } from 'vue';
 import { cellComponents } from './cells';
 import sharedProps from './cells/sharedProps';
+import { warnOfError } from '~/lib/global_utils';
 
 export default Vue.extend({
   functional: true,
@@ -39,7 +40,7 @@ function safeGetText (getText: any, dataItem: any): any {
   try {
     return getText?.(dataItem);
   } catch (err) {
-    utils.notify('error', err, { 'DataTable.TableCell': 'getText failed' });
+    utils.warnOfError(err, { 'DataTable.TableCell': 'getText failed' });
     return null;
   }
 }

@@ -32,7 +32,7 @@ function safeGetText (getText: any, dataItem: any): any {
   try {
     return getText?.(dataItem);
   } catch (err) {
-    utils.notify('error', err, { 'DataTable.cells.RecordLinkCell': 'getText failed' });
+    utils.warn(err, { 'DataTable.cells.RecordLinkCell': 'getText failed' });
     return null;
   }
 }

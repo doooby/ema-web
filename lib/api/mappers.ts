@@ -134,6 +134,16 @@ export function assoc<A> (
   return associatedRecord;
 }
 
+export function maybeAssoc<A> (
+  name: string,
+  parent: { [prop: string]: any },
+  index?: { [id: string]: undefined | A },
+): undefined | A {
+  const associateId = maybeAssocId(parent, name);
+  const associatedRecord = index && associateId && index[associateId];
+  if (associatedRecord) return associatedRecord;
+}
+
 export function recordId (parent: any): number {
   const value = parent.id;
   if (typeof value !== 'number') throw new MappingError('invalid record id');
@@ -145,6 +155,12 @@ export function assocId (parent: any, associationName: string): number {
   const value = parent[propName];
   if (typeof value !== 'number') throw new MappingError(`invalid association id ${propName}`);
   return value;
+}
+
+export function maybeAssocId (parent: any, associationName: string): undefined | number {
+  const propName = `${associationName}_id`;
+  const value = parent[propName];
+  return typeof value !== 'number' ? undefined : value;
 }
 
 export const val = {

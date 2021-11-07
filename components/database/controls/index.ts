@@ -1,4 +1,4 @@
-import AssociatedRecordControl, { type as AssociatedRecordType } from './AssociatedRecord/index.vue';
+import AssociatedRecordControl, { type as AssociatedRecordType } from './AssociatedRecord/AssociatedRecord.vue';
 import NameControl, { type as NameType } from './Name.vue';
 
 function make (type: any, control: any) {

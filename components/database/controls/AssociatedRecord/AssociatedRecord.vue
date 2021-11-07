@@ -6,6 +6,9 @@
       <div class="flex-fill text-truncate association--text">
         {{ valueText }}
       </div>
+      <b-button variant="secondary" @click.stop="onClear">
+        <b-icon icon="x" />
+      </b-button>
       <b-button variant="secondary">
         <b-icon icon="chevron-down" />
       </b-button>
@@ -80,6 +83,9 @@ export default Vue.extend({
     onItemSelected (record: any) {
       this.modalShown = false;
       this.context.onChange({ [this.field.name]: record });
+    },
+    onClear () {
+      this.context.onChange({ [this.field.name]: undefined });
     },
   },
 });

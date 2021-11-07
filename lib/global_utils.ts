@@ -1,35 +1,20 @@
+/* eslint-disable no-console */
 import { formatISO } from 'date-fns';
 
 export function raise (error: Error) {
-  notify('error', error);
+  console.error(error);
   throw error;
 }
 
 export function warn (message: string, context?: any) {
-  notify('warn', message, context);
+  console.log(message);
+  if (context) console.log('context: ', context);
 }
 
-export function notify (
-  type: 'error' | 'warn',
-  message: string | Error,
-  context?: any,
-): void {
-  switch (type) {
-    case 'error':
-      // eslint-disable-next-line no-console
-      console.error(message);
-      break;
-    case 'warn':
-      // eslint-disable-next-line no-console
-      console.error(message);
-      // eslint-disable-next-line no-console
-      if (context) console.log('warn context: ', context);
-      break;
-  }
-}
-
-export function forTimeout (time: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, time));
+export function warnOfError (error: Error, context?: any) {
+  console.log(error.message);
+  if (context) console.log('context: ', context);
+  console.error(error);
 }
 
 export function formatDate (date?: Date): string {

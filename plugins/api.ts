@@ -34,7 +34,7 @@ export class ApiPlugin {
     state.reset();
 
     if (!definition) {
-      utils.notify('error', 'api query definition not given');
+      utils.warn('api query definition not given');
       return null;
     }
 
@@ -45,7 +45,7 @@ export class ApiPlugin {
     if (!response.ok) {
       state.error = response.error!;
       if (response.message) state.fail = response.message;
-      utils.notify('error', 'api query failed', response);
+      utils.warn('api query failed', response);
       state.running = false;
       return null;
     }
@@ -61,7 +61,7 @@ export class ApiPlugin {
     if (mappingResult instanceof Error) {
       state.error = mappingResult;
       state.fail = 'invalid_data';
-      utils.notify('error', mappingResult, response.payload);
+      utils.warnOfError(mappingResult, response.payload);
       mappingResult = null;
     }
 
