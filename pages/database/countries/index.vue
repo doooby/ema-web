@@ -21,6 +21,7 @@ export default class extends DatabasePageMixin {
 
   tableColumns = [
     { name: 'id', cell: { type: 'link', onlyId: true }, size: 60 },
+    { name: 'name_en' },
     { name: 'name' },
   ];
 }

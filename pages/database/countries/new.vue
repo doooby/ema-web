@@ -16,6 +16,7 @@ import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
 })
 export default class extends DatabasePageMixin {
   fields = [
+    [ 'name_en', 'text' ],
     [ 'name', 'text' ],
   ];
 
