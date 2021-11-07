@@ -23,7 +23,7 @@ export default class extends DatabasePageMixin {
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: 'link', entity: 'users' }, size: 60 },
-    { name: 'country', getText: (user: any) => user.country.caption },
+    { name: 'country', getText: (user: any) => user.country?.caption },
     { name: 'login' },
     { name: 'full_name_en' },
     { name: 'full_name' },

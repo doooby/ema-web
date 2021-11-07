@@ -43,9 +43,10 @@ export class ApiPlugin {
 
     const response = await this.processRequest(path, params);
     if (!response.ok) {
-      state.error = response.error!;
+      state.error = response.error ?? null;
       if (response.message) state.fail = response.message;
       utils.warn('api query failed', response);
+      if (response.error) utils.warnOfError(response.error);
       state.running = false;
       return null;
     }
@@ -75,7 +76,8 @@ export class ApiPlugin {
       'Content-Type': 'application/json',
     };
 
-    if (this.context.req) {
+    const isOnServer = !!this.context.req;
+    if (isOnServer) {
       headers.Cookie = this.context.req.headers.cookie;
     }
 
@@ -93,7 +95,7 @@ export class ApiPlugin {
       );
       const { ok, message, payload }: RequestResponse = await rawResponse.json();
       if (!ok) {
-        if (message === 'authn_fail') {
+        if (!isOnServer && rawResponse.status === 401) {
           this.context.store.commit('session/requestAuthnFailed');
         }
 
