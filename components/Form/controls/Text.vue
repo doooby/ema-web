@@ -1,8 +1,10 @@
 <template>
   <b-form-group
-    :label="labelTranslation"
     :label-for="domIdBase"
   >
+    <template #label>
+      <t :value="labelTranslation" />
+    </template>
     <div class="input-group">
       <div v-if="leftLabelText" class="input-group-prepend">
         <span class="input-group-text">

@@ -7,13 +7,10 @@ const ControlMixin = {
       const anyThis = this as any;
       return anyThis.field.options.interactive;
     },
-    labelTranslation () {
+    labelTranslation (): string {
       const anyThis = this as any;
       const { name, options } = anyThis.field as FormField;
-      if (!options.label) {
-        const key = anyThis.context.fieldLabelKey(name);
-        return String(anyThis.$t(key));
-      }
+      if (!options.label) return anyThis.context.fieldLabelKey(name);
       if (typeof options.label === 'function') return options.label();
       return String(options.label);
     },

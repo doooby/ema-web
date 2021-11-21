@@ -6,7 +6,7 @@
       class=""
     >
       <nuxt-link :to="resource.path">
-        {{ resource.name }}
+        <t :value="`record.${resource.name}.meta.p`" class="text-capitalize" />
       </nuxt-link>
     </li>
   </ul>
@@ -14,14 +14,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { startCase } from 'lodash';
 import { dbPages, resourcePath } from '~/config/pages';
 
 export default Vue.extend({
   computed: {
     shownResources (): Array<{ name: string, path: string }> {
       return dbPages.map(resource => ({
-        name: startCase(this.$t(`record.${resource.name}.meta.p`) as string),
+        name: resource.name,
         path: resourcePath(resource.name, resource.pages[0]),
       }));
     },

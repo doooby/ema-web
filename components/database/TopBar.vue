@@ -30,11 +30,20 @@
           <b-icon-person class="emr-2" />
           {{ $t('db.top_bar.menu.login') }}
         </b-dropdown-item>
-
+        <b-dropdown-divider />
         <b-dropdown-item @click="onShowLanguageModal">
           <b-icon-globe2 class="emr-2" />
           {{ $t('db.top_bar.menu.language') }}
         </b-dropdown-item>
+        <li class="epl-8">
+          <b-form-checkbox
+            switch
+            :value="!debugTranslations"
+            @input="onToggleDebugTranslations"
+          >
+            {{ $t('db.top_bar.menu.debugTranslations') }}
+          </b-form-checkbox>
+        </li>
       </b-dropdown>
       <login-modal />
       <language-modal />
@@ -43,12 +52,12 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component } from 'vue-property-decorator';
 import { BIconGear, BIconHouseDoorFill, BIconServer, BIconPerson, BIconGlobe2 } from 'bootstrap-vue';
 import LoginModal from '~/components/LoginModal.vue';
 import LanguageModal from '~/components/LanguageModal.vue';
 
-export default Vue.extend({
+@Component({
   components: {
     BIconGear,
     BIconHouseDoorFill,
@@ -58,13 +67,26 @@ export default Vue.extend({
     LoginModal,
     LanguageModal,
   },
-  methods: {
-    onShowLoginModal () {
-      this.$store.commit('session/showLoginModal');
-    },
-    onShowLanguageModal () {
-      this.$store.commit('session/showLanguageModal');
-    },
-  },
-});
+})
+export default class TopBar extends Vue {
+  get debugTranslations (): boolean {
+    const {
+      currentUser,
+      debugTranslations,
+    } = this.$store.state.session;
+    return !!(currentUser && debugTranslations);
+  }
+
+  onShowLoginModal () {
+    this.$store.commit('session/showLoginModal');
+  }
+
+  onShowLanguageModal () {
+    this.$store.commit('session/showLanguageModal');
+  }
+
+  onToggleDebugTranslations () {
+    this.$store.commit('session/toggleDebugTranslations', !this.debugTranslations);
+  }
+}
 </script>

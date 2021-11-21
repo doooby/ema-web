@@ -58,7 +58,7 @@ export function buildFormFields (fields: FormFieldDefinition[]): FormField[] {
   }));
 }
 
-export function prefilledFormValues (fields: FormField[], record: any = {}): FormValues {
+export function prefillFormValues (fields: FormField[], record: any = {}): FormValues {
   const values = {} as FormValues;
   for (const field of fields) {
     field.type.mapToValues(field, record, values);

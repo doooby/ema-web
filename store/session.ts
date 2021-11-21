@@ -10,10 +10,14 @@ export default class UserModule extends VuexModule {
   loginModalShown = false;
 
   languageModalShown: boolean = false;
+  debugTranslations: boolean = false;
 
   @Mutation
   setCurrentUser (user: null | SessionUser) {
     this.currentUser = user;
+    if (user === null) {
+      this.debugTranslations = false;
+    }
   }
 
   @Mutation
@@ -39,6 +43,11 @@ export default class UserModule extends VuexModule {
   @Mutation
   hideLanguageModal () {
     this.languageModalShown = false;
+  }
+
+  @Mutation
+  toggleDebugTranslations (value: boolean) {
+    this.debugTranslations = value;
   }
 
   @Action

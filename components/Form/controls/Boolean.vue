@@ -4,7 +4,7 @@
     :checked="sanitizedValue"
     @input="onInput"
   >
-    {{ labelTranslation }}
+    <t :value="labelTranslation" />
   </b-form-checkbox>
 </template>
 

@@ -61,7 +61,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import RecordErrors from '~/components/database/RecordErrors.vue';
-import { buildFormFields, FormFieldDefinition, formToRecordParams, prefilledFormValues } from '../Form';
+import { buildFormFields, FormFieldDefinition, formToRecordParams, prefillFormValues } from '../Form';
 import { RecordChange, RecordError } from '~/lib/api/mappers';
 
 @Component({
@@ -72,7 +72,7 @@ export default class EditPage extends Vue {
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
 
   formFields = buildFormFields(this.fields);
-  formValues = prefilledFormValues(this.formFields);
+  formValues = prefillFormValues(this.formFields);
   fetchQueryState = this.$api.newQueryState();
   saveQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordError[];
@@ -86,7 +86,7 @@ export default class EditPage extends Vue {
 
   @Watch('record')
   onRecordChanged (newValue: any) {
-    if (newValue) this.formValues = prefilledFormValues(this.formFields, newValue);
+    if (newValue) this.formValues = prefillFormValues(this.formFields, newValue);
   }
 
   mounted () {
@@ -137,7 +137,7 @@ export default class EditPage extends Vue {
   async updatePage () {
     const formFields = buildFormFields(this.fields);
     this.formFields = formFields;
-    this.formValues = prefilledFormValues(formFields);
+    this.formValues = prefillFormValues(formFields);
     this.fetchQueryState.reset();
     this.saveQueryState.reset();
     this.errors = null;

@@ -1,6 +1,6 @@
 <template>
   <div class="page-content">
-    <divclass="container">
+    <div class="container">
       <div class="row justify-content-md-center">
         <h2 class="col-md-8 col-lg-4">
           {{ title }}
@@ -11,6 +11,7 @@
           v-model="formValues"
           :class="$scopedSlots.layout ? '' : 'col-md-8 col-lg-4'"
           :fields="formFields"
+          :label-prefix="formFieldsLabelPrefix"
         >
           <template v-if="$scopedSlots.layout" #layout="{ context, values }">
             <slot name="layout" :context="context" :values="values" />
@@ -42,7 +43,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { buildFormFields, FormFieldDefinition, formToRecordParams, prefilledFormValues } from '~/components/Form';
+import { buildFormFields, FormFieldDefinition, formToRecordParams, prefillFormValues } from '~/components/Form';
 import { RecordChange, RecordError } from '~/lib/api/mappers';
 import RecordErrors from './RecordErrors.vue';
 
@@ -54,7 +55,7 @@ export default class NewPage extends Vue {
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
 
   formFields = buildFormFields(this.fields);
-  formValues = prefilledFormValues(this.formFields);
+  formValues = prefillFormValues(this.formFields);
   createQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordError[];
 
@@ -72,6 +73,10 @@ export default class NewPage extends Vue {
     return this.$t('db.new.title', {
       entity: this.$t(`record.${this.entity}.meta.s`),
     }) as string;
+  }
+
+  get formFieldsLabelPrefix (): string {
+    return `record.${this.entity}.field`;
   }
 
   get saveQuery (): any {
@@ -92,9 +97,8 @@ export default class NewPage extends Vue {
   }
 
   updatePage () {
-    const formFields = buildFormFields(this.fields);
-    this.formFields = formFields;
-    this.formValues = prefilledFormValues(formFields);
+    this.formFields = buildFormFields(this.fields);
+    this.formValues = prefillFormValues(this.formFields);
     this.createQueryState.reset();
     this.errors = null;
   }
