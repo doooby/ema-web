@@ -1,11 +1,6 @@
 <template>
   <div class="page-content">
-    <div v-if="!isPageAllowed" class="container-fluid emy-4">
-      <b-alert show variant="info">
-        {{ $t('db.shared.not_admissible') }}
-      </b-alert>
-    </div>
-    <div v-else class="container">
+    <div class="container">
       <div class="row justify-content-md-center">
         <h2 class="col-md-8 col-lg-6">
           {{ title }}
@@ -82,7 +77,6 @@ export default class EditPage extends Vue {
   saveQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordError[];
 
-  @Watch('isPageAllowed')
   @Watch('entity')
   @Watch('recordId')
   @Watch('fields')
@@ -97,10 +91,6 @@ export default class EditPage extends Vue {
 
   mounted () {
     this.updatePage();
-  }
-
-  get isPageAllowed (): boolean {
-    return this.$store.state.session.currentUser;
   }
 
   get title (): string {
@@ -151,12 +141,10 @@ export default class EditPage extends Vue {
     this.fetchQueryState.reset();
     this.saveQueryState.reset();
     this.errors = null;
-    if (this.isPageAllowed) {
-      await this.$api.request(
-        this.fetchQuery(),
-        this.fetchQueryState,
-      );
-    }
+    await this.$api.request(
+      this.fetchQuery(),
+      this.fetchQueryState,
+    );
   }
 
   async saveRecord () {

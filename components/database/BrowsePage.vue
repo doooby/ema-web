@@ -6,12 +6,7 @@
         @search="onSearch"
       />
     </div>
-    <div v-if="!isPageAllowed" class="container-fluid emy-4">
-      <b-alert show variant="info">
-        {{ $t('db.shared.not_admissible') }}
-      </b-alert>
-    </div>
-    <div v-else class="container-fluid emy-4">
+    <div class="container-fluid emy-4">
       <div class="border-primary row no-gutters emb-2">
         <div class="col-xl-4">
           {{ $t('db.records_count') }}: {{ records ? records.total : 0 }}
@@ -79,17 +74,8 @@ export default class BrowsePage extends Vue {
     this.updatePage();
   }
 
-  @Watch('isPageAllowed')
-  onPageAllowedChanged () {
-    this.updatePage();
-  }
-
   mounted () {
     this.updatePage();
-  }
-
-  get isPageAllowed (): boolean {
-    return this.$store.state.session.currentUser;
   }
 
   get searchQueryBuilder () {
@@ -127,8 +113,7 @@ export default class BrowsePage extends Vue {
   }
 
   updatePage () {
-    if (this.isPageAllowed) this.search();
-    else this.searchQueryState.reset();
+    this.search();
   }
 
   search (page?: number) {

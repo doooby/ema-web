@@ -1,11 +1,6 @@
 <template>
   <div class="page-content">
-    <div v-if="!isPageAllowed" class="container-fluid emy-4">
-      <b-alert show variant="info">
-        {{ $t('db.shared.not_admissible') }}
-      </b-alert>
-    </div>
-    <div v-else class="container">
+    <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-lg-10">
           <h2 class="text-center">
@@ -50,7 +45,6 @@ export default class ShowPage extends Vue {
   getQueryState = this.$api.newQueryState();
   reloadRecord = () => this.updatePage();
 
-  @Watch('isPageAllowed')
   @Watch('entity')
   @Watch('recordId')
   onPageChanged () {
@@ -59,10 +53,6 @@ export default class ShowPage extends Vue {
 
   mounted () {
     this.updatePage();
-  }
-
-  get isPageAllowed (): boolean {
-    return this.$store.state.session.currentUser;
   }
 
   get recordId () {
@@ -76,9 +66,7 @@ export default class ShowPage extends Vue {
 
   updatePage () {
     this.getQueryState.reset();
-    if (this.isPageAllowed) {
-      this.fetchRecord();
-    }
+    this.fetchRecord();
   }
 
   async fetchRecord () {

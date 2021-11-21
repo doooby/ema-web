@@ -1,11 +1,6 @@
 <template>
   <div class="page-content">
-    <div v-if="!isPageAllowed" class="container-fluid emy-4">
-      <b-alert show variant="info">
-        {{ $t('db.shared.not_admissible') }}
-      </b-alert>
-    </div>
-    <div v-else class="container">
+    <divclass="container">
       <div class="row justify-content-md-center">
         <h2 class="col-md-8 col-lg-4">
           {{ title }}
@@ -63,7 +58,6 @@ export default class NewPage extends Vue {
   createQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordError[];
 
-  @Watch('isPageAllowed')
   @Watch('entity')
   @Watch('fields')
   onPageChanged () {
@@ -72,10 +66,6 @@ export default class NewPage extends Vue {
 
   mounted () {
     this.updatePage();
-  }
-
-  get isPageAllowed (): boolean {
-    return this.$store.state.session.currentUser;
   }
 
   get title (): string {
