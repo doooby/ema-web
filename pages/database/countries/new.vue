@@ -20,8 +20,8 @@ export default class extends DatabasePageMixin {
     [ 'name', 'text' ],
   ];
 
-  onCreated (recordId: Number) {
-    this.$router.push({ path: `/database/countries/${recordId}` });
+  onCreated () {
+    this.$router.push({ path: '/database/countries' });
   }
 }
 </script>
