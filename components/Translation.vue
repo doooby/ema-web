@@ -16,7 +16,7 @@ export default class Boolean extends Vue {
   @Prop({ required: true }) value!: string;
 
   get translatedText (): string {
-    return this.$t(this.value);
+    return this.$t(this.value) as string;
   }
 
   get debugTranslations (): boolean {
