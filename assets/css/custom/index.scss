@@ -3,8 +3,8 @@
   user-select: none;
 }
 
-@import 'custom/sizing';
-@import 'custom/font';
+@import 'sizing';
+@import 'font';
 
 .button-like {
   @include button-like;
@@ -13,4 +13,8 @@
 .control-like {
   background-color: var(--EMA-controls);
   border: $input-border-width solid $input-border-color;
+}
+
+.opacity-70 {
+  opacity: 0.7;
 }

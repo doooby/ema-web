@@ -3,3 +3,7 @@
 @each $label, $value in $font-line-heights {
   .line-#{$label} { line-height: $value; }
 }
+
+.font-12 {
+  font-size: 75% !important;
+}

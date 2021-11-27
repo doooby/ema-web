@@ -1,9 +1,12 @@
 <template>
   <span :class="$attrs.class">
     {{ translatedText }}
-    <b-icon-chat-left-quote
+    <b-icon
       v-if="debugTranslations"
       v-b-popover.hover.left="value"
+      icon="chat-left-quote"
+      class="d-inline-block"
+      @click.capture.prevent="onCopy"
     />
   </span>
 </template>
@@ -12,7 +15,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component({})
-export default class Boolean extends Vue {
+export default class Translation extends Vue {
   @Prop({ required: true }) value!: string;
 
   get translatedText (): string {
@@ -22,6 +25,10 @@ export default class Boolean extends Vue {
   get debugTranslations (): boolean {
     const { currentUser, debugTranslations } = this.$store.state.session;
     return currentUser && debugTranslations;
+  }
+
+  onCopy (): void {
+    navigator.clipboard.writeText(this.value);
   }
 }
 </script>

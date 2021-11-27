@@ -16,7 +16,7 @@
         <tr>
           <td :colspan="columns.length + 1">
             <b-alert variant="warning" show class="m-0">
-              Fetching DataSet failed.
+              Fetching DataSet failed. {{ queryState.fail }}
             </b-alert>
           </td>
         </tr>

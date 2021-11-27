@@ -17,10 +17,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import BrowsePage from '~/components/database/BrowsePage.vue';
-import RecordActionsCell from '~/components/database/RecordActionsCell.vue';
+import RecordCellActions from '~/components/database/RecordCellActions.vue';
 
 export default Vue.extend({
-  components: { RecordActionsCell, BrowsePage },
+  components: { RecordCellActions, BrowsePage },
   layout: 'database',
   data () {
     return {

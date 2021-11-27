@@ -8,13 +8,11 @@
     </div>
     <div class="container-fluid emy-4">
       <div class="border-primary row no-gutters emb-2">
-        <div class="col-xl-4">
-          {{ $t('db.records_count') }}: {{ records ? records.total : 0 }}
+        <div class="col-lg-6">
+          <t value="db.records_count" />
+          : {{ records ? records.total : 0 }}
         </div>
-        <div class="col-xl-4">
-          order by: input
-        </div>
-        <div class="col-xl-4">
+        <div class="col-lg-6">
           <records-pagination
             v-if="records"
             :current="records.page"
@@ -32,10 +30,10 @@
           :templates="columnTemplates"
         >
           <template #header-cell="{ column }">
-            {{ $t(`record.${entity}.${column.name}`) }}
+            <t :value="`record.${entity}.label.${column.name}`" />
           </template>
           <template v-if="actions" #actions="{ dataItem }">
-            <record-actions-cell
+            <record-cell-actions
               entity="users"
               :record="dataItem"
               :actions="actions"
@@ -54,10 +52,10 @@ import { DataTable } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';
 import { PaginatedRecords } from '~/lib/api/mappers';
-import RecordActionsCell, { Action as ActionItem } from '~/components/database/RecordActionsCell.vue';
+import RecordCellActions, { Action as ActionItem } from '~/components/database/RecordCellActions.vue';
 
 @Component({
-  components: { SearchForm, RecordsPagination, RecordActionsCell },
+  components: { SearchForm, RecordsPagination, RecordCellActions },
 })
 export default class BrowsePage extends Vue {
   @Prop({ required: true }) readonly entity!: string;

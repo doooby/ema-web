@@ -18,11 +18,11 @@
 import Vue from 'vue';
 import { formatISO } from 'date-fns';
 import BrowsePage from '~/components/database/BrowsePage.vue';
-import RecordActionsCell from '~/components/database/RecordActionsCell.vue';
+import RecordCellActions from '~/components/database/RecordCellActions.vue';
 import { Student, student } from '~/lib/records';
 
 export default Vue.extend({
-  components: { RecordActionsCell, BrowsePage },
+  components: { RecordCellActions, BrowsePage },
   layout: 'database',
   data () {
     return {
