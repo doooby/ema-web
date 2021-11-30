@@ -19,7 +19,7 @@
         </nuxt-link>
       </li>
     </ul>
-    <h3>admin</h3>
+    <h3>Admin</h3>
     <ul>
       <li>
         <a href="/admin/translations">Translations</a>

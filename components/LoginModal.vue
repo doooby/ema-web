@@ -1,11 +1,13 @@
 <template>
   <b-modal
     :visible="shown"
-    title="Login"
     hide-footer
     @show="onShow"
     @hidden="onHidden"
   >
+    <template #modal-title>
+      <t value="layout.top_bar.menu.action.login" />
+    </template>
     <div v-if="shown">
       <div v-if="currentUser">
         <b-alert :show="currentUser !== null" variant="primary">

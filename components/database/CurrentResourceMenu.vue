@@ -1,7 +1,7 @@
 <template>
   <div class="emt-5">
     <h2 class="text-capitalize">
-      <t :value="`record.${resource.name}.meta.p`" />
+      <t :value="`db.resources_menu.resource.${resource.name}`" />
     </h2>
     <ul>
       <li

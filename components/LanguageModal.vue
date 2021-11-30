@@ -1,10 +1,12 @@
 <template>
   <b-modal
     :visible="shown"
-    title="Language"
     hide-footer
     @hidden="onHidden"
   >
+    <template #modal-title>
+      <t value="layout.top_bar.menu.action.language" />
+    </template>
     <div v-if="shown">
       <b-list-group>
         <b-list-group-item
