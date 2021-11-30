@@ -62,6 +62,7 @@ $font-line-heights: (
 @import '~bootstrap-vue/src/index';
 @import 'custom';
 
+@import 'layouts/app';
 @import 'layouts/database';
 
 @import 'components/DataTable';

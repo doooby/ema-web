@@ -1,17 +1,31 @@
 <template>
-  <div>
+  <div class="page-content -padded">
     <h1>EMA Monitoring v2</h1>
+    <p>
+      Is it any good?
+      <br>
+      <a href="https://news.ycombinator.com/item?id=3067434">yes.</a>
+    </p>
+    <hr>
+    <h3>Homepage</h3>
     <p>
       We're working on it.
     </p>
-    <nuxt-link to="/database">
-      go to DB
-    </nuxt-link>
-    <hr>
-    <h3>admin:</h3>
+    <h3>Database</h3>
+    <ul>
+      <li>
+        <nuxt-link to="/database">
+          browse
+        </nuxt-link>
+      </li>
+    </ul>
+    <h3>admin</h3>
     <ul>
       <li>
         <a href="/admin/translations">Translations</a>
+      </li>
+      <li>
+        <a href="/admin/translations/edit/en">Edit Translations</a>
       </li>
     </ul>
   </div>
@@ -22,7 +36,5 @@ import { Component } from 'vue-property-decorator';
 import { PageSessionMixin } from '~/components';
 
 @Component
-export default class Index extends PageSessionMixin {
-
-}
+export default class Index extends PageSessionMixin {}
 </script>

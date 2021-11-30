@@ -1,15 +1,15 @@
 <template>
   <app-layout>
-    <div v-if="userPresent">
-      <Nuxt />
-    </div>
-    <div v-else>
-      <b-alert show variant="info">
-        <t value="db.shared.not_admissible" />
-      </b-alert>
-      <b-alert show variant="info">
-        <t value="dev.page_may_not_inherit_session_mixin" />
-      </b-alert>
+    <div class="position-relative page-body">
+      <Nuxt v-if="userPresent" />
+      <div v-else>
+        <b-alert show variant="info">
+          <t value="db.shared.not_admissible" />
+        </b-alert>
+        <b-alert show variant="info">
+          <t value="dev.page_may_not_inherit_session_mixin" />
+        </b-alert>
+      </div>
     </div>
   </app-layout>
 </template>

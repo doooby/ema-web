@@ -4,7 +4,7 @@
       class="h-100 ew-16"
       to="/"
     >
-      <b-img class="h-100" src="/ema.png" />
+      <b-img class="h-100" src="/web/ema.png" />
     </nuxt-link>
     <div class="flex-fill d-flex --links">
       <nuxt-link class="epx-4 epy-2 eh-100 text-decoration-none" to="/">

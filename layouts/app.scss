@@ -1,0 +1,13 @@
+body.body-app {
+  .page-body {
+    height: calc(100vh - #{$EMA-top-bar-height}px);
+  }
+  .page-content {
+    overflow-y: scroll;
+    position: relative;
+    height: calc(100vh - #{$EMA-top-bar-height}px);
+    &.-padded {
+      padding: px-size(3);
+    }
+  }
+}
