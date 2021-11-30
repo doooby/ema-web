@@ -2,7 +2,6 @@
   <nuxt-link
     :class="$attrs.class"
     :to="`/database/${entity}/${record.id}`"
-    :title="$t('db.shared.show')"
   >
     <b-icon icon="card-heading" variant="primary" />
     {{ record.caption }}

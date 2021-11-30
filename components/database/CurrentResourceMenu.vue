@@ -1,7 +1,7 @@
 <template>
   <div class="emt-5">
     <h2 class="text-capitalize">
-      {{ $t(`record.${resource.name}.meta.p`) }}
+      <t :value="`record.${resource.name}.meta.p`" />
     </h2>
     <ul>
       <li

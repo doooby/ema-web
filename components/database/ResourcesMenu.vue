@@ -1,7 +1,7 @@
 <template>
   <div class="page-menu ep-3">
     <nuxt-link to="/database">
-      {{ $t('db.menu.index_link') }}
+      <t value="db.menu.index_link" />
     </nuxt-link>
     <hr>
     <current-resource-menu

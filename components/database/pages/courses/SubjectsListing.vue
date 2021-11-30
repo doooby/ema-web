@@ -25,7 +25,7 @@
         @commitChanges="onCommitChanges"
       >
         <template #header-cell="{ column }">
-          {{ $t(`record.courses.${column.name}`) }}
+          <t :value="`record.courses.${column.name}`" />
         </template>
         <template #edit-form="{ onInputCallback }">
           <form-view

@@ -4,7 +4,7 @@
   >
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center">
-        {{ $t('form.field.date.day') }}
+        <t value="form.field.date.day" />
         <b-form-select
           :value="day"
           class="eml-2 epx-2 ew-9 control-like"
@@ -13,7 +13,7 @@
         />
       </div>
       <div class="d-flex align-items-center">
-        {{ $t('form.field.date.month') }}
+        <t value="form.field.date.month" />
         <b-form-select
           :value="month"
           class="eml-2 epx-2 ew-9 control-like"
@@ -22,7 +22,7 @@
         />
       </div>
       <div class="d-flex align-items-center">
-        {{ $t('form.field.date.year') }}
+        <t value="form.field.date.year" />
         <b-form-select
           :value="year"
           class="eml-2 epx-2 ew-11 control-like"

@@ -1,17 +1,16 @@
 <template>
   <div class="page-content">
-
     <b-alert :show="!record && !getQueryState.fail" variant="info">
-      <t value="db.shared.loading"/>
+      <t value="db.shared.loading" />
     </b-alert>
     <b-alert :show="getQueryState.fail" variant="warning">
-      <t value="db.shared.record_not_found"/>
+      <t value="db.shared.record_not_found" />
     </b-alert>
 
     <div v-if="record" class="container">
       <div class="emt-6 emb-6">
         <h2 class="text-center text-secondary">
-          <t :value="`record.${entity}.meta.s`"/>
+          <t :value="`record.${entity}.meta.s`" />
         </h2>
         <h3 class="d-flex align-items-center">
           <slot name="title" :record="record" />

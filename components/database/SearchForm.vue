@@ -1,6 +1,6 @@
 <template>
   <div class="emy-3 epx-3">
-    <h5> {{ $t('db.browse.search') }} </h5>
+    <h5> <t value="db.browse.search" /> </h5>
     <form-group
       :value="searchValues"
       :fields-definitions="fields"

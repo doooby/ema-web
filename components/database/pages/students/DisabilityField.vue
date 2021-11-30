@@ -4,7 +4,7 @@
 <!--  >-->
 <!--    <div class="d-flex align-items-start">-->
 <!--      <div class="ew-13">-->
-<!--        {{ $t('record.students.disability_detail.s') }}-->
+<!--        <t value="record.students.disability_detail.s" />-->
 <!--      </div>-->
 <!--      <b-form-select-->
 <!--        v-model="status"-->
@@ -15,7 +15,7 @@
 <!--    </div>-->
 <!--    <div v-if="status.length" class="emt-2 d-flex align-items-center">-->
 <!--      <div class="ew-13">-->
-<!--        {{ $t('record.students.disability_detail.d') }}-->
+<!--        <t value="record.students.disability_detail.d" />-->
 <!--      </div>-->
 <!--      <b-form-select-->
 <!--        v-model="diagnosis"-->
@@ -25,7 +25,7 @@
 <!--    </div>-->
 <!--    <div v-if="status.length" class="emt-2 d-flex align-items-center">-->
 <!--      <div class="ew-13">-->
-<!--        {{ $t('record.students.disability_detail.n') }}-->
+<!--        <t value="record.students.disability_detail.n" />-->
 <!--      </div>-->
 <!--      <b-form-radio-group-->
 <!--        v-model="assistance_needed"-->
@@ -34,7 +34,7 @@
 <!--    </div>-->
 <!--    <div v-if="status.length" class="emt-2 d-flex align-items-center">-->
 <!--      <div class="ew-13">-->
-<!--        {{ $t('record.students.disability_detail.p') }}-->
+<!--        <t value="record.students.disability_detail.p" />-->
 <!--      </div>-->
 <!--      <b-form-radio-group-->
 <!--        v-model="assistance_provided"-->

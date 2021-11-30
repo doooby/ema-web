@@ -9,7 +9,7 @@
       <div v-if="!record && !fetchQueryState.fail" class="row justify-content-md-center">
         <div class="col-md-8 col-lg-6">
           <b-alert show variant="info">
-            {{ $t('db.shared.loading') }}
+            <t value="db.shared.loading" />
           </b-alert>
         </div>
       </div>
@@ -19,6 +19,7 @@
         v-model="formValues"
         class="row justify-content-md-center"
         :fields="formFields"
+        :label-prefix="formFieldsLabelPrefix"
       >
         <template #layout="{ context, values }">
           <slot name="layout" :context="context" :values="values" />
@@ -32,20 +33,21 @@
           v-model="formValues"
           class="col-md-8 col-lg-6"
           :fields="formFields"
+          :label-prefix="formFieldsLabelPrefix"
         />
       </div>
 
       <div class="row justify-content-md-center">
         <div class="col-md-8 col-lg-6 text-right">
           <span v-if="saveQueryState.running">
-            {{ $t('db.shared.processing') }}
+            <t value="db.shared.processing" />
           </span>
           <b-button
             variant="success"
             :disabled="!record || saveQueryState.running"
             @click="saveRecord"
           >
-            {{ $t('db.shared.save') }}
+            <t value="db.shared.save" />
           </b-button>
         </div>
       </div>
@@ -106,6 +108,10 @@ export default class EditPage extends Vue {
 
   get record (): undefined | any {
     return this.fetchQueryState.value?.record;
+  }
+
+  get formFieldsLabelPrefix (): string {
+    return `record.${this.entity}.label`;
   }
 
   get fetchQuery (): any {

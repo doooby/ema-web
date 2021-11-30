@@ -8,7 +8,7 @@
       </div>
       <div v-else>
         <b-alert show variant="info">
-          {{ $t('db.shared.not_admissible') }}
+          <t value="db.shared.not_admissible" />
         </b-alert>
       </div>
     </div>
