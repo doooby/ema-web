@@ -9,13 +9,13 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import EditPage from '~/components/database/EditPage.vue';
-import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
+import { DatabasePage } from '~/components';
 import { user } from '~/lib/records';
 
 @Component({
   components: { EditPage },
 })
-export default class extends DatabasePageMixin {
+export default class extends DatabasePage {
   fields = [
     ...user.entityControls(),
   ];

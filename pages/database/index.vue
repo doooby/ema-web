@@ -8,9 +8,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { DatabasePage } from '~/components';
 
-export default Vue.extend({
-  layout: 'database',
-});
+export default class Index extends DatabasePage {}
 </script>

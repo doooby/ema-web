@@ -8,13 +8,13 @@
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
-import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
+import { DatabasePage } from '~/components';
 import BrowsePage from '~/components/database/BrowsePage.vue';
 
 @Component({
   components: { BrowsePage },
 })
-export default class extends DatabasePageMixin {
+export default class extends DatabasePage {
   searchFields = [
     [ 'name', 'text' ],
   ];

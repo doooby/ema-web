@@ -33,8 +33,8 @@
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
-import { PageSessionMixin } from '~/components';
+import { AppPage } from '~/components';
 
 @Component
-export default class Index extends PageSessionMixin {}
+export default class Index extends AppPage {}
 </script>

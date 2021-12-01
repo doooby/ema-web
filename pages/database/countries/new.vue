@@ -9,12 +9,12 @@
 <script lang="ts">
 import NewPage from '~/components/database/NewPage.vue';
 import { Component } from 'vue-property-decorator';
-import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
+import { DatabasePage } from '~/components';
 
 @Component({
   components: { NewPage },
 })
-export default class extends DatabasePageMixin {
+export default class extends DatabasePage {
   fields = [
     [ 'name_en', 'text' ],
     [ 'name', 'text' ],

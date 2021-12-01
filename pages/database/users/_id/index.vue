@@ -69,7 +69,7 @@
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
-import DatabasePageMixin from '~/components/mixins/DatabasePageMixin';
+import { DatabasePage } from '~/components';
 import ShowPage from '~/components/database/ShowPage.vue';
 import ChangePasswordModal from '~/components/database/pages/users/ChangePasswordModal.vue';
 import LockModal from '~/components/database/pages/users/LockModal.vue';
@@ -85,7 +85,7 @@ import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
     LockModal,
   },
 })
-export default class extends DatabasePageMixin {
+export default class extends DatabasePage {
   changePassModalShown = false;
   lockModalShown = false;
 }

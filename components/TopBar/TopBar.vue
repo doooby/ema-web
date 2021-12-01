@@ -23,7 +23,7 @@
     <div class="d-flex align-items-stretch">
       <div
         v-if="currentUser"
-        class="m-2 bg-white p-1 user-select-none d-flex flex-column --session"
+        class="my-2 bg-white p-1 user-select-none d-flex flex-column --session"
       >
         <div class="text-truncate --session--row1">
           {{ currentUser.name_en }}

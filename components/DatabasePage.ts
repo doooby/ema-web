@@ -2,11 +2,11 @@ import { Context } from '@nuxt/types';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
-  layout: 'app',
+  layout: 'database',
   async asyncData (context: Context) {
     await context.store.dispatch('session/fetchSession', {
       api: context.app.$api,
     });
   },
 })
-export default class PageSessionMixin extends Vue {}
+export default class DatabasePage extends Vue {}

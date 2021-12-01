@@ -1,6 +1,9 @@
 body.body-database {
   $menu-width: 8 * size(6);
   $menu-border-width: 1;
+
+  overflow: hidden;
+
   .page-body {
     position: relative;
     padding-left: px($menu-width + $menu-border-width);
