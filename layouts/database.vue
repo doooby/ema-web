@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import TopBar from '~/components/database/TopBar.vue';
+import { TopBar } from '~/components/TopBar';
 import ResourcesMenu from '~/components/database/ResourcesMenu.vue';
 
 @Component({

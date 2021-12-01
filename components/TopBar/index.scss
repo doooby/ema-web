@@ -1,0 +1,28 @@
+.top-bar {
+  background-color: $EMA-primary;
+  color: $EMA-primary-contrast;
+  height: px($EMA-top-bar-height);
+
+  .--links {
+    > a:hover {
+      background-color: darken($EMA-primary, 20%);
+    }
+    h2 {
+      font-size: 1.5rem;
+      line-height: 1.5rem;
+    }
+  }
+
+  .--session {
+    color: $body-color;
+    max-width: 150px;
+  }
+
+  .--session--row1 {
+    font-size: 80%;
+  }
+
+  .--session--row2 {
+    font-size: 70%;
+  }
+}

@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { IconsPlugin } from 'bootstrap-vue';
 
 import DataTableView from '~/components/DataTable/View.vue';
-import FormGroup from '~/components/Form/Group.vue';
+import { FormGroup } from '~/components/Form';
 import FormField from '~/components/Form/Field';
 import Translation from '~/components/Translation.vue';
 

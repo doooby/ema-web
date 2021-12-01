@@ -2,17 +2,17 @@
   > div {
     min-width: 28px;
     height: 28px;
-    border: 2px solid var(--EMA-controls);
+    border: 2px solid $input-bg;
     padding: 2px;
 
     margin-right: 4px;
     &:last-child { margin-right: 0; }
 
     &.current {
-      border-color: var(--EMA-font);
+      border-color: $body-color;
       > div {
-        background-color: var(--EMA-font);
-        color: var(--EMA-bg);
+        background-color: $body-color;
+        color: $body-bg;
       }
     }
 

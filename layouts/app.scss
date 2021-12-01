@@ -1,4 +1,5 @@
 body.body-app {
+  overflow: hidden;
   .page-body {
     height: calc(100vh - #{$EMA-top-bar-height}px);
   }

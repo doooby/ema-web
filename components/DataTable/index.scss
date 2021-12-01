@@ -1,6 +1,6 @@
 .data-table2 {
   overflow-x: scroll;
-  $header-bg-color: var(--EMA-controls);
+  $header-bg-color: $input-bg;
 
   table {
     width: 100%;

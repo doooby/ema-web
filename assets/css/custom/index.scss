@@ -11,7 +11,7 @@
 }
 
 .control-like {
-  background-color: var(--EMA-controls);
+  background-color: $input-bg;
   border: $input-border-width solid $input-border-color;
 }
 

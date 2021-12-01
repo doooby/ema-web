@@ -1,4 +1,9 @@
 import { controlsIndex, voidFieldType } from './controls';
+import Group from './Group.vue';
+
+export {
+  Group as FormGroup,
+};
 
 interface FieldOptions {
   [option: string]: any;
