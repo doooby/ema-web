@@ -2,7 +2,7 @@ import * as mappers from '~/lib/api/mappers';
 import * as dbFields from '~/components/database/controls';
 import { FormFieldDefinition } from '~/components/Form';
 
-const { object, recordId, prop, maybeProp, maybeAssoc, val } = mappers;
+const { object, recordId, prop, maybeProp, maybeAssoc, val, list } = mappers;
 
 export interface User {
   id: number;
@@ -45,6 +45,7 @@ export interface SessionUser {
   login: string;
   name_en?: string;
   name?: string;
+  countries: mappers.AssociatedRecord[];
 }
 
 export function mapSessionUser (value: any): SessionUser {
@@ -53,6 +54,7 @@ export function mapSessionUser (value: any): SessionUser {
     login: prop('login', root, val.string),
     name_en: maybeProp('name_en', root, val.string),
     name: maybeProp('name', root, val.string),
+    countries: prop('countries', root, countries => list(countries, val.assoc)),
   }));
 }
 

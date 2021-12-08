@@ -19,7 +19,7 @@ module.exports = {
     'comma-dangle': [ 'error', 'always-multiline' ],
     curly: [ 'error', 'multi-line' ],
     camelcase: [ 'off' ],
-
+    'no-use-before-define': [ 'off' ],
     'vue/require-valid-default-prop': [ 'off' ],
   },
 };

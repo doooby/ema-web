@@ -11,10 +11,20 @@
     <div v-if="shown">
       <div v-if="currentUser">
         <b-alert :show="currentUser !== null" variant="primary">
-          You are already logged-in:<br>
-          <i>{{ currentUser.login }}</i> - <strong>{{ currentUser.name_en }}</strong><br>
-          <small>{{ currentUser.name }}</small>
+          You are logged-in.
         </b-alert>
+        <p>
+          <i>{{ currentUser.login }}</i><br>
+          <strong>{{ currentUser.name_en }}</strong><br>
+          <small>{{ currentUser.name }}</small><br>
+          <small
+            v-for="(country, index) of currentUser.countries"
+            :key="country.id"
+          >
+            <span v-if="index !== 0">, </span>
+            {{ country.caption }}
+          </small>
+        </p>
         <div class="text-right">
           <b-button variant="warning" @click="onLogOut">
             Log out
@@ -58,6 +68,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState } from 'vuex';
+import { SessionUser } from '~/lib/records';
 
 export default Vue.extend({
   data () {
@@ -71,7 +82,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      currentUser: (state: any) => state.session.currentUser,
+      currentUser: (state: any): null | SessionUser => state.session.currentUser,
       shown: (state: any) => state.session.loginModalShown,
     }),
   },

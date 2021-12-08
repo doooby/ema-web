@@ -181,6 +181,13 @@ export const val = {
     if (isNaN(date as any)) throw new MappingError('invalid date');
     return date;
   },
+  assoc<R=any> (value: any): AssociatedRecord<R> {
+    return object(value, root => ({
+      id: recordId(root),
+      caption: prop('caption', root, val.string),
+      labels: unsafeProp('labels', root, {}, value => recordLabels(value)),
+    }));
+  },
 };
 
 export function record<R, A> (
@@ -241,15 +248,7 @@ export function paginatedRecords<R, A> (
 
 export function associatedRecords<R> (value: any): { records: AssociatedRecord<R>[] } {
   return object(value, root => ({
-    records: prop('records', root, records => list(records, mapAssociatedRecord)),
-  }));
-}
-
-export function mapAssociatedRecord<R=any> (value: any): AssociatedRecord<R> {
-  return object(value, root => ({
-    id: recordId(root),
-    caption: prop('caption', root, val.string),
-    labels: unsafeProp('labels', root, {}, value => recordLabels(value)),
+    records: prop('records', root, records => list(records, val.assoc)),
   }));
 }
 
@@ -258,7 +257,7 @@ export function createAssociationsMapper<A> (...names: string[]) {
     return object(value, (root) => {
       const associations_index = {} as any;
       for (const name of names) {
-        associations_index[name] = prop(name, root, records => index(records, mapAssociatedRecord));
+        associations_index[name] = prop(name, root, records => index(records, val.assoc));
       }
       return associations_index as A;
     });
