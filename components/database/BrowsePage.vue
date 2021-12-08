@@ -30,7 +30,7 @@
           :templates="columnTemplates"
         >
           <template #header-cell="{ column }">
-            <t :value="`record.${entity}.label.${column.name}`" />
+            <t :value="`db.record.${entity}.label.${column.name}`" />
           </template>
           <template v-if="actions" #actions="{ dataItem }">
             <record-cell-actions

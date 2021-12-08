@@ -5,7 +5,7 @@
       <Nuxt v-if="userPresent" />
       <div v-else>
         <b-alert show variant="info">
-          <t value="db.shared.not_admissible" />
+          <t value="app.user_not_present" />
         </b-alert>
         <b-alert show variant="info">
           <t value="dev.page_may_not_inherit_session_mixin" />

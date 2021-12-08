@@ -9,7 +9,7 @@
         :key="page.name"
       >
         <nuxt-link :to="page.path">
-          {{ page.text }}
+          <t :value="page.text" />
         </nuxt-link>
       </li>
     </ul>
@@ -32,7 +32,7 @@ export default Vue.extend({
       const { name, pages } = this.resource;
       return pages.map(page => ({
         name: page,
-        text: this.$t(`db.pages.${page || 'index'}`) as string,
+        text: `db.page.${page || 'index'}`,
         path: resourcePath(name, page),
       }));
     },

@@ -1,11 +1,13 @@
 <template>
   <b-modal
     :visible="value"
-    :title="$t('db.pages.users.change_pass')"
     @show="onShow"
     @hidden="onHidden"
     @ok="onSubmit"
   >
+    <template #modal-title>
+      <t value="db.record.users.change_pass" />
+    </template>
     <b-form-group
       v-if="value"
       label="password"

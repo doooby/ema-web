@@ -1,11 +1,13 @@
 <template>
   <b-modal
     :visible="value"
-    :title="$t(`db.pages.users.${record.lock ? 'un' : ''}lock`)"
     @show="onShow"
     @hidden="onHidden"
     @ok="onSubmit"
   >
+    <template #modal-title>
+      <t :value="`db.record.users.${record.lock ? 'un' : ''}lock`" />
+    </template>
     <div v-if="value">
       <div v-if="record.lock">
         <p>

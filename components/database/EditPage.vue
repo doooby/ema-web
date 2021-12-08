@@ -96,8 +96,8 @@ export default class EditPage extends Vue {
   }
 
   get title (): string {
-    return this.$t('db.edit.title', {
-      entity: this.$t(`record.${this.entity}.meta.s`),
+    return this.$t('db.page.edit.title', {
+      entity: this.$t(`db.record.record.${this.entity}.meta.s`),
     }) as string;
   }
 

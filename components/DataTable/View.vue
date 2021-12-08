@@ -16,7 +16,9 @@
         <tr>
           <td :colspan="columns.length + 1">
             <b-alert variant="warning" show class="m-0">
-              Fetching DataSet failed. {{ queryState.fail }}
+              <t value="data_table.fetch_fail" />
+              <span> </span>
+              <t :value="`app.processing.${queryState.fail}`" />
             </b-alert>
           </td>
         </tr>

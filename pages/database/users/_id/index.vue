@@ -13,7 +13,7 @@
             icon="pencil"
             :path="`/database/users/${record.id}/edit`"
           >
-            <t value="db.pages.users.edit" />
+            <t value="db.record.users.edit" />
           </show-page-action>
         </li>
         <li>
@@ -21,7 +21,7 @@
             icon="lock"
             @click="changePassModalShown = true"
           >
-            <t value="db.pages.users.change_pass" />
+            <t value="db.record.users.change_pass" />
           </show-page-action>
           <change-password-modal
             v-model="changePassModalShown"
@@ -33,7 +33,7 @@
             icon="lock"
             @click="lockModalShown = true"
           >
-            <t :value="`db.pages.users.${record.lock ? 'un' : ''}lock`" />
+            <t :value="`db.record.users.${record.lock ? 'un' : ''}lock`" />
           </show-page-action>
           <lock-modal
             v-model="lockModalShown"
@@ -57,10 +57,7 @@
           {{ record.country && record.country.caption }}
         </show-page-table-row>
         <show-page-table-row label="privileges">
-          is_root: {{ record.is_root ? 'Yes': 'No' }} <br>
-          is_can_admin: {{ record.is_can_admin ? 'Yes': 'No' }} <br>
-          is_can_web: {{ record.is_can_web ? 'Yes': 'No' }} <br>
-          is_can_mng_users: {{ record.is_can_mng_users ? 'Yes': 'No' }} <br>
+          {{ privilegesList(record) }}
         </show-page-table-row>
       </table>
     </template>
@@ -75,6 +72,7 @@ import ChangePasswordModal from '~/components/database/pages/users/ChangePasswor
 import LockModal from '~/components/database/pages/users/LockModal.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
+import { User } from '~/lib/records';
 
 @Component({
   components: {
@@ -88,5 +86,14 @@ import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 export default class extends DatabasePage {
   changePassModalShown = false;
   lockModalShown = false;
+
+  privilegesList (record: User): string {
+    if (record.is_root) return 'is_root';
+    return [
+      (record.is_can_admin && 'is_can_admin'),
+      (record.is_can_web && 'is_can_web'),
+      (record.is_can_mng_users && 'is_can_mng_users'),
+    ].filter(value => value).join(', ');
+  }
 }
 </script>

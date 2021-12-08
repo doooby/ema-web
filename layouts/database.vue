@@ -8,7 +8,7 @@
       </div>
       <div v-else>
         <b-alert show variant="info">
-          <t value="db.shared.not_admissible" />
+          <t value="app.user_not_present" />
         </b-alert>
       </div>
     </div>

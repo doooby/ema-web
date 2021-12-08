@@ -70,8 +70,8 @@ export default class NewPage extends Vue {
   }
 
   get title (): string {
-    return this.$t('db.new.title', {
-      entity: this.$t(`record.${this.entity}.meta.s`),
+    return this.$t('db.page.new.title', {
+      entity: this.$t(`db.record.${this.entity}.meta.s`),
     }) as string;
   }
 
