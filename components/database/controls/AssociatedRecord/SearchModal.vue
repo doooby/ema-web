@@ -2,7 +2,8 @@
   <div>
     <div>
       <form-group
-        :fields-definitions="searchFields"
+        :fields="searchFields"
+        label-prefix="db.control.associated_record"
         @input="onInputDebounced"
       />
     </div>
@@ -29,6 +30,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import debounce from 'lodash/debounce';
+import { buildFormFields } from '~/components/Form';
 
 export default Vue.extend({
   props: {
@@ -38,9 +40,9 @@ export default Vue.extend({
   data () {
     return {
       fetchQueryState: this.$api.newQueryState<any>(),
-      searchFields: [
-        [ 'name', 'text', { leftLabel: '🔍', interactive: true } ],
-      ],
+      searchFields: buildFormFields([
+        [ 'name', 'text', { leftLabel: { text: '🔍' }, interactive: true } ],
+      ]),
     };
   },
   computed: {

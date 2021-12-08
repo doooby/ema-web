@@ -1,7 +1,7 @@
 <template>
   <div class="emt-5">
     <h2 class="text-capitalize">
-      <t :value="`db.resources_menu.resource.${resource.name}`" />
+      <t :value="`db.menu.resource.${resource.name}`" />
     </h2>
     <ul>
       <li
@@ -32,7 +32,7 @@ export default Vue.extend({
       const { name, pages } = this.resource;
       return pages.map(page => ({
         name: page,
-        text: `db.page.${page || 'index'}`,
+        text: `db.page.${page || 'index'}.action`,
         path: resourcePath(name, page),
       }));
     },

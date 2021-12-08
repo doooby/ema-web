@@ -1,7 +1,7 @@
 <template>
   <div class="page-menu ep-3">
     <nuxt-link to="/database">
-      <t value="db.resources_menu.index_page" />
+      <t value="db.menu.index_page" />
     </nuxt-link>
     <hr>
     <current-resource-menu

@@ -3,13 +3,15 @@
     <div class="container">
       <div class="row justify-content-md-center">
         <h2 class="col-md-8 col-lg-6">
-          {{ title }}
+          <t value="db.page.edit.title" />
+          <span> </span>
+          <t :value="`db.record.${entity}.meta.s`" />
         </h2>
       </div>
       <div v-if="!record && !fetchQueryState.fail" class="row justify-content-md-center">
         <div class="col-md-8 col-lg-6">
           <b-alert show variant="info">
-            <t value="db.shared.loading" />
+            <t value="app.loading" />
           </b-alert>
         </div>
       </div>
@@ -40,14 +42,14 @@
       <div class="row justify-content-md-center">
         <div class="col-md-8 col-lg-6 text-right">
           <span v-if="saveQueryState.running">
-            <t value="db.shared.processing" />
+            <t value="app.processing" />
           </span>
           <b-button
             variant="success"
             :disabled="!record || saveQueryState.running"
             @click="saveRecord"
           >
-            <t value="db.shared.save" />
+            <t value="app.action.save" />
           </b-button>
         </div>
       </div>
@@ -95,12 +97,6 @@ export default class EditPage extends Vue {
     this.updatePage();
   }
 
-  get title (): string {
-    return this.$t('db.page.edit.title', {
-      entity: this.$t(`db.record.record.${this.entity}.meta.s`),
-    }) as string;
-  }
-
   get recordId () {
     const route = this.$route as any;
     return route.params.id;
@@ -111,7 +107,7 @@ export default class EditPage extends Vue {
   }
 
   get formFieldsLabelPrefix (): string {
-    return `record.${this.entity}.label`;
+    return `db.record.${this.entity}.label`;
   }
 
   get fetchQuery (): any {

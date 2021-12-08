@@ -3,7 +3,9 @@
     <div class="container">
       <div class="row justify-content-md-center">
         <h2 class="col-md-8 col-lg-4">
-          {{ title }}
+          <t value="db.page.new.title" />
+          <span> </span>
+          <t :value="`db.record.${entity}.meta.s`" />
         </h2>
       </div>
       <div class="row justify-content-md-center">
@@ -21,14 +23,14 @@
       <div class="row justify-content-md-center">
         <div class="col-md-8 col-lg-4 text-right">
           <span v-if="createQueryState.running">
-            <t value="db.shared.processing" />
+            <t value="app.processing" />
           </span>
           <b-button
             variant="success"
             :disabled="createQueryState.running"
             @click="saveRecord"
           >
-            <t value="db.shared.save" />
+            <t value="app.action.save" />
           </b-button>
         </div>
       </div>
@@ -69,14 +71,8 @@ export default class NewPage extends Vue {
     this.updatePage();
   }
 
-  get title (): string {
-    return this.$t('db.page.new.title', {
-      entity: this.$t(`db.record.${this.entity}.meta.s`),
-    }) as string;
-  }
-
   get formFieldsLabelPrefix (): string {
-    return `record.${this.entity}.field`;
+    return `db.record.${this.entity}.label`;
   }
 
   get saveQuery (): any {

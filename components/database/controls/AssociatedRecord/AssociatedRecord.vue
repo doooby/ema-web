@@ -1,7 +1,8 @@
 <template>
-  <b-form-group
-    :label="labelTranslation"
-  >
+  <b-form-group>
+    <template #label>
+      <t :value="labelTranslation" />
+    </template>
     <div class="d-flex" @click="onChevronClick">
       <div class="flex-fill text-truncate association--text">
         {{ valueText }}
@@ -16,8 +17,10 @@
     <b-modal
       v-model="modalShown"
       hide-footer
-      :title="labelTranslation"
     >
+      <template #modal-title>
+        <t :value="labelTranslation" />
+      </template>
       <search-modal
         v-if="modalShown"
         :fetch-query="fetchQuery"

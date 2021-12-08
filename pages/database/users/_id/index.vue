@@ -13,7 +13,7 @@
             icon="pencil"
             :path="`/database/users/${record.id}/edit`"
           >
-            <t value="db.record.users.edit" />
+            <t value="db.page.edit.action" />
           </show-page-action>
         </li>
         <li>
@@ -50,13 +50,13 @@
       </b-alert>
 
       <table class="table">
-        <show-page-table-row label="name">
+        <show-page-table-row label="db.record.users.label.name">
           {{ record.full_name_en }}, {{ record.full_name }}
         </show-page-table-row>
-        <show-page-table-row label="country">
+        <show-page-table-row label="db.record.users.label.country">
           {{ record.country && record.country.caption }}
         </show-page-table-row>
-        <show-page-table-row label="privileges">
+        <show-page-table-row label="db.record.users.label.privileges">
           {{ privilegesList(record) }}
         </show-page-table-row>
       </table>

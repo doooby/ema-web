@@ -1,7 +1,7 @@
 <template>
   <tr>
     <th scope="row">
-      <t :value="labelKey" />
+      <t :value="label" />
     </th>
     <td>
       <slot />
@@ -15,9 +15,5 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 @Component
 export default class ShowPageTableRow extends Vue {
   @Prop({ required: true }) readonly label!: string;
-
-  get labelKey (): string {
-    return this.label;
-  }
 }
 </script>

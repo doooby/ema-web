@@ -6,7 +6,7 @@
       class=""
     >
       <nuxt-link :to="resource.path">
-        <t :value="`db.resources_menu.resource.${resource.name}`" class="text-capitalize" />
+        <t :value="`db.menu.resource.${resource.name}`" class="text-capitalize" />
       </nuxt-link>
     </li>
   </ul>

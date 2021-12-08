@@ -7,8 +7,11 @@
     </template>
     <div class="input-group">
       <div v-if="leftLabelText" class="input-group-prepend">
-        <span class="input-group-text">
-          {{ leftLabelText }}
+        <span v-if="leftLabelText.text" class="input-group-text">
+          {{ leftLabelText.text }}
+        </span>
+        <span v-if="leftLabelText.t" class="input-group-text">
+          <t :value="leftLabelText.t" />
         </span>
       </div>
       <input
@@ -21,8 +24,11 @@
         @keypress.ctrl.enter="onCommit"
       >
       <div v-if="rightLabelText" class="input-group-append">
-        <span class="input-group-text">
-          {{ rightLabelText }}
+        <span v-if="rightLabelText.text" class="input-group-text">
+          {{ rightLabelText.text }}
+        </span>
+        <span v-if="rightLabelText.t" class="input-group-text">
+          <t :value="rightLabelText.t" />
         </span>
       </div>
     </div>
@@ -54,17 +60,19 @@ export default Vue.extend({
     formValues: { type: Object as Vue.PropType<FormValues>, required: true },
   },
   computed: {
-    leftLabelText (): undefined | string {
+    leftLabelText (): undefined | { text?: string; t?: string } {
       const leftLabel = this.field.options.leftLabel;
       if (!leftLabel) return undefined;
+      if (typeof leftLabel === 'object') return leftLabel;
       if (typeof leftLabel === 'function') return leftLabel();
-      return String(leftLabel);
+      return { t: String(leftLabel) };
     },
-    rightLabelText (): undefined | string {
+    rightLabelText (): undefined | { text?: string; t?: string } {
       const rightLabel = this.field.options.rightLabel;
       if (!rightLabel) return undefined;
+      if (typeof rightLabel === 'object') return rightLabel;
       if (typeof rightLabel === 'function') return rightLabel();
-      return String(rightLabel);
+      return { t: String(rightLabel) };
     },
     sanitizedValue (): string {
       const rawValue = this.formValues[this.field.name];

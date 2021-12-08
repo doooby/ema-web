@@ -30,7 +30,7 @@ export default class extends DatabasePage {
   ];
 
   actions = [
-    { action: 'edit', icon: 'pencil', t: 'db.shared.edit' },
+    { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
   ];
 }
 </script>

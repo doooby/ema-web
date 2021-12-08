@@ -1,10 +1,10 @@
 <template>
   <div class="page-content">
     <b-alert :show="!record && !getQueryState.fail" variant="info">
-      <t value="db.shared.loading" />
+      <t value="app.loading" />
     </b-alert>
     <b-alert :show="getQueryState.fail" variant="warning">
-      <t value="db.shared.record_not_found" />
+      <t value="app.record_not_found" />
     </b-alert>
 
     <div v-if="record" class="container">
