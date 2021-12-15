@@ -6,7 +6,7 @@
     @hidden="onHidden"
   >
     <template #modal-title>
-      <t value="layout.top_bar.menu.action.login" />
+      <t value="top_bar.menu.action.login" />
     </template>
     <div v-if="shown">
       <div v-if="currentUser">

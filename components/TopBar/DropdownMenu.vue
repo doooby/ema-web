@@ -6,13 +6,13 @@
     </template>
     <b-dropdown-item @click="onShowLoginModal">
       <b-icon icon="person" class="emr-2" />
-      <t value="layout.top_bar.menu.action.login" />
+      <t value="top_bar.menu.action.login" />
       <login-modal />
     </b-dropdown-item>
     <b-dropdown-divider />
     <b-dropdown-item @click="onShowLanguageModal">
       <b-icon icon="globe2" class="emr-2" />
-      <t value="layout.top_bar.menu.action.language" />
+      <t value="top_bar.menu.action.language" />
       <language-modal />
     </b-dropdown-item>
     <b-dropdown-divider />
@@ -23,7 +23,7 @@
           :value="!debugTranslations"
           @input="onToggleDebugTranslations"
         >
-          <t value="layout.top_bar.menu.action.debug_translations" />
+          <t value="top_bar.menu.action.debug_translations" />
         </b-form-checkbox>
       </div>
     </li>

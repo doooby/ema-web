@@ -5,7 +5,7 @@
     @hidden="onHidden"
   >
     <template #modal-title>
-      <t value="layout.top_bar.menu.action.language" />
+      <t value="top_bar.menu.action.language" />
     </template>
     <div v-if="shown">
       <b-list-group>
