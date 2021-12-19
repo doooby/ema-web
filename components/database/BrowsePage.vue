@@ -2,7 +2,8 @@
   <div class="page-content -has-submenu">
     <div class="page-menu">
       <search-form
-        :fields="searchFields"
+        :fields="searchFormFields"
+        :entity="entity"
         @search="onSearch"
       />
     </div>
@@ -47,9 +48,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { FormValues, FormField } from '~/components/Form';
+import { FormValues, buildFormFields, FormFieldDefinition } from '~/components/Form';
 import { DataTable } from '~/components/DataTable';
-import SearchForm from './SearchForm.vue';
+import SearchForm from './page/index/SearchForm.vue';
 import RecordsPagination from './RecordsPagination.vue';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordCellActions, { Action as ActionItem } from '~/components/database/RecordCellActions.vue';
@@ -59,10 +60,11 @@ import RecordCellActions, { Action as ActionItem } from '~/components/database/R
 })
 export default class BrowsePage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
-  @Prop({ required: true }) readonly searchFields!: FormField[];
+  @Prop({ required: true }) readonly searchFields!: FormFieldDefinition[];
   @Prop({ required: true }) readonly tableColumns!: DataTable.Column[];
   @Prop({ default: () => [] }) readonly actions!: ActionItem[];
 
+  searchFormFields = buildFormFields(this.searchFields);
   searchValues = {};
   searchQueryState = this.$api.newQueryState();
 
