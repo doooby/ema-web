@@ -9,7 +9,6 @@ interface FieldOptions {
   [option: string]: any;
 }
 
-// eslint-disable-next-line no-use-before-define
 export type FormFieldDefinition = [ string, (string | FormFieldType), FieldOptions? ];
 
 export interface FormValues {
@@ -18,7 +17,6 @@ export interface FormValues {
 
 export interface FormField {
   name: string;
-  // eslint-disable-next-line no-use-before-define
   type: FormFieldType;
   options: FieldOptions;
 }

@@ -19,6 +19,14 @@
     >
       <b-list-group v-if="modalShown">
         <b-list-group-item
+          v-if="blankOption"
+          key="--blank--"
+          button
+          @click="onItemSelected(blankOption)"
+        >
+          <t value="db.record.shared.label.any" />
+        </b-list-group-item>
+        <b-list-group-item
           v-for="option in options"
           :key="option.value"
           :active="selected === option"
@@ -78,6 +86,11 @@ export default class List extends Vue {
 
   get valueText (): string {
     return this.selected?.caption ?? '';
+  }
+
+  get blankOption (): undefined | Option {
+    if (!this.field.options.blank) return;
+    return { value: null, caption: '' };
   }
 
   get options (): Array<Option> {

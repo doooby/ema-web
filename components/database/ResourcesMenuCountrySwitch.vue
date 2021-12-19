@@ -1,10 +1,15 @@
 <template>
-  <div v-if="viableCountries.length > 0">
-    <form-group
-      :value="{ country: currentCountryId }"
-      :fields="fields"
-      @input="onSelectCountry"
-    />
+  <div>
+    <div v-if="viableCountries.length > 1">
+      <form-group
+        :value="{ country: currentCountryId }"
+        :fields="fields"
+        @input="onSelectCountry"
+      />
+    </div>
+    <div v-if="viableCountries.length === 1">
+      {{ viableCountries[0].caption }}
+    </div>
   </div>
 </template>
 

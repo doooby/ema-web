@@ -16,6 +16,10 @@ export default class DatabasePage extends Vue {
     return this.$store.state.session.currentUser;
   }
 
+  get currentCountryId (): null | number {
+    return this.$store.state.session.currentCountry?.id ?? null;
+  }
+
   beforeMount () {
     const user = this.currentUser;
     if (!user) return;

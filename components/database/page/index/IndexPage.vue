@@ -48,7 +48,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { FormValues, buildFormFields, FormFieldDefinition } from '~/components/Form';
+import { FormValues, buildFormFields, FormFieldDefinition, prefillFormValues } from '~/components/Form';
 import { DataTable } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from '../../RecordsPagination.vue';
@@ -65,11 +65,14 @@ export default class IndexPage extends Vue {
   @Prop({ default: () => [] }) readonly actions!: ActionItem[];
 
   searchFormFields = buildFormFields(this.searchFields);
-  searchValues = {};
+  searchValues = prefillFormValues(this.searchFormFields);
   searchQueryState = this.$api.newQueryState();
 
   @Watch('entity')
+  @Watch('searchFields')
   onEntityChanged () {
+    this.searchFormFields = buildFormFields(this.searchFields);
+    this.searchValues = prefillFormValues(this.searchFormFields);
     this.searchQueryState.reset();
     this.updatePage();
   }

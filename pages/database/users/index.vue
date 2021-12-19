@@ -11,14 +11,23 @@
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
+import { FormFieldDefinition } from '~/components/Form';
 
 @Component({
   components: { IndexPage },
 })
 export default class extends DatabasePage {
-  searchFields = [
-    [ 'name', 'text' ],
-  ];
+  get searchFields (): FormFieldDefinition[] {
+    if (!this.currentUser) return [];
+    const options = this.currentUser.countries.map(item => ({
+      value: item.id,
+      caption: item.caption,
+    }));
+    return [
+      [ 'country', 'list', { options, blank: true } ],
+      [ 'name', 'text' ],
+    ];
+  }
 
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },

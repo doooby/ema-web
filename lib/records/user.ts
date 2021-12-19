@@ -1,5 +1,4 @@
 import * as mappers from '~/lib/api/mappers';
-import * as dbFields from '~/components/database/controls';
 import { FormFieldDefinition } from '~/components/Form';
 
 const { object, recordId, prop, maybeProp, maybeAssoc, val, list } = mappers;
@@ -61,7 +60,6 @@ export function mapSessionUser (value: any): SessionUser {
 export const user = {
   entityControls (): FormFieldDefinition[] {
     return [
-      [ 'country', dbFields.AssociatedRecord, { entity: 'countries', optional: true } ],
       [ 'login', 'text' ],
       [ 'full_name_en', 'text' ],
       [ 'full_name', 'text' ],
