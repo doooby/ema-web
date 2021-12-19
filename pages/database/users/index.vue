@@ -1,5 +1,5 @@
 <template>
-  <browse-page
+  <index-page
     entity="users"
     :search-fields="searchFields"
     :table-columns="tableColumns"
@@ -10,10 +10,10 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import BrowsePage from '~/components/database/BrowsePage.vue';
+import IndexPage from '~/components/database/page/index/IndexPage.vue';
 
 @Component({
-  components: { BrowsePage },
+  components: { IndexPage },
 })
 export default class extends DatabasePage {
   searchFields = [

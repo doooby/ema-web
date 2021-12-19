@@ -21,5 +21,6 @@ module.exports = {
     camelcase: [ 'off' ],
     'no-use-before-define': [ 'off' ],
     'vue/require-valid-default-prop': [ 'off' ],
+    'no-console': [ 'off' ],
   },
 };

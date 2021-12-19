@@ -1,7 +1,7 @@
-import BrowsePage from './BrowsePage.vue';
+import IndexPage from './page/index/IndexPage.vue';
 import NewPage from './NewPage.vue';
 
 export {
-  BrowsePage,
+  IndexPage,
   NewPage,
 };

@@ -7,12 +7,11 @@
       <div class="flex-fill text-truncate association--text">
         {{ valueText }}
       </div>
-      <b-button v-if="optionsInModal" @click="onChevronClick">
+      <b-button @click="onChevronClick">
         <b-icon icon="chevron-down" />
       </b-button>
     </div>
     <b-modal
-      v-if="optionsInModal"
       v-model="modalShown"
       centered
       hide-footer
@@ -41,63 +40,57 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
-import ControlMixin from '../ControlMixin';
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import ControlMixin from '~/components/Form/ControlMixin';
+import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 
 type Option = { value: string, caption: string };
 
-export const type: FormFieldType = {
-  name: 'list',
-  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
-    values[name] = record[name] ?? undefined;
-    return values;
-  },
-  mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
-    const value = values[name];
-    record[name] = value === undefined ? '' : value;
-    return record;
-  },
-};
-
-export default Vue.extend({
+@Component({
   mixins: [ ControlMixin ],
-  props: {
-    field: { type: Object as Vue.PropType<FormField>, required: true },
-    context: { type: Object as Vue.PropType<FormGroupContext>, required: true },
-    formValues: { type: Object as Vue.PropType<FormValues>, required: true },
-  },
-  data () {
-    return {
-      modalShown: false,
+})
+export default class List extends Vue {
+    static fieldType: FormFieldType = {
+      name: 'list',
+      mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
+        values[name] = record[name] ?? undefined;
+        return values;
+      },
+      mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
+        const value = values[name];
+        record[name] = value === undefined ? '' : value;
+        return record;
+      },
     };
-  },
-  computed: {
-    optionsInModal (): boolean {
-      // return !!this.field.options.modal;
-      return true;
-    },
-    selected (): undefined | Option {
-      if (!this.options) return undefined;
-      const value = this.formValues[this.field.name];
-      const option = value && this.options.find(option => option.value === value);
-      return option || undefined;
-    },
-    valueText (): string {
-      return this.selected?.caption ?? '';
-    },
-    options (): Array<Option> {
-      return this.field.options.options ?? [];
-    },
-  },
-  methods: {
-    onChevronClick () {
-      this.modalShown = true;
-    },
-    onItemSelected (option: Option) {
-      this.modalShown = false;
-      this.context.onChange({ [this.field.name]: option.value });
-    },
-  },
-});
+
+  @Prop({ required: true }) field!: FormField;
+  @Prop({ required: true }) context!: FormGroupContext;
+  @Prop({ required: true }) formValues!: FormValues;
+
+  modalShown = false;
+
+  get selected (): undefined | Option {
+    if (!this.options) return undefined;
+    const value = this.formValues[this.field.name];
+    const option = value && this.options.find(option => option.value === value);
+    return option || undefined;
+  }
+
+  get valueText (): string {
+    return this.selected?.caption ?? '';
+  }
+
+  get options (): Array<Option> {
+    return this.field.options.options ?? [];
+  }
+
+  onChevronClick () {
+    this.modalShown = true;
+  }
+
+  onItemSelected (option: Option) {
+    this.modalShown = false;
+    this.context.onChange({ [this.field.name]: option.value });
+  }
+}
 </script>

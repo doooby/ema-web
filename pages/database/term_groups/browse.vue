@@ -1,5 +1,5 @@
 <template>
-  <browse-page
+  <index-page
     entity="term_groups"
     :search-fields="[]"
     :table-columns="tableColumns"
@@ -11,16 +11,16 @@
         :edit="true"
       />
     </template>
-  </browse-page>
+  </index-page>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import BrowsePage from '~/components/database/BrowsePage.vue';
+import IndexPage from '~/components/database/page/index/IndexPage.vue';
 import RecordCellActions from '~/components/database/RecordCellActions.vue';
 
 export default Vue.extend({
-  components: { RecordCellActions, BrowsePage },
+  components: { RecordCellActions, IndexPage },
   layout: 'database',
   data () {
     return {

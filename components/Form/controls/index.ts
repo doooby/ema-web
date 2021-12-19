@@ -2,7 +2,7 @@ import BooleanControl from './Boolean.vue';
 import CalendarControl, { type as CalendarControlType } from './Calendar.vue';
 import DateControl, { type as DateControlType } from './Date.vue';
 import IntegerControl, { type as IntegerControlType } from './Integer.vue';
-import ListControl, { type as ListControlType } from './List.vue';
+import ListControl from './List.vue';
 import TextControl, { type as TextControlType } from './Text.vue';
 import TextMultilineControl, { type as TextMultilineControlType } from './TextMultiline.vue';
 
@@ -28,6 +28,6 @@ add(BooleanControl.fieldType, BooleanControl);
 add(CalendarControlType, CalendarControl);
 add(DateControlType, DateControl);
 add(IntegerControlType, IntegerControl);
-add(ListControlType, ListControl);
+add(ListControl.fieldType, ListControl);
 add(TextControlType, TextControl);
 add(TextMultilineControlType, TextMultilineControl);

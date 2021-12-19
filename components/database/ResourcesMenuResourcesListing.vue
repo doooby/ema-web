@@ -13,17 +13,16 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Vue, Component } from 'vue-property-decorator';
 import { dbPages, resourcePath } from '~/config/pages';
 
-export default Vue.extend({
-  computed: {
-    shownResources (): Array<{ name: string, path: string }> {
-      return dbPages.map(resource => ({
-        name: resource.name,
-        path: resourcePath(resource.name, resource.pages[0]),
-      }));
-    },
-  },
-});
+@Component
+export default class ResourcesMenuResourcesListing extends Vue {
+  get shownResources (): Array<{ name: string, path: string }> {
+    return dbPages.map(resource => ({
+      name: resource.name,
+      path: resourcePath(resource.name, resource.pages[0]),
+    }));
+  }
+}
 </script>

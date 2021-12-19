@@ -50,15 +50,15 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { FormValues, buildFormFields, FormFieldDefinition } from '~/components/Form';
 import { DataTable } from '~/components/DataTable';
-import SearchForm from './page/index/SearchForm.vue';
-import RecordsPagination from './RecordsPagination.vue';
+import SearchForm from './SearchForm.vue';
+import RecordsPagination from '../../RecordsPagination.vue';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordCellActions, { Action as ActionItem } from '~/components/database/RecordCellActions.vue';
 
 @Component({
   components: { SearchForm, RecordsPagination, RecordCellActions },
 })
-export default class BrowsePage extends Vue {
+export default class IndexPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly searchFields!: FormFieldDefinition[];
   @Prop({ required: true }) readonly tableColumns!: DataTable.Column[];
@@ -83,7 +83,7 @@ export default class BrowsePage extends Vue {
     const entityQueries = (this.$api.queries as any)[entity];
     const queryBuilder = entityQueries?.search || entityQueries?.index;
     if (!queryBuilder) {
-      utils.warn(`database.BrowsePage: search/index query is missing for entity ${entity}.`);
+      utils.warn(`database.IndexPage: search/index query is missing for entity ${entity}.`);
       return;
     }
     return queryBuilder;

@@ -1,5 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
 import { SessionUser } from '~/lib/records';
+import * as mappers from '~/lib/api/mappers';
+import * as localStorage from '~/lib/localStorage';
 
 @Module({
   stateFactory: true,
@@ -7,8 +9,9 @@ import { SessionUser } from '~/lib/records';
 })
 export default class UserModule extends VuexModule {
   currentUser: null | SessionUser = null;
-  loginModalShown = false;
+  currentCountry: null | mappers.AssociatedRecord = null;
 
+  loginModalShown = false;
   languageModalShown: boolean = false;
   debugTranslations: boolean = false;
 
@@ -23,6 +26,12 @@ export default class UserModule extends VuexModule {
   @Mutation
   requestAuthnFailed () {
     this.currentUser = null;
+  }
+
+  @Mutation
+  setCurrentCountry (country: null | mappers.AssociatedRecord) {
+    localStorage.set(localStorage.values.currentCountry, country);
+    this.currentCountry = country;
   }
 
   @Mutation

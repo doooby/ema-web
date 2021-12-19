@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { formatISO } from 'date-fns';
 
 export function raise (error: Error) {
