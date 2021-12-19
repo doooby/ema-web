@@ -1,8 +1,10 @@
 <template>
   <b-form-group
-    :label="labelTranslation"
     :label-for="domIdBase"
   >
+    <template #label>
+      <t :value="labelTranslation" />
+    </template>
     <div class="d-flex">
       <div class="flex-fill text-truncate association--text">
         {{ valueText }}
@@ -17,6 +19,9 @@
       hide-footer
       :title="labelTranslation"
     >
+      <template #modal-title>
+        <t :value="labelTranslation" />
+      </template>
       <b-list-group v-if="modalShown">
         <b-list-group-item
           v-if="blankOption"

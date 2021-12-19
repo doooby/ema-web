@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { FormField, FormValues, prefillFormValues } from '~/components/Form';
 
 @Component
@@ -27,7 +27,15 @@ export default class SearchForm extends Vue {
   @Prop({ required: true }) readonly fields!: FormField[];
 
   searchValues = prefillFormValues(this.fields);
-  fieldsPrefix = 'db.record.countries.search';
+
+  @Watch('fields')
+  onFieldsChanged () {
+    this.searchValues = prefillFormValues(this.fields);
+  }
+
+  get fieldsPrefix (): string {
+    return `db.record.${this.entity}.search`;
+  }
 
   onInput (value: FormValues) {
     this.searchValues = value;
