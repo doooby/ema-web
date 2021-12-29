@@ -1,59 +1,25 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { EducationLevel, EducationLevelAssociations } from '~/lib/records';
+import { EducationLevel } from '~/lib/records';
 
-const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
+const { object, recordId, prop, maybeProp, val } = mappers;
 
-function mapEducationLevel (value: any, associations?: EducationLevelAssociations): EducationLevel {
+function mapEducationLevel (value: any): EducationLevel {
   return object(value, root => ({
     id: recordId(root),
     name: prop('name', root, val.string),
-    level: maybeProp('level', root, val.integer),
+    level: prop('level', root, val.integer),
     terms_per_year: maybeProp('terms_per_year', root, val.integer),
     years_length: maybeProp('years_length', root, val.integer),
     start_age: maybeProp('start_age', root, val.integer),
     mandatory: maybeProp('mandatory', root, val.boolean),
-    country: assoc('country', root, associations?.country),
   }));
 }
 
-const mapAssociations = mappers.createAssociationsMapper<EducationLevelAssociations>('country');
-
-export function search (params: Params) {
+export function index (params: Params) {
   return {
-    path: '/education_levels/search',
+    path: '/education_levels',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapEducationLevel, mapAssociations),
-  };
-}
-
-export function searchAssociated (params?: Params) {
-  return {
-    path: '/education_levels/search?assoc=1',
-    params,
-    mapper: (payload: any) => mappers.associatedRecords<EducationLevel>(payload),
-  };
-}
-
-export function get (educationLevelId: number) {
-  return {
-    path: `/education_levels/${educationLevelId}`,
-    mapper: (payload: any) => record(payload, mapEducationLevel, mapAssociations),
-  };
-}
-
-export function create (educationLevel: Params) {
-  return {
-    path: '/education_levels/create',
-    params: { education_level: educationLevel },
-    mapper: mappers.changedRecord,
-  };
-}
-
-export function update (educationLevelId: number, educationLevel: Params) {
-  return {
-    path: `/education_levels/${educationLevelId}/update`,
-    params: { education_level: educationLevel },
-    mapper: mappers.changedRecord,
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapEducationLevel),
   };
 }

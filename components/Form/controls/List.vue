@@ -95,7 +95,7 @@ export default class List extends Vue {
 
   get blankOption (): undefined | Option {
     if (!this.field.options.blank) return;
-    return { value: null, caption: '' };
+    return { value: '', caption: '' };
   }
 
   get options (): Array<Option> {

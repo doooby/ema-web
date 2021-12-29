@@ -33,13 +33,6 @@ export function update (userId: number, user: Params) {
   };
 }
 
-export function deleteRecord (userId: number) {
-  return {
-    path: `/users/${userId}/destroy`,
-    mapper: mappers.changedRecord,
-  };
-}
-
 export function changePassword (userId: number, password: string) {
   return {
     path: `/users/${userId}/change_password`,

@@ -33,7 +33,7 @@
           <template #header-cell="{ column }">
             <t :value="`db.record.${entity}.label.${column.name}`" />
           </template>
-          <template v-if="actions" #actions="{ dataItem }">
+          <template v-if="actions.length" #actions="{ dataItem }">
             <record-cell-actions
               entity="users"
               :record="dataItem"
