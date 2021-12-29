@@ -7,8 +7,8 @@ export const dbPages: Resource[] = [
   { name: 'countries', pages: [ '', 'new' ] },
   { name: 'users', pages: [ '', 'new' ] },
   { name: 'education_levels', pages: [ '' ] },
+  { name: 'subjects', pages: [ '', 'new' ] },
   // gut up
-  { name: 'subjects', pages: [ 'browse', 'new' ] },
   { name: 'courses', pages: [ 'browse', 'new' ] },
   { name: 'schools', pages: [ '', 'new' ] },
   { name: 'term_groups', pages: [ 'browse', 'new' ] },

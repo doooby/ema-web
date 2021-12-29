@@ -2,7 +2,7 @@ import { Params } from '..';
 import * as mappers from '../mappers';
 import { Subject } from '~/lib/records';
 
-const { object, record, recordId, prop, maybeProp, val } = mappers;
+const { object, recordId, prop, maybeProp, val } = mappers;
 
 function mapSubject (value: any): Subject {
   return object(value, root => ({
@@ -20,18 +20,10 @@ export function index (params: Params) {
   };
 }
 
-export function searchAssociated (params?: Params) {
+export function show (userId: number) {
   return {
-    path: '/subjects?assoc=1',
-    params,
-    mapper: (payload: any) => mappers.associatedRecords<Subject>(payload),
-  };
-}
-
-export function get (subjectId: number) {
-  return {
-    path: `/subjects/${subjectId}`,
-    mapper: (payload: any) => record(payload, mapSubject),
+    path: `/subjects/${userId}`,
+    mapper: (payload: any) => mappers.record(payload, mapSubject),
   };
 }
 

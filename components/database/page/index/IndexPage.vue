@@ -35,7 +35,7 @@
           </template>
           <template v-if="actions.length" #actions="{ dataItem }">
             <record-cell-actions
-              entity="users"
+              :entity="entity"
               :record="dataItem"
               :actions="actions"
             />

@@ -24,7 +24,7 @@ export default class extends DatabasePage {
       caption: item.caption,
     }));
     return [
-      [ 'country', 'list', { options, blank: true } ],
+      [ 'country_id', 'list', { options, blank: true } ],
       [ 'name', 'text' ],
     ];
   }

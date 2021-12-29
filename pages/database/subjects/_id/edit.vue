@@ -2,30 +2,30 @@
   <edit-page
     entity="subjects"
     :fields="fields"
-    :no-default-redirect="true"
     @updated="onUpdated"
   />
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
 import EditPage from '~/components/database/EditPage.vue';
+import { DatabasePage } from '~/components';
+import { FormFieldDefinition } from '~/components/Form';
 
-export default Vue.extend({
+@Component({
   components: { EditPage },
-  layout: 'database',
-  computed: {
-    fields () {
-      return [
-        [ 'name_en', 'text' ],
-        [ 'name', 'text' ],
-      ];
-    },
-  },
-  methods: {
-    onUpdated () {
-      this.$router.push({ path: '/database/subjects/browse' });
-    },
-  },
-});
+})
+export default class extends DatabasePage {
+  get fields (): FormFieldDefinition[] {
+    return [
+      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
+      [ 'name_en', 'text' ],
+      [ 'name', 'text' ],
+    ];
+  }
+
+  onUpdated () {
+    this.$router.push({ path: '/database/subjects' });
+  }
+}
 </script>

@@ -1,6 +1,6 @@
 export interface EducationLevel {
   id: number;
-  name: string;
+  name_en: string;
   level: number;
   terms_per_year?: number;
   years_length?: number;

@@ -7,7 +7,7 @@ const { object, recordId, prop, maybeProp, val } = mappers;
 function mapEducationLevel (value: any): EducationLevel {
   return object(value, root => ({
     id: recordId(root),
-    name: prop('name', root, val.string),
+    name_en: prop('name_en', root, val.string),
     level: prop('level', root, val.integer),
     terms_per_year: maybeProp('terms_per_year', root, val.integer),
     years_length: maybeProp('years_length', root, val.integer),

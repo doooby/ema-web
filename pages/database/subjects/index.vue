@@ -1,8 +1,9 @@
 <template>
   <index-page
-    entity="education_levels"
+    entity="subjects"
     :search-fields="searchFields"
     :table-columns="tableColumns"
+    :actions="actions"
   />
 </template>
 
@@ -19,17 +20,19 @@ export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
+      [ 'name', 'text' ],
     ];
   }
 
   tableColumns = [
+    { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: 'link', onlyId: true }, size: 60 },
     { name: 'name_en' },
-    { name: 'level' },
-    { name: 'terms_per_year' },
-    { name: 'start_age' },
-    { name: 'years_length' },
-    { name: 'mandatory' },
+    { name: 'name' },
+  ];
+
+  actions = [
+    { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
   ];
 }
 </script>
