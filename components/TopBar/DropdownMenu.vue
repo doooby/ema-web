@@ -1,8 +1,7 @@
 <template>
   <b-dropdown right no-caret variant="default">
     <template #button-content>
-      <slot />
-      <b-icon icon="list" variant="light" />
+      <b-icon icon="list" variant="light" data-testid="TopBar--menu" />
     </template>
     <b-dropdown-item @click="onShowLoginModal">
       <b-icon icon="person" class="emr-2" />
