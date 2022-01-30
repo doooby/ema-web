@@ -167,7 +167,7 @@ export const val = {
     return !!value;
   },
   string (value: any): string {
-    if (value === undefined) return '';
+    if (value === null) return '';
     if (typeof value !== 'string') throw new MappingError('invalid string');
     return value;
   },
@@ -184,7 +184,6 @@ export const val = {
   assoc<R=any> (value: any): AssociatedRecord<R> {
     return object(value, root => ({
       id: recordId(root),
-      caption: prop('caption', root, val.string),
       labels: unsafeProp('labels', root, {}, value => recordLabels(value)),
     }));
   },
