@@ -1,26 +1,12 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { Course, CourseAssociations, Subject } from '~/lib/records';
-
-const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
-
-function mapCourse (value: any, associations?: CourseAssociations): Course {
-  return object(value, root => ({
-    id: recordId(root),
-    name_en: prop('name_en', root, val.string),
-    name: maybeProp('name', root, val.string),
-    grade: maybeProp('grade', root, val.integer),
-    education_level: assoc('education_level', root, associations?.education_level),
-  }));
-}
-
-const mapAssociations = mappers.createAssociationsMapper<CourseAssociations>('education_level');
+import { Course, mapCourse, mapCourseAssociations, Subject } from '~/lib/records';
 
 export function search (params: Params) {
   return {
     path: '/courses/search',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapCourse, mapAssociations),
+    mapper: (payload: any) => mappers.paginatedRecords(payload, mapCourse, mapCourseAssociations),
   };
 }
 
@@ -42,7 +28,7 @@ export function searchSubjects (courseId: number) {
 export function get (courseId: number) {
   return {
     path: `/courses/${courseId}`,
-    mapper: (payload: any) => record(payload, mapCourse, mapAssociations),
+    mapper: (payload: any) => mappers.record(payload, mapCourse, mapCourseAssociations),
   };
 }
 

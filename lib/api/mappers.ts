@@ -25,7 +25,6 @@ export interface PaginatedRecords<R=any> {
 
 export interface AssociatedRecord<R=any> {
   id: number;
-  caption: string;
   labels: Labels;
   record?: R;
 }
@@ -168,6 +167,7 @@ export const val = {
     return !!value;
   },
   string (value: any): string {
+    if (value === undefined) return '';
     if (typeof value !== 'string') throw new MappingError('invalid string');
     return value;
   },

@@ -1,15 +1,16 @@
 import * as mappers from '~/lib/api/mappers';
 import { FormFieldDefinition } from '~/components/Form';
+import { Country } from '~/lib/records/country';
 
-const { object, recordId, prop, maybeProp, maybeAssoc, val, list } = mappers;
+const { object, recordId, prop, maybeAssoc, val, list } = mappers;
 
 export interface User {
   id: number;
+  country?: mappers.AssociatedRecord<Country>;
   login: string;
-  full_name_en?: string;
-  full_name?: string;
-  lock?: string;
-  country?: mappers.AssociatedRecord;
+  full_name_en: string;
+  full_name: string;
+  lock: string;
   is_root: boolean;
   is_can_admin: boolean;
   is_can_web: boolean;
@@ -23,11 +24,11 @@ export interface UserAssociations {
 export function mapUser (value: any, associations?: UserAssociations): User {
   return object(value, root => ({
     id: recordId(root),
-    login: prop('login', root, val.string),
-    full_name_en: maybeProp('full_name_en', root, val.string),
-    full_name: maybeProp('full_name', root, val.string),
-    lock: maybeProp('lock', root, val.string),
     country: maybeAssoc('country', root, associations?.country),
+    login: prop('login', root, val.string),
+    full_name_en: prop('full_name_en', root, val.string),
+    full_name: prop('full_name', root, val.string),
+    lock: prop('lock', root, val.string),
     is_root: prop('is_root', root, val.boolean),
     is_can_admin: prop('is_can_admin', root, val.boolean),
     is_can_web: prop('is_can_web', root, val.boolean),
@@ -42,8 +43,8 @@ export const mapUserAssociations = mappers.createAssociationsMapper<UserAssociat
 export interface SessionUser {
   id: number;
   login: string;
-  name_en?: string;
-  name?: string;
+  name_en: string;
+  name: string;
   countries: mappers.AssociatedRecord[];
 }
 
@@ -51,8 +52,8 @@ export function mapSessionUser (value: any): SessionUser {
   return object(value, root => ({
     id: recordId(root),
     login: prop('login', root, val.string),
-    name_en: maybeProp('name_en', root, val.string),
-    name: maybeProp('name', root, val.string),
+    name_en: prop('name_en', root, val.string),
+    name: prop('name', root, val.string),
     countries: prop('countries', root, countries => list(countries, val.assoc)),
   }));
 }

@@ -19,7 +19,7 @@ import Vue from 'vue';
 import { formatISO } from 'date-fns';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
 import RecordCellActions from '~/components/database/RecordCellActions.vue';
-import { Student, student } from '~/lib/records';
+import { Person, student } from '~/lib/records';
 
 export default Vue.extend({
   components: { RecordCellActions, IndexPage },
@@ -36,8 +36,8 @@ export default Vue.extend({
         { name: 'last_name_en' },
         { name: 'first_name' },
         { name: 'last_name' },
-        { name: 'born_on', getText: ({ born_on }: Student) => formatDate(born_on) },
-        { name: 'gender', getText: (student: Student) => (this as any).translateGender(student.gender) },
+        { name: 'born_on', getText: ({ born_on }: Person) => formatDate(born_on) },
+        { name: 'gender', getText: (student: Person) => (this as any).translateGender(student.gender) },
         { name: 'residency' },
         { name: 'language' },
         { name: 'region' },
@@ -64,7 +64,7 @@ export default Vue.extend({
         { name: 'disability_diagnosis' },
         { name: 'assistance_needed' },
         { name: 'oos_before' },
-        { name: 'enrolment_on', getText: ({ enrolment_on }: Student) => formatDate(enrolment_on) },
+        { name: 'enrolment_on', getText: ({ enrolment_on }: Person) => formatDate(enrolment_on) },
       ],
     };
   },

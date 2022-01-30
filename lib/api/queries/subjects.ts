@@ -1,29 +1,19 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { Subject } from '~/lib/records';
-
-const { object, recordId, prop, maybeProp, val } = mappers;
-
-function mapSubject (value: any): Subject {
-  return object(value, root => ({
-    id: recordId(root),
-    name_en: prop('name_en', root, val.string),
-    name: maybeProp('name', root, val.string),
-  }));
-}
+import { subject } from '~/lib/records';
 
 export function index (params: Params) {
   return {
     path: '/subjects',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapSubject),
+    mapper: (payload: any) => mappers.paginatedRecords(payload, subject.mapRecord, subject.mapAssociations),
   };
 }
 
 export function show (userId: number) {
   return {
     path: `/subjects/${userId}`,
-    mapper: (payload: any) => mappers.record(payload, mapSubject),
+    mapper: (payload: any) => mappers.record(payload, subject.mapRecord, subject.mapAssociations),
   };
 }
 

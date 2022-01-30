@@ -1,13 +1,13 @@
 // const isProduction = process.env.NODE_ENV === 'production';
 
-let serverHostName = process.env.SERVER_URL || 'http://localhost:3070';
+let serverHostName = process.env.SERVER_URL || 'http://127.0.0.1:3070';
 if (serverHostName.endsWith('/')) {
   serverHostName = serverHostName.substring(0, serverHostName.length - 1);
 }
 
 export default {
   server: {
-    host: process.env.HOST || 'localhost',
+    host: process.env.HOST || '127.0.0.1',
     port: process.env.PORT || 3072,
   },
 

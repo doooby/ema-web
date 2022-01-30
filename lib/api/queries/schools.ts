@@ -1,27 +1,14 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { School, SchoolAssociations, Course } from '~/lib/records';
+import { School, Course, school } from '~/lib/records';
 
-const { object, record, recordId, prop, maybeProp, assoc, val } = mappers;
-
-function mapSchool (value: any, associations?: SchoolAssociations): School {
-  return object(value, root => ({
-    id: recordId(root),
-    name_en: prop('name_en', root, val.string),
-    name: maybeProp('name', root, val.string),
-    address: maybeProp('address', root, val.string),
-    project: maybeProp('project', root, val.string),
-    country: assoc('country', root, associations?.country),
-  }));
-}
-
-const mapAssociations = mappers.createAssociationsMapper<SchoolAssociations>('country');
+const { object, record, prop, val } = mappers;
 
 export function index (params: Params) {
   return {
     path: '/schools',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapSchool, mapAssociations),
+    mapper: (payload: any) => mappers.paginatedRecords(payload, school.mapRecord, school.mapAssociations),
   };
 }
 
@@ -43,7 +30,7 @@ export function searchCourses (schoolId: number) {
 export function get (schoolId: number) {
   return {
     path: `/schools/${schoolId}`,
-    mapper: (payload: any) => record(payload, mapSchool, mapAssociations),
+    mapper: (payload: any) => record(payload, school.mapRecord, school.mapAssociations),
   };
 }
 

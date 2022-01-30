@@ -39,6 +39,6 @@ export function get<V> ({ key, mapper }: StoredValue<V>): null | V {
 
 export function set ({ key }: StoredValue<any>, value: any): void {
   if (!store) return;
-  value = value ? JSON.stringify(value) : '';
-  store.setItem(key, value);
+  if (value) store.setItem(key, JSON.stringify(value));
+  else store.removeItem(key);
 }
