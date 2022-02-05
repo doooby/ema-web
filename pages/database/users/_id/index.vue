@@ -57,7 +57,14 @@
           {{ record.country && record.country.caption }}
         </show-page-table-row>
         <show-page-table-row label="db.record.users.label.privileges">
-          {{ privilegesList(record) }}
+          <ul>
+            <li
+              v-for="name of privilegesList(record)"
+              :key="name"
+            >
+              <t :value="`db.record.users.label.${name}`" />
+            </li>
+          </ul>
         </show-page-table-row>
       </table>
     </template>
@@ -87,13 +94,13 @@ export default class extends DatabasePage {
   changePassModalShown = false;
   lockModalShown = false;
 
-  privilegesList (record: User): string {
-    if (record.is_root) return 'is_root';
+  privilegesList (record: User): string[] {
+    if (record.is_root) return [ 'is_root' ];
     return [
-      (record.is_can_admin && 'is_can_admin'),
-      (record.is_can_web && 'is_can_web'),
-      (record.is_can_mng_users && 'is_can_mng_users'),
-    ].filter(value => value).join(', ');
+      (record.is_can_admin ? 'is_can_admin' : null),
+      (record.is_can_web ? 'is_can_web' : null),
+      (record.is_can_mng_users ? 'is_can_mng_users' : null),
+    ].filter(value => value) as string[];
   }
 }
 </script>

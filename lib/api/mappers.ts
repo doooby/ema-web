@@ -4,8 +4,9 @@ type Labels = { [name: string]: undefined | string };
 
 export type RecordError = [ string, string ];
 
-export interface RecordGet<R=any> {
-  success: boolean;
+export type RecordGet<R=any> =
+  { success: false } | {
+  success: true;
   record: R;
 }
 
@@ -195,9 +196,12 @@ export function record<R, A> (
   mapAssociations?: (value: any) => A,
 ): RecordGet<R> {
   return object(value, (root) => {
-    const associations = mapAssociations && prop('associations', root, mapAssociations);
+    const success = prop('success', root, val.boolean);
+    if (!success) return { success: false };
+
+    const associations = mapAssociations && maybeProp('associations', root, mapAssociations);
     return {
-      success: prop('success', root, val.boolean),
+      success: true,
       record: prop('record', root, record => mapToRecordParams(record, associations)),
     };
   });

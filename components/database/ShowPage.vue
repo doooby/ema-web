@@ -1,9 +1,9 @@
 <template>
   <div class="page-content">
-    <b-alert :show="!record && !getQueryState.fail" variant="info">
+    <b-alert :show="!record && getQueryState.running" variant="info" class="m-2">
       <t value="app.loading" />
     </b-alert>
-    <b-alert :show="getQueryState.fail" variant="warning">
+    <b-alert :show="recordLoadFailed" variant="warning" class="m-2">
       <t value="app.record_not_found" />
     </b-alert>
 
@@ -30,12 +30,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { RecordGet } from '~/lib/api/mappers';
 
 @Component
 export default class ShowPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
 
-  getQueryState = this.$api.newQueryState();
+  getQueryState = this.$api.newQueryState<RecordGet>();
   reloadRecord = () => this.updatePage();
 
   @Watch('entity')
@@ -53,8 +54,14 @@ export default class ShowPage extends Vue {
     return route.params.id;
   }
 
+  get recordLoadFailed (): boolean {
+    const recordGet = this.getQueryState.value;
+    return recordGet ? !recordGet.success : false;
+  }
+
   get record (): null | any {
-    return this.getQueryState.value?.record;
+    const recordGet = this.getQueryState.value;
+    return recordGet?.success ? recordGet.record : null;
   }
 
   updatePage () {
