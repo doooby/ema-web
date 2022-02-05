@@ -10,7 +10,7 @@
     <div class="container-fluid emy-4">
       <div class="border-primary row no-gutters emb-2">
         <div class="col-lg-6">
-          <t value="db.records_count" />
+          <t value="db.record.shared.label.records_count" />
           : {{ records ? records.total : 0 }}
         </div>
         <div class="col-lg-6">

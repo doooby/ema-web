@@ -16,7 +16,7 @@ import IndexPage from '~/components/database/page/index/IndexPage.vue';
 })
 export default class extends DatabasePage {
   searchFields = [
-    [ 'name', 'text' ],
+    [ 'search', 'text' ],
   ];
 
   tableColumns = [
