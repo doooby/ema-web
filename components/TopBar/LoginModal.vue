@@ -106,7 +106,6 @@ export default Vue.extend({
       await this.$store.dispatch('session/fetchSession', {
         api: this.$api,
       });
-      console.log({ result });
       if (result) {
         this.$store.commit('session/hideLoginModal');
       } else {

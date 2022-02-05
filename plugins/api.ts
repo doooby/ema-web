@@ -45,8 +45,11 @@ export class ApiPlugin {
     if (!response.ok) {
       state.error = response.error ?? null;
       if (response.message) state.fail = response.message;
-      utils.warn('api query failed', response);
-      if (response.error) utils.warnOfError(response.error);
+      if (response.error) {
+        utils.warnOfError(response.error, { path, params });
+      } else {
+        utils.warn('api query failed', { path, params }, response);
+      }
       state.running = false;
       return null;
     }
@@ -62,7 +65,7 @@ export class ApiPlugin {
     if (mappingResult instanceof Error) {
       state.error = mappingResult;
       state.fail = 'invalid_data';
-      utils.warnOfError(mappingResult, response.payload);
+      utils.warnOfError(mappingResult, { path, params });
       mappingResult = null;
     }
 

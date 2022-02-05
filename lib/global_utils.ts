@@ -5,14 +5,14 @@ export function raise (error: Error) {
   throw error;
 }
 
-export function warn (message: string, context?: any) {
+export function warn (message: string, ...context: any) {
   console.log(message);
-  if (context) console.log('context: ', context);
+  if (context) console.log(...context);
 }
 
-export function warnOfError (error: Error, context?: any) {
+export function warnOfError (error: Error, ...context: any) {
   console.log(error.message);
-  if (context) console.log('context: ', context);
+  if (context) console.log(...context);
   console.error(error);
 }
 
