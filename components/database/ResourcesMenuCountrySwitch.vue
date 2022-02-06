@@ -4,6 +4,7 @@
       <form-group
         :value="{ country: currentCountryId }"
         :fields="fields"
+        name-prefix="resources_menu"
         @input="onSelectCountry"
       />
     </div>
@@ -35,7 +36,7 @@ export default class ResourcesMenuCountrySwitch extends Vue {
     const label = this.$t('db.menu.switch_country');
     const options = this.viableCountries.map(country => ({
       value: country.id,
-      caption: country.caption,
+      caption: country.labels.caption,
     }));
     return buildFormFields([
       [ 'country', 'list', { label, options } ],

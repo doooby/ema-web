@@ -9,7 +9,7 @@
       <div class="flex-fill text-truncate association--text">
         {{ valueText }}
       </div>
-      <b-button @click="onChevronClick">
+      <b-button :id="domIdBase" @click="onChevronClick">
         <b-icon icon="chevron-down" />
       </b-button>
     </div>
