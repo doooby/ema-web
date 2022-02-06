@@ -80,9 +80,6 @@ export default Vue.extend({
       if (typeof rightLabel === 'function') return rightLabel();
       return { t: String(rightLabel) };
     },
-    sanitizedValue (): string {
-      return sanitizeValue(this.formValues[this.field.name]);
-    },
   },
   watch: {
     formValues (newValue) {
