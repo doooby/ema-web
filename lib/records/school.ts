@@ -1,4 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
+import { FormFieldDefinition } from '~/components/Form';
 
 const { object, recordId, prop, assoc, val } = mappers;
 
@@ -27,4 +28,19 @@ export const school = {
   mapAssociations: mappers.createAssociationsMapper<SchoolAssociations>(
     'country',
   ),
+  recordControls ({
+    countryId,
+  }: {
+    countryId: null | number;
+  }): FormFieldDefinition[] {
+    const country: FormFieldDefinition[] = countryId
+      ? [ [ 'country_id', 'hidden', { value: countryId } ] ]
+      : [];
+    return [
+      ...country,
+      [ 'name_en', 'text' ],
+      [ 'name', 'text' ],
+      [ 'school_id', 'text' ],
+    ];
+  },
 };

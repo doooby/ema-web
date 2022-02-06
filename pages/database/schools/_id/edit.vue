@@ -8,27 +8,22 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import EditPage from '~/components/database/EditPage.vue';
+import { Component } from 'vue-property-decorator';
+import { DatabasePage } from '~/components';
+import { FormFieldDefinition } from '~/components/Form';
+import { school } from '~/lib/records';
 
-export default Vue.extend({
+@Component({
   components: { EditPage },
-  layout: 'database',
-  computed: {
-    fields () {
-      return [
-        [ 'country', 'associatedRecord', { entity: 'countries' } ],
-        [ 'name_en', 'text' ],
-        [ 'name', 'text' ],
-        [ 'address', 'text' ],
-        [ 'project', 'text' ],
-      ];
-    },
-  },
-  methods: {
-    onUpdated (record: any) {
-      this.$router.push({ path: `/database/schools/${record.id}` });
-    },
-  },
-});
+})
+export default class extends DatabasePage {
+  get fields (): FormFieldDefinition[] {
+    return school.recordControls({ countryId: null });
+  }
+
+  onUpdated (record: any) {
+    this.$router.push({ path: `/database/schools/${record.id}` });
+  }
+}
 </script>

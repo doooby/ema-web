@@ -21,8 +21,8 @@ export default class extends DatabasePage {
     return course.recordControls({ countryId: this.currentCountryId });
   }
 
-  onCreated () {
-    this.$router.push({ path: '/database/courses' });
+  onCreated (recordId: Number) {
+    this.$router.push({ path: `/database/courses/${recordId}` });
   }
 }
 </script>

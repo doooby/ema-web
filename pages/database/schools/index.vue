@@ -3,39 +3,37 @@
     entity="schools"
     :search-fields="searchFields"
     :table-columns="tableColumns"
-  >
-    <template #actions="{ dataItem }">
-      <record-actions-cell
-        entity="schools"
-        :record="dataItem"
-        :edit="true"
-      />
-    </template>
-  </index-page>
+    :actions="actions"
+  />
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { Component } from 'vue-property-decorator';
+import { DatabasePage } from '~/components';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
-// import RecordCellActions from '~/components/database/RecordCellActions.vue';
+import { FormFieldDefinition } from '~/components/Form';
 
-export default Vue.extend({
+@Component({
   components: { IndexPage },
-  layout: 'database',
-  data () {
-    return {
-      searchFields: [
-        [ 'name', 'text' ],
-      ],
-      tableColumns: [
-        { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-        { name: 'id', cell: { type: 'link', entity: 'schools' }, size: 60 },
-        { name: 'country', getText: (record: any) => record.country.caption },
-        { name: 'name_en' },
-        { name: 'name' },
-        { name: 'address' },
-      ],
-    };
-  },
-});
+})
+export default class extends DatabasePage {
+  get searchFields (): FormFieldDefinition[] {
+    return [
+      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
+      [ 'search', 'text' ],
+    ];
+  }
+
+  tableColumns = [
+    { name: 'actions', slot: 'actions', headerText: false, size: 40 },
+    { name: 'id', cell: { type: 'link', entity: 'schools' }, size: 60 },
+    { name: 'name_en' },
+    { name: 'name' },
+    { name: 'school_id' },
+  ];
+
+  actions = [
+    { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
+  ];
+}
 </script>
