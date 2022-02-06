@@ -15,9 +15,9 @@
         button
         @click="$emit('select', record)"
       >
-        {{ record.caption }}
-        <div v-for="(label, i) in record.labels" :key="i">
-          <small>{{ label }}</small>
+        {{ record.labels.caption }}
+        <div v-for="[label, value] in labelsOfRecord(record)" :key="label">
+          <small>{{ label }}: {{ value }}</small>
         </div>
       </b-list-group-item>
     </b-list-group>
@@ -31,10 +31,12 @@
 import Vue from 'vue';
 import debounce from 'lodash/debounce';
 import { buildFormFields } from '~/components/Form';
+import { AssociatedRecord } from '~/lib/api/mappers';
 
 export default Vue.extend({
   props: {
     fetchQuery: { type: Function, required: true },
+    fetchParams: { type: Object, default: undefined },
     selectedId: { type: Number, default: undefined },
   },
   data () {
@@ -69,12 +71,23 @@ export default Vue.extend({
       },
       800,
     ),
-    fetchOptions (params: any = undefined) {
+    fetchOptions (searchValue: any = undefined) {
       if (this.fetchQueryState.running) return;
       this.$api.request(
-        this.fetchQuery?.(params),
+        this.fetchQuery?.({
+          ...searchValue,
+          ...this.fetchParams,
+        }),
         this.fetchQueryState,
       );
+    },
+    labelsOfRecord (record: AssociatedRecord): [string, string][] {
+      const list: [string, string][] = [];
+      for (const [ name, value ] of Object.entries(record.labels)) {
+        if (name === 'caption') continue;
+        if (value) list.push([ name, value ]);
+      }
+      return list;
     },
   },
 });

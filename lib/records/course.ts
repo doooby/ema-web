@@ -1,5 +1,7 @@
 import * as mappers from '~/lib/api/mappers';
 import { EducationLevel } from '~/lib/records/education_level';
+import { FormFieldDefinition } from '~/components/Form';
+import * as dbFields from '~/components/database/controls';
 
 const { object, recordId, prop, assoc, val } = mappers;
 
@@ -28,4 +30,21 @@ export const course = {
   mapAssociations: mappers.createAssociationsMapper<CourseAssociations>(
     'education_level',
   ),
+  recordControls ({
+    countryId,
+  }: {
+    countryId: null | number;
+  }): FormFieldDefinition[] {
+    return [
+      [ 'education_level', dbFields.AssociatedRecord, {
+        entity: 'education_levels',
+        params: {
+          country_id: countryId,
+        },
+      } ],
+      [ 'name_en', 'text' ],
+      [ 'name', 'text' ],
+      [ 'grade', 'integer' ],
+    ];
+  },
 };

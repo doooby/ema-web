@@ -33,8 +33,11 @@ export const subject = {
   }: {
     countryId: null | number;
   }): FormFieldDefinition[] {
+    const country: FormFieldDefinition[] = countryId
+      ? [ [ 'country_id', 'hidden', { value: countryId } ] ]
+      : [];
     return [
-      [ 'country_id', 'hidden', { value: countryId } ],
+      ...country,
       [ 'name_en', 'text' ],
       [ 'name', 'text' ],
     ];

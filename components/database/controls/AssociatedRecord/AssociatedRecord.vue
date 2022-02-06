@@ -24,6 +24,7 @@
       <search-modal
         v-if="modalShown"
         :fetch-query="fetchQuery"
+        :fetch-params="field.options.params"
         :selected-id="selectedRecord && selectedRecord.id"
         @select="onItemSelected"
       />
@@ -68,7 +69,7 @@ export default Vue.extend({
     },
     valueText (): string {
       const value = this.selectedRecord;
-      return value ? value.caption : '';
+      return value ? value.labels.caption : '';
     },
     fetchQuery (): any {
       const entity = this.field.options.entity;

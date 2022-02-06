@@ -51,7 +51,9 @@
 
       <table class="table">
         <show-page-table-row label="db.record.users.label.name">
-          {{ record.full_name_en }}, {{ record.full_name }}
+          {{ record.full_name_en }}
+          <br>
+          <small>{{ record.full_name }}</small>
         </show-page-table-row>
         <show-page-table-row label="db.record.users.label.country">
           {{ record.country && record.country.caption }}

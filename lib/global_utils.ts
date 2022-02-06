@@ -6,12 +6,12 @@ export function raise (error: Error) {
 }
 
 export function warn (message: string, ...context: any) {
-  console.log(message);
+  console.log('EMA warning', message);
   if (context) console.log(...context);
 }
 
 export function warnOfError (error: Error, ...context: any) {
-  console.log(error.message);
+  console.log('EMA error', error.message);
   if (context) console.log(...context);
   console.error(error);
 }

@@ -211,7 +211,7 @@ export function recordLabels (value: any): Labels {
   return object(value, (root) => {
     const labels: Labels = {};
     for (const [ name, value ] of Object.entries(root)) {
-      labels[name] = String(value);
+      labels[name] = value ? String(value) : '';
     }
     return labels;
   });

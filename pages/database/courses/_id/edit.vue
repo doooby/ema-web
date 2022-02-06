@@ -2,32 +2,27 @@
   <edit-page
     entity="courses"
     :fields="fields"
-    :no-default-redirect="true"
     @updated="onUpdated"
   />
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import EditPage from '~/components/database/EditPage.vue';
+import { Component } from 'vue-property-decorator';
+import { DatabasePage } from '~/components';
+import { FormFieldDefinition } from '~/components/Form';
+import { course } from '~/lib/records';
 
-export default Vue.extend({
+@Component({
   components: { EditPage },
-  layout: 'database',
-  computed: {
-    fields () {
-      return [
-        [ 'education_level', 'associatedRecord', { entity: 'education_levels' } ],
-        [ 'name_en', 'text' ],
-        [ 'name', 'text' ],
-        [ 'grade', 'integer' ],
-      ];
-    },
-  },
-  methods: {
-    onUpdated (record: any) {
-      this.$router.push({ path: `/database/courses/${record.id}` });
-    },
-  },
-});
+})
+export default class extends DatabasePage {
+  get fields (): FormFieldDefinition[] {
+    return course.recordControls({ countryId: this.currentCountryId });
+  }
+
+  onUpdated (record: any) {
+    this.$router.push({ path: `/database/courses/${record.id}` });
+  }
+}
 </script>

@@ -18,7 +18,7 @@
         :id="domIdBase"
         type="text"
         class="form-control"
-        :value="toInputValue(value)"
+        :value="value"
         autocomplete="off"
         @input="onInput"
         @blur="onBlur"
@@ -66,9 +66,6 @@ export default Vue.extend({
     };
   },
   computed: {
-    // formValue (): undefined | number {
-    //   return sanitizeValue(this.formValues[this.field.name]);
-    // },
     leftLabelText (): undefined | { text?: string; t?: string } {
       const leftLabel = this.field.options.leftLabel;
       if (!leftLabel) return undefined;
@@ -83,12 +80,15 @@ export default Vue.extend({
       if (typeof rightLabel === 'function') return rightLabel();
       return { t: String(rightLabel) };
     },
+    sanitizedValue (): string {
+      return sanitizeValue(this.formValues[this.field.name]);
+    },
   },
-  // watch: {
-  //   formValue (newValue) {
-  //     this.value = newValue;
-  //   },
-  // },
+  watch: {
+    formValues (newValue) {
+      this.value = sanitizeValue(newValue[this.field.name]);
+    },
+  },
   methods: {
     toInputValue (value: undefined | number): string {
       return value === undefined ? '' : String(value);
