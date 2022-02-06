@@ -12,27 +12,29 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import sharedProps from './sharedProps';
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import { DataTable } from '~/components/DataTable';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 
-export default Vue.extend({
+@Component({
   components: { ShowRecordLink },
-  props: sharedProps,
-  computed: {
-    caption (): string {
-      const textGet = this.column.cell!.text;
-      if (textGet) return safeGetText(textGet, this.dataItem);
-      return this.dataItem[this.column.name];
-    },
-  },
-});
+})
+export default class Record extends Vue {
+  @Prop({ required: true }) readonly column!: DataTable.Column;
+  @Prop({ required: true }) readonly dataItem!: any;
+
+  get caption (): string {
+    const textGet = this.column.cell!.text;
+    if (textGet) return safeGetText(textGet, this.dataItem);
+    return this.dataItem.id;
+  }
+}
 
 function safeGetText (getText: any, dataItem: any): any {
   try {
     return getText?.(dataItem);
   } catch (err) {
-    utils.warn(err, { 'DataTable.cells.RecordLinkCell': 'getText failed' });
+    utils.warn(err, { 'database.cells.AssociatedRecord': 'getText failed' });
     return null;
   }
 }

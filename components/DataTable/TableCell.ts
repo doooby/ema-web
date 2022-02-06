@@ -1,17 +1,19 @@
-import Vue, { VNode } from 'vue';
-import { cellComponents } from './cells';
-import sharedProps from './cells/sharedProps';
-import { warnOfError } from '~/lib/global_utils';
+import Vue, { PropType, VNode } from 'vue';
+import { DataTable } from '~/components/DataTable/index';
 
 export default Vue.extend({
   functional: true,
-  props: sharedProps,
+  props: {
+    column: { type: Object as PropType<DataTable.Column>, required: true },
+    dataItem: { type: Object as PropType<any>, required: true },
+    template: { type: Function as PropType<any>, default: undefined },
+  },
   render (createElement: any, { props }: any): VNode {
     const { column, dataItem, template } = props;
     if (template) return template({ column, dataItem });
 
     if (column.cell) {
-      const component = cellComponents[column.cell.type];
+      const component = column.cell.type;
       if (component) {
         return createElement(
           component,

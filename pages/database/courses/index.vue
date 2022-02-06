@@ -12,6 +12,8 @@ import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
 import { FormFieldDefinition } from '~/components/Form';
+import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
+import RecordLink from '~/components/database/cells/RecordLink.vue';
 
 @Component({
   components: { IndexPage },
@@ -26,10 +28,13 @@ export default class extends DatabasePage {
 
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-    { name: 'id', cell: { type: 'link', entity: 'courses' }, size: 60 },
+    { name: 'id', cell: { type: RecordLink, entity: 'courses' }, size: 60 },
     { name: 'name_en' },
     { name: 'name' },
-    { name: 'education_level', getText: (record: any) => record.education_level.labels.caption },
+    {
+      name: 'education_level',
+      cell: { type: AssociatedRecordLink, entity: 'education_levels', noLink: true },
+    },
     { name: 'grade' },
   ];
 
