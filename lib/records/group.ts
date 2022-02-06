@@ -1,4 +1,6 @@
 import * as mappers from '~/lib/api/mappers';
+import { FormFieldDefinition } from '~/components/Form';
+import * as dbFields from '~/components/database/controls';
 
 export interface Group {
   id: number;
@@ -17,23 +19,45 @@ export interface GroupAssociations {
 
 const { object, recordId, prop, assoc, val } = mappers;
 
-export function mapTermGroup (value: any, associations?: GroupAssociations): Group {
-  return object(value, root => ({
-    id: recordId(root),
-    school: assoc('school', root, associations?.school),
-    course: assoc('course', root, associations?.course),
-    name_en: prop('name_en', root, val.string),
-    name: prop('name', root, val.string),
-    year: prop('year', root, val.integer),
-    term: prop('term', root, val.integer),
-  }));
-}
-
-export const mapGroupAssociations = mappers.createAssociationsMapper<GroupAssociations>(
-  'school', 'course',
-);
-
 export const group = {
+  mapRecord (value: any, associations?: GroupAssociations): Group {
+    return object(value, root => ({
+      id: recordId(root),
+      school: assoc('school', root, associations?.school),
+      course: assoc('course', root, associations?.course),
+      name_en: prop('name_en', root, val.string),
+      name: prop('name', root, val.string),
+      year: prop('year', root, val.integer),
+      term: prop('term', root, val.integer),
+    }));
+  },
+  mapAssociations: mappers.createAssociationsMapper<GroupAssociations>(
+    'school', 'course',
+  ),
+  recordControls ({
+    countryId,
+  }: {
+    countryId: null | number;
+  }): FormFieldDefinition[] {
+    return [
+      [ 'school', dbFields.AssociatedRecord, {
+        entity: 'schools',
+        params: {
+          country_id: countryId,
+        },
+      } ],
+      [ 'course', dbFields.AssociatedRecord, {
+        entity: 'courses',
+        params: {
+          country_id: countryId,
+        },
+      } ],
+      [ 'name_en', 'text' ],
+      [ 'name', 'text' ],
+      [ 'year', 'list', { options: group.startYearOptions } ],
+      [ 'term', 'integer' ],
+    ];
+  },
   startYearOptions: Object.freeze([
     { value: 2018, caption: 2018 },
     { value: 2019, caption: 2019 },

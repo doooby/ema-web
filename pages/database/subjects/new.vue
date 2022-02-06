@@ -18,9 +18,10 @@ import { subject } from '~/lib/records';
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return subject.recordControls({
-      countryId: this.currentCountryId,
-    });
+    return [
+      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
+      ...subject.recordControls(),
+    ];
   }
 
   onCreated () {

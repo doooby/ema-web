@@ -12,7 +12,7 @@ export function index (params: Params) {
 
 export function searchAssociated (params?: Params) {
   return {
-    path: '/courses/search?assoc=1',
+    path: '/courses?assoc=1',
     params,
     mapper: (payload: any) => mappers.associatedRecords<Course>(payload),
   };

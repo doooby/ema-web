@@ -28,16 +28,8 @@ export const subject = {
   mapAssociations: mappers.createAssociationsMapper<SubjectAssociations>(
     'country',
   ),
-  recordControls ({
-    countryId,
-  }: {
-    countryId: null | number;
-  }): FormFieldDefinition[] {
-    const country: FormFieldDefinition[] = countryId
-      ? [ [ 'country_id', 'hidden', { value: countryId } ] ]
-      : [];
+  recordControls (): FormFieldDefinition[] {
     return [
-      ...country,
       [ 'name_en', 'text' ],
       [ 'name', 'text' ],
     ];

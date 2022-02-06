@@ -28,16 +28,8 @@ export const school = {
   mapAssociations: mappers.createAssociationsMapper<SchoolAssociations>(
     'country',
   ),
-  recordControls ({
-    countryId,
-  }: {
-    countryId: null | number;
-  }): FormFieldDefinition[] {
-    const country: FormFieldDefinition[] = countryId
-      ? [ [ 'country_id', 'hidden', { value: countryId } ] ]
-      : [];
+  recordControls (): FormFieldDefinition[] {
     return [
-      ...country,
       [ 'name_en', 'text' ],
       [ 'name', 'text' ],
       [ 'school_id', 'text' ],

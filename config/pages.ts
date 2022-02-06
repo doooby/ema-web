@@ -9,10 +9,9 @@ export const dbPages: Resource[] = [
   { name: 'education_levels', pages: [ '' ] },
   { name: 'courses', pages: [ '', 'new' ] },
   { name: 'subjects', pages: [ '', 'new' ] },
-  // gut up
   { name: 'schools', pages: [ '', 'new' ] },
-  { name: 'term_groups', pages: [ 'browse', 'new' ] },
-  { name: 'students', pages: [ 'browse', 'new' ] },
+  { name: 'groups', pages: [ '', 'new' ] },
+  { name: 'students', pages: [ '', 'new' ] },
 ];
 
 export function resourcePath (name: string, page: string): string {

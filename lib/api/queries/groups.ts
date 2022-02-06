@@ -1,50 +1,35 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { Group, mapGroupAssociations, mapTermGroup, Person } from '~/lib/records';
+import { group } from '~/lib/records';
 import { record } from '../mappers';
 
-export function search (params: Params) {
+export function index (params: Params) {
   return {
-    path: '/term_groups/search',
+    path: '/groups',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapTermGroup, mapGroupAssociations),
+    mapper: (payload: any) => mappers.paginatedRecords(payload, group.mapRecord, group.mapAssociations),
   };
 }
 
-export function searchAssociated (params?: Params) {
+export function show (groupId: number) {
   return {
-    path: '/term_groups/search?assoc=1',
-    params,
-    mapper: (payload: any) => mappers.associatedRecords<Group>(payload),
+    path: `/groups/${groupId}`,
+    mapper: (payload: any) => record(payload, group.mapRecord, group.mapAssociations),
   };
 }
 
-export function searchStudents (termGroupId: number) {
+export function create (group: Params) {
   return {
-    path: `/term_groups/${termGroupId}/search_students?assoc=1`,
-    mapper: (payload: any) => mappers.associatedRecords<Person>(payload),
-  };
-}
-
-export function get (termGroupId: number) {
-  return {
-    path: `/term_groups/${termGroupId}`,
-    mapper: (payload: any) => record(payload, mapTermGroup, mapGroupAssociations),
-  };
-}
-
-export function create (termGroup: Params) {
-  return {
-    path: '/term_groups/create',
-    params: { term_group: termGroup },
+    path: '/groups/create',
+    params: { group },
     mapper: mappers.changedRecord,
   };
 }
 
-export function update (termGroupId: number, termGroup: Params) {
+export function update (groupId: number, group: Params) {
   return {
-    path: `/term_groups/${termGroupId}/update`,
-    params: { term_group: termGroup },
+    path: `/groups/${groupId}/update`,
+    params: { group },
     mapper: mappers.changedRecord,
   };
 }

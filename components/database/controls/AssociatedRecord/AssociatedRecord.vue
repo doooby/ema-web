@@ -7,7 +7,7 @@
       <div class="flex-fill text-truncate association--text">
         {{ valueText }}
       </div>
-      <b-button variant="secondary" @click.stop="onClear">
+      <b-button v-if="selectedRecord" variant="secondary" @click.stop="onClear">
         <b-icon icon="x" />
       </b-button>
       <b-button variant="secondary">
