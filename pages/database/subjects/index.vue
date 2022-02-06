@@ -20,7 +20,7 @@ export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      [ 'name', 'text' ],
+      [ 'search', 'text' ],
     ];
   }
 

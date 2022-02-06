@@ -8,10 +8,18 @@
           <t :value="`db.record.${entity}.meta.s`" />
         </h2>
       </div>
-      <div v-if="!record && !fetchQueryState.fail" class="row justify-content-md-center">
+
+      <div v-if="!record && getQueryState.running" class="row justify-content-md-center">
         <div class="col-md-8 col-lg-6">
           <b-alert show variant="info">
             <t value="app.loading" />
+          </b-alert>
+        </div>
+      </div>
+      <div v-if="recordLoadFailed" class="row justify-content-md-center">
+        <div class="col-md-8 col-lg-6">
+          <b-alert show variant="warning">
+            <t value="app.record_not_found" />
           </b-alert>
         </div>
       </div>
@@ -77,7 +85,7 @@ export default class EditPage extends Vue {
 
   formFields = buildFormFields(this.fields);
   formValues = prefillFormValues(this.formFields);
-  fetchQueryState = this.$api.newQueryState();
+  getQueryState = this.$api.newQueryState();
   saveQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordError[];
 
@@ -102,20 +110,25 @@ export default class EditPage extends Vue {
     return route.params.id;
   }
 
+  get recordLoadFailed (): boolean {
+    const recordGet = this.getQueryState.value;
+    return recordGet ? !recordGet.success : false;
+  }
+
   get record (): undefined | any {
-    return this.fetchQueryState.value?.record;
+    return this.getQueryState.value?.record;
   }
 
   get formFieldsLabelPrefix (): string {
     return `db.record.${this.entity}.label`;
   }
 
-  get fetchQuery (): any {
+  get getQuery (): any {
     const entity = this.entity;
     const query = (this.$api.queries as any)[entity]?.show;
     if (query) return () => query(this.recordId);
     return function () {
-      utils.raise(new Error(`database.EditPage: fetch query is missing for ${entity}`));
+      utils.raise(new Error(`database.EditPage: get/show query is missing for ${entity}`));
     };
   }
 
@@ -140,12 +153,12 @@ export default class EditPage extends Vue {
     const formFields = buildFormFields(this.fields);
     this.formFields = formFields;
     this.formValues = prefillFormValues(formFields);
-    this.fetchQueryState.reset();
+    this.getQueryState.reset();
     this.saveQueryState.reset();
     this.errors = null;
     await this.$api.request(
-      this.fetchQuery(),
-      this.fetchQueryState,
+      this.getQuery(),
+      this.getQueryState,
     );
   }
 

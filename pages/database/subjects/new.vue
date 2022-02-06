@@ -11,17 +11,16 @@ import NewPage from '~/components/database/NewPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
+import { subject } from '~/lib/records';
 
 @Component({
   components: { NewPage },
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return [
-      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      [ 'name_en', 'text' ],
-      [ 'name', 'text' ],
-    ];
+    return subject.recordControls({
+      countryId: this.currentCountryId,
+    });
   }
 
   onCreated () {

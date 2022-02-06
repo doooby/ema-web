@@ -25,11 +25,8 @@ export default class extends DatabasePage {
   tableColumns = [
     { name: 'id', cell: { type: 'link', onlyId: true }, size: 60 },
     { name: 'name_en' },
+    { name: 'name' },
     { name: 'level' },
-    { name: 'terms_per_year' },
-    { name: 'start_age' },
-    { name: 'years_length' },
-    { name: 'mandatory' },
   ];
 }
 </script>

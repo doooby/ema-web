@@ -25,7 +25,7 @@ export default class extends DatabasePage {
     }));
     return [
       [ 'country_id', 'list', { options, blank: true } ],
-      [ 'name', 'text' ],
+      [ 'search', 'text' ],
     ];
   }
 
