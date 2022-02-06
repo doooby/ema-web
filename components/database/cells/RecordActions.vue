@@ -32,7 +32,7 @@ export interface Action {
 }
 
 @Component
-export default class RecordCellActions extends Vue {
+export default class RecordActions extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly record!: any;
   @Prop({ required: true }) readonly actions!: Action[];

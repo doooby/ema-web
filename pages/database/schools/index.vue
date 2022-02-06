@@ -17,10 +17,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
-import RecordCellActions from '~/components/database/RecordCellActions.vue';
+// import RecordCellActions from '~/components/database/RecordCellActions.vue';
 
 export default Vue.extend({
-  components: { RecordCellActions, IndexPage },
+  components: { IndexPage },
   layout: 'database',
   data () {
     return {

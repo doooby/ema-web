@@ -1,12 +1,12 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { Course, mapCourse, mapCourseAssociations, Subject } from '~/lib/records';
+import { course, Course } from '~/lib/records';
 
-export function search (params: Params) {
+export function index (params: Params) {
   return {
-    path: '/courses/search',
+    path: '/courses',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapCourse, mapCourseAssociations),
+    mapper: (payload: any) => mappers.paginatedRecords(payload, course.mapRecord, course.mapAssociations),
   };
 }
 
@@ -18,17 +18,10 @@ export function searchAssociated (params?: Params) {
   };
 }
 
-export function searchSubjects (courseId: number) {
-  return {
-    path: `/courses/${courseId}/search_subjects?assoc=1`,
-    mapper: (payload: any) => mappers.associatedRecords<Subject>(payload),
-  };
-}
-
-export function get (courseId: number) {
+export function show (courseId: number) {
   return {
     path: `/courses/${courseId}`,
-    mapper: (payload: any) => mappers.record(payload, mapCourse, mapCourseAssociations),
+    mapper: (payload: any) => mappers.record(payload, course.mapRecord, course.mapAssociations),
   };
 }
 

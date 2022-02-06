@@ -1,44 +1,40 @@
 <template>
   <show-page
     entity="courses"
-    :record-id="recordId"
-    :title="title"
   >
-    <template #detail="{ record }">
-      <div class="emb-6">
-        <record-detail-value label="Name:">
-          {{ record.name }}
-        </record-detail-value>
-        <record-detail-value label="Education Level:">
-          {{ record.education_level.caption }}
-          <code class="eml-2">[{{ record.education_level.id }}]</code>
-        </record-detail-value>
-        <record-detail-value label="Grade:">
+    <template #title="{ record }">
+      {{ record.name_en }}
+    </template>
+
+    <template #details="{ record }">
+      <table class="table">
+        <show-page-table-row label="db.record.courses.label.name">
+          {{ record.name_en }}
+          <br>
+          <small>{{ record.name }}</small>
+        </show-page-table-row>
+        <show-page-table-row label="db.record.courses.label.grade">
           {{ record.grade }}
-        </record-detail-value>
-      </div>
-      <subjects-listing :course="record" />
+        </show-page-table-row>
+        <show-page-table-row label="db.record.courses.label.education_level">
+          {{ record.education_level.labels.caption }}
+        </show-page-table-row>
+      </table>
     </template>
   </show-page>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import ShowPage from '~/components/database/ShowPage.vue';
-import SubjectsListing from '~/components/database/pages/courses/SubjectsListing.vue';
-import RecordDetailValue from '~/components/database/RecordDetailValue.vue';
+import { DatabasePage } from '~/components';
+import { Component } from 'vue-property-decorator';
+import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 
-export default Vue.extend({
-  components: { ShowPage, SubjectsListing, RecordDetailValue },
-  layout: 'database',
-  data () {
-    return {
-      recordId: Number(this.$route.params.id),
-      title: {
-        text: (record: any) => record.name_en,
-        showEditLink: true,
-      },
-    };
+@Component({
+  components: {
+    ShowPage,
+    ShowPageTableRow,
   },
-});
+})
+export default class extends DatabasePage {}
 </script>

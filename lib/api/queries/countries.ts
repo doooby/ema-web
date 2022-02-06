@@ -10,10 +10,10 @@ export function index (params: Params) {
   };
 }
 
-// export function searchAssociated (params?: Params) {
-//   return {
-//     path: '/countries?assoc=1',
-//     params,
-//     mapper: (payload: any) => mappers.associatedRecords<Country>(payload),
-//   };
-// }
+export function searchAssociated (params?: Params) {
+  return {
+    path: '/countries?assoc=1',
+    params,
+    mapper: (payload: any) => mappers.associatedRecords<Country>(payload),
+  };
+}

@@ -18,11 +18,9 @@
 import Vue from 'vue';
 import { formatISO } from 'date-fns';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
-import RecordCellActions from '~/components/database/RecordCellActions.vue';
-import { Person, student } from '~/lib/records';
 
 export default Vue.extend({
-  components: { RecordCellActions, IndexPage },
+  components: { IndexPage },
   layout: 'database',
   data () {
     return {

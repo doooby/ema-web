@@ -1,6 +1,6 @@
 <template>
   <index-page
-    entity="users"
+    entity="courses"
     :search-fields="searchFields"
     :table-columns="tableColumns"
     :actions="actions"
@@ -18,24 +18,19 @@ import { FormFieldDefinition } from '~/components/Form';
 })
 export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
-    if (!this.currentUser) return [];
-    const options = this.currentUser.countries.map(item => ({
-      value: item.id,
-      caption: item.labels.caption,
-    }));
     return [
-      [ 'country_id', 'list', { options, blank: true } ],
+      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       [ 'search', 'text' ],
     ];
   }
 
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-    { name: 'id', cell: { type: 'link', entity: 'users' }, size: 60 },
-    { name: 'country', getText: (user: any) => user.country?.labels.caption },
-    { name: 'login' },
-    { name: 'full_name_en' },
-    { name: 'full_name' },
+    { name: 'id', cell: { type: 'link', entity: 'courses' }, size: 60 },
+    { name: 'name_en' },
+    { name: 'name' },
+    { name: 'education_level', getText: (record: any) => record.education_level.labels.caption },
+    { name: 'grade' },
   ];
 
   actions = [

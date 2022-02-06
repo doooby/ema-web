@@ -15,16 +15,17 @@ export interface CourseAssociations {
   education_level: mappers.AssociatedRecordsIndex,
 }
 
-export function mapCourse (value: any, associations?: CourseAssociations): Course {
-  return object(value, root => ({
-    id: recordId(root),
-    name_en: prop('name_en', root, val.string),
-    name: prop('name', root, val.string),
-    grade: prop('grade', root, val.integer),
-    education_level: assoc('education_level', root, associations?.education_level),
-  }));
-}
-
-export const mapCourseAssociations = mappers.createAssociationsMapper<CourseAssociations>(
-  'education_level',
-);
+export const course = {
+  mapRecord (value: any, associations?: CourseAssociations): Course {
+    return object(value, root => ({
+      id: recordId(root),
+      name_en: prop('name_en', root, val.string),
+      name: prop('name', root, val.string),
+      grade: prop('grade', root, val.integer),
+      education_level: assoc('education_level', root, associations?.education_level),
+    }));
+  },
+  mapAssociations: mappers.createAssociationsMapper<CourseAssociations>(
+    'education_level',
+  ),
+};

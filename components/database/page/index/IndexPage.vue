@@ -11,7 +11,9 @@
       <div class="border-primary row no-gutters emb-2">
         <div class="col-lg-6">
           <t value="db.record.shared.label.records_count" />
-          : {{ records ? records.total : 0 }}
+          <span>: </span>
+          <t v-if="isFetching" value="app.loading" />
+          <span v-else>{{ records ? records.total : 0 }}</span>
         </div>
         <div class="col-lg-6">
           <records-pagination
@@ -34,7 +36,7 @@
             <t :value="`db.record.${entity}.label.${column.name}`" />
           </template>
           <template v-if="actions.length" #actions="{ dataItem }">
-            <record-cell-actions
+            <record-actions
               :entity="entity"
               :record="dataItem"
               :actions="actions"
@@ -53,10 +55,10 @@ import { DataTable } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from '../../RecordsPagination.vue';
 import { PaginatedRecords } from '~/lib/api/mappers';
-import RecordCellActions, { Action as ActionItem } from '~/components/database/RecordCellActions.vue';
+import RecordActions, { Action as ActionItem } from '~/components/database/cells/RecordActions.vue';
 
 @Component({
-  components: { SearchForm, RecordsPagination, RecordCellActions },
+  components: { SearchForm, RecordsPagination, RecordActions },
 })
 export default class IndexPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
@@ -84,12 +86,16 @@ export default class IndexPage extends Vue {
   get searchQueryBuilder () {
     const entity = this.entity;
     const entityQueries = (this.$api.queries as any)[entity];
-    const queryBuilder = entityQueries?.search || entityQueries?.index;
+    const queryBuilder = entityQueries?.index;
     if (!queryBuilder) {
-      utils.warn(`database.IndexPage: search/index query is missing for entity ${entity}.`);
+      utils.warn(`database.IndexPage: index query is missing for entity ${entity}.`);
       return;
     }
     return queryBuilder;
+  }
+
+  get isFetching (): boolean {
+    return this.searchQueryState.running;
   }
 
   get records (): null | PaginatedRecords {
