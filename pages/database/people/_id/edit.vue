@@ -1,6 +1,6 @@
 <template>
   <edit-page
-    entity="schools"
+    entity="people"
     :fields="fields"
     :no-default-redirect="true"
     @updated="onUpdated"
@@ -12,18 +12,18 @@ import EditPage from '~/components/database/EditPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
-import { school } from '~/lib/records';
+import { person } from '~/lib/records';
 
 @Component({
   components: { EditPage },
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return school.recordControls();
+    return person.recordControls();
   }
 
   onUpdated (record: any) {
-    this.$router.push({ path: `/database/schools/${record.id}` });
+    this.$router.push({ path: `/database/people/${record.id}` });
   }
 }
 </script>

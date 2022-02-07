@@ -6,31 +6,31 @@ const { record } = mappers;
 
 export function index (params: Params) {
   return {
-    path: '/students',
+    path: '/people',
     params,
     mapper: (payload: any) => mappers.paginatedRecords(payload, person.mapRecord, person.mapAssociations),
   };
 }
 
-export function show (studentId: number) {
+export function show (personId: number) {
   return {
-    path: `/students/${studentId}`,
+    path: `/people/${personId}`,
     mapper: (payload: any) => record(payload, person.mapRecord, person.mapAssociations),
   };
 }
 
-export function create (student: Params) {
+export function create (person: Params) {
   return {
-    path: '/students/create',
-    params: { student },
+    path: '/people/create',
+    params: { person },
     mapper: mappers.changedRecord,
   };
 }
 
-export function update (studentId: number, student: Params) {
+export function update (personId: number, person: Params) {
   return {
-    path: `/students/${studentId}/update`,
-    params: { student },
+    path: `/people/${personId}/update`,
+    params: { person },
     mapper: mappers.changedRecord,
   };
 }

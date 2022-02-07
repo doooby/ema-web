@@ -1,7 +1,8 @@
 <template>
-  <b-form-group
-    :label="labelTranslation"
-  >
+  <b-form-group>
+    <template #label>
+      <t :value="labelTranslation" />
+    </template>
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center">
         <t value="form.field.date.day" />

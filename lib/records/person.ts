@@ -143,10 +143,14 @@ export const person = {
   //   return `status=${s}, diagnosis=${dd}, assistance needed=${nn}, provided=${pp}`;
   // },
 
-  entityControls ({ $t }: any): FormFieldDefinition[] {
+  recordControls (): FormFieldDefinition[] {
     return [
       [ 'country', dbFields.AssociatedRecord, { entity: 'countries' } ],
-      // [ 'first_name', dbFields.Name ],
+      [ 'family_name_en', 'text' ],
+      [ 'family_name', 'text' ],
+      [ 'given_name_en', 'text' ],
+      [ 'given_name', 'text' ],
+      [ 'born_on', 'date' ],
       // [ 'last_name', dbFields.Name ],
       // [ 'born_on', 'date' ],
       // [ 'gender', 'list', { options: student.genderOptions } ],

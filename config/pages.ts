@@ -11,7 +11,7 @@ export const dbPages: Resource[] = [
   { name: 'subjects', pages: [ '', 'new' ] },
   { name: 'schools', pages: [ '', 'new' ] },
   { name: 'groups', pages: [ '', 'new' ] },
-  { name: 'students', pages: [ '', 'new' ] },
+  { name: 'people', pages: [ '', 'new' ] },
 ];
 
 export function resourcePath (name: string, page: string): string {
