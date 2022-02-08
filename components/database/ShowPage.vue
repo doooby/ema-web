@@ -24,6 +24,7 @@
           <slot name="details" :record="record" />
         </div>
       </div>
+      <slot name="container" :record="record" />
     </div>
   </div>
 </template>

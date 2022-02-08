@@ -77,8 +77,8 @@
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import ShowPage from '~/components/database/ShowPage.vue';
-import ChangePasswordModal from '~/components/database/pages/users/ChangePasswordModal.vue';
-import LockModal from '~/components/database/pages/users/LockModal.vue';
+import ChangePasswordModal from '~/components/database/records/users/ChangePasswordModal.vue';
+import LockModal from '~/components/database/records/users/LockModal.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { User } from '~/lib/records';
