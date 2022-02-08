@@ -34,6 +34,10 @@
         </show-page-table-row>
       </table>
     </template>
+
+    <template #container="{ record }">
+      <subjects-listing :course="record" />
+    </template>
   </show-page>
 </template>
 
@@ -43,12 +47,14 @@ import { DatabasePage } from '~/components';
 import { Component } from 'vue-property-decorator';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
+import SubjectsListing from '~/components/database/records/courses/SubjectsListing.vue';
 
 @Component({
   components: {
     ShowPage,
     ShowPageAction,
     ShowPageTableRow,
+    SubjectsListing,
   },
 })
 export default class extends DatabasePage {}
