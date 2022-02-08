@@ -26,8 +26,8 @@ export default class StudentsListing extends Vue {
   getStudentsQueryState = this.$api.newQueryState<PaginatedRecords<Person>>();
   tableColumns = [
     { name: 'id', cell: { type: RecordLink, entity: 'people' }, size: 60 },
-    { name: 'name_en', getText: ({ family_name_en, given_name_en }) => `${family_name_en}, ${given_name_en}` },
-    { name: 'name', getText: ({ family_name, given_name }) => `${family_name}, ${given_name}` },
+    { name: 'name_en', getText: ({ family_name_en, given_name_en }: any) => `${family_name_en}, ${given_name_en}` },
+    { name: 'name', getText: ({ family_name, given_name }: any) => `${family_name}, ${given_name}` },
   ];
 
   @Watch('group')

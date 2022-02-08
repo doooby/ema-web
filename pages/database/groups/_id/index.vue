@@ -42,7 +42,18 @@
     </template>
 
     <template #container="{ record }">
-      <students-listing :group="record" />
+      <b-tabs v-model="currenTab" content-class="mt-3" no-fade>
+        <b-tab title="Students">
+          <div v-if="currenTab === Tabs.students">
+            <students-listing :group="record" />
+          </div>
+        </b-tab>
+        <b-tab title="Schedule">
+          <div v-if="currenTab === Tabs.schedule">
+            <group-schedule :group="record" />
+          </div>
+        </b-tab>
+      </b-tabs>
     </template>
   </show-page>
 </template>
@@ -54,6 +65,12 @@ import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import StudentsListing from '~/components/database/records/groups/StudentsListing.vue';
+import GroupSchedule from '~/components/database/records/groups/GroupSchedule.vue';
+
+enum Tabs {
+  students,
+  schedule,
+}
 
 @Component({
   components: {
@@ -61,7 +78,11 @@ import StudentsListing from '~/components/database/records/groups/StudentsListin
     ShowPageAction,
     ShowPageTableRow,
     StudentsListing,
+    GroupSchedule,
   },
 })
-export default class extends DatabasePage {}
+export default class extends DatabasePage {
+  Tabs = Tabs;
+  currenTab: Tabs = Tabs.schedule;
+}
 </script>
