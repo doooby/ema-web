@@ -13,6 +13,7 @@ import { DatabasePage } from '~/components';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
 import { FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
+import Date from '~/components/database/cells/Date.vue';
 
 @Component({
   components: { IndexPage },
@@ -32,7 +33,7 @@ export default class extends DatabasePage {
     { name: 'family_name' },
     { name: 'given_name_en' },
     { name: 'given_name' },
-    { name: 'born_on' },
+    { name: 'born_on', cell: { type: Date } },
   ];
 
   actions = [
