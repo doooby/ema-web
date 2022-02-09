@@ -3,6 +3,9 @@
     <div>
       <group-schedule-controls :value="currenDate" @input="onDateChange" />
     </div>
+    <div>
+      {{ JSON.stringify(occurrences) }}
+    </div>
     <div class="d-flex">
       <data-table-view
         class="col-9"
@@ -31,7 +34,12 @@
           <br>
           <small>{{ subject.name }}</small>
           <div class="d-flex align-items-center justify-content-between">
-            <b-button class="border-0" size="sm" variant="outline-secondary" @click="onApplySubject(subject)">
+            <b-button
+              class="border-0"
+              size="sm"
+              variant="outline-secondary"
+              @click="onOpenModal(subject)"
+            >
               <b-icon icon="box-arrow-in-left" />
             </b-button>
             <div :class="occurs < required ? 'text-danger' : 'text-success'">
@@ -39,6 +47,13 @@
             </div>
           </div>
         </div>
+        <group-schedule-apply-subject-modal
+          v-if="applySubject"
+          v-model="applyModalShown"
+          :subject="applySubject"
+          :date="currenDate"
+          @submit="onApplySubject"
+        />
       </div>
     </div>
   </div>
@@ -52,6 +67,7 @@ import startOfWeek from 'date-fns/startOfWeek';
 import addDays from 'date-fns/addDays';
 import fnsFormat from 'date-fns/format';
 import { PaginatedRecords } from '~/lib/api/mappers';
+import GroupScheduleApplySubjectModal from '~/components/database/records/groups/GroupScheduleApplySubjectModal.vue';
 
 interface SubjectRequirements {
   subject: Subject;
@@ -65,6 +81,11 @@ interface DaySchedule {
   subjects: Subject[];
 }
 
+interface Occurrence {
+  subject: Subject;
+  dayStart: Date;
+}
+
 function simplifyDate (date: Date): Date {
   return startOfWeek(date, { weekStartsOn: 0 });
 }
@@ -72,6 +93,7 @@ function simplifyDate (date: Date): Date {
 @Component({
   components: {
     GroupScheduleControls,
+    GroupScheduleApplySubjectModal,
   },
 })
 export default class GroupSchedule extends Vue {
@@ -85,6 +107,12 @@ export default class GroupSchedule extends Vue {
     { name: 'date', slot: 'day' },
     { name: 'subjects', slot: 'subjects' },
   ];
+
+  occurrences: Occurrence[] = [];
+
+  applyModalShown = false;
+
+  applySubject = null as null | Subject
 
   @Watch('group')
   onPageChanged () {
@@ -124,8 +152,16 @@ export default class GroupSchedule extends Vue {
     this.currenDate = simplifyDate(date);
   }
 
-  onApplySubject (subject: Subject): void {
+  onOpenModal (subject: Subject): void {
+    this.applySubject = subject;
+    this.applyModalShown = true;
+  }
 
+  onApplySubject (res: any) {
+    this.occurrences.push({
+      subject: res.subject,
+      dayStart: res.dateStart,
+    });
   }
 
   printDay (date: Date): string {
