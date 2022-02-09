@@ -36,7 +36,7 @@ export default class extends DatabasePage {
       name: 'course',
       cell: { type: AssociatedRecordLink, entity: 'courses' },
     },
-    { name: 'name' },
+    { name: 'name_en' },
     { name: 'year' },
     { name: 'term' },
   ];

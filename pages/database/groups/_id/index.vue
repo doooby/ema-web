@@ -83,6 +83,6 @@ enum Tabs {
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.schedule;
+  currenTab: Tabs = Tabs.students;
 }
 </script>
