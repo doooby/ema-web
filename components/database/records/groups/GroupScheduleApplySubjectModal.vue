@@ -11,6 +11,12 @@
       {{ subject.name_en }}
       <br>
       <small>{{ subject.name }}</small>
+      <br>
+      <br>
+      <form-group
+        v-model="formValues"
+        :fields="formFields"
+      />
     </div>
   </b-modal>
 </template>
@@ -18,12 +24,19 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Subject } from '~/lib/records';
+import { buildFormFields, prefillFormValues } from '~/components/Form';
 
 @Component
 export default class GroupScheduleApplySubjectModal extends Vue {
   @Prop({ required: true }) readonly value!: boolean;
   @Prop({ required: true }) readonly subject!: Subject;
   @Prop({ required: true }) readonly date!: Date;
+
+  formFields = buildFormFields([
+    [ 'date', 'calendar' ],
+  ]);
+
+  formValues = prefillFormValues(this.formFields, { date: this.date });
 
   onHidden () {
     this.$emit('input', false);
@@ -32,7 +45,7 @@ export default class GroupScheduleApplySubjectModal extends Vue {
   onSubmit () {
     this.$emit('submit', {
       subject: this.subject,
-      dateStart: this.date,
+      dateStart: this.formValues.date,
     });
   }
 }

@@ -3,9 +3,6 @@
     <div>
       <group-schedule-controls :value="currenDate" @input="onDateChange" />
     </div>
-    <div>
-      {{ JSON.stringify(occurrences) }}
-    </div>
     <div class="d-flex">
       <data-table-view
         class="col-9"
@@ -20,7 +17,18 @@
           </div>
         </template>
         <template #subjects="{ dataItem }">
-          {{ JSON.stringify(dataItem) }}
+          <div class="d-flex align-items-center">
+            <div
+              v-for="(subject, index) in dataItem.subjects"
+              :key="index"
+              class="em-3 ep-1 border bg-primary text-white"
+            >
+              <h4 class="em-0">
+                {{ subject.name }}
+              </h4>
+              <small>{{ subject.name_en }}</small>
+            </div>
+          </div>
         </template>
       </data-table-view>
       <div class="col-3">
@@ -28,11 +36,12 @@
         <div
           v-for="{subject, occurs, required} in subjects"
           :key="subject.id"
-          class="em-2 epy-2 epx-3 border"
+          class="em-2 epy-2 epx-3 border bg-light"
         >
-          {{ subject.name_en }}
-          <br>
-          <small>{{ subject.name }}</small>
+          <h4 class="em-0">
+            {{ subject.name }}
+          </h4>
+          <small>{{ subject.name_en }}</small>
           <div class="d-flex align-items-center justify-content-between">
             <b-button
               class="border-0"
@@ -65,6 +74,8 @@ import GroupScheduleControls from '~/components/database/records/groups/GroupSch
 import { Group, Subject } from '~/lib/records';
 import startOfWeek from 'date-fns/startOfWeek';
 import addDays from 'date-fns/addDays';
+import addWeeks from 'date-fns/addWeeks';
+import isSameDay from 'date-fns/isSameDay';
 import fnsFormat from 'date-fns/format';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import GroupScheduleApplySubjectModal from '~/components/database/records/groups/GroupScheduleApplySubjectModal.vue';
@@ -83,7 +94,7 @@ interface DaySchedule {
 
 interface Occurrence {
   subject: Subject;
-  dayStart: Date;
+  date: Date;
 }
 
 function simplifyDate (date: Date): Date {
@@ -105,7 +116,7 @@ export default class GroupSchedule extends Vue {
 
   tableColumns = [
     { name: 'date', slot: 'day' },
-    { name: 'subjects', slot: 'subjects' },
+    { name: 'subjects', slot: 'subjects', size: 500 },
   ];
 
   occurrences: Occurrence[] = [];
@@ -130,10 +141,14 @@ export default class GroupSchedule extends Vue {
   get days (): DaySchedule[] {
     const list = [] as DaySchedule[];
     for (let index = 0; index < 8; index += 1) {
+      const dayDate = addDays(this.currenDate, index);
+      const subjects = this.occurrences
+        .filter(({ date }) => isSameDay(dayDate, date))
+        .map(({ subject }) => subject);
       list.push({
         id: index,
-        date: addDays(this.currenDate, index),
-        subjects: [],
+        date: dayDate,
+        subjects,
       });
     }
     return list;
@@ -144,7 +159,7 @@ export default class GroupSchedule extends Vue {
     return (records ?? []).map(subject => ({
       subject,
       occurs: 0,
-      required: 20,
+      required: 2,
     }));
   }
 
@@ -158,10 +173,13 @@ export default class GroupSchedule extends Vue {
   }
 
   onApplySubject (res: any) {
-    this.occurrences.push({
-      subject: res.subject,
-      dayStart: res.dateStart,
-    });
+    const startDate = this.currenDate;
+    for (let index = 0; index < 10; index += 1) {
+      this.occurrences.push({
+        subject: res.subject,
+        date: addDays(addWeeks(startDate, index), 1),
+      });
+    }
   }
 
   printDay (date: Date): string {
