@@ -159,7 +159,7 @@ export default class GroupSchedule extends Vue {
     return (records ?? []).map(subject => ({
       subject,
       occurs: 0,
-      required: 2,
+      required: 20,
     }));
   }
 
