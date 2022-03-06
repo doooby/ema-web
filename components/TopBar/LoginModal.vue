@@ -33,6 +33,16 @@
       </div>
       <b-form v-else @submit="onLoginSubmit">
         <b-form-group
+          label="country"
+          label-for="login-country"
+        >
+          <b-form-select
+            id="login-country"
+            v-model="form.country"
+            :options="countriesOptions"
+          />
+        </b-form-group>
+        <b-form-group
           label="Login"
           label-for="login-login"
         >
@@ -69,11 +79,15 @@
 import Vue from 'vue';
 import { mapState } from 'vuex';
 import { SessionUser } from '~/lib/records';
+import { RequestResponse } from '~/lib/api';
+import { AssociatedRecord } from '~/lib/api/mappers';
 
 export default Vue.extend({
   data () {
     return {
+      countries: undefined as undefined | AssociatedRecord[],
       form: {
+        country: '',
         login: '',
         password: '',
         error: null as null | string,
@@ -85,9 +99,23 @@ export default Vue.extend({
       currentUser: (state: any): null | SessionUser => state.session.currentUser,
       shown: (state: any) => state.session.loginModalShown,
     }),
+    countriesOptions (): { value: string; text: string }[] {
+      return (this.countries ?? []).map(country => ({
+        value: String(country.id),
+        text: country.labels.caption as string,
+      }));
+    },
+  },
+  mounted () {
+    loadCountries().then((countries) => {
+      if (countries.ok) {
+        this.countries = countries.data;
+      }
+    });
   },
   methods: {
     onShow () {
+      this.form.country = '2';
       this.form.login = '';
       this.form.password = '';
       this.form.error = null;
@@ -98,9 +126,9 @@ export default Vue.extend({
     async onLoginSubmit (event: any) {
       event.preventDefault();
 
-      const { login, password } = this.form;
+      const { country, login, password } = this.form;
       const result = await this.$api.request(
-        this.$api.queries.session.login({ login, password }),
+        this.$api.queries.session.login({ country, login, password }),
         this.$api.newQueryState(),
       );
       await this.$store.dispatch('session/fetchSession', {
@@ -123,4 +151,14 @@ export default Vue.extend({
     },
   },
 });
+
+async function loadCountries () {
+  try {
+    const rawResponse = await globalThis.fetch('/public/countries');
+    const { ok, payload }: RequestResponse = await rawResponse.json();
+    return { ok, data: payload.list as AssociatedRecord[] };
+  } catch (error) {
+    return { ok: false };
+  }
+}
 </script>

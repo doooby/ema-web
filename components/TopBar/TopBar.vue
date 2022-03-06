@@ -13,7 +13,11 @@
           <t value="top_bar.action.home" />
         </h2>
       </nuxt-link>
-      <nuxt-link class="epx-4 epy-2 eh-100 text-decoration-none" to="/database">
+      <nuxt-link
+        v-if="currentUser"
+        to="/database"
+        class="epx-4 epy-2 eh-100 text-decoration-none"
+      >
         <h2 class="m-0 h-100 d-flex align-items-center text-light">
           <b-icon icon="server" variant="light" class="emr-3" />
           <t value="top_bar.action.db" />

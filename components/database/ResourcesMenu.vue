@@ -10,7 +10,7 @@
       :resource="currentResource"
     />
     <hr>
-    <resources-listing />
+    <resources-listing v-if="userPresent" />
   </div>
 </template>
 
@@ -25,6 +25,10 @@ import { dbPages, Resource } from '~/config/pages';
   components: { CountrySwitch, CurrentResource, ResourcesListing },
 })
 export default class ResourcesMenu extends Vue {
+  get userPresent (): boolean {
+    return !!this.$store.state.session.currentUser;
+  }
+
   get currentResource (): undefined | Resource {
     const name = this.$route.path.match(/^\/database\/(\w+)\/?.*/)?.[1];
     const resource = name && dbPages.find(item => item.name === name);
