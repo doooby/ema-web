@@ -53,6 +53,11 @@
             <group-schedule :group="record" />
           </div>
         </b-tab>
+        <b-tab title="Attendance">
+          <div v-if="currenTab === Tabs.attendance">
+            <group-attendance :group="record" />
+          </div>
+        </b-tab>
       </b-tabs>
     </template>
   </show-page>
@@ -66,10 +71,12 @@ import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import StudentsListing from '~/components/database/records/groups/StudentsListing.vue';
 import GroupSchedule from '~/components/database/records/groups/GroupSchedule.vue';
+import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
 
 enum Tabs {
   students,
   schedule,
+  attendance,
 }
 
 @Component({
@@ -79,10 +86,11 @@ enum Tabs {
     ShowPageTableRow,
     StudentsListing,
     GroupSchedule,
+    GroupAttendance,
   },
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.students;
+  currenTab: Tabs = Tabs.attendance;
 }
 </script>
