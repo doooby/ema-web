@@ -25,15 +25,18 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Subject } from '~/lib/records';
 import { buildFormFields, prefillFormValues } from '~/components/Form';
+import RecurrenceSelection
+  from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/RecurrenceSelection.vue';
 
 @Component
-export default class GroupScheduleApplySubjectModal extends Vue {
+export default class ApplySubjectModal extends Vue {
   @Prop({ required: true }) readonly value!: boolean;
   @Prop({ required: true }) readonly subject!: Subject;
   @Prop({ required: true }) readonly date!: Date;
 
   formFields = buildFormFields([
     [ 'date', 'calendar' ],
+    [ 'recurrence', RecurrenceSelection.asControl ],
   ]);
 
   formValues = prefillFormValues(this.formFields, { date: this.date });

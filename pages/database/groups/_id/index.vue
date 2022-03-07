@@ -70,7 +70,7 @@ import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import StudentsListing from '~/components/database/records/groups/StudentsListing.vue';
-import GroupSchedule from '~/components/database/records/groups/GroupSchedule.vue';
+import GroupSchedule from '~/components/database/records/groups/GroupSchedule/index.vue';
 import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
 
 enum Tabs {
@@ -91,6 +91,6 @@ enum Tabs {
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.attendance;
+  currenTab: Tabs = Tabs.students;
 }
 </script>

@@ -56,7 +56,7 @@
             </div>
           </div>
         </div>
-        <group-schedule-apply-subject-modal
+        <apply-subject-modal
           v-if="applySubject"
           v-model="applyModalShown"
           :subject="applySubject"
@@ -78,7 +78,7 @@ import addWeeks from 'date-fns/addWeeks';
 import isSameDay from 'date-fns/isSameDay';
 import fnsFormat from 'date-fns/format';
 import { PaginatedRecords } from '~/lib/api/mappers';
-import GroupScheduleApplySubjectModal from '~/components/database/records/groups/GroupScheduleApplySubjectModal.vue';
+import ApplySubjectModal from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/index.vue';
 
 interface SubjectRequirements {
   subject: Subject;
@@ -104,7 +104,7 @@ function simplifyDate (date: Date): Date {
 @Component({
   components: {
     GroupScheduleControls,
-    GroupScheduleApplySubjectModal,
+    ApplySubjectModal,
   },
 })
 export default class GroupSchedule extends Vue {
