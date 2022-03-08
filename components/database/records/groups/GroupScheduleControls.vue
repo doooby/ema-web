@@ -1,57 +1,56 @@
 <template>
-  <form-group
-    v-model="formValues"
-    :fields="formFields"
-    @change="onDateChange"
-  >
-    <template #layout="{ context, values }">
-      <div class="d-flex align-items-center">
-        <b-button variant="outline-secondary" class="emr-2" @click="onSetPreviousWeek">
-          <b-icon icon="chevron-left" />
-        </b-button>
-        <form-field
-          name="date"
-          :context="context"
-          :values="values"
-        />
-        <b-button variant="outline-secondary" class="eml-2" @click="onSetNextWeek">
-          <b-icon icon="chevron-right" />
-        </b-button>
-      </div>
-    </template>
-  </form-group>
+  <div class="d-flex align-items-center">
+    <b-button
+      variant="outline-secondary"
+      class="emr-2"
+      @click="onSetPreviousWeek"
+    >
+      <b-icon icon="chevron-left" />
+    </b-button>
+    <div style="max-width: 160px;">
+      <b-form-datepicker
+        :value="value"
+        label-no-date-selected=""
+        :min="startDate"
+        :max="endDate"
+        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+        @input="onDateChange"
+      />
+    </div>
+    <b-button variant="outline-secondary" class="eml-2" @click="onSetNextWeek">
+      <b-icon icon="chevron-right" />
+    </b-button>
+  </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { buildFormFields, prefillFormValues } from '~/components/Form';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import addWeeks from 'date-fns/addWeeks';
+import { isAfter, isBefore, parseISO as parseDate, startOfWeek, endOfWeek } from 'date-fns';
 
 @Component
 export default class GroupScheduleControls extends Vue {
   @Prop({ required: true }) readonly value!: Date;
+  @Prop({ required: true }) readonly span!: [Date, Date];
 
-  formFields = buildFormFields([
-    [ 'date', 'calendar' ],
-  ]);
+  startDate = startOfWeek(this.span[0], { weekStartsOn: 1 });
+  endDate = endOfWeek(this.span[1], { weekStartsOn: 1 });
 
-  formValues = prefillFormValues(this.formFields, { date: this.value });
-
-  @Watch('value')
-  onValueChanged (newValue: Date) {
-    this.formValues.date = newValue;
-  }
-
-  onDateChange (): void {
-    this.$emit('input', this.formValues.date);
+  onDateChange (rawDate: string): void {
+    const date = parseDate(rawDate);
+    this.$emit('input', isNaN(date as any) ? undefined : date);
   }
 
   onSetPreviousWeek (): void {
-    this.$emit('input', addWeeks(this.formValues.date, -1));
+    const value = addWeeks(this.value, -1);
+    if (isBefore(value, this.startDate)) return;
+    this.$emit('input', value);
   }
 
   onSetNextWeek (): void {
-    this.$emit('input', addWeeks(this.formValues.date, 1));
+    const value = addWeeks(this.value, 1);
+    if (isAfter(value, this.endDate)) return;
+    this.$emit('input', value);
   }
 }
 </script>

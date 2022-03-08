@@ -4,6 +4,7 @@ import DateControl, { type as DateControlType } from './Date.vue';
 import HiddenControl from './Hidden.vue';
 import IntegerControl, { type as IntegerControlType } from './Integer.vue';
 import ListControl from './List.vue';
+import SelectControl from './Select.vue';
 import TextControl, { type as TextControlType } from './Text.vue';
 import TextMultilineControl, { type as TextMultilineControlType } from './TextMultiline.vue';
 
@@ -31,5 +32,6 @@ add(DateControlType, DateControl);
 add(IntegerControlType, IntegerControl);
 add(HiddenControl.fieldType, HiddenControl);
 add(ListControl.fieldType, ListControl);
+add(SelectControl.fieldType, SelectControl);
 add(TextControlType, TextControl);
 add(TextMultilineControlType, TextMultilineControl);

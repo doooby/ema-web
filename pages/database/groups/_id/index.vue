@@ -50,7 +50,10 @@
         </b-tab>
         <b-tab title="Schedule">
           <div v-if="currenTab === Tabs.schedule">
-            <group-schedule :group="record" />
+            <group-schedule
+              :group="record"
+              :term-span="termSpan"
+            />
           </div>
         </b-tab>
         <b-tab title="Attendance">
@@ -91,6 +94,11 @@ enum Tabs {
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.students;
+  currenTab: Tabs = Tabs.schedule;
+
+  termSpan = [
+    new Date(2022, 1, 1),
+    new Date(2022, 5, 30),
+  ]
 }
 </script>

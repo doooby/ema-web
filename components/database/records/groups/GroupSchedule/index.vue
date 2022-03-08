@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div>
-      <group-schedule-controls :value="currenDate" @input="onDateChange" />
+    <div class="emy-4">
+      <group-schedule-controls
+        :value="currenDate"
+        :span="termSpan"
+        @input="onDateChange"
+      />
     </div>
     <div class="d-flex">
       <data-table-view
@@ -72,13 +76,10 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import GroupScheduleControls from '~/components/database/records/groups/GroupScheduleControls.vue';
 import { Group, Subject } from '~/lib/records';
-import startOfWeek from 'date-fns/startOfWeek';
-import addDays from 'date-fns/addDays';
-import addWeeks from 'date-fns/addWeeks';
-import isSameDay from 'date-fns/isSameDay';
-import fnsFormat from 'date-fns/format';
 import { PaginatedRecords } from '~/lib/api/mappers';
-import ApplySubjectModal from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/index.vue';
+import ApplySubjectModal, { Result as AddSubjectResult } from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/index.vue';
+import { times } from 'lodash';
+import { addWeeks, addDays, isSameDay, format as fnsFormat, startOfWeek, eachWeekOfInterval, isAfter } from 'date-fns';
 
 interface SubjectRequirements {
   subject: Subject;
@@ -98,7 +99,7 @@ interface Occurrence {
 }
 
 function simplifyDate (date: Date): Date {
-  return startOfWeek(date, { weekStartsOn: 0 });
+  return startOfWeek(date, { weekStartsOn: 1 });
 }
 
 @Component({
@@ -109,10 +110,11 @@ function simplifyDate (date: Date): Date {
 })
 export default class GroupSchedule extends Vue {
   @Prop({ required: true }) readonly group!: Group;
+  @Prop({ required: true }) readonly termSpan!: [Date, Date];
 
   getSubjectsQueryState = this.$api.newQueryState<PaginatedRecords<Subject>>();
 
-  currenDate = simplifyDate(new Date());
+  currenDate = simplifyDate(this.termSpan[0]);
 
   tableColumns = [
     { name: 'date', slot: 'day' },
@@ -139,19 +141,17 @@ export default class GroupSchedule extends Vue {
   }
 
   get days (): DaySchedule[] {
-    const list = [] as DaySchedule[];
-    for (let index = 0; index < 8; index += 1) {
+    return times(7, (index: number) => {
       const dayDate = addDays(this.currenDate, index);
       const subjects = this.occurrences
         .filter(({ date }) => isSameDay(dayDate, date))
         .map(({ subject }) => subject);
-      list.push({
-        id: index,
+      return {
+        id: index + 1,
         date: dayDate,
         subjects,
-      });
-    }
-    return list;
+      };
+    });
   }
 
   get subjects (): SubjectRequirements[] {
@@ -172,14 +172,23 @@ export default class GroupSchedule extends Vue {
     this.applyModalShown = true;
   }
 
-  onApplySubject (res: any) {
-    const startDate = this.currenDate;
-    for (let index = 0; index < 10; index += 1) {
-      this.occurrences.push({
-        subject: res.subject,
-        date: addDays(addWeeks(startDate, index), 1),
-      });
+  onApplySubject (values: AddSubjectResult) {
+    let weeks;
+    if (values.recurrence.option === 'regular') {
+      weeks = eachWeekOfInterval({ start: this.currenDate, end: this.termSpan[1] }, { weekStartsOn: 1 });
+    } else {
+      weeks = [];
+      for (let index = 0; index < values.recurrence.times!; index += 1) {
+        const nextValue = addWeeks(this.currenDate, index * values.recurrence.eachWeek!);
+        if (isAfter(nextValue, this.termSpan[1])) break;
+        weeks.push(nextValue);
+      }
     }
+    const occurences = weeks.map(day => addDays(day, values.day));
+    if (occurences.length && isAfter(occurences[occurences.length - 1], this.termSpan[1])) {
+      occurences.pop();
+    }
+    console.log(occurences);
   }
 
   printDay (date: Date): string {

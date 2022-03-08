@@ -104,7 +104,7 @@ export default Vue.extend({
   },
 });
 
-function sanitizeValue (value: any): undefined | number {
+export function sanitizeValue (value: any): undefined | number {
   if (value === undefined || value === '') return undefined;
   value = Number(value);
   return isNaN(value) ? undefined : value;

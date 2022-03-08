@@ -16,6 +16,7 @@
       <form-group
         v-model="formValues"
         :fields="formFields"
+        label-prefix="db.record.groups.schedule.applySubject"
       />
     </div>
   </b-modal>
@@ -26,7 +27,16 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Subject } from '~/lib/records';
 import { buildFormFields, prefillFormValues } from '~/components/Form';
 import RecurrenceSelection
-  from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/RecurrenceSelection.vue';
+, { Value as RecurrenceValue } from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/RecurrenceSelection.vue';
+import addDays from 'date-fns/addDays';
+import times from 'lodash/times';
+import fnsFormat from 'date-fns/format';
+
+export interface Result {
+  subject: Subject;
+  day: number;
+  recurrence: RecurrenceValue;
+}
 
 @Component
 export default class ApplySubjectModal extends Vue {
@@ -35,11 +45,13 @@ export default class ApplySubjectModal extends Vue {
   @Prop({ required: true }) readonly date!: Date;
 
   formFields = buildFormFields([
-    [ 'date', 'calendar' ],
+    [ 'day', 'select', { options: buildDayOptions(this.date) } ],
     [ 'recurrence', RecurrenceSelection.asControl ],
   ]);
 
-  formValues = prefillFormValues(this.formFields, { date: this.date });
+  formValues = prefillFormValues(this.formFields, {
+    day: 0,
+  });
 
   onHidden () {
     this.$emit('input', false);
@@ -48,8 +60,19 @@ export default class ApplySubjectModal extends Vue {
   onSubmit () {
     this.$emit('submit', {
       subject: this.subject,
-      dateStart: this.formValues.date,
-    });
+      day: this.formValues.day,
+      recurrence: this.formValues.recurrence,
+    } as Result);
   }
+}
+
+function buildDayOptions (date: Date) {
+  return times(7, (index: number) => {
+    const day = addDays(date, index);
+    return {
+      value: index,
+      text: fnsFormat(day, 'EEEE'),
+    };
+  });
 }
 </script>
