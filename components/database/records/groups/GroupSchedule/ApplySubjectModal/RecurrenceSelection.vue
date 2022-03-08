@@ -6,16 +6,15 @@
     <b-form-radio-group :checked="value.option">
       <div>
         <b-form-radio value="regular" @change="onSelectRegular">
-          <t value="db.record.groups.schedule.applySubject.recurrence.regular.label" />
+          <t value="db.record.groups.schedule.apply_subject.recurrence_regular.label" />
         </b-form-radio>
       </div>
       <div>
         <b-form-radio value="irregular" @change="onSelectIrregular">
-          <t value="db.record.groups.schedule.applySubject.recurrence.irregular.label" />
+          <t value="db.record.groups.schedule.apply_subject.recurrence_irregular.label" />
         </b-form-radio>
         <div v-if="value.option === 'irregular'">
           <div class="d-flex flex-wrap">
-            <t value="db.record.groups.schedule.applySubject.recurrence.irregular.per_week" />
             <b-form-select
               :value="value.eachWeek"
               :options="perWeekOptions"
@@ -24,7 +23,7 @@
             />
           </div>
           <div class="d-flex flex-wrap">
-            <t value="db.record.groups.schedule.applySubject.recurrence.irregular.repeat_times" />
+            <t value="db.record.groups.schedule.apply_subject.recurrence_irregular.repeat_times" />
             <b-form-input
               :value="value.times"
               type="number"

@@ -8,15 +8,16 @@
       Schedule a Subject
     </template>
     <div v-if="value">
-      {{ subject.name_en }}
-      <br>
-      <small>{{ subject.name }}</small>
-      <br>
-      <br>
+      <div class="emb-4">
+        <h4 class="em-0">
+          {{ subject.name }}
+        </h4>
+        <small>{{ subject.name_en }}</small>
+      </div>
       <form-group
         v-model="formValues"
         :fields="formFields"
-        label-prefix="db.record.groups.schedule.applySubject"
+        label-prefix="db.record.groups.schedule.apply_subject"
       />
     </div>
   </b-modal>
@@ -27,7 +28,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Subject } from '~/lib/records';
 import { buildFormFields, prefillFormValues } from '~/components/Form';
 import RecurrenceSelection
-, { Value as RecurrenceValue } from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/RecurrenceSelection.vue';
+, { Value as RecurrenceValue } from './RecurrenceSelection.vue';
 import addDays from 'date-fns/addDays';
 import times from 'lodash/times';
 import fnsFormat from 'date-fns/format';

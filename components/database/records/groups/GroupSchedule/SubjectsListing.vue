@@ -5,10 +5,12 @@
       :key="subject.id"
       class="em-2 epy-2 epx-3 border bg-light"
     >
-      <h4 class="em-0">
-        {{ subject.name }}
-      </h4>
-      <small>{{ subject.name_en }}</small>
+      <div>
+        <h4 class="em-0">
+          {{ subject.name }}
+        </h4>
+        <small>{{ subject.name_en }}</small>
+      </div>
       <div class="d-flex align-items-center justify-content-between">
         <div>
           <b-button
