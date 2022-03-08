@@ -37,29 +37,12 @@
       </data-table-view>
       <div class="col-3">
         <h4>Subjects</h4>
-        <div
-          v-for="{subject, occurs, required} in subjects"
-          :key="subject.id"
-          class="em-2 epy-2 epx-3 border bg-light"
-        >
-          <h4 class="em-0">
-            {{ subject.name }}
-          </h4>
-          <small>{{ subject.name_en }}</small>
-          <div class="d-flex align-items-center justify-content-between">
-            <b-button
-              class="border-0"
-              size="sm"
-              variant="outline-secondary"
-              @click="onOpenModal(subject)"
-            >
-              <b-icon icon="box-arrow-in-left" />
-            </b-button>
-            <div :class="occurs < required ? 'text-danger' : 'text-success'">
-              {{ occurs }} / {{ required }}
-            </div>
-          </div>
-        </div>
+        <subjects-listing
+          :subjects="subjects"
+          :occurrences="occurrences"
+          @apply="onOpenModal($event)"
+          @remove="onRemoveSubject($event)"
+        />
         <apply-subject-modal
           v-if="applySubject"
           v-model="applyModalShown"
@@ -80,12 +63,7 @@ import { PaginatedRecords } from '~/lib/api/mappers';
 import ApplySubjectModal, { Result as AddSubjectResult } from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/index.vue';
 import { times } from 'lodash';
 import { addWeeks, addDays, isSameDay, format as fnsFormat, startOfWeek, eachWeekOfInterval, isAfter } from 'date-fns';
-
-interface SubjectRequirements {
-  subject: Subject;
-  occurs: number;
-  required: number;
-}
+import SubjectsListing from './SubjectsListing.vue';
 
 interface DaySchedule {
   id: number;
@@ -93,7 +71,7 @@ interface DaySchedule {
   subjects: Subject[];
 }
 
-interface Occurrence {
+export interface Occurrence {
   subject: Subject;
   date: Date;
 }
@@ -106,6 +84,7 @@ function simplifyDate (date: Date): Date {
   components: {
     GroupScheduleControls,
     ApplySubjectModal,
+    SubjectsListing,
   },
 })
 export default class GroupSchedule extends Vue {
@@ -140,6 +119,10 @@ export default class GroupSchedule extends Vue {
     return this.$store.state.session.currentCountry?.id ?? null;
   }
 
+  get subjects (): Subject[] {
+    return this.getSubjectsQueryState.value?.records ?? [];
+  }
+
   get days (): DaySchedule[] {
     return times(7, (index: number) => {
       const dayDate = addDays(this.currenDate, index);
@@ -152,15 +135,6 @@ export default class GroupSchedule extends Vue {
         subjects,
       };
     });
-  }
-
-  get subjects (): SubjectRequirements[] {
-    const { records } = this.getSubjectsQueryState.value ?? {};
-    return (records ?? []).map(subject => ({
-      subject,
-      occurs: 0,
-      required: 20,
-    }));
   }
 
   onDateChange (date: Date): void {
@@ -184,11 +158,22 @@ export default class GroupSchedule extends Vue {
         weeks.push(nextValue);
       }
     }
-    const occurences = weeks.map(day => addDays(day, values.day));
-    if (occurences.length && isAfter(occurences[occurences.length - 1], this.termSpan[1])) {
-      occurences.pop();
+    const occurrences = weeks.map(day => addDays(day, values.day));
+    if (occurrences.length && isAfter(occurrences[occurrences.length - 1], this.termSpan[1])) {
+      occurrences.pop();
     }
-    console.log(occurences);
+    for (const date of occurrences) {
+      this.occurrences.push({
+        date,
+        subject: values.subject,
+      });
+    }
+  }
+
+  onRemoveSubject (subject: Subject) {
+    this.occurrences = this.occurrences.filter(
+      occurrence => occurrence.subject !== subject,
+    );
   }
 
   printDay (date: Date): string {
