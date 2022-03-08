@@ -1,7 +1,7 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { group } from '~/lib/records';
-import { record } from '../mappers';
+import { group, mapScheduleOccurrences } from '~/lib/records';
+import { object, prop, record } from '../mappers';
 
 export function index (params: Params) {
   return {
@@ -30,6 +30,23 @@ export function update (groupId: number, group: Params) {
   return {
     path: `/groups/${groupId}/update`,
     params: { group },
+    mapper: mappers.changedRecord,
+  };
+}
+
+export function showSchedule (groupId: number) {
+  return {
+    path: `/groups/${groupId}/show_schedule`,
+    mapper: (value: any) => object(value, root =>
+      prop('occurrences', root, mapScheduleOccurrences),
+    ),
+  };
+}
+
+export function updateSchedule (groupId: number, occurrences: [number, string][]) {
+  return {
+    path: `/groups/${groupId}/update_schedule`,
+    params: { occurrences },
     mapper: mappers.changedRecord,
   };
 }

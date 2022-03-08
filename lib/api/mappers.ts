@@ -164,6 +164,13 @@ export function maybeAssocId (parent: any, associationName: string): undefined |
 }
 
 export const val = {
+  id (value: any): number {
+    if (typeof value !== 'number') {
+      value = Number(value);
+    }
+    if (isNaN(value)) throw new MappingError('invalid record id');
+    return value;
+  },
   boolean (value: any): boolean {
     return !!value;
   },

@@ -1,15 +1,27 @@
 <template>
-  <div>
-    <div class="emy-4">
-      <group-schedule-controls
-        :value="currenDate"
-        :span="termSpan"
-        @input="onDateChange"
-      />
-    </div>
-    <div class="d-flex">
+  <div class="d-flex">
+    <div class="col-9">
+      <div class="emy-4 d-flex justify-content-between">
+        <group-schedule-controls
+          :value="currenDate"
+          :span="termSpan"
+          @input="onDateChange"
+        />
+        <div class="d-flex align-items-center">
+          <div v-if="changed" class="emr-2">
+            <b-icon icon="exclamation-circle" />
+            changed
+          </div>
+          <b-button
+            :disabled="!changed || postScheduleQueryState.running"
+            variant="primary"
+            @click="postSchedule"
+          >
+            Save
+          </b-button>
+        </div>
+      </div>
       <data-table-view
-        class="col-9"
         :columns="tableColumns"
         :dataset="days"
       >
@@ -35,22 +47,22 @@
           </div>
         </template>
       </data-table-view>
-      <div class="col-3">
-        <h4>Subjects</h4>
-        <subjects-listing
-          :subjects="subjects"
-          :occurrences="occurrences"
-          @apply="onOpenModal($event)"
-          @remove="onRemoveSubject($event)"
-        />
-        <apply-subject-modal
-          v-if="applySubject"
-          v-model="applyModalShown"
-          :subject="applySubject"
-          :date="currenDate"
-          @submit="onApplySubject"
-        />
-      </div>
+    </div>
+    <div class="col-3">
+      <h4>Subjects</h4>
+      <subjects-listing
+        :subjects="subjects"
+        :occurrences="occurrences"
+        @apply="onOpenModal($event)"
+        @remove="onRemoveSubject($event)"
+      />
+      <apply-subject-modal
+        v-if="applySubject"
+        v-model="applyModalShown"
+        :subject="applySubject"
+        :date="currenDate"
+        @submit="onApplySubject"
+      />
     </div>
   </div>
 </template>
@@ -59,7 +71,7 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import GroupScheduleControls from '~/components/database/records/groups/GroupScheduleControls.vue';
 import { Group, Subject } from '~/lib/records';
-import { PaginatedRecords } from '~/lib/api/mappers';
+import { PaginatedRecords, RecordChange } from '~/lib/api/mappers';
 import ApplySubjectModal, { Result as AddSubjectResult } from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/index.vue';
 import { times } from 'lodash';
 import { addWeeks, addDays, isSameDay, format as fnsFormat, startOfWeek, eachWeekOfInterval, isAfter } from 'date-fns';
@@ -92,6 +104,8 @@ export default class GroupSchedule extends Vue {
   @Prop({ required: true }) readonly termSpan!: [Date, Date];
 
   getSubjectsQueryState = this.$api.newQueryState<PaginatedRecords<Subject>>();
+  getScheduleQueryState = this.$api.newQueryState<[number, Date][]>();
+  postScheduleQueryState = this.$api.newQueryState<RecordChange>();
 
   currenDate = simplifyDate(this.termSpan[0]);
 
@@ -106,13 +120,15 @@ export default class GroupSchedule extends Vue {
 
   applySubject = null as null | Subject
 
+  changed = false;
+
   @Watch('group')
   onPageChanged () {
-    this.reloadSubjects();
+    this.reloadSchedule();
   }
 
   mounted () {
-    this.reloadSubjects();
+    this.reloadSchedule();
   }
 
   get currentCountryId (): null | number {
@@ -168,30 +184,69 @@ export default class GroupSchedule extends Vue {
         subject: values.subject,
       });
     }
+    this.changed = true;
   }
 
   onRemoveSubject (subject: Subject) {
     this.occurrences = this.occurrences.filter(
-      occurrence => occurrence.subject !== subject,
+      occurrence => occurrence.subject.id !== subject.id,
     );
+    this.changed = true;
   }
 
   printDay (date: Date): string {
     return fnsFormat(date, 'EEEE');
   }
 
-  reloadSubjects () {
-    this.getSubjectsQueryState.reset();
-    this.fetchSubjects();
-  }
+  async reloadSchedule () {
+    this.changed = false;
 
-  async fetchSubjects () {
-    const query = this.$api.queries.subjects.index;
-    await this.$api.request(query({
+    this.getSubjectsQueryState.reset();
+    await this.$api.request(this.$api.queries.subjects.index({
       course_id: this.group.course.id,
       country_id: this.currentCountryId,
       per_page: 50,
     }), this.getSubjectsQueryState);
+
+    this.getScheduleQueryState.reset();
+    const result = await this.$api.request(this.$api.queries.groups.showSchedule(
+      this.group.id,
+    ), this.getScheduleQueryState);
+    if (result) {
+      this.occurrences = mapScheduleToOccurences(this.subjects, result);
+    }
   }
+
+  async postSchedule () {
+    const result = await this.$api.request(this.$api.queries.groups.updateSchedule(
+      this.group.id,
+      this.occurrences.map(
+        ({ subject, date }) => [ subject.id, fnsFormat(date, 'yyyy-MM-dd') ],
+      ),
+    ), this.postScheduleQueryState);
+    console.log(result);
+    this.postScheduleQueryState.reset();
+  }
+}
+
+function mapScheduleToOccurences (
+  subjects: Subject[],
+  schedule: [number, Date][],
+): Occurrence[] {
+  const subjectsIndex = subjects.reduce((memo, subject) => {
+    memo[subject.id] = subject;
+    return memo;
+  }, {} as any);
+  const occurrences = [] as Occurrence[];
+  for (const [ subject_id, date ] of schedule) {
+    const subject = subjectsIndex[subject_id];
+    if (!subject) return [];
+
+    occurrences.push({
+      subject,
+      date,
+    });
+  }
+  return occurrences;
 }
 </script>

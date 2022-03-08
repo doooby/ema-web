@@ -1,6 +1,7 @@
 import * as mappers from '~/lib/api/mappers';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
+import { list, tuple } from '~/lib/api/mappers';
 
 export interface Group {
   id: number;
@@ -72,3 +73,10 @@ export const group = {
     { value: 2028, caption: 2028 },
   ]),
 };
+
+export function mapScheduleOccurrences (value: any): [number, Date][] {
+  return list(value, item => tuple(item, itemValues => [
+    prop('0', itemValues, val.id),
+    prop('1', itemValues, val.date),
+  ]));
+}
