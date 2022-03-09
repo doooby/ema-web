@@ -19,7 +19,7 @@ import { FormFieldDefinition } from '~/components/Form';
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return [
-      [ 'country', 'hidden', { value: this.currentCountryId } ],
+      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       ...user.entityControls(),
     ];
   }
