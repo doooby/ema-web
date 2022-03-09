@@ -30,7 +30,10 @@
           {{ record.school.labels.caption }}
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.course">
-          {{ record.course.labels.caption }}
+          <show-record-link
+            entity="courses"
+            :record="{ id: record.course.id, caption: record.course.labels.caption }"
+          />
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.year">
           {{ record.year }}
@@ -72,6 +75,7 @@ import { Component } from 'vue-property-decorator';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
+import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import StudentsListing from '~/components/database/records/groups/StudentsListing.vue';
 import GroupSchedule from '~/components/database/records/groups/GroupSchedule/index.vue';
 import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
@@ -87,6 +91,7 @@ enum Tabs {
     ShowPage,
     ShowPageAction,
     ShowPageTableRow,
+    ShowRecordLink,
     StudentsListing,
     GroupSchedule,
     GroupAttendance,

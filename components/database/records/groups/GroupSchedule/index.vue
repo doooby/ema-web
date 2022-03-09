@@ -51,8 +51,8 @@
     <div class="col-3">
       <h4>Subjects</h4>
       <subjects-listing
-        :subjects="subjects"
-        :occurrences="occurrences"
+        v-if="schedule"
+        :schedule="schedule"
         @apply="onOpenModal($event)"
         @remove="onRemoveSubject($event)"
       />
@@ -70,8 +70,8 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import GroupScheduleControls from '~/components/database/records/groups/GroupScheduleControls.vue';
-import { Group, Subject } from '~/lib/records';
-import { PaginatedRecords, RecordChange } from '~/lib/api/mappers';
+import { Group, GroupSchedule as GroupScheduleT, Subject } from '~/lib/records';
+import { AssociatedRecord, RecordChange } from '~/lib/api/mappers';
 import ApplySubjectModal, { Result as AddSubjectResult } from '~/components/database/records/groups/GroupSchedule/ApplySubjectModal/index.vue';
 import { times } from 'lodash';
 import { addWeeks, addDays, isSameDay, format as fnsFormat, startOfWeek, eachWeekOfInterval, isAfter } from 'date-fns';
@@ -80,12 +80,7 @@ import SubjectsListing from './SubjectsListing.vue';
 interface DaySchedule {
   id: number;
   date: Date;
-  subjects: Subject[];
-}
-
-export interface Occurrence {
-  subject: Subject;
-  date: Date;
+  subjects: AssociatedRecord<Subject>[];
 }
 
 function simplifyDate (date: Date): Date {
@@ -103,8 +98,9 @@ export default class GroupSchedule extends Vue {
   @Prop({ required: true }) readonly group!: Group;
   @Prop({ required: true }) readonly termSpan!: [Date, Date];
 
-  getSubjectsQueryState = this.$api.newQueryState<PaginatedRecords<Subject>>();
-  getScheduleQueryState = this.$api.newQueryState<[number, Date][]>();
+  schedule = null as null | GroupScheduleT.Definition;
+  changed = false;
+  getScheduleQueryState = this.$api.newQueryState<GroupScheduleT.Definition>();
   postScheduleQueryState = this.$api.newQueryState<RecordChange>();
 
   currenDate = simplifyDate(this.termSpan[0]);
@@ -114,13 +110,8 @@ export default class GroupSchedule extends Vue {
     { name: 'subjects', slot: 'subjects', size: 500 },
   ];
 
-  occurrences: Occurrence[] = [];
-
   applyModalShown = false;
-
-  applySubject = null as null | Subject
-
-  changed = false;
+  applySubject = null as null | AssociatedRecord<Subject>
 
   @Watch('group')
   onPageChanged () {
@@ -135,14 +126,11 @@ export default class GroupSchedule extends Vue {
     return this.$store.state.session.currentCountry?.id ?? null;
   }
 
-  get subjects (): Subject[] {
-    return this.getSubjectsQueryState.value?.records ?? [];
-  }
-
   get days (): DaySchedule[] {
+    if (!this.schedule) return [];
     return times(7, (index: number) => {
       const dayDate = addDays(this.currenDate, index);
-      const subjects = this.occurrences
+      const subjects = this.schedule!.occurrences
         .filter(({ date }) => isSameDay(dayDate, date))
         .map(({ subject }) => subject);
       return {
@@ -157,12 +145,13 @@ export default class GroupSchedule extends Vue {
     this.currenDate = simplifyDate(date);
   }
 
-  onOpenModal (subject: Subject): void {
+  onOpenModal (subject: AssociatedRecord<Subject>): void {
     this.applySubject = subject;
     this.applyModalShown = true;
   }
 
   onApplySubject (values: AddSubjectResult) {
+    if (!this.schedule) return;
     let weeks;
     if (values.recurrence.option === 'regular') {
       weeks = eachWeekOfInterval({ start: this.currenDate, end: this.termSpan[1] }, { weekStartsOn: 1 });
@@ -179,7 +168,7 @@ export default class GroupSchedule extends Vue {
       occurrences.pop();
     }
     for (const date of occurrences) {
-      this.occurrences.push({
+      this.schedule.occurrences.push({
         date,
         subject: values.subject,
       });
@@ -187,8 +176,9 @@ export default class GroupSchedule extends Vue {
     this.changed = true;
   }
 
-  onRemoveSubject (subject: Subject) {
-    this.occurrences = this.occurrences.filter(
+  onRemoveSubject (subject: AssociatedRecord<Subject>) {
+    if (!this.schedule) return;
+    this.schedule.occurrences = this.schedule.occurrences.filter(
       occurrence => occurrence.subject.id !== subject.id,
     );
     this.changed = true;
@@ -199,54 +189,31 @@ export default class GroupSchedule extends Vue {
   }
 
   async reloadSchedule () {
-    this.changed = false;
-
-    this.getSubjectsQueryState.reset();
-    await this.$api.request(this.$api.queries.subjects.index({
-      course_id: this.group.course.id,
-      country_id: this.currentCountryId,
-      per_page: 50,
-    }), this.getSubjectsQueryState);
-
     this.getScheduleQueryState.reset();
-    const result = await this.$api.request(this.$api.queries.groups.showSchedule(
+    const query = this.$api.queries.groups.showSchedule;
+    const result = await this.$api.request(query(
       this.group.id,
     ), this.getScheduleQueryState);
-    if (result) {
-      this.occurrences = mapScheduleToOccurences(this.subjects, result);
-    }
+    this.schedule = result ?? {
+      subjects: {},
+      settings: undefined,
+      occurrences: [],
+    };
+    this.changed = false;
   }
 
   async postSchedule () {
+    if (!this.schedule) return;
     const result = await this.$api.request(this.$api.queries.groups.updateSchedule(
       this.group.id,
-      this.occurrences.map(
+      this.schedule.occurrences.map(
         ({ subject, date }) => [ subject.id, fnsFormat(date, 'yyyy-MM-dd') ],
       ),
     ), this.postScheduleQueryState);
-    console.log(result);
+    if (result?.success) {
+      this.changed = false;
+    }
     this.postScheduleQueryState.reset();
   }
-}
-
-function mapScheduleToOccurences (
-  subjects: Subject[],
-  schedule: [number, Date][],
-): Occurrence[] {
-  const subjectsIndex = subjects.reduce((memo, subject) => {
-    memo[subject.id] = subject;
-    return memo;
-  }, {} as any);
-  const occurrences = [] as Occurrence[];
-  for (const [ subject_id, date ] of schedule) {
-    const subject = subjectsIndex[subject_id];
-    if (!subject) return [];
-
-    occurrences.push({
-      subject,
-      date,
-    });
-  }
-  return occurrences;
 }
 </script>

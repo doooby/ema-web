@@ -1,7 +1,7 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { group, mapScheduleOccurrences } from '~/lib/records';
-import { object, prop, record } from '../mappers';
+import { group, mapScheduleOccurrences, GroupSchedule } from '~/lib/records';
+import { list, object, prop, record, val } from '../mappers';
 
 export function index (params: Params) {
   return {
@@ -37,9 +37,25 @@ export function update (groupId: number, group: Params) {
 export function showSchedule (groupId: number) {
   return {
     path: `/groups/${groupId}/show_schedule`,
-    mapper: (value: any) => object(value, root =>
-      prop('occurrences', root, mapScheduleOccurrences),
-    ),
+    mapper: (value: any): GroupSchedule.Definition => {
+      const { subjects, settings, schedule } = object(value, root => ({
+        subjects: prop('subjects', root, (subjects_values: any) => {
+          return list(subjects_values, val.assoc);
+        }),
+        settings: prop('settings', root, (value: any) => value),
+        schedule: prop('occurrences', root, mapScheduleOccurrences),
+      }));
+      const subjectsIndex = subjects.reduce((memo, subject) => {
+        memo[subject.id] = subject;
+        return memo;
+      }, {} as any);
+      const occurrences = [] as GroupSchedule.SubjectOccurrence[];
+      for (const [ subject_id, date ] of schedule) {
+        const subject = subjectsIndex[subject_id];
+        if (subject) occurrences.push({ subject, date });
+      }
+      return { subjects: subjectsIndex, settings, occurrences };
+    },
   };
 }
 

@@ -7,9 +7,9 @@
     >
       <div>
         <h4 class="em-0">
-          {{ subject.name }}
+          {{ subject.labels.name }}
         </h4>
-        <small>{{ subject.name_en }}</small>
+        <small>{{ subject.labels.caption }}</small>
       </div>
       <div class="d-flex align-items-center justify-content-between">
         <div>
@@ -55,32 +55,32 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Subject } from '~/lib/records';
-import { Occurrence } from '~/components/database/records/groups/GroupSchedule/index.vue';
+import { GroupSchedule, Subject } from '~/lib/records';
 import classNames from 'classnames';
+import { AssociatedRecord } from '~/lib/api/mappers';
 
 interface SubjectRequirements {
-  subject: Subject;
+  subject: AssociatedRecord<Subject>;
   occurs: number;
   required: number;
 }
 
 @Component
 export default class SubjectsListing extends Vue {
-  @Prop({ required: true }) readonly subjects!: Subject[];
-  @Prop({ required: true }) readonly occurrences!: Occurrence[];
+  @Prop({ required: true }) readonly schedule!: GroupSchedule.Definition;
 
-  clearSubject = null as null | Subject;
+  clearSubject = null as null | AssociatedRecord<Subject>;
 
   get requiredSubjects (): SubjectRequirements[] {
-    return (this.subjects).map((subject) => {
-      const occurs = this.occurrences.filter(
+    return (Object.values(this.schedule.subjects)).map((subject) => {
+      const occurs = this.schedule.occurrences.filter(
         occurrence => subject.id === occurrence.subject.id,
       ).length;
+      const required = this.schedule.settings?.[subject.id]?.requirements?.per_week ?? 0;
       return {
         subject,
         occurs,
-        required: 20,
+        required,
       };
     });
   }

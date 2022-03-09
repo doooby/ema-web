@@ -32,9 +32,10 @@ import RecurrenceSelection
 import addDays from 'date-fns/addDays';
 import times from 'lodash/times';
 import fnsFormat from 'date-fns/format';
+import { AssociatedRecord } from '~/lib/api/mappers';
 
 export interface Result {
-  subject: Subject;
+  subject: AssociatedRecord<Subject>;
   day: number;
   recurrence: RecurrenceValue;
 }
@@ -42,7 +43,7 @@ export interface Result {
 @Component
 export default class ApplySubjectModal extends Vue {
   @Prop({ required: true }) readonly value!: boolean;
-  @Prop({ required: true }) readonly subject!: Subject;
+  @Prop({ required: true }) readonly subject!: AssociatedRecord<Subject>;
   @Prop({ required: true }) readonly date!: Date;
 
   formFields = buildFormFields([

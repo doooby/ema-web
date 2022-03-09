@@ -1,7 +1,8 @@
 import * as mappers from '~/lib/api/mappers';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
-import { list, tuple } from '~/lib/api/mappers';
+import { AssociatedRecord, list, tuple } from '~/lib/api/mappers';
+import { Subject } from '~/lib/records/subject';
 
 export interface Group {
   id: number;
@@ -16,6 +17,18 @@ export interface Group {
 export interface GroupAssociations {
   school: mappers.AssociatedRecordsIndex,
   course: mappers.AssociatedRecordsIndex,
+}
+
+export namespace GroupSchedule {
+  export interface Definition {
+    subjects: Record<string, AssociatedRecord<Subject>>;
+    settings: any;
+    occurrences: SubjectOccurrence[];
+  }
+  export interface SubjectOccurrence {
+    subject: AssociatedRecord<Subject>;
+    date: Date;
+  }
 }
 
 const { object, recordId, prop, assoc, val } = mappers;
