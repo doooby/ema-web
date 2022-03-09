@@ -68,6 +68,7 @@ interface SubjectRequirements {
 @Component
 export default class SubjectsListing extends Vue {
   @Prop({ required: true }) readonly schedule!: GroupSchedule.Definition;
+  @Prop({ required: true }) readonly weeksCount!: number;
 
   clearSubject = null as null | AssociatedRecord<Subject>;
 
@@ -76,7 +77,7 @@ export default class SubjectsListing extends Vue {
       const occurs = this.schedule.occurrences.filter(
         occurrence => subject.id === occurrence.subject.id,
       ).length;
-      const required = this.schedule.settings?.[subject.id]?.requirements?.per_week ?? 0;
+      const required = (this.schedule.settings?.[subject.id]?.requirements?.per_week ?? 0) * this.weeksCount;
       return {
         subject,
         occurs,

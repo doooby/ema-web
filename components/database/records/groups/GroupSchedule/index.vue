@@ -40,9 +40,9 @@
               class="em-3 ep-1 border bg-primary text-white"
             >
               <h4 class="em-0">
-                {{ subject.name }}
+                {{ subject.labels.name }}
               </h4>
-              <small>{{ subject.name_en }}</small>
+              <small>{{ subject.labels.caption }}</small>
             </div>
           </div>
         </template>
@@ -53,6 +53,7 @@
       <subjects-listing
         v-if="schedule"
         :schedule="schedule"
+        :weeks-count="weeks.length"
         @apply="onOpenModal($event)"
         @remove="onRemoveSubject($event)"
       />
@@ -139,6 +140,13 @@ export default class GroupSchedule extends Vue {
         subjects,
       };
     });
+  }
+
+  get weeks (): Date[] {
+    return eachWeekOfInterval(
+      { start: this.termSpan[0], end: this.termSpan[1] },
+      { weekStartsOn: 1 },
+    );
   }
 
   onDateChange (date: Date): void {
