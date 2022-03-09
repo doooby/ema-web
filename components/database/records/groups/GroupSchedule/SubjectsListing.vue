@@ -77,7 +77,7 @@ export default class SubjectsListing extends Vue {
       const occurs = this.schedule.occurrences.filter(
         occurrence => subject.id === occurrence.subject.id,
       ).length;
-      const required = (this.schedule.settings?.[subject.id]?.requirements?.per_week ?? 0) * this.weeksCount;
+      const required = (this.schedule.settings?.[subject.id]?.per_week ?? 0) * this.weeksCount;
       return {
         subject,
         occurs,
