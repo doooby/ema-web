@@ -53,7 +53,7 @@ export class MappingError extends Error {
   }
 }
 
-export function object<V> (value: any, map: (object: { [prop: string]: any }) => V): V {
+export function object<V> (value: any, map: (value: any) => V): V {
   if (typeof value !== 'object' || value === null) {
     throw new MappingError('invalid object');
   }
@@ -65,6 +65,13 @@ export function list<V> (value: any, map: (item: any) => V): V[] {
     throw new MappingError('invalid list');
   }
   return Object.freeze(value.map((item: any) => map(item)));
+}
+
+export function listOfObjects<V> (value: any, map: (item: any) => V): V[] {
+  if (typeof value !== 'object' || value === null || typeof value.map !== 'function') {
+    throw new MappingError('invalid list');
+  }
+  return Object.freeze(value.map((item: any) => object(item, map)));
 }
 
 export function tuple<V> (value: any, map: (items: any[]) => V): V {
@@ -194,6 +201,11 @@ export const val = {
       id: recordId(root),
       labels: unsafeProp('labels', root, {}, value => recordLabels(value)),
     }));
+  },
+  factories: {
+    listOfObjects<V> (map: (item: any) => V): ((value: any) => V[]) {
+      return value => listOfObjects<V>(value, map);
+    },
   },
 };
 
