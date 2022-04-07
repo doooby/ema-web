@@ -11,10 +11,10 @@ import ControlMixin from '../ControlMixin';
 
 export const type: FormFieldType = {
   name: 'void',
-  mapToValues (_field: FormField, _record: any, values: FormValues = {}) {
+  fillValues (_field: FormField, _record: any, values: FormValues = {}) {
     return values;
   },
-  mapToRecordParams (_field: FormField, _values: FormValues, record: any = {}) {
+  fillParams (_field: FormField, _values: FormValues, record: any = {}) {
     return record;
   },
 };

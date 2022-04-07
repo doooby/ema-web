@@ -1,8 +1,7 @@
 <template>
   <edit-page
-    entity="people"
+    entity="school_years"
     :fields="fields"
-    @updated="onUpdated"
   />
 </template>
 
@@ -11,18 +10,17 @@ import EditPage from '~/components/database/EditPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
-import { person } from '~/lib/records';
+import { schoolYear } from '~/lib/records';
 
 @Component({
   components: { EditPage },
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return person.recordControls();
-  }
-
-  onUpdated (record: any) {
-    this.$router.push({ path: `/database/people/${record.id}` });
+    return [
+      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
+      ...schoolYear.recordControls({ countryId: this.currentCountryId }),
+    ];
   }
 }
 </script>

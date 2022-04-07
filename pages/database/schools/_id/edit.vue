@@ -2,7 +2,6 @@
   <edit-page
     entity="schools"
     :fields="fields"
-    :no-default-redirect="true"
     @updated="onUpdated"
   />
 </template>

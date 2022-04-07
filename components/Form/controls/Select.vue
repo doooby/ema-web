@@ -28,11 +28,7 @@ type Option = { value: string, text: string };
 export default class Select extends Vue {
   static fieldType: FormFieldType = {
     name: 'select',
-    mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
-      values[name] = record[name] ?? undefined;
-      return values;
-    },
-    mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
+    fillParams ({ name }, values, record) {
       const value = values[name];
       record[name] = value === undefined ? '' : value;
       return record;

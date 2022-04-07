@@ -43,11 +43,11 @@ import ControlMixin from '../ControlMixin';
 
 export const type: FormFieldType = {
   name: 'integer',
-  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
+  fillValues ({ name }, record, values) {
     values[name] = sanitizeValue(record[name]);
     return values;
   },
-  mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
+  fillParams ({ name }, values, record) {
     record[name] = values[name] || '';
     return record;
   },

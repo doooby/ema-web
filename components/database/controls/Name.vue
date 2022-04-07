@@ -35,13 +35,13 @@ import { FormFieldType, FormField, FormValues, FormGroupContext } from '~/compon
 import ControlMixin from '~/components/Form/ControlMixin';
 
 export const type: FormFieldType = {
-  mapToValues (field: FormField, record: any, values: FormValues = {}) {
+  fillValues (field: FormField, record: any, values: FormValues = {}) {
     for (const name of getNamesTuple(field)) {
       values[name] = record[name] ?? undefined;
     }
     return values;
   },
-  mapToRecordParams (field: FormField, values: FormValues, record: any = {}) {
+  fillParams (field: FormField, values: FormValues, record: any = {}) {
     for (const name of getNamesTuple(field)) {
       record[name] = values[name] || '';
     }

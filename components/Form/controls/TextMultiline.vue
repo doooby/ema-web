@@ -21,11 +21,11 @@ import ControlMixin from '../ControlMixin';
 
 export const type: FormFieldType = {
   name: 'textMultiline',
-  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
+  fillValues ({ name }, record, values) {
     values[name] = record[name] ?? undefined;
     return values;
   },
-  mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
+  fillParams ({ name }, values, record) {
     record[name] = values[name] || '';
     return record;
   },

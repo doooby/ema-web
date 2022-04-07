@@ -1,4 +1,7 @@
 import * as mappers from '~/lib/api/mappers';
+import { FormFieldDefinition } from '~/components/Form';
+import * as dbFields from '~/components/database/controls';
+import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
 
 const { object, recordId, prop, maybeAssoc, val } = mappers;
 
@@ -34,4 +37,21 @@ export const schoolYear = {
   mapAssociations: mappers.createAssociationsMapper<SchoolYearAssociations>(
     'education_level',
   ),
+  recordControls ({
+    countryId,
+  }: {
+    countryId: null | number;
+  }): FormFieldDefinition[] {
+    return [
+      [ 'education_level', dbFields.AssociatedRecord, {
+        entity: 'education_levels',
+        params: {
+          country_id: countryId,
+        },
+      } ],
+      [ 'name_en', 'text' ],
+      [ 'name', 'text' ],
+      [ 'terms', SchoolYearTerms.asControl ],
+    ];
+  },
 };

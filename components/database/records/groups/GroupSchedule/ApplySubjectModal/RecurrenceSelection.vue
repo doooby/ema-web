@@ -56,11 +56,11 @@ export type Value = {
 })
 export default class RecurrenceSelection extends Vue {
   static fieldType: FormFieldType = {
-    mapToValues ({ name }: FormField, _record: any, values: FormValues = {}) {
+    fillValues ({ name }: FormField, _record: any, values: FormValues = {}) {
       values[name] = buildDefault('regular');
       return values;
     },
-    mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
+    fillParams ({ name }, values, record) {
       // record[name] = String(values[name]) || '';
       return record;
     },

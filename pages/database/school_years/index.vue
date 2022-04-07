@@ -28,7 +28,7 @@ export default class extends DatabasePage {
 
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-    { name: 'id', cell: { type: RecordLink, entity: 'groups' }, size: 60 },
+    { name: 'id', cell: { type: RecordLink, onlyId: true }, size: 60 },
     {
       name: 'education_level',
       cell: { type: AssociatedRecordLink, entity: 'education_levels' },
@@ -39,7 +39,7 @@ export default class extends DatabasePage {
   ];
 
   actions = [
-    // { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
+    { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
   ];
 }
 </script>

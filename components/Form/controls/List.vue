@@ -63,18 +63,14 @@ type Option = { value: string, caption: string };
   mixins: [ ControlMixin ],
 })
 export default class List extends Vue {
-    static fieldType: FormFieldType = {
-      name: 'list',
-      mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
-        values[name] = record[name] ?? undefined;
-        return values;
-      },
-      mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
-        const value = values[name];
-        record[name] = value === undefined ? '' : value;
-        return record;
-      },
-    };
+  static fieldType: FormFieldType = {
+    name: 'list',
+    fillParams ({ name }, values, record) {
+      const value = values[name];
+      record[name] = value === undefined ? '' : value;
+      return record;
+    },
+  };
 
   @Prop({ required: true }) field!: FormField;
   @Prop({ required: true }) context!: FormGroupContext;

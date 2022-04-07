@@ -40,11 +40,11 @@ import ControlMixin from '~/components/Form/ControlMixin';
 import SearchModal from './SearchModal.vue';
 
 export const type: FormFieldType = {
-  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
+  fillValues ({ name }, record, values) {
     values[name] = record[name] ?? undefined;
     return values;
   },
-  mapToRecordParams ({ name, options }: FormField, values: FormValues, record: any = {}) {
+  fillParams ({ name, options }: FormField, values: FormValues, record: any = {}) {
     record[options.paramsName || `${name}_id`] = values[name]?.id;
     return record;
   },

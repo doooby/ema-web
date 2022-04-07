@@ -19,13 +19,13 @@ import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/compon
 export default class Boolean extends Vue {
   static fieldType: FormFieldType = {
     name: 'boolean',
-    mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
+    fillValues ({ name }, record, values) {
       let value = record[name];
       if (value !== undefined) value = !!value;
       values[name] = value;
       return values;
     },
-    mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
+    fillParams ({ name }, values, record) {
       record[name] = values[name] ? '1' : '0';
       return record;
     },

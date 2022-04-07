@@ -18,6 +18,13 @@ export function create (schoolYear: Params) {
   };
 }
 
+export function show (schoolYearId: number) {
+  return {
+    path: `/school_years/${schoolYearId}`,
+    mapper: (payload: any) => mappers.record(payload, schoolYear.mapRecord, schoolYear.mapAssociations),
+  };
+}
+
 export function update (schoolYearId: number, schoolYear: Params) {
   return {
     path: `/school_years/${schoolYearId}/update`,

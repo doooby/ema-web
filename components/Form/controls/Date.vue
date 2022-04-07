@@ -58,11 +58,11 @@ const YEARS_OPTIONS = reverse(times(50, val => 2030 - val));
 
 export const type: FormFieldType = {
   name: 'date',
-  mapToValues ({ name }: FormField, record: any, values: FormValues = {}) {
+  fillValues ({ name }, record, values) {
     values[name] = utils.sanitizedDate(record[name]);
     return values;
   },
-  mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
+  fillParams ({ name }, values, record) {
     const date = values[name];
     record[name] = date ? utils.formatDate(date) : '';
     record[name] = values[name] || '';

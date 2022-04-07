@@ -10,11 +10,11 @@ import { FormField, FormFieldType, FormValues } from '~/components/Form';
 export default class Hidden extends Vue {
   static fieldType: FormFieldType = {
     name: 'hidden',
-    mapToValues ({ name, options }: FormField, _record: any, values: FormValues = {}) {
+    fillValues ({ name, options }: FormField, _record: any, values: FormValues = {}) {
       values[name] = options.value;
       return values;
     },
-    mapToRecordParams ({ name }: FormField, values: FormValues, record: any = {}) {
+    fillParams ({ name }, values, record) {
       record[name] = String(values[name]) || '';
       return record;
     },

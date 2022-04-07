@@ -24,8 +24,8 @@ export interface FormField {
 export interface FormFieldType {
   name?: string;
   control?: any;
-  mapToValues(field: FormField, record: any, values: FormValues): FormValues;
-  mapToRecordParams(field: FormField, values: FormValues, record: any): any;
+  fillValues?(field: FormField, record: any, values: FormValues): void;
+  fillParams(field: FormField, values: FormValues, record: any): any;
 }
 
 export interface FormGroupContext {
@@ -61,10 +61,14 @@ export function buildFormFields (fields: FormFieldDefinition[]): FormField[] {
   }));
 }
 
+function defaultFillValuesUsingField ({ name }: FormField, record: any, values: FormValues): void {
+  values[name] = record[name] ?? undefined;
+}
+
 export function prefillFormValues (fields: FormField[], record: any = {}): FormValues {
   const values = {} as FormValues;
   for (const field of fields) {
-    field.type.mapToValues(field, record, values);
+    (field.type.fillValues ?? defaultFillValuesUsingField)(field, record, values);
   }
   return values;
 }
@@ -72,7 +76,7 @@ export function prefillFormValues (fields: FormField[], record: any = {}): FormV
 export function formToRecordParams (fields: FormField[], values: FormValues): FormValues {
   const params = {} as FormValues;
   for (const field of fields) {
-    field.type.mapToRecordParams(field, values, params);
+    field.type.fillParams(field, values, params);
   }
   return params;
 }

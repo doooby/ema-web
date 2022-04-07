@@ -145,7 +145,7 @@ export default class EditPage extends Vue {
     if (this.$listeners.updated) {
       this.$emit('updated', record);
     } else {
-      this.$router.push({ path: '/database' });
+      this.$router.push({ path: `/database/${this.entity}` });
     }
   }
 
