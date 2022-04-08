@@ -35,7 +35,7 @@ export default class extends DatabasePage {
 
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-    { name: 'id', cell: { type: RecordLink, onlyId: true }, size: 60 },
+    { name: 'id', cell: { type: RecordLink, entity: 'course_guidelines' }, size: 60 },
     {
       name: 'education_level',
       cell: { type: AssociatedRecordLink, entity: 'education_levels', noLink: true },

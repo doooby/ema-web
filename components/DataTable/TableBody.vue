@@ -1,5 +1,5 @@
 <template>
-  <tbody>
+  <tbody v-if="dataset.length">
     <tr
       v-for="dataItem of dataset"
       :key="dataItem.id"

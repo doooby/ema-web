@@ -17,7 +17,7 @@
           <td :colspan="columns.length + 1">
             <b-alert variant="warning" show class="m-0">
               <t value="data_table.fetch_fail" />
-              <span> </span>
+              <span />
               <t :value="`app.processing.${queryState.fail}`" />
             </b-alert>
           </td>
@@ -28,8 +28,13 @@
         :dataset="computedDataSet"
         :templates="computedCellTemplates"
       />
-      <tbody v-if="$slots.footer">
+      <tbody>
         <slot name="footer" />
+        <tr v-if="$slots['footer-row']">
+          <td :colspan="columns.length + 1">
+            <slot name="footer-row" />
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -60,7 +65,7 @@ export default Vue.extend({
   computed: {
     className (): string {
       return classNames(
-        'data-table2',
+        'data-table',
         this.$attrs.class,
       );
     },

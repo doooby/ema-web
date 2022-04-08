@@ -1,4 +1,4 @@
-.data-table2 {
+.data-table {
   overflow-x: scroll;
   $header-bg-color: $input-bg;
 
@@ -32,6 +32,10 @@
         }
       }
     }
+  }
+
+  &.__modified {
+    border-left: 10px solid $EMA-primary;
   }
 
   .single-row-cell {
