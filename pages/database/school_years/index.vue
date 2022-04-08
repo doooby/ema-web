@@ -14,6 +14,7 @@ import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
+import * as dbFields from '~/components/database/controls';
 
 @Component({
   components: { IndexPage },
@@ -23,6 +24,12 @@ export default class extends DatabasePage {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       [ 'search', 'text' ],
+      [ 'education_level_id', dbFields.AssociatedRecord, {
+        entity: 'education_levels',
+        params: {
+          country_id: this.currentCountryId,
+        },
+      } ],
     ];
   }
 
