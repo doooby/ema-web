@@ -8,6 +8,7 @@ import * as schools from './schools';
 import * as school_years from './school_years';
 import * as session from './session';
 import * as subjects from './subjects';
+import * as subject_categories from './subject_categories';
 
 export default {
   countries,
@@ -20,4 +21,5 @@ export default {
   school_years,
   session,
   subjects,
+  subject_categories,
 };

@@ -6,4 +6,5 @@ export * from './person';
 export * from './school';
 export * from './school_year';
 export * from './subject';
+export * from './subject_category';
 export * from './user';

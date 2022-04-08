@@ -4,19 +4,19 @@ import { FormFieldDefinition } from '~/components/Form';
 
 const { object, recordId, prop, val, assoc } = mappers;
 
-export interface Subject {
+export interface SubjectCategory {
   id: number;
   country: mappers.AssociatedRecord<Country>;
   name_en: string;
   name: string;
 }
 
-export interface SubjectAssociations {
+export interface SubjectCategoryAssociations {
   country: mappers.AssociatedRecordsIndex,
 }
 
-export const subject = {
-  mapRecord (value: any, associations?: SubjectAssociations): Subject {
+export const subjectCategory = {
+  mapRecord (value: any, associations?: SubjectCategoryAssociations): SubjectCategory {
     return object(value, root => ({
       id: recordId(root),
       country: assoc('country', root, associations?.country),
@@ -24,7 +24,7 @@ export const subject = {
       name: prop('name', root, val.string),
     }));
   },
-  mapAssociations: mappers.createAssociationsMapper<SubjectAssociations>(
+  mapAssociations: mappers.createAssociationsMapper<SubjectCategoryAssociations>(
     'country',
   ),
   recordControls (): FormFieldDefinition[] {
