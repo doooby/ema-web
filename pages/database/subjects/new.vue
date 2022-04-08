@@ -2,7 +2,6 @@
   <new-page
     entity="subjects"
     :fields="fields"
-    @created="onCreated"
   />
 </template>
 
@@ -20,12 +19,8 @@ export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      ...subject.recordControls(),
+      ...subject.recordControls(this.currentCountryId),
     ];
-  }
-
-  onCreated () {
-    this.$router.push({ path: '/database/subjects' });
   }
 }
 </script>

@@ -1,5 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
-import { EducationLevel } from '~/lib/records/education_level';
+import { EducationLevel } from '~/lib/records';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
 

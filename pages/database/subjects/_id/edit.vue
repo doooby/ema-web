@@ -2,7 +2,6 @@
   <edit-page
     entity="subjects"
     :fields="fields"
-    @updated="onUpdated"
   />
 </template>
 
@@ -18,11 +17,7 @@ import { subject } from '~/lib/records';
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return subject.recordControls();
-  }
-
-  onUpdated () {
-    this.$router.push({ path: '/database/subjects' });
+    return subject.recordControls(this.currentCountryId);
   }
 }
 </script>

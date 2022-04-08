@@ -1,34 +1,41 @@
 import * as mappers from '~/lib/api/mappers';
-import { Country } from '~/lib/records/country';
 import { FormFieldDefinition } from '~/components/Form';
+import { CourseAssociations, EducationLevel } from '~/lib/records';
+import * as dbFields from '~/components/database/controls';
 
 const { object, recordId, prop, val, assoc } = mappers;
 
 export interface Subject {
   id: number;
-  country: mappers.AssociatedRecord<Country>;
+  education_level: mappers.AssociatedRecord<EducationLevel>;
   name_en: string;
   name: string;
 }
 
 export interface SubjectAssociations {
-  country: mappers.AssociatedRecordsIndex,
+  education_level: mappers.AssociatedRecordsIndex,
 }
 
 export const subject = {
   mapRecord (value: any, associations?: SubjectAssociations): Subject {
     return object(value, root => ({
       id: recordId(root),
-      country: assoc('country', root, associations?.country),
+      education_level: assoc('education_level', root, associations?.education_level),
       name_en: prop('name_en', root, val.string),
       name: prop('name', root, val.string),
     }));
   },
-  mapAssociations: mappers.createAssociationsMapper<SubjectAssociations>(
-    'country',
+  mapAssociations: mappers.createAssociationsMapper<CourseAssociations>(
+    'education_level',
   ),
-  recordControls (): FormFieldDefinition[] {
+  recordControls (countryId: null | number): FormFieldDefinition[] {
     return [
+      [ 'education_level', dbFields.AssociatedRecord, {
+        entity: 'education_levels',
+        params: {
+          country_id: countryId,
+        },
+      } ],
       [ 'name_en', 'text' ],
       [ 'name', 'text' ],
     ];
