@@ -1,5 +1,6 @@
 export * from './country';
 export * from './course';
+export * from './course_guideline';
 export * from './education_level';
 export * from './group';
 export * from './person';

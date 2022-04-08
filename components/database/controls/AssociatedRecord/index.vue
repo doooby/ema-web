@@ -45,7 +45,7 @@ import SearchModal from './SearchModal.vue';
 export default class AssociatedRecord extends Vue {
   static fieldType: FormFieldType = {
     fillParams ({ name, options }, values, params) {
-      params[options.paramsName || `${name}_id`] = values[name]?.id;
+      params[options.paramsName || `${name}_id`] = values[name]?.id ?? '';
     },
   };
 
