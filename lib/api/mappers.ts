@@ -151,6 +151,16 @@ export function maybeAssoc<A> (
   if (associatedRecord) return associatedRecord;
 }
 
+export function assocList<A> (
+  name: string,
+  parent: { [prop: string]: any },
+  index?: { [id: string]: undefined | A },
+): A[] {
+  const ids = parent[name];
+  if (!index || !ids) return [];
+  return ids.map((id: any) => index[id]).filter((item: any) => item);
+}
+
 export function recordId (parent: any): number {
   const value = parent.id;
   if (typeof value !== 'number') throw new MappingError('invalid record id');

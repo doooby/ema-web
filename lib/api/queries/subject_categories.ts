@@ -1,6 +1,6 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { subjectCategory } from '~/lib/records';
+import { SubjectCategory, subjectCategory } from '~/lib/records';
 
 export function index (params: Params) {
   return {
@@ -11,6 +11,14 @@ export function index (params: Params) {
       subjectCategory.mapRecord,
       subjectCategory.mapAssociations,
     ),
+  };
+}
+
+export function searchAssociated (params?: Params) {
+  return {
+    path: '/subject_categories?assoc=1',
+    params,
+    mapper: (payload: any) => mappers.associatedRecords<SubjectCategory>(payload),
   };
 }
 

@@ -1,14 +1,23 @@
-import AssociatedRecordControl, { type as AssociatedRecordType } from './AssociatedRecord/AssociatedRecord.vue';
+import { FormFieldType } from '~/components/Form';
+
+import AssociatedRecordComponent from './AssociatedRecord/index.vue';
+import MultipleAssociatedRecordsComponent from './MultipleAssociatedRecords/index.vue';
 import NameControl, { type as NameType } from './Name.vue';
 
-function make (type: any, control: any) {
+function make (control: any, type: any) {
   return { ...type, control };
 }
 
-const AssociatedRecord = make(AssociatedRecordType, AssociatedRecordControl);
-const Name = make(NameType, NameControl);
+function asControl (component: any): FormFieldType {
+  return { ...component.fieldType, control: component };
+}
+
+const AssociatedRecord = asControl(AssociatedRecordComponent);
+const MultipleAssociatedRecords = asControl(MultipleAssociatedRecordsComponent);
+const Name = make(NameControl, NameType);
 
 export {
   AssociatedRecord,
+  MultipleAssociatedRecords,
   Name,
 };
