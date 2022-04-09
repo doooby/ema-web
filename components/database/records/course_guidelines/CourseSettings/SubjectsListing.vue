@@ -6,7 +6,11 @@
       :dataset="items"
     >
       <template #footer-row>
-        <b-button variant="outline-primary" class="btn-xs" @click="onAddSubject">
+        <b-button
+          variant="outline-primary"
+          class="btn-xs"
+          @click="searchShown = true"
+        >
           <b-icon icon="plus" />
         </b-button>
       </template>
@@ -25,6 +29,21 @@
         </b-button>
       </div>
     </div>
+    <b-modal
+      v-model="searchShown"
+      hide-footer
+    >
+      <template #modal-title>
+        <t value="db.record.course_guidelines.subject_settings.subject_listing.add_modal.title" />
+      </template>
+      <search-modal
+        v-if="searchShown"
+        :query="$api.queries.subjects.searchAssociated"
+        :params="{ country_id: currentCountryId }"
+        :selected-ids="items.map(item => item.id)"
+        @select="onAddSubject"
+      />
+    </b-modal>
   </div>
 </template>
 
@@ -33,8 +52,12 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { SubjectSetting } from '~/components/database/records/course_guidelines/CourseSettings/index.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import RemoveRow from '~/components/database/cells/RemoveRow.vue';
+import SearchModal from '~/components/database/SearchModal.vue';
+import { AssociatedRecord } from '~/lib/api/mappers';
 
-@Component
+@Component({
+  components: { SearchModal },
+})
 export default class SubjectsListing extends Vue {
   @Prop({ required: true }) readonly subjectSettings!: SubjectSetting[];
 
@@ -54,6 +77,11 @@ export default class SubjectsListing extends Vue {
 
   items = [ ...this.subjectSettings ];
   modified = false;
+  searchShown = false;
+
+  get currentCountryId (): null | number {
+    return this.$store.state.session.currentCountry?.id ?? null;
+  }
 
   onRemove (item: SubjectSetting) {
     const index = this.items.indexOf(item);
@@ -62,8 +90,10 @@ export default class SubjectsListing extends Vue {
     this.modified = true;
   }
 
-  onAddSubject () {
-
+  onAddSubject (subject: AssociatedRecord) {
+    this.searchShown = false;
+    this.items.push({ id: subject.id, subject });
+    this.modified = true;
   }
 
   onSave () {

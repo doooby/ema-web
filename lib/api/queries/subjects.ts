@@ -1,12 +1,20 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { subject } from '~/lib/records';
+import { subject, Subject } from '~/lib/records';
 
 export function index (params: Params) {
   return {
     path: '/subjects',
     params,
     mapper: (payload: any) => mappers.paginatedRecords(payload, subject.mapRecord, subject.mapAssociations),
+  };
+}
+
+export function searchAssociated (params?: Params) {
+  return {
+    path: '/subjects?assoc=1',
+    params,
+    mapper: (payload: any) => mappers.associatedRecords<Subject>(payload),
   };
 }
 
