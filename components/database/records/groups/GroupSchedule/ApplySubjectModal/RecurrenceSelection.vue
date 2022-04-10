@@ -43,7 +43,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import ControlMixin from '~/components/Form/ControlMixin';
-import { sanitizeValue } from '~/components/Form/controls/Integer.vue';
+import { sanitizeValue } from '~/components/Form/primitives/IntegerInput.vue';
 
 export type Value = {
   option: 'regular' | 'irregular';
@@ -108,7 +108,7 @@ export default class RecurrenceSelection extends Vue {
   onTimesChange (value: any) {
     this.changeValue({
       ...this.value,
-      times: sanitizeValue(value),
+      times: sanitizeValue(value) ?? undefined,
     });
   }
 }

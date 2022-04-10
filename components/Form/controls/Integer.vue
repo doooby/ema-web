@@ -14,16 +14,11 @@
           <t :value="leftLabelText.t" />
         </span>
       </div>
-      <input
-        :id="domIdBase"
-        type="text"
-        class="form-control"
-        :value="value"
-        autocomplete="off"
-        @input="onInput"
-        @blur="onBlur"
-        @keypress.ctrl.enter="onCommit"
-      >
+      <integer-input
+        :dom-id="domIdBase"
+        :value="fieldValue"
+        @change="onChange"
+      />
       <div v-if="rightLabelText" class="input-group-append">
         <span v-if="rightLabelText.text" class="input-group-text">
           {{ rightLabelText.text }}
@@ -40,13 +35,10 @@
 import Vue from 'vue';
 import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
 import ControlMixin from '../ControlMixin';
+import IntegerInput from '~/components/Form/primitives/IntegerInput.vue';
 
 export const type: FormFieldType = {
   name: 'integer',
-  fillValues ({ name }, record, values) {
-    values[name] = sanitizeValue(record[name]);
-    return values;
-  },
   fillParams ({ name }, values, record) {
     record[name] = values[name] || '';
     return record;
@@ -54,18 +46,17 @@ export const type: FormFieldType = {
 };
 
 export default Vue.extend({
+  components: { IntegerInput },
   mixins: [ ControlMixin ],
   props: {
     field: { type: Object as Vue.PropType<FormField>, required: true },
     context: { type: Object as Vue.PropType<FormGroupContext>, required: true },
     formValues: { type: Object as Vue.PropType<FormValues>, required: true },
   },
-  data () {
-    return {
-      value: sanitizeValue(this.formValues[this.field.name]),
-    };
-  },
   computed: {
+    fieldValue () {
+      return this.formValues[this.field.name];
+    },
     leftLabelText (): undefined | { text?: string; t?: string } {
       const leftLabel = this.field.options.leftLabel;
       if (!leftLabel) return undefined;
@@ -81,32 +72,10 @@ export default Vue.extend({
       return { t: String(rightLabel) };
     },
   },
-  watch: {
-    formValues (newValue) {
-      this.value = sanitizeValue(newValue[this.field.name]);
-    },
-  },
   methods: {
-    toInputValue (value: undefined | number): string {
-      return value === undefined ? '' : String(value);
+    onChange (newValue: any): void {
+      this.context.onChange({ [this.field.name]: newValue });
     },
-    onInput (event: {target: HTMLInputElement}): void {
-      let newValue: any = event.target.value;
-      newValue = newValue.replace(/[^0-9]/g, '');
-      newValue = sanitizeValue(newValue);
-      event.target.value = this.toInputValue(newValue);
-      this.value = newValue;
-    },
-    onBlur (): void {
-      this.context.onChange({ [this.field.name]: this.value });
-    },
-    onCommit (): void {},
   },
 });
-
-export function sanitizeValue (value: any): undefined | number {
-  if (value === undefined || value === '') return undefined;
-  value = Number(value);
-  return isNaN(value) ? undefined : value;
-}
 </script>

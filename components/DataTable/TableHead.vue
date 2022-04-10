@@ -7,8 +7,11 @@
         scope="col"
       >
         <div class="three-rows-cell">
+          <span v-if="typeof column.headerText === 'function'">
+            {{ column.headerText() }}
+          </span>
           <slot
-            v-if="column.headerText !== false"
+            v-else-if="column.headerText !== false"
             name="header-cell"
             :column="column"
           />

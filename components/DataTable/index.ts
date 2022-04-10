@@ -3,7 +3,7 @@ import View from './View.vue';
 export namespace DataTable {
   export interface Column {
     name: string;
-    headerText?: false;
+    headerText?: false | (() => string);
     getText?: (item: any) => undefined | string;
     size?: number;
     slot?: string;

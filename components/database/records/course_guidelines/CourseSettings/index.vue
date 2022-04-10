@@ -1,7 +1,9 @@
 <template>
   <subjects-listing
     v-if="getSettingsQueryState.value"
-    :subject-settings="getSettingsQueryState.value.subjects"
+    :course-guideline="courseGuideline"
+    :settings="getSettingsQueryState.value.subjects"
+    @updated="reloadSettings"
   />
 </template>
 
@@ -14,6 +16,9 @@ import SubjectsListing from '~/components/database/records/course_guidelines/Cou
 export interface SubjectSetting {
   id: number;
   subject: mappers.AssociatedRecord<Subject>;
+  mandatory: any;
+  periodsPerWeek: any;
+  periodsTotal: any;
 }
 
 interface Settings {
@@ -65,6 +70,9 @@ function mapSetting (value: any): Settings {
         subjects.push({
           id: subject.id,
           subject,
+          mandatory: mappers.prop('mandatory', subjectItem, mappers.val.boolean),
+          periodsPerWeek: mappers.prop('periods_per_week', subjectItem, mappers.val.integer),
+          periodsTotal: mappers.prop('periods_total', subjectItem, mappers.val.integer),
         });
       }
     }));

@@ -11,13 +11,13 @@
     th,
     td {
       padding: px-size(1);
-      vertical-align: top;
       border: $table-border-width solid $table-border-color;
     }
 
     thead {
       background-color: $header-bg-color;
       th {
+        vertical-align: top;
         border-bottom: (2 * $table-border-width) solid $table-border-color;
         > div {
           text-align: center;
