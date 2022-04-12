@@ -50,7 +50,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { FormValues, buildFormFields, FormFieldDefinition, prefillFormValues } from '~/components/Form';
+import {
+  FormValues,
+  buildFormFields,
+  FormFieldDefinition,
+  prefillFormValues,
+  formToRecordParams,
+} from '~/components/Form';
 import { DataTable } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
 import RecordsPagination from '../../RecordsPagination.vue';
@@ -126,8 +132,9 @@ export default class IndexPage extends Vue {
   }
 
   search (page?: number) {
+    const params = formToRecordParams(this.searchFormFields, this.searchValues);
     this.$api.request(
-      this.searchQueryBuilder({ ...this.searchValues, page }),
+      this.searchQueryBuilder({ ...params, page }),
       this.searchQueryState,
     );
   }
