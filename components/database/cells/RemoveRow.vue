@@ -1,8 +1,6 @@
 <template>
   <div class="single-row-cell">
-    <b-button variant="outline-secondary" class="btn-xs" @click="onClick">
-      <b-icon icon="x" />
-    </b-button>
+    <btn-mini variant="secondary" icon="x" @click="onClick" />
   </div>
 </template>
 

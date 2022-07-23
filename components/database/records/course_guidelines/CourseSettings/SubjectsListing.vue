@@ -5,32 +5,26 @@
       :columns="tableColumns"
       :dataset="items"
     >
-      <template #footer-row>
-        <b-button
-          variant="outline-primary"
-          class="btn-xs"
-          @click="searchShown = true"
-        >
-          <b-icon icon="plus" />
-        </b-button>
-      </template>
-      <template #mandatory="{ dataItem }">
+      <template #col-mandatory="{ dataItem }">
         <checkbox-input
           :value="dataItem.mandatory"
           @change="onMandatoryChange(dataItem, $event)"
         />
       </template>
-      <template #periods-per-week="{ dataItem }">
+      <template #col-periods-per-week="{ dataItem }">
         <integer-input
           :value="dataItem.periodsPerWeek"
           @change="onPeriodsPerWeekChange(dataItem, $event)"
         />
       </template>
-      <template #periods-total="{ dataItem }">
+      <template #col-periods-total="{ dataItem }">
         <integer-input
           :value="dataItem.periodsTotal"
           @change="onPeriodsTotalChange(dataItem, $event)"
         />
+      </template>
+      <template #footer-row>
+        <btn-mini variant="primary" icon="plus" @click="searchShown = true" />
       </template>
     </data-table-view>
     <div
@@ -116,21 +110,21 @@ export default class SubjectsListing extends Vue {
       headerText: () => this.$t(
         'db.record.course_guidelines.course_settings.subjects_listing.label.mandatory',
       ),
-      slot: 'mandatory',
+      slot: 'col-mandatory',
     },
     {
       name: 'periods_per_week',
       headerText: () => this.$t(
         'db.record.course_guidelines.course_settings.subjects_listing.label.periods_per_week',
       ),
-      slot: 'periods-per-week',
+      slot: 'col-periods-per-week',
     },
     {
       name: 'periods_total',
       headerText: () => this.$t(
         'db.record.course_guidelines.course_settings.subjects_listing.label.periods_total',
       ),
-      slot: 'periods-total',
+      slot: 'col-periods-total',
     },
   ];
 

@@ -9,28 +9,17 @@
       <slot name="header-cell" :column="column" />
     </template>
     <template #actions="{ dataItem }">
-      <b-button
+      <btn-mini
         v-if="editable"
-        variant="outline-danger"
-        class="btn-xs"
-        title="Remove"
+        variant="danger"
+        icon="dash"
         @click="onRemove(dataItem)"
-      >
-        <b-icon icon="dash" />
-      </b-button>
+      />
     </template>
     <template v-if="editable" #footer>
       <tr>
         <td>
-          <b-button
-            variant="outline-primary"
-            class="btn-xs"
-            title="Add"
-            :disabled="formShown"
-            @click="formShown = !formShown"
-          >
-            <b-icon icon="plus" />
-          </b-button>
+          <btn-mini variant="primary" icon="plus" :disabled="formShown" @click="formShown = !formShown" />
         </td>
         <td :colspan="tableColumns.length + 1">
           <div v-if="formShown" class="ew-14">

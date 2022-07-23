@@ -11,12 +11,8 @@
       @change="onRowChange(index, $event)"
     />
     <div>
-      <b-button variant="outline-primary" class="btn-xs" @click="onAddTerm">
-        <b-icon icon="plus" />
-      </b-button>
-      <b-button variant="outline-secondary" class="btn-xs" @click="onRemoveLastTerm">
-        <b-icon icon="x" />
-      </b-button>
+      <btn-mini variant="primary" icon="plus" @click="onAddTerm" />
+      <btn-mini variant="secondary" icon="x" @click="onRemoveLastTerm" />
     </div>
   </b-form-group>
 </template>

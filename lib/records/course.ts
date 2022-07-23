@@ -52,9 +52,9 @@ export const course = {
           country_id: countryId,
         },
       } ],
+      [ 'grade', 'integer' ],
       [ 'name_en', 'text' ],
       [ 'name', 'text' ],
-      [ 'grade', 'integer' ],
     ];
   },
 };

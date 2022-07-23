@@ -8,7 +8,7 @@ function make (control: any, type: any) {
   return { ...type, control };
 }
 
-function asControl (component: any): FormFieldType {
+export function asControl (component: any): FormFieldType {
   return { ...component.fieldType, control: component };
 }
 

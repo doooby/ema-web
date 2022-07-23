@@ -22,10 +22,7 @@
     <h3>Admin</h3>
     <ul>
       <li>
-        <a href="/admin/translations">Translations</a>
-      </li>
-      <li>
-        <a href="/admin/translations/edit/en">Edit Translations</a>
+        <a href="/admin/translations/edit/en">Edit EN Translations</a>
       </li>
     </ul>
   </div>

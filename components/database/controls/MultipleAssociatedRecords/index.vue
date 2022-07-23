@@ -12,19 +12,11 @@
         <span class="emr-2">
           {{ category.labels.caption }}
         </span>
-        <b-button variant="outline-secondary" class="btn-xs" @click="onRemoveItem(category)">
-          <b-icon icon="x" />
-        </b-button>
+        <btn-mini variant="secondary" icon="x" @click="onRemoveItem(category)" />
       </div>
     </div>
     <div>
-      <b-button
-        variant="outline-primary"
-        class="btn-xs"
-        @click="modalShown = true"
-      >
-        <b-icon icon="plus" />
-      </b-button>
+      <btn-mini variant="primary" icon="plus" @click="modalShown = true" />
     </div>
     <b-modal
       v-model="modalShown"
