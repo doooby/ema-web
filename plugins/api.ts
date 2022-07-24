@@ -65,7 +65,7 @@ export class ApiPlugin {
     if (mappingResult instanceof Error) {
       state.error = mappingResult;
       state.fail = 'invalid_data';
-      utils.warnOfError(mappingResult, { path, params });
+      utils.warnOfError(mappingResult, { path, params, response });
       mappingResult = null;
     }
 

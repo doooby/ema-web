@@ -44,6 +44,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import ControlMixin from '~/components/Form/ControlMixin';
+import { maybe, prop, tuple, val } from '~/lib/api/mappers';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -66,11 +67,13 @@ export default class Name extends Vue {
   @Prop({ required: true }) formValues!: FormValues;
 
   get sanitizedValue (): [string, string] {
-    let value = this.formValues[this.field.name];
-    if (!Array.isArray(value)) value = [];
-    if (!value[0] || typeof value[0] !== 'string') value[0] = '';
-    if (!value[1] || typeof value[1] !== 'string') value[1] = '';
-    return [ value[0], value[1] ];
+    return maybe(this.formValues[this.field.name],
+      value => tuple(value, items => [
+        prop('0', items, val.string),
+        prop('1', items, val.string),
+
+      ]),
+    ) ?? [ '', '' ];
   }
 
   onInputEn (event) {

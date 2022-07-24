@@ -53,14 +53,14 @@ export class MappingError extends Error {
   }
 }
 
-export function object<V> (value: any, map: (value: any) => V): V {
+export function object<V> (value: any, map: (value: any) => V = id => id): V {
   if (typeof value !== 'object' || value === null) {
     throw new MappingError('invalid object');
   }
   return Object.freeze(map(value));
 }
 
-export function list<V> (value: any, map: (item: any) => V): V[] {
+export function list<V> (value: any, map: (item: any) => V = id => id): V[] {
   if (typeof value !== 'object' || value === null || typeof value.map !== 'function') {
     throw new MappingError('invalid list');
   }
@@ -86,7 +86,15 @@ export function index<V extends { id: any }> (value: any, map: (item: any) => V)
   const items = list(value, map);
   const index: { [id: string]: undefined | V } = {};
   for (const item of items) index[item.id] = item;
-  return index;
+  return Object.freeze(index);
+}
+
+export function maybe<V> (value: any, map: (value: any) => V): undefined | V {
+  try {
+    return map(value);
+  } catch (error) {
+    if (!(error instanceof MappingError)) throw error;
+  }
 }
 
 export function prop<V> (
@@ -208,11 +216,10 @@ export const val = {
   },
   nameTuple (value: any): [string, string] {
     if (!Array.isArray(value)) throw new MappingError('invalid nameTuple');
-    if (value[0] === null) value[0] = '';
-    if (typeof value[0] !== 'string') throw new MappingError('invalid nameTuple');
-    if (value[1] === null) value[1] = '';
-    if (typeof value[1] !== 'string') throw new MappingError('invalid nameTuple');
-    return [ value[0], value[1] ];
+    return tuple(value, tuple => [
+      prop('0', tuple, val.string),
+      prop('1', tuple, val.string),
+    ]);
   },
   assoc<R=any> (value: any): AssociatedRecord<R> {
     return object(value, root => ({

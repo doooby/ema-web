@@ -19,21 +19,16 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import ControlMixin from '~/components/Form/ControlMixin';
-import { UserPrivilege } from '~/lib/records';
+import { mapUserPrivilege, UserPrivilege } from '~/lib/records';
+import { list } from '~/lib/api/mappers';
 
 @Component({
   mixins: [ ControlMixin ],
 })
 export default class Privileges extends Vue {
   static fieldType: FormFieldType = {
-    fillValues ({ name }, record, values) {
-      // let value = record[name];
-      // if (value !== undefined) value = !!value;
-      // values[name] = value;
-      return values;
-    },
     fillParams ({ name }, values, record) {
-      record[name] = values[name] ?? [];
+      record[name] = list([ ...values[name] ]);
       return record;
     },
   };
@@ -52,13 +47,13 @@ export default class Privileges extends Vue {
 
   get privilegesTypesOptions () {
     return [
-      { value: 'country-admin', text: this.$t('db.record.users.privileges.country_admin') },
+      { value: 'country_admin', text: this.$t('db.record.users.privileges.country_admin') },
     ];
   }
 
   onAdd () {
     const newItems = [ ...this.items ];
-    newItems.push({ type: '' });
+    newItems.push(mapUserPrivilege(null));
     this.context.onChange({ [this.field.name]: newItems });
   }
 
@@ -74,8 +69,6 @@ export default class Privileges extends Vue {
 }
 
 function createEmptyItem (type: string): UserPrivilege {
-  return {
-    type,
-  };
+  return { type: type as any };
 }
 </script>

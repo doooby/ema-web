@@ -12,14 +12,13 @@ export interface User {
   login: string;
   full_name: [string, string];
   lock: string;
+  privileges: UserPrivilege[];
   is_root: boolean;
-  is_can_admin: boolean;
-  is_can_web: boolean;
-  is_can_mng_users: boolean;
 }
 
 export interface UserPrivilege {
-  type: string;
+  type: null | 'country_admin';
+  [ opt: string ]: any;
 }
 
 export interface UserAssociations {
@@ -33,16 +32,29 @@ export function mapUser (value: any, associations?: UserAssociations): User {
     login: prop('login', root, val.string),
     full_name: prop('full_name', root, val.nameTuple),
     lock: prop('lock', root, val.string),
+    privileges: prop('privileges', root, mapUserPrivileges),
     is_root: prop('is_root', root, val.boolean),
-    is_can_admin: prop('is_can_admin', root, val.boolean),
-    is_can_web: prop('is_can_web', root, val.boolean),
-    is_can_mng_users: prop('is_can_mng_users', root, val.boolean),
   }));
 }
 
 export const mapUserAssociations = mappers.createAssociationsMapper<UserAssociations>(
   'country',
 );
+
+export function mapUserPrivilege (value: any): UserPrivilege {
+  // noinspection UnnecessaryLocalVariableJS
+  const privilege = {
+    type: value?.type ?? null,
+  } as any;
+  // switch (value?.type) {
+  //   case 'country_admin':
+  // }
+  return Object.freeze(privilege);
+}
+
+function mapUserPrivileges (value: any): UserPrivilege[] {
+  return list(value, mapUserPrivilege);
+}
 
 export interface SessionUser {
   id: number;
@@ -67,9 +79,6 @@ export const user = {
       [ 'full_name', 'name' ],
       [ 'privileges', asControl(Privileges) ],
       [ 'is_root', 'boolean' ],
-      [ 'is_can_admin', 'boolean' ],
-      [ 'is_can_web', 'boolean' ],
-      [ 'is_can_mng_users', 'boolean' ],
     ];
   },
 };

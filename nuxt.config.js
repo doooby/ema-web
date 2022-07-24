@@ -77,6 +77,10 @@ export default {
     } ],
   ],
 
+  generate: {
+    devtools: true,
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },

@@ -98,11 +98,7 @@ export default class extends DatabasePage {
 
   privilegesList (record: User): string[] {
     if (record.is_root) return [ 'is_root' ];
-    return [
-      (record.is_can_admin ? 'is_can_admin' : null),
-      (record.is_can_web ? 'is_can_web' : null),
-      (record.is_can_mng_users ? 'is_can_mng_users' : null),
-    ].filter(value => value) as string[];
+    return [];
   }
 }
 </script>

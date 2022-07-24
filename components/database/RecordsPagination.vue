@@ -39,7 +39,7 @@ export default Vue.extend({
       if (start < 2) start = 2;
       let end = this.current + 2;
       if (this.pagesCount < end) end = this.pagesCount;
-      const list = [];
+      const list: number[] = [];
       for (let i = start; i <= end; i += 1) list.push(i);
       return list;
     },
