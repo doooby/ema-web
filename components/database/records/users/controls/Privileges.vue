@@ -3,7 +3,7 @@
     <template #label>
       <t :value="labelTranslation" />
     </template>
-    <items-listing-view :columns="columns" :items="items" @add="onAdd" @change="onChange">
+    <items-listing :columns="columns" :items="items" @add="onAdd" @change="onChange">
       <template #cell-type="{ index, item }">
         <b-form-select
           :value="item.type"
@@ -11,7 +11,7 @@
           @input="onSelectTypeFor(index, $event)"
         />
       </template>
-    </items-listing-view>
+    </items-listing>
   </b-form-group>
 </template>
 
@@ -33,7 +33,7 @@ export default class Privileges extends Vue {
       return values;
     },
     fillParams ({ name }, values, record) {
-      // record[name] = values[name] ? '1' : '0';
+      record[name] = values[name] ?? [];
       return record;
     },
   };

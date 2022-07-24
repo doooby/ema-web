@@ -1,4 +1,4 @@
-import View from './View.vue';
+import Main from './Main.vue';
 
 export namespace ItemsListing {
   export interface Column {
@@ -15,5 +15,5 @@ export namespace ItemsListing {
 }
 
 export {
-  View as ItemsListingView,
+  Main as ItemsListingMain,
 };

@@ -206,6 +206,14 @@ export const val = {
     if (isNaN(date as any)) throw new MappingError('invalid date');
     return date;
   },
+  nameTuple (value: any): [string, string] {
+    if (!Array.isArray(value)) throw new MappingError('invalid nameTuple');
+    if (value[0] === null) value[0] = '';
+    if (typeof value[0] !== 'string') throw new MappingError('invalid nameTuple');
+    if (value[1] === null) value[1] = '';
+    if (typeof value[1] !== 'string') throw new MappingError('invalid nameTuple');
+    return [ value[0], value[1] ];
+  },
   assoc<R=any> (value: any): AssociatedRecord<R> {
     return object(value, root => ({
       id: recordId(root),

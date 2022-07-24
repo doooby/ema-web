@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { IconsPlugin } from 'bootstrap-vue';
 
 import DataTableView from '~/components/DataTable/View.vue';
-import ItemsListingView from '~/components/ItemsListing/View.vue';
+import { ItemsListingMain } from '~/components/ItemsListing';
 import { FormGroup } from '~/components/Form';
 import FormField from '~/components/Form/Field';
 import Translation from '~/components/toolkit/Translation.vue';
@@ -13,7 +13,7 @@ import * as global_utils from '~/lib/global_utils';
 Vue.use(IconsPlugin);
 
 Vue.component('DataTableView', DataTableView);
-Vue.component('ItemsListingView', ItemsListingView);
+Vue.component('ItemsListing', ItemsListingMain);
 Vue.component('FormGroup', FormGroup);
 Vue.component('FormField', FormField);
 Vue.component('T', Translation);

@@ -30,7 +30,7 @@
         class="my-2 bg-white p-1 user-select-none d-flex flex-column --session"
       >
         <div class="text-truncate --session--row1">
-          {{ currentUser.name_en }}
+          {{ currentUser.name[0] }}
         </div>
         <div class="text-truncate --session--row2">
           privileges: N/A

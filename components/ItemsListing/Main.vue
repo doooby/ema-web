@@ -46,10 +46,10 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import classNames from 'classnames';
-import { ItemsListing } from '~/components/ItemsListing/index';
+import { ItemsListing } from '~/components/ItemsListing';
 
 @Component
-export default class View extends Vue {
+export default class Main extends Vue {
   @Prop({ required: true }) columns!: ItemsListing.Column[];
   @Prop({ required: true }) items!: Record<string, any>[];
 

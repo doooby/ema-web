@@ -3,7 +3,7 @@
     entity="users"
   >
     <template #title="{ record }">
-      {{ record.full_name_en }} - {{ record.login }}
+      {{ record.full_name[0] }} - {{ record.login }}
     </template>
 
     <template #actions="{ record, reloadRecord }">
@@ -51,9 +51,9 @@
 
       <table class="table">
         <show-page-table-row label="db.record.users.label.name">
-          {{ record.full_name_en }}
+          {{ record.full_name[0] }}
           <br>
-          <small>{{ record.full_name }}</small>
+          <small>{{ record.full_name[1] }}</small>
         </show-page-table-row>
         <show-page-table-row label="db.record.users.label.country">
           {{ record.country && record.country.caption }}

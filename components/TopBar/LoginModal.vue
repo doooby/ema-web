@@ -15,8 +15,8 @@
         </b-alert>
         <p>
           <i>{{ currentUser.login }}</i><br>
-          <strong>{{ currentUser.name_en }}</strong><br>
-          <small>{{ currentUser.name }}</small><br>
+          <strong>{{ currentUser.name[0] }}</strong><br>
+          <small>{{ currentUser.name[1] }}</small><br>
           <small
             v-for="(country, index) of currentUser.countries"
             :key="country.id"

@@ -14,6 +14,7 @@ import IndexPage from '~/components/database/page/index/IndexPage.vue';
 import { FormFieldDefinition } from '~/components/Form';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
+import Name from '~/components/database/cells/Name.vue';
 
 @Component({
   components: { IndexPage },
@@ -39,8 +40,7 @@ export default class extends DatabasePage {
       cell: { type: AssociatedRecordLink, entity: 'countries', noLink: true },
     },
     { name: 'login' },
-    { name: 'full_name_en' },
-    { name: 'full_name' },
+    { name: 'full_name', cell: { type: Name } },
   ];
 
   actions = [

@@ -10,8 +10,7 @@ export interface User {
   id: number;
   country?: mappers.AssociatedRecord<Country>;
   login: string;
-  full_name_en: string;
-  full_name: string;
+  full_name: [string, string];
   lock: string;
   is_root: boolean;
   is_can_admin: boolean;
@@ -32,8 +31,7 @@ export function mapUser (value: any, associations?: UserAssociations): User {
     id: recordId(root),
     country: maybeAssoc('country', root, associations?.country),
     login: prop('login', root, val.string),
-    full_name_en: prop('full_name_en', root, val.string),
-    full_name: prop('full_name', root, val.string),
+    full_name: prop('full_name', root, val.nameTuple),
     lock: prop('lock', root, val.string),
     is_root: prop('is_root', root, val.boolean),
     is_can_admin: prop('is_can_admin', root, val.boolean),
@@ -49,8 +47,7 @@ export const mapUserAssociations = mappers.createAssociationsMapper<UserAssociat
 export interface SessionUser {
   id: number;
   login: string;
-  name_en: string;
-  name: string;
+  name: [string, string];
   countries: mappers.AssociatedRecord[];
 }
 
@@ -58,8 +55,7 @@ export function mapSessionUser (value: any): SessionUser {
   return object(value, root => ({
     id: recordId(root),
     login: prop('login', root, val.string),
-    name_en: prop('name_en', root, val.string),
-    name: prop('name', root, val.string),
+    name: prop('name', root, val.nameTuple),
     countries: prop('countries', root, countries => list(countries, val.assoc)),
   }));
 }
@@ -68,8 +64,7 @@ export const user = {
   entityControls (): FormFieldDefinition[] {
     return [
       [ 'login', 'text' ],
-      [ 'full_name_en', 'text' ],
-      [ 'full_name', 'text' ],
+      [ 'full_name', 'name' ],
       [ 'privileges', asControl(Privileges) ],
       [ 'is_root', 'boolean' ],
       [ 'is_can_admin', 'boolean' ],

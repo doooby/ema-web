@@ -6,6 +6,7 @@ import IntegerControl, { type as IntegerControlType } from './Integer.vue';
 import ListControl from './List.vue';
 import SelectControl from './Select.vue';
 import TextControl, { type as TextControlType } from './Text.vue';
+import NameControl from './Name.vue';
 import TextMultilineControl, { type as TextMultilineControlType } from './TextMultiline.vue';
 
 import VoidControl, { type as VoidControlType } from './Void.vue';
@@ -35,3 +36,4 @@ add(ListControl.fieldType, ListControl);
 add(SelectControl.fieldType, SelectControl);
 add(TextControlType, TextControl);
 add(TextMultilineControlType, TextMultilineControl);
+add(NameControl.fieldType, NameControl);
