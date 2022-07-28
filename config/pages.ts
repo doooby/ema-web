@@ -8,7 +8,7 @@ export const dbPages: Resource[] = [
   { name: 'users', pages: [ '', 'new' ] },
   { name: 'education_levels', pages: [ '' ] },
   { name: 'courses', pages: [ '', 'new' ] },
-  { name: 'course_guidelines', pages: [ '', 'new' ] },
+  { name: 'standardized_courses', pages: [ '', 'new' ] },
   { name: 'subjects', pages: [ '', 'new' ] },
   { name: 'subject_categories', pages: [ '', 'new' ] },
   { name: 'schools', pages: [ '', 'new' ] },

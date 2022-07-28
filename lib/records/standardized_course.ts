@@ -5,19 +5,19 @@ import * as dbFields from '~/components/database/controls';
 
 const { object, recordId, prop, assoc, val } = mappers;
 
-export interface CourseGuideline {
+export interface StandardizedCourse {
   id: number;
   education_level: mappers.AssociatedRecord<EducationLevel>;
   name_en: string;
   name: string;
 }
 
-export interface CourseGuidelineAssociations {
+export interface StandardizedCourseAssociations {
   education_level: mappers.AssociatedRecordsIndex,
 }
 
-export const courseGuideline = {
-  mapRecord (value: any, associations?: CourseGuidelineAssociations): CourseGuideline {
+export const standardizedCourse = {
+  mapRecord (value: any, associations?: StandardizedCourseAssociations): StandardizedCourse {
     return object(value, root => ({
       id: recordId(root),
       education_level: assoc('education_level', root, associations?.education_level),
@@ -25,7 +25,7 @@ export const courseGuideline = {
       name: prop('name', root, val.string),
     }));
   },
-  mapAssociations: mappers.createAssociationsMapper<CourseGuidelineAssociations>(
+  mapAssociations: mappers.createAssociationsMapper<StandardizedCourseAssociations>(
     'education_level',
   ),
   recordControls (countryId: null | number): FormFieldDefinition[] {

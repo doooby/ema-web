@@ -1,6 +1,6 @@
 <template>
   <index-page
-    entity="course_guidelines"
+    entity="standardized_courses"
     :search-fields="searchFields"
     :table-columns="tableColumns"
     :actions="actions"
@@ -35,7 +35,7 @@ export default class extends DatabasePage {
 
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-    { name: 'id', cell: { type: RecordLink, entity: 'course_guidelines' }, size: 60 },
+    { name: 'id', cell: { type: RecordLink, entity: 'standardized_courses' }, size: 60 },
     {
       name: 'education_level',
       cell: { type: AssociatedRecordLink, entity: 'education_levels', noLink: true },

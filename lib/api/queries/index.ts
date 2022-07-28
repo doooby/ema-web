@@ -1,7 +1,7 @@
 import * as countries from './countries';
 import * as users from './users';
 import * as courses from './courses';
-import * as course_guidelines from './course_guidelines';
+import * as standardized_courses from './standardized_courses';
 import * as education_levels from './education_levels';
 import * as groups from './groups';
 import * as people from './people';
@@ -15,7 +15,7 @@ export default {
   countries,
   users,
   courses,
-  course_guidelines,
+  standardized_courses,
   education_levels,
   groups,
   people,

@@ -1,6 +1,6 @@
 <template>
   <show-page
-    entity="course_guidelines"
+    entity="standardized_courses"
   >
     <template #title="{ record }">
       {{ record.name_en }}
@@ -11,7 +11,7 @@
         <li>
           <show-page-action
             icon="pencil"
-            :path="`/database/course_guidelines/${record.id}/edit`"
+            :path="`/database/standardized_courses/${record.id}/edit`"
           >
             <t value="db.page.edit.action" />
           </show-page-action>
@@ -21,19 +21,15 @@
 
     <template #details="{ record }">
       <table class="table">
-        <show-page-table-row label="db.record.course_guidelines.label.name">
+        <show-page-table-row label="db.record.standardized_courses.label.name">
           {{ record.name_en }}
           <br>
           <small>{{ record.name }}</small>
         </show-page-table-row>
-        <show-page-table-row label="db.record.course_guidelines.label.education_level">
+        <show-page-table-row label="db.record.standardized_courses.label.education_level">
           {{ record.education_level.labels.caption }}
         </show-page-table-row>
       </table>
-    </template>
-
-    <template #container="{ record }">
-      <course-settings :course-guideline="record" />
     </template>
   </show-page>
 </template>
@@ -44,14 +40,12 @@ import { DatabasePage } from '~/components';
 import { Component } from 'vue-property-decorator';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
-import CourseSettings from '~/components/database/records/course_guidelines/CourseSettings/index.vue';
 
 @Component({
   components: {
     ShowPage,
     ShowPageAction,
     ShowPageTableRow,
-    CourseSettings,
   },
 })
 export default class extends DatabasePage {}

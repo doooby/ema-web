@@ -1,6 +1,6 @@
 <template>
   <edit-page
-    entity="course_guidelines"
+    entity="standardized_courses"
     :fields="fields"
   />
 </template>
@@ -10,14 +10,14 @@ import EditPage from '~/components/database/EditPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
-import { courseGuideline } from '~/lib/records';
+import { standardizedCourse } from '~/lib/records';
 
 @Component({
   components: { EditPage },
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return courseGuideline.recordControls(this.currentCountryId);
+    return standardizedCourse.recordControls(this.currentCountryId);
   }
 }
 </script>
