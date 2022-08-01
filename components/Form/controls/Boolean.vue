@@ -1,11 +1,13 @@
 <template>
-  <b-form-checkbox
-    :id="domIdBase"
-    :checked="sanitizedValue"
-    @input="onInput"
-  >
-    <t :value="labelTranslation" />
-  </b-form-checkbox>
+  <b-form-group>
+    <b-form-checkbox
+      :id="domIdBase"
+      :checked="sanitizedValue"
+      @input="onInput"
+    >
+      <t :value="labelTranslation" />
+    </b-form-checkbox>
+  </b-form-group>
 </template>
 
 <script lang="ts">

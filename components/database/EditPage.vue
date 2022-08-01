@@ -1,69 +1,64 @@
 <template>
   <div class="page-content">
-    <div class="container">
-      <div class="row justify-content-md-center">
-        <h2 class="col-md-8 col-lg-6">
-          <t value="db.page.edit.title" />
-          <span> </span>
-          <t :value="`db.record.${entity}.meta.s`" />
-        </h2>
-      </div>
-
-      <div v-if="!record && getQueryState.running" class="row justify-content-md-center">
-        <div class="col-md-8 col-lg-6">
-          <b-alert show variant="info">
-            <t value="app.loading" />
-          </b-alert>
-        </div>
-      </div>
-      <div v-if="recordLoadFailed" class="row justify-content-md-center">
-        <div class="col-md-8 col-lg-6">
-          <b-alert show variant="warning">
-            <t value="app.record_not_found" />
-          </b-alert>
-        </div>
-      </div>
-
-      <form-group
-        v-if="$scopedSlots.layout"
-        v-model="formValues"
-        class="row justify-content-md-center"
-        :fields="formFields"
-        :label-prefix="formFieldsLabelPrefix"
-      >
-        <template #layout="{ context, values }">
-          <slot name="layout" :context="context" :values="values" />
-        </template>
-      </form-group>
-      <div
-        v-else
-        class="row justify-content-md-center"
-      >
-        <form-group
-          v-model="formValues"
-          class="col-md-8 col-lg-6"
-          :fields="formFields"
-          :label-prefix="formFieldsLabelPrefix"
-        />
-      </div>
-
-      <div class="row justify-content-md-center">
-        <div class="col-md-8 col-lg-6 text-right">
-          <span v-if="saveQueryState.running">
-            <t value="app.processing" />
-          </span>
-          <b-button
-            variant="success"
-            :disabled="!record || saveQueryState.running"
-            @click="saveRecord"
-          >
-            <t value="app.action.save" />
-          </b-button>
-        </div>
-      </div>
+    <div class="container pt-4 pb-5">
       <div class="row justify-content-md-center">
         <div class="col-md-8 col-lg-6">
-          <record-errors :errors="errors" />
+          <div class="card">
+            <div class="card-header">
+              <h2 class="m-0">
+                <t value="db.page.edit.title" />
+              &#32;
+                <t :value="`db.record.${entity}.meta.s`" />
+              </h2>
+            </div>
+            <div class="position-relative">
+              <div class="position-absolute w-100" style="z-index: 1;">
+                <b-progress
+                  v-if="getQueryState.running"
+                  height="2px"
+                  :value="100"
+                  variant="info"
+                  striped
+                  animated
+                />
+                <b-alert v-if="getQueryState.fail" show variant="warning">
+                  <b-icon icon="exclamation-triangle-fill" class="mr-3" />
+                  <t value="app.record_not_found" />
+                </b-alert>
+              </div>
+            </div>
+            <div class="card-body pt-3 pb-0">
+              <form-group
+                v-if="$scopedSlots.layout"
+                v-model="formValues"
+                :fields="formFields"
+                :label-prefix="formFieldsLabelPrefix"
+              >
+                <template #layout="{ context, values }">
+                  <slot name="layout" :context="context" :values="values" />
+                </template>
+              </form-group>
+              <form-group
+                v-else
+                v-model="formValues"
+                :fields="formFields"
+                :label-prefix="formFieldsLabelPrefix"
+              />
+              <record-errors class="mb-3" :errors="errors" />
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+              <div>
+                <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
+                  <t value="app.action.save" />
+                </b-button>
+              </div>
+              <div>
+                <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
+                  <t value="app.action.cancel" />
+                </b-button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -141,6 +136,12 @@ export default class EditPage extends Vue {
     };
   }
 
+  get isControlsDisabled (): boolean {
+    return !this.record ||
+      this.saveQueryState.running ||
+      !!this.saveQueryState.value?.success;
+  }
+
   onUpdated (record: any) {
     if (this.$listeners.updated) {
       this.$emit('updated', record);
@@ -162,7 +163,7 @@ export default class EditPage extends Vue {
     );
   }
 
-  async saveRecord () {
+  async onSubmit () {
     if (this.saveQueryState.running) return;
     this.errors = null;
     const params = formToRecordParams(this.formFields, this.formValues);
@@ -177,6 +178,10 @@ export default class EditPage extends Vue {
     } else {
       this.errors = [ [ 'base', 'unknown fail' ] ];
     }
+  }
+
+  onCancel () {
+    this.$router.go(-1);
   }
 }
 </script>

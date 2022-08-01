@@ -3,8 +3,10 @@
     <div class="card-header">
       Basic Fields
     </div>
-    <div class="card-body">
+    <div class="card-body pt-3 pb-0">
       <form-group v-model="values" :fields="fields" />
+    </div>
+    <div class="card-footer">
       <div class="d-flex justify-content-between">
         <div>
           <b-button variant="outline-success" :disabled="isProcessing" @click="onSubmit">
@@ -20,8 +22,8 @@
           </b-button>
         </div>
       </div>
+      <pre class="mt-3 mb-0">{{ JSON.stringify(values, null, 2) }}</pre>
     </div>
-    <pre>{{ JSON.stringify(values, null, 2) }}</pre>
   </div>
 </template>
 
@@ -33,6 +35,7 @@ import { buildFormFields, prefillFormValues } from '~/components/Form';
 export default class BasicForm extends Vue {
   fields = buildFormFields([
     [ 'text', 'text' ],
+    [ 'integer', 'integer' ],
     [ 'list', 'list', {
       options: [
         { value: 'opt1', text: 'Option 1' },
@@ -47,6 +50,7 @@ export default class BasicForm extends Vue {
     } ],
     [ 'date', 'date' ],
     [ 'calendar', 'calendar' ],
+    [ 'name', 'name' ],
     [ 'text_interactive', 'text', { interactive: true } ],
     [ 'text_multiline', 'textMultiline' ],
   ]);
