@@ -28,7 +28,7 @@ import { list } from '~/lib/api/mappers';
 export default class Privileges extends Vue {
   static fieldType: FormFieldType = {
     fillParams ({ name }, values, record) {
-      record[name] = list([ ...values[name] ]);
+      record[name] = values[name] && list([ ...values[name] ]);
       return record;
     },
   };
