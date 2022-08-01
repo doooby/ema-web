@@ -1,5 +1,11 @@
 <template>
   <div>
+    <div class="p-3">
+      <nuxt-link to="/">
+        GOTO HOME
+      </nuxt-link>
+    </div>
+
     cosik :-)
   </div>
 </template>

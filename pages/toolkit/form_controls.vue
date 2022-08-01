@@ -1,10 +1,17 @@
 <template>
-  <div class="row">
-    <div class="col-md-6 col-lg-4">
-      <basic-form />
+  <div>
+    <div class="p-3">
+      <nuxt-link to="/">
+        GOTO HOME
+      </nuxt-link>
     </div>
-    <div class="col-md-6 col-lg-4">
-      <options-form />
+    <div class="row">
+      <div class="col-md-6 col-lg-4">
+        <basic-form />
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <options-form />
+      </div>
     </div>
   </div>
 </template>
