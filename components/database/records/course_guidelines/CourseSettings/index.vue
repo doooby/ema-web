@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { CourseGuideline, Subject } from '~/lib/records';
+import { StandardizedCourse, Subject } from '~/lib/records';
 import * as mappers from '~/lib/api/mappers';
 import SubjectsListing from '~/components/database/records/course_guidelines/CourseSettings/SubjectsListing.vue';
 
@@ -29,11 +29,11 @@ interface Settings {
   components: { SubjectsListing },
 })
 export default class CourseSettings extends Vue {
-  @Prop({ required: true }) readonly courseGuideline!: CourseGuideline;
+  @Prop({ required: true }) readonly course!: StandardizedCourse;
 
   getSettingsQueryState = this.$api.newQueryState<Settings>();
 
-  @Watch('courseGuideline')
+  @Watch('course')
   onPageChanged () {
     this.reloadSettings();
   }
@@ -49,7 +49,7 @@ export default class CourseSettings extends Vue {
 
   async fetchSettings () {
     await this.$api.request({
-      path: `/course_guidelines/${this.courseGuideline.id}/show_settings`,
+      path: `/course_guidelines/${this.course.id}/show_settings`,
       mapper: mapSetting,
     }, this.getSettingsQueryState);
   }

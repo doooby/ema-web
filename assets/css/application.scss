@@ -50,9 +50,24 @@ $font-line-heights: (
   @return #{size($size)}px;
 }
 
-@import 'bootstrap';
+$body-bg: white;
+$body-color: #1a1a1a;
+
+$enable-shadows: false;
+$btn-focus-box-shadow: none;
+
+$enable-rounded: false;
+
+$input-bg: #c2c0bf;
+
+$label-margin-bottom: px-size(1);
+
+@import "~bootstrap/scss/bootstrap";
 @import '~bootstrap-vue/src/index';
-@import 'custom';
+
+@import "font";
+@import "sizing";
+@import "misc";
 
 @import 'layouts/app';
 @import 'layouts/database';

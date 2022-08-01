@@ -25,6 +25,19 @@
         <a href="/admin/translations/edit/en">Edit EN Translations</a>
       </li>
     </ul>
+    <h3>Dev</h3>
+    <ul>
+      <li>
+        <nuxt-link to="/toolkit/playground">
+          playground (empty page)
+        </nuxt-link>
+      </li>
+      <li>
+        <nuxt-link to="/toolkit/form_controls">
+          toolkit - form controls
+        </nuxt-link>
+      </li>
+    </ul>
   </div>
 </template>
 

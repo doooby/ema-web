@@ -3,8 +3,14 @@
   user-select: none;
 }
 
-@import 'sizing';
-@import 'font';
+.btn-xs {
+  padding: 0 px-size(1);
+  height: 22px;
+  &.btn .b-icon.bi {
+    font-size: 100%;
+    display: flex;
+  }
+}
 
 .button-like {
   @include button-like;

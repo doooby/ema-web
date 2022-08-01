@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { SubjectSetting } from '~/components/database/records/course_guidelines/CourseSettings/index.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import RemoveRow from '~/components/database/cells/RemoveRow.vue';
@@ -79,15 +79,15 @@ import SearchModal from '~/components/database/SearchModal.vue';
 import IntegerInput from '~/components/Form/primitives/IntegerInput.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 import * as mappers from '~/lib/api/mappers';
-import { CourseGuideline } from '~/lib/records';
 import { RecordError } from '~/lib/api/mappers';
+import { StandardizedCourse } from '~/lib/records';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 
 @Component({
   components: { SearchModal, IntegerInput, CheckboxInput, RecordErrors },
 })
 export default class SubjectsListing extends Vue {
-  @Prop({ required: true }) readonly courseGuideline!: CourseGuideline;
+  @Prop({ required: true }) readonly course!: StandardizedCourse;
   @Prop({ required: true }) readonly settings!: SubjectSetting[];
 
   tableColumns = [
@@ -181,7 +181,7 @@ export default class SubjectsListing extends Vue {
 
   async onSave () {
     const result = await this.$api.request({
-      path: `/course_guidelines/${this.courseGuideline.id}/update_settings`,
+      path: `/course_guidelines/${this.course.id}/update_settings`,
       params: {
         settings: {
           subjects: this.items.map(item => ({
