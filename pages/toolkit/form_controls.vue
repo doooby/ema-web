@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container pb-5">
     <div class="p-3">
       <nuxt-link to="/">
         GOTO HOME

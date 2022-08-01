@@ -7,7 +7,6 @@
     </template>
     <b-form-select
       :id="domIdBase"
-      class="form-control"
       :value="selected && selected.value"
       :options="options"
       @change="onChange"

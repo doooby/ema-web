@@ -4,11 +4,22 @@
       Basic Fields
     </div>
     <div class="card-body">
-      <form-group
-        v-model="values"
-        class="container"
-        :fields="fields"
-      />
+      <form-group v-model="values" :fields="fields" />
+      <div class="d-flex justify-content-between">
+        <div>
+          <b-button variant="outline-success" :disabled="isProcessing" @click="onSubmit">
+            <t value="app.action.save" />
+          </b-button>
+        </div>
+        <div class="d-flex align-items-center">
+          <btn-mini icon="backspace" variant="secondary" :disabled="isProcessing" @click="onReset" />
+        </div>
+        <div>
+          <b-button variant="outline-secondary" :disabled="isProcessing">
+            <t value="app.action.cancel" />
+          </b-button>
+        </div>
+      </div>
     </div>
     <pre>{{ JSON.stringify(values, null, 2) }}</pre>
   </div>
@@ -24,8 +35,14 @@ export default class BasicForm extends Vue {
     [ 'text', 'text' ],
     [ 'list', 'list', {
       options: [
-        { value: 'opt1', caption: 'Option 1' },
-        { value: 'opt2', caption: 'Option 2' },
+        { value: 'opt1', text: 'Option 1' },
+        { value: 'opt2', text: 'Option 2' },
+      ],
+    } ],
+    [ 'select', 'select', {
+      options: [
+        { value: 'opt1', text: 'Option 1' },
+        { value: 'opt2', text: 'Option 2' },
       ],
     } ],
     [ 'date', 'date' ],
@@ -34,10 +51,30 @@ export default class BasicForm extends Vue {
     [ 'text_multiline', 'textMultiline' ],
   ]);
 
-  values = {
-    ...prefillFormValues(this.fields),
+  defaultValues = {
     text: 'some text',
     list: 'opt2',
+  }
+
+  values = {
+    ...prefillFormValues(this.fields),
+    ...this.defaultValues,
   };
+
+  isProcessing = false;
+
+  onSubmit () {
+    this.isProcessing = true;
+    setTimeout(() => {
+      this.isProcessing = false;
+    }, 1000);
+  }
+
+  onReset () {
+    this.values = {
+      ...prefillFormValues(this.fields),
+      ...this.defaultValues,
+    };
+  }
 }
 </script>

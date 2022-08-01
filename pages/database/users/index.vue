@@ -24,7 +24,7 @@ export default class extends DatabasePage {
     if (!this.currentUser) return [];
     const options = this.currentUser.countries.map(item => ({
       value: item.id,
-      caption: item.labels.caption,
+      text: item.labels.caption,
     }));
     return [
       [ 'country_id', 'list', { options, blank: true } ],

@@ -73,17 +73,17 @@ export const group = {
     ];
   },
   startYearOptions: Object.freeze([
-    { value: 2018, caption: 2018 },
-    { value: 2019, caption: 2019 },
-    { value: 2020, caption: 2020 },
-    { value: 2021, caption: 2021 },
-    { value: 2022, caption: 2022 },
-    { value: 2023, caption: 2023 },
-    { value: 2024, caption: 2024 },
-    { value: 2025, caption: 2025 },
-    { value: 2026, caption: 2026 },
-    { value: 2027, caption: 2027 },
-    { value: 2028, caption: 2028 },
+    { value: 2018, text: 2018 },
+    { value: 2019, text: 2019 },
+    { value: 2020, text: 2020 },
+    { value: 2021, text: 2021 },
+    { value: 2022, text: 2022 },
+    { value: 2023, text: 2023 },
+    { value: 2024, text: 2024 },
+    { value: 2025, text: 2025 },
+    { value: 2026, text: 2026 },
+    { value: 2027, text: 2027 },
+    { value: 2028, text: 2028 },
   ]),
 };
 

@@ -36,7 +36,7 @@ export default class ResourcesMenuCountrySwitch extends Vue {
     const label = this.$t('db.menu.switch_country');
     const options = this.viableCountries.map(country => ({
       value: country.id,
-      caption: country.labels.caption,
+      text: country.labels.caption,
     }));
     return buildFormFields([
       [ 'country', 'list', { label, options } ],

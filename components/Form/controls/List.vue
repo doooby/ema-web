@@ -38,7 +38,7 @@
           button
           @click="onItemSelected(option)"
         >
-          {{ option.caption }}
+          {{ option.text }}
         </b-list-group-item>
       </b-list-group>
       <b-alert
@@ -57,7 +57,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 
-type Option = { value: string, caption: string };
+type Option = { value: string, text: string };
 
 @Component({
   mixins: [ ControlMixin ],
@@ -86,12 +86,12 @@ export default class List extends Vue {
   }
 
   get valueText (): string {
-    return this.selected?.caption ?? '';
+    return this.selected?.text ?? '';
   }
 
   get blankOption (): undefined | Option {
     if (!this.field.options.blank) return;
-    return { value: '', caption: '' };
+    return { value: '', text: '' };
   }
 
   get options (): Array<Option> {
