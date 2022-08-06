@@ -1,7 +1,5 @@
 <template>
-  <b-form-group
-    :label-for="domIdBase"
-  >
+  <b-form-group :label-for="domIdBase">
     <template #label>
       <t :value="labelTranslation" />
     </template>
@@ -13,12 +11,7 @@
         <b-icon icon="chevron-down" />
       </b-button>
     </div>
-    <b-modal
-      v-model="modalShown"
-      centered
-      hide-footer
-      :title="labelTranslation"
-    >
+    <b-modal v-model="modalShown" centered hide-footer>
       <template #modal-title>
         <t :value="labelTranslation" />
       </template>
@@ -56,8 +49,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-
-type Option = { value: string, text: string };
+import { Option } from '~/lib/types';
 
 @Component({
   mixins: [ ControlMixin ],

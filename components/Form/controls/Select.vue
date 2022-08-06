@@ -18,8 +18,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-
-type Option = { value: string, text: string };
+import { Option } from '~/lib/types';
 
 @Component({
   mixins: [ ControlMixin ],

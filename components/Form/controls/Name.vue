@@ -18,7 +18,7 @@
         class="form-control"
         :value="sanitizedValue[0]"
         autocomplete="off"
-        @input="onInputEn"
+        @blur="onInputEn"
       >
     </div>
 
@@ -34,7 +34,7 @@
         class="form-control"
         :value="sanitizedValue[1]"
         autocomplete="off"
-        @input="onInputLoc"
+        @blur="onInputLoc"
       >
     </div>
   </b-form-group>

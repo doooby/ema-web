@@ -8,6 +8,7 @@ import SelectControl from './Select.vue';
 import TextControl, { type as TextControlType } from './Text.vue';
 import NameControl from './Name.vue';
 import TextMultilineControl, { type as TextMultilineControlType } from './TextMultiline.vue';
+import LocationControl from './Location.vue';
 
 import VoidControl, { type as VoidControlType } from './Void.vue';
 
@@ -37,3 +38,4 @@ add(SelectControl.fieldType, SelectControl);
 add(TextControlType, TextControl);
 add(TextMultilineControlType, TextMultilineControl);
 add(NameControl.fieldType, NameControl);
+add(LocationControl.fieldType, LocationControl);

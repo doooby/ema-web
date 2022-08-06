@@ -1,5 +1,11 @@
 .form, .form--group {
+  // TODO REMOVE
   .association--text {
+    background-color: $input-bg;
+    @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
+  }
+
+  .form--control-label {
     background-color: $input-bg;
     @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
   }

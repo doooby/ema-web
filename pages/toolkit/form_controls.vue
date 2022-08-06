@@ -6,11 +6,14 @@
       </nuxt-link>
     </div>
     <div class="row">
-      <div class="col-md-6 col-lg-4">
+      <div class="col-md-6 col-lg-4 mb-4">
         <basic-form />
       </div>
-      <div class="col-md-6 col-lg-4">
+      <div class="col-md-6 col-lg-4 mb-4">
         <options-form />
+      </div>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <location-form />
       </div>
     </div>
   </div>
@@ -20,9 +23,10 @@
 import { Vue, Component } from 'vue-property-decorator';
 import BasicForm from '~/components/toolkit/dev/BasicForm.vue';
 import OptionsForm from '~/components/toolkit/dev/OptionsForm.vue';
+import LocationForm from '~/components/toolkit/dev/LocationForm.vue';
 
 @Component({
-  components: { BasicForm, OptionsForm },
+  components: { BasicForm, OptionsForm, LocationForm },
 })
 export default class Form_controls extends Vue {
 
