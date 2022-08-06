@@ -10,7 +10,8 @@
       v-model="modalShown"
       :list="options"
       :selected="selectedOption"
-      @select="OnSelect($event)">
+      @select="OnSelect($event)"
+    >
       <template #title>
         <slot name="modal-title" />
       </template>
@@ -45,14 +46,16 @@ export default class SelectWithModal extends Vue {
   }
 
   @Watch('optionsSource')
-  @Watch('disabled')
   onOptionsSourceChange () {
-    if (this.disabled) {
-      this.state = 'initial';
-      this.options = [];
-    } else {
-      this.loadOptions();
-    }
+    this.state = 'initial';
+    this.options = [];
+    if (!this.disabled) this.loadOptions();
+  }
+
+  @Watch('disabled')
+  onDisabledChanged () {
+    if (this.disabled) return;
+    if (this.state === 'initial') this.loadOptions();
   }
 
   get selectedOption (): undefined | Option {

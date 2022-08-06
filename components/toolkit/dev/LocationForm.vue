@@ -27,8 +27,8 @@ export default class SpecialsForm extends Vue {
         levels: [
           { type: 'list', name: 'Kraj', name_en: 'County' },
           { type: 'list', name: 'Okres', name_en: 'District' },
-          { type: 'text', name: 'Ulice', name_en: 'Street' },
-          { type: 'list', name: 'Město', name_en: 'Town' },
+          { type: 'text', name: 'Město', name_en: 'Town' },
+          { type: 'list', name: 'Psč', name_en: 'Post Number' },
         ],
       },
       fetchLocations,
@@ -44,7 +44,6 @@ export default class SpecialsForm extends Vue {
 }
 
 function fetchLocations (level: number, parent_id?: string): MaybeData<Location[]> {
-  console.log({ level, parent_id });
   let list = addresses.locations.filter(location => location.level === level);
   if (parent_id) {
     list = list.filter(location => location.parent_id === parent_id);
@@ -86,6 +85,12 @@ const addresses = {
       parent_id: '2',
       name: 'Jakýsi okrsek',
       name_en: 'some distr.',
+    },
+    {
+      id: '5',
+      level: 4,
+      parent_id: '4',
+      name: '74221',
     },
   ],
 };

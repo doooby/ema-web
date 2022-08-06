@@ -32,7 +32,7 @@ export default class IntegerInput extends Vue {
   }
 
   onInput (event: {target: HTMLInputElement}): void {
-    const domValue: any = event.target.value;
+    const domValue = event.target.value;
     this.internalValue = sanitizeValue(domValue.replace(/[^0-9]/g, ''));
     this.inputValue = sanitizeInputValue(this.internalValue);
     if (this.inputValue !== domValue) {
@@ -50,7 +50,7 @@ export default class IntegerInput extends Vue {
   }
 }
 
-export function sanitizeValue (value: any): null | number {
+function sanitizeValue (value: any): null | number {
   if (!value) {
     return value === 0 ? 0 : null;
   }

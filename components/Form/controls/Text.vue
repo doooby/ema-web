@@ -14,15 +14,12 @@
           <t :value="leftLabelText.t" />
         </span>
       </div>
-      <input
-        :id="domIdBase"
-        type="text"
-        class="form-control"
-        :value="sanitizedValue"
-        autocomplete="off"
-        v-on="interactive ? { input: onInput} : { blur: onInput }"
-        @keypress.ctrl.enter="onCommit"
-      >
+      <text-input
+        :dom-id="domIdBase"
+        :interactive="interactive"
+        :value="value"
+        @change="onChange"
+      />
       <div v-if="rightLabelText" class="input-group-append">
         <span v-if="rightLabelText.text" class="input-group-text">
           {{ rightLabelText.text }}
@@ -39,6 +36,7 @@
 import Vue from 'vue';
 import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
 import ControlMixin from '../ControlMixin';
+import TextInput from '~/components/Form/primitives/TextInput.vue';
 
 export const type: FormFieldType = {
   name: 'text',
@@ -53,6 +51,7 @@ export const type: FormFieldType = {
 };
 
 export default Vue.extend({
+  components: { TextInput },
   mixins: [ ControlMixin ],
   props: {
     field: { type: Object as Vue.PropType<FormField>, required: true },
@@ -74,16 +73,14 @@ export default Vue.extend({
       if (typeof rightLabel === 'function') return rightLabel();
       return { t: String(rightLabel) };
     },
-    sanitizedValue (): string {
-      const rawValue = this.formValues[this.field.name];
-      return rawValue ? String(rawValue) : '';
+    value (): string {
+      return this.formValues[this.field.name];
     },
   },
   methods: {
-    onInput (event: {target: HTMLInputElement}) {
-      (this as any).debouncedOnChange({ [this.field.name]: event.target.value });
+    onChange (newValue: string) {
+      (this as any).debouncedOnChange({ [this.field.name]: newValue });
     },
-    onCommit () {},
   },
 });
 </script>

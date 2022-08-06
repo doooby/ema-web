@@ -3,7 +3,7 @@ export interface LocationSystem {
   levels: LocationSystemLevel[];
 }
 
-interface LocationSystemLevel {
+export interface LocationSystemLevel {
   type: 'list' | 'text';
   name: string;
   name_en?: string;
