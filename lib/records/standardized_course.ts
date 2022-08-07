@@ -1,30 +1,49 @@
 import * as mappers from '~/lib/api/mappers';
-import { EducationLevel } from '~/lib/records';
+import { maybeProp } from '~/lib/api/mappers';
+import { course, CourseSubject, EducationLevel } from '~/lib/records';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
 import { asControl } from '~/components/database/controls';
 import GradingType from '~/components/database/records/courses/controls/GradingType.vue';
+import CourseSubjects from '~/components/database/records/courses/controls/CourseSubjects/CourseSubjects.vue';
 
 const { object, recordId, prop, assoc, val } = mappers;
 
 export interface StandardizedCourse {
   id: number;
+  name: [string, string];
   education_level: mappers.AssociatedRecord<EducationLevel>;
-  name_en: string;
-  name: string;
+  grade: number;
+  accreditation_authority: [string, undefined | string];
+  lesson_duration: number;
+  attendance_limit: undefined | number;
+  preferred_grading: [string, string, undefined | string];
+  description: undefined | string;
+  subjects: CourseSubject[];
 }
 
 export interface StandardizedCourseAssociations {
   education_level: mappers.AssociatedRecordsIndex,
+  subjects: mappers.AssociatedRecordsIndex,
+  teachers: mappers.AssociatedRecordsIndex,
 }
 
 export const standardizedCourse = {
   mapRecord (value: any, associations?: StandardizedCourseAssociations): StandardizedCourse {
     return object(value, root => ({
       id: recordId(root),
+      name: prop('name', root, val.nameTuple),
       education_level: assoc('education_level', root, associations?.education_level),
-      name_en: prop('name_en', root, val.string),
-      name: prop('name', root, val.string),
+      grade: prop('grade', root, val.integer),
+      accreditation_authority: prop('accreditation_authority', root, val.factories.tuple2_1(
+        val.string,
+        val.string,
+      )),
+      lesson_duration: prop('lesson_duration', root, val.integer),
+      attendance_limit: maybeProp('attendance_limit', root, val.integer),
+      preferred_grading: prop('preferred_grading', root, course.mapGrading),
+      description: prop('description', root, val.string),
+      subjects: prop('subjects', root, course.mapSubjectsFactory(associations)),
     }));
   },
   mapAssociations: mappers.createAssociationsMapper<StandardizedCourseAssociations>(
@@ -48,8 +67,9 @@ export const standardizedCourse = {
         requireable: true,
         rightLabel: { text: '%' },
       } ],
-      [ 'grading_type', asControl(GradingType) ],
+      [ 'preferred_grading', asControl(GradingType) ],
       [ 'description', 'textMultiline' ],
+      [ 'subjects', asControl(CourseSubjects) ],
     ];
   },
   accreditationAuthorityOptions () {

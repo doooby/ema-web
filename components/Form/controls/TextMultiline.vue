@@ -1,8 +1,8 @@
 <template>
-  <b-form-group
-    :label="labelTranslation"
-    :label-for="domIdBase"
-  >
+  <b-form-group :label-for="domIdBase">
+    <template #label>
+      <t :value="labelTranslation" />
+    </template>
     <div class="input-group">
       <textarea
         :id="domIdBase"

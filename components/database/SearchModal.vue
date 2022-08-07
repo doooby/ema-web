@@ -47,7 +47,7 @@ interface Item {
 @Component
 export default class SearchModal extends Vue {
   @Prop({ required: true }) readonly query!: (params?: any) => QueryDefinition<SearchResult>;
-  @Prop({ default: undefined }) readonly params: any;
+  @Prop() readonly params: any;
   @Prop({ required: true }) readonly selectedIds!: number[];
 
   queryState = this.$api.newQueryState<SearchResult>();

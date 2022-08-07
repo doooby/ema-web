@@ -75,7 +75,7 @@ export function listOfObjects<V> (value: any, map: (item: any) => V): V[] {
 }
 
 export function tuple<V> (value: any, map: (items: any[]) => V): V {
-  if (typeof value !== 'object' || value === null) throw new MappingError('invalid tuple');
+  if (!Array.isArray(value)) throw new MappingError('invalid tuple');
   return Object.freeze(map(value));
 }
 
@@ -230,6 +230,26 @@ export const val = {
   factories: {
     listOfObjects<V> (map: (item: any) => V): ((value: any) => V[]) {
       return value => listOfObjects<V>(value, map);
+    },
+    tuple2_1<V0, V1> (
+      map0: (item: any) => V0,
+      map1: (item: any) => V1,
+    ): ((value: any) => [V0, undefined | V1]) {
+      return value => tuple(value, tuple => [
+        prop('0', tuple, map0),
+        maybeProp('1', tuple, map1),
+      ]);
+    },
+    tuple3_2<V0, V1, V2> (
+      map0: (item: any) => V0,
+      map1: (item: any) => V1,
+      map2: (item: any) => V2,
+    ): ((value: any) => [V0, V1, undefined | V2]) {
+      return value => tuple(value, tuple => [
+        prop('0', tuple, map0),
+        prop('1', tuple, map1),
+        maybeProp('2', tuple, map2),
+      ]);
     },
   },
 };

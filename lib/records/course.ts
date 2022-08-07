@@ -1,9 +1,9 @@
 import * as mappers from '~/lib/api/mappers';
-import { EducationLevel, School } from '~/lib/records';
+import { EducationLevel, Person, School, Subject } from '~/lib/records';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
 
-const { object, recordId, prop, assoc, val } = mappers;
+const { object, recordId, prop, assoc, val, maybeAssoc } = mappers;
 
 export interface Course {
   id: number;
@@ -12,11 +12,19 @@ export interface Course {
   name_en: string;
   name: string;
   grade: number;
+  // subjects: CourseSubject[];
 }
 
 export interface CourseAssociations {
   school: mappers.AssociatedRecordsIndex,
   education_level: mappers.AssociatedRecordsIndex,
+}
+
+export interface CourseSubject {
+  subject: mappers.AssociatedRecord<Subject>;
+  teacher?: mappers.AssociatedRecord<Person>;
+  grading: [string, string, undefined | string];
+  exam: boolean;
 }
 
 export const course = {
@@ -34,6 +42,20 @@ export const course = {
     'school',
     'education_level',
   ),
+  mapGrading: val.factories.tuple3_2(
+    val.string,
+    val.string,
+    val.string,
+  ),
+  mapSubjectsFactory: (associations?: {
+    subjects: mappers.AssociatedRecordsIndex,
+    teachers: mappers.AssociatedRecordsIndex,
+  }): (value: any) => CourseSubject[] => val.factories.listOfObjects(item => ({
+    subject: assoc('subject', item, associations?.subjects),
+    teacher: maybeAssoc('teacher', item, associations?.teachers),
+    grading: prop('grading', item, course.mapGrading),
+    exam: prop('exam', item, val.boolean),
+  })),
   recordControls ({
     countryId,
   }: {
