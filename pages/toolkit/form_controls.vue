@@ -28,7 +28,7 @@ import LocationForm from '~/components/toolkit/dev/LocationForm.vue';
 @Component({
   components: { BasicForm, OptionsForm, LocationForm },
 })
-export default class Form_controls extends Vue {
+export default class FormControls extends Vue {
 
 }
 </script>

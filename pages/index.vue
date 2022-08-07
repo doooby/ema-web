@@ -37,6 +37,11 @@
           toolkit - form controls
         </nuxt-link>
       </li>
+      <li>
+        <nuxt-link to="/toolkit/bs_icons">
+          toolkit - bootstrap 1.5.0 icons
+        </nuxt-link>
+      </li>
     </ul>
   </div>
 </template>

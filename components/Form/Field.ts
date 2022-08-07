@@ -15,6 +15,11 @@ export default Vue.extend({
     if (!field) {
       return createElement(VoidControl);
     }
+
+    if (field.options?.hideIf) {
+      if (field.options.hideIf(values)) return createElement('div');
+    }
+
     return createElement(
       field.type.control,
       { props: { field, context, formValues: values } },

@@ -2,6 +2,8 @@ import * as mappers from '~/lib/api/mappers';
 import { EducationLevel } from '~/lib/records';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
+import { asControl } from '~/components/database/controls';
+import GradingType from '~/components/database/records/courses/controls/GradingType.vue';
 
 const { object, recordId, prop, assoc, val } = mappers;
 
@@ -30,14 +32,26 @@ export const standardizedCourse = {
   ),
   recordControls (countryId: null | number): FormFieldDefinition[] {
     return [
+      [ 'name', 'name' ],
       [ 'education_level', dbFields.AssociatedRecord, {
         entity: 'education_levels',
         params: {
           country_id: countryId,
         },
       } ],
-      [ 'name_en', 'text' ],
-      [ 'name', 'text' ],
+      [ 'grade', 'integer' ],
+      [ 'accreditation_authority', 'selectOrFill', {
+        options: standardizedCourse.accreditationAuthorityOptions(),
+      } ],
+      [ 'lesson_duration', 'integer', { rightLabel: 'app.time.minutes.p' } ],
+      [ 'attendance_limit', 'integer', { rightLabel: { text: '%' } } ],
+      [ 'grading_type', asControl(GradingType) ],
     ];
+  },
+  accreditationAuthorityOptions () {
+    return Object.freeze([
+      { value: 'gov', text: 'db.record.standardized_courses.accreditation_authority.gov' },
+      { value: 'ngo', text: 'db.record.standardized_courses.accreditation_authority.ngo' },
+    ]);
   },
 };

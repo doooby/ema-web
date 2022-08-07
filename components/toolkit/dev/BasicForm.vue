@@ -48,6 +48,12 @@ export default class BasicForm extends Vue {
         { value: 'opt2', text: 'Option 2' },
       ],
     } ],
+    [ 'select_or_fill', 'selectOrFill', {
+      options: [
+        { value: 'opt1', text: 'Option 1' },
+        { value: 'opt2', text: 'Option 2' },
+      ],
+    } ],
     [ 'date', 'date' ],
     [ 'calendar', 'calendar' ],
     [ 'name', 'name' ],

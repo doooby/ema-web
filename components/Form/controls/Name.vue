@@ -52,10 +52,6 @@ import { maybe, prop, tuple, val } from '~/lib/api/mappers';
 export default class Name extends Vue {
   static fieldType: FormFieldType = {
     name: 'name',
-    fillValues ({ name }, record, values) {
-      values[name] = record[name];
-      return values;
-    },
     fillParams ({ name }, values, record) {
       record[name] = values[name] ?? [ '', '' ];
       return record;
@@ -71,7 +67,6 @@ export default class Name extends Vue {
       value => tuple(value, items => [
         prop('0', items, val.string),
         prop('1', items, val.string),
-
       ]),
     ) ?? [ '', '' ];
   }
