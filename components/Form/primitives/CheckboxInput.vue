@@ -1,5 +1,7 @@
 <template>
   <b-form-checkbox
+    :id="domId"
+    :class="$attrs.class"
     size="lg"
     :checked="inputChecked"
     @change="onChange"
@@ -13,7 +15,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class CheckboxInput extends Vue {
-  @Prop({ default: () => undefined }) readonly domId?: string;
+  @Prop() readonly domId?: string;
   @Prop({ required: true }) readonly value!: any;
 
   get inputChecked (): boolean {

@@ -39,13 +39,17 @@ export const standardizedCourse = {
           country_id: countryId,
         },
       } ],
-      [ 'grade', 'integer' ],
+      [ 'grade', 'integer', { maxLength: 2 } ],
       [ 'accreditation_authority', 'selectOrFill', {
         options: standardizedCourse.accreditationAuthorityOptions(),
       } ],
       [ 'lesson_duration', 'integer', { rightLabel: 'app.time.minutes.p' } ],
-      [ 'attendance_limit', 'integer', { rightLabel: { text: '%' } } ],
+      [ 'attendance_limit', 'integer', {
+        requireable: true,
+        rightLabel: { text: '%' },
+      } ],
       [ 'grading_type', asControl(GradingType) ],
+      [ 'description', 'textMultiline' ],
     ];
   },
   accreditationAuthorityOptions () {

@@ -4,7 +4,9 @@
     type="text"
     :class="[ 'form-control', $attrs.class ]"
     :value="inputValue"
+    :disabled="disabled"
     autocomplete="off"
+    :maxlength="maxLength"
     @input="onInput"
     @focus="onFocus"
     @blur="onBlur"
@@ -18,6 +20,8 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 export default class IntegerInput extends Vue {
   @Prop({ default: () => undefined }) readonly domId?: string;
   @Prop({ required: true }) readonly value!: any;
+  @Prop() readonly disabled?: boolean;
+  @Prop() readonly maxLength?: number;
 
   internalValue = sanitizeValue(this.value);
   inputValue = sanitizeInputValue(this.internalValue);

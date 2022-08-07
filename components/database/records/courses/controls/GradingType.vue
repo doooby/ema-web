@@ -45,15 +45,17 @@
       </li>
 
       <li>
-        <div class="d-flex">
+        <div class="d-flex align-items-center">
           <checkbox-input
+            class="mr-2"
             :value="sanitizedValue[2] !== undefined"
             @change="onLimitCheckChange"
-          />
-          <t value="db.record.courses.grading_type.required_limit" />
+          >
+            <t value="app.common.label.required" />
+          </checkbox-input>
           <input
             type="text"
-            class="form-control ml-3"
+            class="form-control"
             maxlength="2"
             :disabled="sanitizedValue[2] === undefined"
             :value="sanitizedValue[2]"
