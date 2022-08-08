@@ -14,18 +14,18 @@ export interface StandardizedCourse {
   name: [string, string];
   education_level: mappers.AssociatedRecord<EducationLevel>;
   grade: number;
-  accreditation_authority: [string, undefined | string];
-  lesson_duration: number;
+  accreditation_authority: undefined | [string, undefined | string];
+  lesson_duration: undefined | number;
   attendance_limit: undefined | number;
-  preferred_grading: [string, string, undefined | string];
+  preferred_grading: undefined | [string, string, undefined | string];
   description: undefined | string;
-  subjects: CourseSubject[];
+  subjects: undefined | CourseSubject[];
 }
 
 export interface StandardizedCourseAssociations {
   education_level: mappers.AssociatedRecordsIndex,
-  subjects: mappers.AssociatedRecordsIndex,
-  teachers: mappers.AssociatedRecordsIndex,
+  subject: mappers.AssociatedRecordsIndex,
+  teacher: mappers.AssociatedRecordsIndex,
 }
 
 export const standardizedCourse = {
@@ -35,15 +35,15 @@ export const standardizedCourse = {
       name: prop('name', root, val.nameTuple),
       education_level: assoc('education_level', root, associations?.education_level),
       grade: prop('grade', root, val.integer),
-      accreditation_authority: prop('accreditation_authority', root, val.factories.tuple2_1(
+      accreditation_authority: maybeProp('accreditation_authority', root, val.factories.tuple2_1(
         val.string,
         val.string,
       )),
-      lesson_duration: prop('lesson_duration', root, val.integer),
+      lesson_duration: maybeProp('lesson_duration', root, val.integer),
       attendance_limit: maybeProp('attendance_limit', root, val.integer),
-      preferred_grading: prop('preferred_grading', root, course.mapGrading),
+      preferred_grading: maybeProp('preferred_grading', root, course.mapGrading),
       description: prop('description', root, val.string),
-      subjects: prop('subjects', root, course.mapSubjectsFactory(associations)),
+      subjects: maybeProp('subjects', root, course.mapSubjectsFactory(associations)),
     }));
   },
   mapAssociations: mappers.createAssociationsMapper<StandardizedCourseAssociations>(

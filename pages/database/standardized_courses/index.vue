@@ -15,6 +15,7 @@ import { FormFieldDefinition } from '~/components/Form';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import * as dbFields from '~/components/database/controls';
+import Name from '~/components/database/cells/Name.vue';
 
 @Component({
   components: { IndexPage },
@@ -40,8 +41,10 @@ export default class extends DatabasePage {
       name: 'education_level',
       cell: { type: AssociatedRecordLink, entity: 'education_levels', noLink: true },
     },
-    { name: 'name_en' },
-    { name: 'name' },
+    { name: 'name', cell: { type: Name } },
+    { name: 'grade' },
+    { name: 'accreditation_authority' },
+    { name: 'description' },
   ];
 
   actions = [

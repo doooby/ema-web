@@ -15,6 +15,7 @@ import { FormFieldDefinition } from '~/components/Form';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import * as dbFields from '~/components/database/controls';
+import Name from '~/components/database/cells/Name.vue';
 
 @Component({
   components: { IndexPage },
@@ -42,8 +43,7 @@ export default class extends DatabasePage {
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: RecordLink, entity: 'courses' }, size: 60 },
-    { name: 'name_en' },
-    { name: 'name' },
+    { name: 'name', cell: { type: Name } },
     {
       name: 'school',
       cell: { type: AssociatedRecordLink, entity: 'schools' },
@@ -53,6 +53,8 @@ export default class extends DatabasePage {
       cell: { type: AssociatedRecordLink, entity: 'education_levels', noLink: true },
     },
     { name: 'grade' },
+    { name: 'accreditation_authority' },
+    { name: 'description' },
   ];
 
   actions = [
