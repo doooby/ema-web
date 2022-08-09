@@ -15,6 +15,7 @@
     "@types/lodash": "^4.14.171",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
+    "chart.js": "^3.9.1",
     "classnames": "^2.3.1",
     "core-js": "^3.9.1",
     "date-fns": "^2.22.1",

@@ -42,6 +42,11 @@
           toolkit - bootstrap 1.5.0 icons
         </nuxt-link>
       </li>
+      <li>
+        <nuxt-link to="/toolkit/charts">
+          toolkit - charts demo
+        </nuxt-link>
+      </li>
     </ul>
   </div>
 </template>

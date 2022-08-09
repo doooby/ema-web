@@ -15,3 +15,19 @@
 @each $label, $value in map.merge($gl-sizes, $sizing-large-x-y-sizes) {
   .ew-#{$label} { width: px($value) !important; }
 }
+
+@each $size in (300) {
+  .width-px-#{$size} { width: px($size) !important; }
+}
+
+
+// text
+@each $size in (11) {
+  .text-#{$size} { font-size: px($size); }
+}
+
+@each $name, $size in (
+  '08': 0.8
+) {
+  .text-h-#{$name} { line-height: #{$size}; }
+}
