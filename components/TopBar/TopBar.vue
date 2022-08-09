@@ -23,6 +23,15 @@
           <t value="top_bar.action.db" />
         </h2>
       </nuxt-link>
+      <nuxt-link
+        to="/toolkit/charts"
+        class="epx-4 epy-2 eh-100 text-decoration-none"
+      >
+        <h2 class="m-0 h-100 d-flex align-items-center text-light">
+          <b-icon icon="columns-gap" variant="light" class="emr-3" />
+          Dashboard
+        </h2>
+      </nuxt-link>
     </div>
     <div class="d-flex align-items-stretch">
       <div

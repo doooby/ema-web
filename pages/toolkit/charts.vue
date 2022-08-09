@@ -1,53 +1,55 @@
 <template>
-  <div class="container emy-4">
-    <h2 class="text-center">
-      North-West Syria
-    </h2>
-    <div class="text-center mb-5 d-flex align-items-center justify-content-center">
-      <span class="mr-3">project:</span>
-      <div class="width-px-300 form--group">
-        <select-with-modal value="" :options-source="projectsListSource" />
+  <div class="page-content -padded">
+    <div class="container emy-4">
+      <h2 class="text-center">
+        North-West Syria
+      </h2>
+      <div class="text-center mb-5 d-flex align-items-center justify-content-center">
+        <span class="mr-3">project:</span>
+        <div class="width-px-300 form--group">
+          <select-with-modal value="" :options-source="projectsListSource" />
+        </div>
       </div>
-    </div>
 
-    <div class="row mb-4">
-      <div class="col-6">
-        <div class="d-flex justify-content-center">
-          <pie-chart :definition="sums.studentsTotal" />
+      <div class="row mb-4">
+        <div class="col-6">
+          <div class="d-flex justify-content-center">
+            <pie-chart :definition="sums.studentsTotal" />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="d-flex justify-content-center">
+            <pie-chart :definition="sums.teachersTotal" />
+          </div>
         </div>
       </div>
-      <div class="col-6">
-        <div class="d-flex justify-content-center">
-          <pie-chart :definition="sums.teachersTotal" />
+      <div class="row mb-4">
+        <div class="col-4">
+          <div class="d-flex justify-content-center">
+            <pie-chart :definition="sums.schoolsFormalInformal" />
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="d-flex justify-content-center">
+            <pie-chart :definition="sums.schoolsType" />
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="d-flex justify-content-center">
+            <pie-chart :definition="sums.schoolsLevel" />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="row mb-4">
-      <div class="col-4">
-        <div class="d-flex justify-content-center">
-          <pie-chart :definition="sums.schoolsFormalInformal" />
+      <div class="row mb-4">
+        <div class="col-6">
+          <div class="d-flex justify-content-center">
+            <grades-distribution :definition="sums.studentsNoPerGrades" />
+          </div>
         </div>
-      </div>
-      <div class="col-4">
-        <div class="d-flex justify-content-center">
-          <pie-chart :definition="sums.schoolsType" />
-        </div>
-      </div>
-      <div class="col-4">
-        <div class="d-flex justify-content-center">
-          <pie-chart :definition="sums.schoolsLevel" />
-        </div>
-      </div>
-    </div>
-    <div class="row mb-4">
-      <div class="col-6">
-        <div class="d-flex justify-content-center">
-          <grades-distribution :definition="sums.studentsNoPerGrades" />
-        </div>
-      </div>
-      <div class="col-6">
-        <div class="d-flex justify-content-center">
-          <grades-distribution :definition="sums.studentsAgePerGrades" />
+        <div class="col-6">
+          <div class="d-flex justify-content-center">
+            <grades-distribution :definition="sums.studentsAgePerGrades" />
+          </div>
         </div>
       </div>
     </div>
@@ -55,15 +57,16 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import PieChart from '~/components/Chart/PieChart.vue';
 import SelectWithModal from '~/components/Form/primitives/SelectWithModal.vue';
 import GradesDistribution from '~/components/Chart/GradesDistribution.vue';
+import { AppPage } from '~/components';
 
 @Component({
   components: { PieChart, SelectWithModal, GradesDistribution },
 })
-export default class Charts extends Vue {
+export default class Charts extends AppPage {
   projectsListSource = Object.freeze({
     list: [
       { value: '1', text: 'Project 1' },
