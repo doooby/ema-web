@@ -36,7 +36,21 @@
     </template>
 
     <template #container="{ record }">
-      <subjects-listing :course="record" />
+      <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
+        <b-tab title="Subjects">
+          <div v-if="currenTab === Tabs.subjects">
+            <subjects-listing :course="record" />
+          </div>
+        </b-tab>
+        <b-tab>
+          <template #title>
+            <t value="db.record.groups.meta.p" />
+          </template>
+          <div v-if="currenTab === Tabs.groups">
+            <groups-listing :course="record" />
+          </div>
+        </b-tab>
+      </b-tabs>
     </template>
   </show-page>
 </template>
@@ -48,6 +62,12 @@ import { Component } from 'vue-property-decorator';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import SubjectsListing from '~/components/database/records/courses/SubjectsListing.vue';
+import GroupsListing from '~/components/database/records/courses/GroupsListing.vue';
+
+enum Tabs {
+  subjects,
+  groups,
+}
 
 @Component({
   components: {
@@ -55,7 +75,11 @@ import SubjectsListing from '~/components/database/records/courses/SubjectsListi
     ShowPageAction,
     ShowPageTableRow,
     SubjectsListing,
+    GroupsListing,
   },
 })
-export default class extends DatabasePage {}
+export default class extends DatabasePage {
+  Tabs = Tabs;
+  currenTab: Tabs = Tabs.subjects;
+}
 </script>

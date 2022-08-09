@@ -51,14 +51,6 @@
             <students-listing :group="record" />
           </div>
         </b-tab>
-        <b-tab title="Schedule">
-          <div v-if="currenTab === Tabs.schedule">
-            <group-schedule
-              :group="record"
-              :term-span="termSpan"
-            />
-          </div>
-        </b-tab>
         <b-tab title="Attendance">
           <div v-if="currenTab === Tabs.attendance">
             <group-attendance :group="record" />
@@ -77,12 +69,10 @@ import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import StudentsListing from '~/components/database/records/groups/StudentsListing.vue';
-import GroupSchedule from '~/components/database/records/groups/GroupSchedule/index.vue';
 import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
 
 enum Tabs {
   students,
-  schedule,
   attendance,
 }
 
@@ -93,13 +83,12 @@ enum Tabs {
     ShowPageTableRow,
     ShowRecordLink,
     StudentsListing,
-    GroupSchedule,
     GroupAttendance,
   },
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.schedule;
+  currenTab: Tabs = Tabs.students;
 
   termSpan = [
     new Date(2022, 1, 1),
