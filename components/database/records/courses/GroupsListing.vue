@@ -27,7 +27,6 @@ export default class GroupsListing extends Vue {
   tableColumns = [
     { name: 'id', cell: { type: RecordLink, entity: 'groups' }, size: 60 },
     { name: 'name_en', headerText: () => 'Name' },
-    { name: 'year', headerText: () => 'Year' },
     { name: 'term', headerText: () => 'term' },
   ];
 

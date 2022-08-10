@@ -8,7 +8,15 @@
         class="col"
         :columns="tableColumns"
         :dataset="getCoursesQueryState.value.records"
-      />
+      >
+        <template #time_range="{ dataItem }">
+          <div v-if="dataItem.time_range">
+            {{ fnsFormat(dataItem.time_range[0], 'yyyy-MM-dd') }}
+            -
+            {{ fnsFormat(dataItem.time_range[1], 'yyyy-MM-dd') }}
+          </div>
+        </template>
+      </data-table-view>
     </div>
   </div>
 </template>
@@ -20,10 +28,13 @@ import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
+import { format as fnsFormat } from 'date-fns';
 
 @Component
 export default class CoursesListing extends Vue {
   @Prop({ required: true }) readonly school!: School;
+
+  fnsFormat = fnsFormat;
 
   getCoursesQueryState = this.$api.newQueryState<PaginatedRecords<Course>>();
   tableColumns = [
@@ -35,6 +46,7 @@ export default class CoursesListing extends Vue {
       headerText: () => 'Education Level',
     },
     { name: 'grade', headerText: () => 'Grade' },
+    { name: 'time_range', headerText: () => 'Duration', slot: 'time_range' },
   ];
 
   @Watch('school')

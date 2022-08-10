@@ -6,16 +6,13 @@ import { Subject } from '~/lib/records/subject';
 
 export interface Group {
   id: number;
-  school: mappers.AssociatedRecord;
   course: mappers.AssociatedRecord;
   name_en: string
   name: string
-  year: number;
   term: number;
 }
 
 export interface GroupAssociations {
-  school: mappers.AssociatedRecordsIndex,
   course: mappers.AssociatedRecordsIndex,
 }
 
@@ -37,16 +34,14 @@ export const group = {
   mapRecord (value: any, associations?: GroupAssociations): Group {
     return object(value, root => ({
       id: recordId(root),
-      school: assoc('school', root, associations?.school),
       course: assoc('course', root, associations?.course),
       name_en: prop('name_en', root, val.string),
       name: prop('name', root, val.string),
-      year: prop('year', root, val.integer),
       term: prop('term', root, val.integer),
     }));
   },
   mapAssociations: mappers.createAssociationsMapper<GroupAssociations>(
-    'school', 'course',
+    'course',
   ),
   recordControls ({
     countryId,
@@ -54,12 +49,6 @@ export const group = {
     countryId: null | number;
   }): FormFieldDefinition[] {
     return [
-      [ 'school', dbFields.AssociatedRecord, {
-        entity: 'schools',
-        params: {
-          country_id: countryId,
-        },
-      } ],
       [ 'course', dbFields.AssociatedRecord, {
         entity: 'courses',
         params: {
@@ -68,7 +57,6 @@ export const group = {
       } ],
       [ 'name_en', 'text' ],
       [ 'name', 'text' ],
-      [ 'year', 'list', { options: group.startYearOptions } ],
       [ 'term', 'integer' ],
     ];
   },

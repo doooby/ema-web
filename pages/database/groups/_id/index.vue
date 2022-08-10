@@ -26,9 +26,6 @@
           <br>
           <small>{{ record.name }}</small>
         </show-page-table-row>
-        <show-page-table-row label="db.record.groups.label.school">
-          {{ record.school.labels.caption }}
-        </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.course">
           <show-record-link
             entity="courses"
