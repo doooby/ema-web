@@ -17,10 +17,20 @@
     thead {
       background-color: $header-bg-color;
       th {
+        position: relative;
         vertical-align: top;
         border-bottom: (2 * $table-border-width) solid $table-border-color;
         > div {
           text-align: center;
+        }
+
+        > .--column-limit {
+          position: absolute;
+          height: 100%;
+          right: -4px;
+          top: 0;
+          width: 8px;
+          cursor: col-resize;
         }
       }
     }

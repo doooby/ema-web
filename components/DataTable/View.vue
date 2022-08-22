@@ -7,6 +7,7 @@
       />
       <table-head
         :columns="columns"
+        @resize="onColumnResize"
       >
         <template #header-cell="{ column }">
           <slot name="header-cell" :column="column" />
@@ -59,7 +60,7 @@ export default Vue.extend({
   },
   data () {
     return {
-      localColumnWidths: this.columns.map(column => column.size),
+      localColumnWidths: this.columns.map(column => column.size ?? 150),
     };
   },
   computed: {
@@ -85,6 +86,14 @@ export default Vue.extend({
         if (slot) templates[column.name] = slot;
       }
       return templates;
+    },
+  },
+  methods: {
+    onColumnResize ({ index, x, reset }) {
+      const newSize = reset
+        ? (this.columns[index].size ?? 150)
+        : (this.localColumnWidths[index] + x);
+      this.$set(this.localColumnWidths, index, newSize < 25 ? 25 : newSize);
     },
   },
 });

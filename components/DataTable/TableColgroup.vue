@@ -4,8 +4,8 @@
       v-for="(column, index) of columns"
       :key="column.name"
       :style="styles[index]"
-    />
-    <col style="min-width: 50px;" />
+    >
+    <col style="min-width: 25px;">
   </colgroup>
 </template>
 
@@ -20,7 +20,7 @@ export default Vue.extend({
   },
   computed: {
     styles (): string[] {
-      return this.columns.map((_, i) => `width: ${this.widths[i] || 150}px`);
+      return this.columns.map((_, i) => `width: ${this.widths[i]}px`);
     },
   },
 });

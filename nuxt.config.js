@@ -6,6 +6,12 @@ if (serverHostName.endsWith('/')) {
 }
 
 export default {
+  vue: {
+    config: {
+      performance: true,
+    },
+  },
+
   server: {
     host: process.env.HOST || '127.0.0.1',
     port: process.env.PORT || 3072,

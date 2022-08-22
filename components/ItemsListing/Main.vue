@@ -8,24 +8,28 @@
           :key="column.key"
           :style="column.style"
         >
-        <col>
+        <col style="min-width: 25px;">
       </colgroup>
       <thead>
         <tr>
           <th />
-          <th v-for="column of computedColumns" :key="column.key" scope="col">
+          <th v-for="(column, index) of computedColumns" :key="column.key" scope="col">
             <div class="three-rows-cell">
               <slot :name="column.headerSlot" />
             </div>
+            <column-limit
+              @shift="onColumnResize({ index, x: $event })"
+              @reset="onColumnResize({ index, reset: true })"
+            />
           </th>
-          <th />
+          <th scope="col" />
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, i) of items" :key="i">
           <td>
-            <div class="single-row-cell">
-              <btn-mini variant="secondary" icon="x" @click="onRemove(i)" />
+            <div class="single-row-cell d-flex justify-content-center align-items-center epy-2">
+              <btn-mini variant="danger" icon="x" @click="onRemove(i)" />
             </div>
           </td>
           <td v-for="column of computedColumns" :key="column.key">
@@ -34,9 +38,12 @@
           <td />
         </tr>
         <tr>
-          <td :colspan="columns.length + 2">
-            <btn-mini variant="primary" icon="plus" @click="onAdd" />
+          <td>
+            <div class="single-row-cell d-flex justify-content-center align-items-center epy-2">
+              <btn-mini variant="primary" icon="plus" @click="onAdd" />
+            </div>
           </td>
+          <td :colspan="columns.length + 1" />
         </tr>
       </tbody>
     </table>
@@ -47,8 +54,11 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import classNames from 'classnames';
 import { ItemsListing } from '~/components/ItemsListing';
+import ColumnLimit from '~/components/DataTable/ColumnLimit.vue';
 
-@Component
+@Component({
+  components: { ColumnLimit },
+})
 export default class Main extends Vue {
   @Prop({ required: true }) columns!: ItemsListing.Column[];
   @Prop({ required: true }) items!: Record<string, any>[];
@@ -80,6 +90,13 @@ export default class Main extends Vue {
 
   onAdd () {
     this.$emit('add');
+  }
+
+  onColumnResize ({ index, x, reset }) {
+    const newSize = reset
+      ? (this.columns[index].size ?? 150)
+      : (this.widths[index] + x);
+    this.$set(this.widths, index, newSize < 25 ? 25 : newSize);
   }
 }
 </script>
