@@ -34,7 +34,6 @@ export default Vue.extend({
       },
       formFields: [
         [ 'association_country', dbFields.AssociatedRecord, { entity: 'countries' } ],
-        [ 'name', dbFields.Name ],
       ],
     };
   },

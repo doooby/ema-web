@@ -1,11 +1,11 @@
 import * as mappers from '~/lib/api/mappers';
 import { maybeProp } from '~/lib/api/mappers';
-import { course, CourseSubject, EducationLevel } from '~/lib/records';
+import { course, CourseSubject, EducationLevel, Subject } from '~/lib/records';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
 import { asControl } from '~/components/database/controls';
-import GradingType from '~/components/database/records/courses/controls/GradingType.vue';
-import CourseSubjects from '~/components/database/records/courses/controls/CourseSubjects/CourseSubjects.vue';
+import GradingType from '~/components/database/controls/Course/GradingType.vue';
+import CourseSubjects from '~/components/database/controls/CourseSubjects/CourseSubjects.vue';
 
 const { object, recordId, prop, assoc, val } = mappers;
 
@@ -25,7 +25,12 @@ export interface StandardizedCourse {
 export interface StandardizedCourseAssociations {
   education_level: mappers.AssociatedRecordsIndex,
   subject: mappers.AssociatedRecordsIndex,
-  teacher: mappers.AssociatedRecordsIndex,
+}
+
+export interface StandardizedCourseSubject {
+  subject: mappers.AssociatedRecord<Subject>;
+  grading: [string, string, undefined | string];
+  exam: boolean;
 }
 
 export const standardizedCourse = {
@@ -43,9 +48,16 @@ export const standardizedCourse = {
       attendance_limit: maybeProp('attendance_limit', root, val.integer),
       preferred_grading: maybeProp('preferred_grading', root, course.mapGrading),
       description: prop('description', root, val.string),
-      subjects: maybeProp('subjects', root, course.mapSubjectsFactory(associations)),
+      subjects: maybeProp('subjects', root, standardizedCourse.mapSubjectsFactory(associations)),
     }));
   },
+  mapSubjectsFactory: (associations?: {
+    subject: mappers.AssociatedRecordsIndex,
+  }): (value: any) => CourseSubject[] => val.factories.listOfObjects(item => ({
+    subject: assoc('subject', item, associations?.subject),
+    grading: prop('grading', item, course.mapGrading),
+    exam: prop('exam', item, val.boolean),
+  })),
   mapAssociations: mappers.createAssociationsMapper<StandardizedCourseAssociations>(
     'education_level',
   ),

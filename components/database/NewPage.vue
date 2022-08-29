@@ -2,45 +2,43 @@
   <div class="page-content">
     <div class="container pt-4 pb-5">
       <div class="row justify-content-md-center">
-        <div class="col-md-8 col-lg-6">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="m-0">
-                <t value="db.page.new.title" />
+        <div :class="['card px-0', cardClass]">
+          <div class="card-header">
+            <h2 class="m-0">
+              <t value="db.page.new.title" />
                 &#32;
-                <t :value="`db.record.${entity}.meta.s`" />
-              </h2>
+              <t :value="`db.record.${entity}.meta.s`" />
+            </h2>
+          </div>
+          <div class="card-body pt-3 pb-0">
+            <form-group
+              v-if="$scopedSlots.layout"
+              v-model="formValues"
+              :fields="formFields"
+              :label-prefix="formFieldsLabelPrefix"
+            >
+              <template #layout="{ context, values }">
+                <slot name="layout" :context="context" :values="values" />
+              </template>
+            </form-group>
+            <form-group
+              v-else
+              v-model="formValues"
+              :fields="formFields"
+              :label-prefix="formFieldsLabelPrefix"
+            />
+            <record-errors class="mb-3" :errors="errors" />
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <div>
+              <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
+                <t value="app.action.save" />
+              </b-button>
             </div>
-            <div class="card-body pt-3 pb-0">
-              <form-group
-                v-if="$scopedSlots.layout"
-                v-model="formValues"
-                :fields="formFields"
-                :label-prefix="formFieldsLabelPrefix"
-              >
-                <template #layout="{ context, values }">
-                  <slot name="layout" :context="context" :values="values" />
-                </template>
-              </form-group>
-              <form-group
-                v-else
-                v-model="formValues"
-                :fields="formFields"
-                :label-prefix="formFieldsLabelPrefix"
-              />
-              <record-errors class="mb-3" :errors="errors" />
-            </div>
-            <div class="card-footer d-flex justify-content-between">
-              <div>
-                <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
-                  <t value="app.action.save" />
-                </b-button>
-              </div>
-              <div>
-                <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
-                  <t value="app.action.cancel" />
-                </b-button>
-              </div>
+            <div>
+              <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
+                <t value="app.action.cancel" />
+              </b-button>
             </div>
           </div>
         </div>
@@ -61,6 +59,7 @@ import RecordErrors from './RecordErrors.vue';
 export default class NewPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
+  @Prop() readonly cardClass?: string;
 
   formFields = buildFormFields(this.fields);
   formValues = prefillFormValues(this.formFields);

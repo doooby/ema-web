@@ -6,7 +6,7 @@
       <t :value="labelTranslation" />
     </template>
 
-    <div class="input-group">
+    <div class="input-group emb-1">
       <div class="input-group-prepend">
         <span class="input-group-text">
           <t value="form.field.name.en" />

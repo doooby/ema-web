@@ -29,6 +29,12 @@ const ControlMixin = {
       return debounce(handler, timeout);
     },
   },
+  methods: {
+    onChangeValue (newValue: any) {
+      const anyThis = this as any;
+      anyThis.context.onChange({ [anyThis.field.name]: newValue });
+    },
+  },
 };
 
 export default ControlMixin;

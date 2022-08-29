@@ -10,6 +10,11 @@
     @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
   }
 
+  .custom-control-label {
+    font-size: 1rem;
+    line-height: 1.9rem;
+  }
+
   //.fields-group-row {
   //  &.-small {
   //    > * {

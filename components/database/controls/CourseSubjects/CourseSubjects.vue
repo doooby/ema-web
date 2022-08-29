@@ -7,28 +7,26 @@
       :columns="columns"
       :items="items"
       @add="selectSubjectModalShown = true"
-      @change="onChange"
+      @change="onChangeValue"
     >
+      <template #header-grading>
+        <t value="db.record.courses.subjects.label.grading" />
+      </template>
+      <template #header-exam>
+        <t value="db.record.courses.subjects.label.exam" />
+      </template>
       <template #cell-subject="{ item }">
-        <div class="single-row-cell">
-          <show-record-link
-            entity="subjects"
-            :record="{ id: item.subject.id, caption: item.subject.labels.caption }"
-          />
-        </div>
+        <show-record-link
+          entity="subjects"
+          :record="{ id: item.subject.id, caption: item.subject.labels.caption }"
+        />
       </template>
-      <template #cell-teacher="{ item }">
+      <template #cell-grading="{ item, index }">
         <div class="single-row-cell">
-          <show-record-link
-            v-if="item.teacher"
-            entity="people"
-            :record="{ id: item.teacher.id, caption: item.teacher.labels.caption }"
+          <grading-type-primitive
+            :value="item.grading"
+            @change="onUpdateItem(index, item, 'grading', $event)"
           />
-        </div>
-      </template>
-      <template #cell-grading>
-        <div class="single-row-cell">
-          shooot
         </div>
       </template>
       <template #cell-exam="{ item }">
@@ -36,6 +34,7 @@
           <checkbox-input
             class="mr-2"
             :value="item.exam"
+            @change="onUpdateItem(index, item, 'exam', $event)"
           >
             <t value="app.common.label.required" />
           </checkbox-input>
@@ -64,15 +63,16 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { CourseSubject, Subject } from '~/lib/records';
+import { StandardizedCourseSubject, Subject } from '~/lib/records';
 import { AssociatedRecord } from '~/lib/api/mappers';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import SearchModal from '~/components/database/SearchModal.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
+import GradingTypePrimitive from '~/components/database/controls/primitives/Course/GradingType.vue';
 
 @Component({
   mixins: [ ControlMixin ],
-  components: { ShowRecordLink, SearchModal, CheckboxInput },
+  components: { ShowRecordLink, SearchModal, CheckboxInput, GradingTypePrimitive },
 })
 export default class CourseSubjects extends Vue {
   static fieldType: FormFieldType = {};
@@ -81,7 +81,7 @@ export default class CourseSubjects extends Vue {
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;
 
-  get items (): CourseSubject[] {
+  get items (): StandardizedCourseSubject[] {
     return this.formValues[this.field.name] ?? [];
   }
 
@@ -91,29 +91,38 @@ export default class CourseSubjects extends Vue {
 
   selectSubjectModalShown = false;
   columns = [
-    { name: 'subject' },
-    { name: 'teacher' },
-    { name: 'grading' },
-    { name: 'exam' },
+    { name: 'subject', size: 100 },
+    { name: 'grading', size: 250 },
+    { name: 'exam', size: 100 },
   ];
 
   onAddSubject (subject: AssociatedRecord<Subject>) {
     this.selectSubjectModalShown = false;
     const newItems = [ ...this.items ];
-    newItems.push(createEmptyItem(subject));
-    this.context.onChange({ [this.field.name]: newItems });
+    newItems.push(createEmptyItem(subject, this.formValues.preferred_grading));
+    (this as any).onChangeValue(newItems);
   }
 
-  onChange (newItems: CourseSubject[]) {
-    this.context.onChange({ [this.field.name]: newItems });
+  onUpdateItem (
+    index: number,
+    item: StandardizedCourseSubject,
+    field: string,
+    value: any,
+  ) {
+    const newItems = [ ...this.items ];
+    newItems[index] = Object.freeze({
+      ...item,
+      [field]: value,
+    });
+    (this as any).onChangeValue(newItems);
   }
 }
 
-function createEmptyItem (subject: AssociatedRecord<Subject>): CourseSubject {
+function createEmptyItem (subject: AssociatedRecord<Subject>, preferred_grading: any): StandardizedCourseSubject {
   return Object.freeze({
     subject,
     exam: false,
-    grading: [ '', '', undefined ],
+    grading: preferred_grading,
   });
 }
 </script>
