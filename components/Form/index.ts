@@ -73,7 +73,7 @@ export function prefillFormValues (fields: FormField[], record: any = {}): FormV
   return values;
 }
 
-function defaultFormToRecordParams ({ name }: FormField, record: any, values: FormValues): void {
+function defaultFormToRecordParams ({ name }: FormField, values, record): void {
   record[name] = values[name];
 }
 

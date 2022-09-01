@@ -2,61 +2,59 @@
   <div class="page-content">
     <div class="container pt-4 pb-5">
       <div class="row justify-content-md-center">
-        <div class="col-md-8 col-lg-6">
-          <div class="card">
-            <div class="card-header">
-              <h2 class="m-0">
-                <t value="db.page.edit.title" />
+        <div :class="['card px-0', cardClass]">
+          <div class="card-header">
+            <h2 class="m-0">
+              <t value="db.page.edit.title" />
               &#32;
-                <t :value="`db.record.${entity}.meta.s`" />
-              </h2>
-            </div>
-            <div class="position-relative">
-              <div class="position-absolute w-100" style="z-index: 1;">
-                <b-progress
-                  v-if="getQueryState.running"
-                  height="2px"
-                  :value="100"
-                  variant="info"
-                  striped
-                  animated
-                />
-                <b-alert v-if="getQueryState.fail" show variant="warning">
-                  <b-icon icon="exclamation-triangle-fill" class="mr-3" />
-                  <t value="app.record_not_found" />
-                </b-alert>
-              </div>
-            </div>
-            <div class="card-body pt-3 pb-0">
-              <form-group
-                v-if="$scopedSlots.layout"
-                v-model="formValues"
-                :fields="formFields"
-                :label-prefix="formFieldsLabelPrefix"
-              >
-                <template #layout="{ context, values }">
-                  <slot name="layout" :context="context" :values="values" />
-                </template>
-              </form-group>
-              <form-group
-                v-else
-                v-model="formValues"
-                :fields="formFields"
-                :label-prefix="formFieldsLabelPrefix"
+              <t :value="`db.record.${entity}.meta.s`" />
+            </h2>
+          </div>
+          <div class="position-relative">
+            <div class="position-absolute w-100" style="z-index: 1;">
+              <b-progress
+                v-if="getQueryState.running"
+                height="2px"
+                :value="100"
+                variant="info"
+                striped
+                animated
               />
-              <record-errors class="mb-3" :errors="errors" />
+              <b-alert v-if="getQueryState.fail" show variant="warning">
+                <b-icon icon="exclamation-triangle-fill" class="mr-3" />
+                <t value="app.record_not_found" />
+              </b-alert>
             </div>
-            <div class="card-footer d-flex justify-content-between">
-              <div>
-                <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
-                  <t value="app.action.save" />
-                </b-button>
-              </div>
-              <div>
-                <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
-                  <t value="app.action.cancel" />
-                </b-button>
-              </div>
+          </div>
+          <div class="card-body pt-3 pb-0">
+            <form-group
+              v-if="$scopedSlots.layout"
+              v-model="formValues"
+              :fields="formFields"
+              :label-prefix="formFieldsLabelPrefix"
+            >
+              <template #layout="{ context, values }">
+                <slot name="layout" :context="context" :values="values" />
+              </template>
+            </form-group>
+            <form-group
+              v-else
+              v-model="formValues"
+              :fields="formFields"
+              :label-prefix="formFieldsLabelPrefix"
+            />
+            <record-errors class="mb-3" :errors="errors" />
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <div>
+              <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
+                <t value="app.action.save" />
+              </b-button>
+            </div>
+            <div>
+              <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
+                <t value="app.action.cancel" />
+              </b-button>
             </div>
           </div>
         </div>

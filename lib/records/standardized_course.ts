@@ -1,6 +1,6 @@
 import * as mappers from '~/lib/api/mappers';
 import { maybeProp } from '~/lib/api/mappers';
-import { course, CourseSubject, EducationLevel, Subject } from '~/lib/records';
+import { course, EducationLevel, Subject } from '~/lib/records';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
 import { asControl } from '~/components/database/controls';
@@ -14,12 +14,12 @@ export interface StandardizedCourse {
   name: [string, string];
   education_level: mappers.AssociatedRecord<EducationLevel>;
   grade: number;
-  accreditation_authority: undefined | [string, undefined | string];
-  lesson_duration: undefined | number;
-  attendance_limit: undefined | number;
-  preferred_grading: undefined | [string, string, undefined | string];
-  description: undefined | string;
-  subjects: undefined | CourseSubject[];
+  accreditation_authority?: [string, undefined | string];
+  lesson_duration?: number;
+  attendance_limit?: number;
+  preferred_grading?: [string, string, undefined | string];
+  description?: string;
+  subjects?: StandardizedCourseSubject[];
 }
 
 export interface StandardizedCourseAssociations {
@@ -53,13 +53,15 @@ export const standardizedCourse = {
   },
   mapSubjectsFactory: (associations?: {
     subject: mappers.AssociatedRecordsIndex,
-  }): (value: any) => CourseSubject[] => val.factories.listOfObjects(item => ({
-    subject: assoc('subject', item, associations?.subject),
-    grading: prop('grading', item, course.mapGrading),
-    exam: prop('exam', item, val.boolean),
-  })),
+  }): (value: any) => StandardizedCourseSubject[] => val.factories.listOfObjects((item) => {
+    return {
+      subject: assoc('subject', item, associations?.subject),
+      grading: prop('grading', item, course.mapGrading),
+      exam: prop('exam', item, val.boolean),
+    };
+  }),
   mapAssociations: mappers.createAssociationsMapper<StandardizedCourseAssociations>(
-    'education_level',
+    'education_level', 'subject',
   ),
   recordControls (countryId: null | number): FormFieldDefinition[] {
     return [

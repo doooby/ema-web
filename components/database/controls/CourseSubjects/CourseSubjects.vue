@@ -29,7 +29,7 @@
           />
         </div>
       </template>
-      <template #cell-exam="{ item }">
+      <template #cell-exam="{ item, index }">
         <div class="single-row-cell">
           <checkbox-input
             class="mr-2"
@@ -75,7 +75,18 @@ import GradingTypePrimitive from '~/components/database/controls/primitives/Cour
   components: { ShowRecordLink, SearchModal, CheckboxInput, GradingTypePrimitive },
 })
 export default class CourseSubjects extends Vue {
-  static fieldType: FormFieldType = {};
+  static fieldType: FormFieldType = {
+    fillParams ({ name }: FormField, values: FormValues, record: any): any {
+      let value = values[name];
+      if (value) {
+        value = value.map(({ subject, ...item }: StandardizedCourseSubject) => ({
+          ...item,
+          subject_id: subject.id,
+        }));
+      }
+      record[name] = value;
+    },
+  };
 
   @Prop({ required: true }) field!: FormField;
   @Prop({ required: true }) context!: FormGroupContext;
@@ -99,7 +110,14 @@ export default class CourseSubjects extends Vue {
   onAddSubject (subject: AssociatedRecord<Subject>) {
     this.selectSubjectModalShown = false;
     const newItems = [ ...this.items ];
-    newItems.push(createEmptyItem(subject, this.formValues.preferred_grading));
+    newItems.push(
+      Object.freeze({
+        subject,
+        exam: false,
+        grading: this.formValues.preferred_grading,
+      }),
+    );
+    Object.freeze(newItems);
     (this as any).onChangeValue(newItems);
   }
 
@@ -114,15 +132,8 @@ export default class CourseSubjects extends Vue {
       ...item,
       [field]: value,
     });
+    Object.freeze(newItems);
     (this as any).onChangeValue(newItems);
   }
-}
-
-function createEmptyItem (subject: AssociatedRecord<Subject>, preferred_grading: any): StandardizedCourseSubject {
-  return Object.freeze({
-    subject,
-    exam: false,
-    grading: preferred_grading,
-  });
 }
 </script>
