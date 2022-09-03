@@ -7,8 +7,7 @@ const { object, recordId, prop, val, assoc } = mappers;
 export interface SubjectCategory {
   id: number;
   country: mappers.AssociatedRecord<Country>;
-  name_en: string;
-  name: string;
+  name: [string, string];
 }
 
 export interface SubjectCategoryAssociations {
@@ -20,8 +19,7 @@ export const subjectCategory = {
     return object(value, root => ({
       id: recordId(root),
       country: assoc('country', root, associations?.country),
-      name_en: prop('name_en', root, val.string),
-      name: prop('name', root, val.string),
+      name: prop('name', root, val.nameTuple),
     }));
   },
   mapAssociations: mappers.createAssociationsMapper<SubjectCategoryAssociations>(
@@ -29,8 +27,7 @@ export const subjectCategory = {
   ),
   recordControls (): FormFieldDefinition[] {
     return [
-      [ 'name_en', 'text' ],
-      [ 'name', 'text' ],
+      [ 'name', 'name' ],
     ];
   },
 };

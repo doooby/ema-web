@@ -9,8 +9,7 @@ const { object, recordId, prop, val, assoc } = mappers;
 export interface Subject {
   id: number;
   education_level: mappers.AssociatedRecord<EducationLevel>;
-  name_en: string;
-  name: string;
+  name: [string, string];
   categories: mappers.AssociatedRecord<SubjectCategory>[];
 }
 
@@ -24,8 +23,7 @@ export const subject = {
     return object(value, root => ({
       id: recordId(root),
       education_level: assoc('education_level', root, associations?.education_level),
-      name_en: prop('name_en', root, val.string),
-      name: prop('name', root, val.string),
+      name: prop('name', root, val.nameTuple),
       categories: assocList('categories', root, associations?.subject_category),
     }));
   },
@@ -41,8 +39,7 @@ export const subject = {
           country_id: countryId,
         },
       } ],
-      [ 'name_en', 'text' ],
-      [ 'name', 'text' ],
+      [ 'name', 'name' ],
       [ 'categories', dbFields.MultipleAssociatedRecords, {
         entity: 'subject_categories',
         params: {

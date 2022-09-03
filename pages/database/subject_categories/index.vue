@@ -13,6 +13,7 @@ import { DatabasePage } from '~/components';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
 import { FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
+import Name from '~/components/database/cells/Name.vue';
 
 @Component({
   components: { IndexPage },
@@ -28,8 +29,7 @@ export default class extends DatabasePage {
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: RecordLink, onlyId: true }, size: 60 },
-    { name: 'name_en' },
-    { name: 'name' },
+    { name: 'name', cell: { type: Name } },
   ];
 
   actions = [

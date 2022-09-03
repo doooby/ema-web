@@ -53,7 +53,7 @@ export default class SearchModal extends Vue {
   queryState = this.$api.newQueryState<SearchResult>();
 
   searchFields = buildFormFields([
-    [ 'name', 'text', { leftLabel: { text: '🔍' }, interactive: true } ],
+    [ 'search', 'text', { leftLabel: { text: '🔍' }, interactive: true } ],
   ]);
 
   onInputDebounced = debounce(

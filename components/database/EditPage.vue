@@ -75,6 +75,7 @@ import { RecordChange, RecordError } from '~/lib/api/mappers';
 export default class EditPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
+  @Prop() readonly cardClass?: string;
 
   formFields = buildFormFields(this.fields);
   formValues = prefillFormValues(this.formFields);
