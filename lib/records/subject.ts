@@ -1,15 +1,15 @@
 import * as mappers from '~/lib/api/mappers';
+import { assocList } from '~/lib/api/mappers';
 import { FormFieldDefinition } from '~/components/Form';
 import { EducationLevel, SubjectCategory } from '~/lib/records';
 import * as dbFields from '~/components/database/controls';
-import { assocList } from '~/lib/api/mappers';
 
-const { object, recordId, prop, val, assoc } = mappers;
+const { object, recordId, prop, val } = mappers;
 
 export interface Subject {
   id: number;
-  education_level: mappers.AssociatedRecord<EducationLevel>;
   name: [string, string];
+  education_levels: mappers.AssociatedRecord<EducationLevel>[];
   categories: mappers.AssociatedRecord<SubjectCategory>[];
 }
 
@@ -22,8 +22,8 @@ export const subject = {
   mapRecord (value: any, associations?: SubjectAssociations): Subject {
     return object(value, root => ({
       id: recordId(root),
-      education_level: assoc('education_level', root, associations?.education_level),
       name: prop('name', root, val.nameTuple),
+      education_levels: assocList('education_levels', root, associations?.education_level),
       categories: assocList('categories', root, associations?.subject_category),
     }));
   },
@@ -33,13 +33,13 @@ export const subject = {
   ),
   recordControls (countryId: null | number): FormFieldDefinition[] {
     return [
-      [ 'education_level', dbFields.AssociatedRecord, {
+      [ 'name', 'name' ],
+      [ 'education_levels', dbFields.MultipleAssociatedRecords, {
         entity: 'education_levels',
         params: {
           country_id: countryId,
         },
       } ],
-      [ 'name', 'name' ],
       [ 'categories', dbFields.MultipleAssociatedRecords, {
         entity: 'subject_categories',
         params: {
