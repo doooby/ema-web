@@ -6,8 +6,7 @@ const { object, recordId, prop, assoc, val } = mappers;
 export interface School {
   id: number;
   country: mappers.AssociatedRecord;
-  name_en: string;
-  name: string;
+  name: [string, string];
   school_id: string;
 }
 
@@ -20,8 +19,7 @@ export const school = {
     return object(value, root => ({
       id: recordId(root),
       country: assoc('country', root, associations?.country),
-      name_en: prop('name_en', root, val.string),
-      name: prop('name', root, val.string),
+      name: prop('name', root, val.nameTuple),
       school_id: prop('school_id', root, val.string),
     }));
   },
@@ -30,8 +28,7 @@ export const school = {
   ),
   recordControls (): FormFieldDefinition[] {
     return [
-      [ 'name_en', 'text' ],
-      [ 'name', 'text' ],
+      [ 'name', 'name' ],
       [ 'school_id', 'text' ],
     ];
   },
