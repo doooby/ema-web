@@ -1,43 +1,42 @@
 <template>
-  <div>
-    <b-alert :show="getCoursesQueryState.running" variant="info" class="m-2">
-      <t value="app.loading" />
-    </b-alert>
-    <div v-if="getCoursesQueryState.value" class="row">
-      <data-table-view
-        class="col"
-        :columns="tableColumns"
-        :dataset="getCoursesQueryState.value.records"
-      >
-        <template #time_range="{ dataItem }">
-          <div v-if="dataItem.time_range">
-            {{ fnsFormat(dataItem.time_range[0], 'yyyy-MM-dd') }}
-            -
-            {{ fnsFormat(dataItem.time_range[1], 'yyyy-MM-dd') }}
-          </div>
-        </template>
-      </data-table-view>
-    </div>
-  </div>
+  <records-browsing
+    class="emt-5"
+    entity="courses"
+    :build-query="onBuildQuery"
+    :search-token="searchToken"
+    :columns="columns"
+    :actions="actions"
+  >
+    <template #time_range="{ dataItem }">
+      <div v-if="dataItem.time_range">
+        {{ fnsFormat(dataItem.time_range[0], 'yyyy-MM-dd') }}
+        -
+        {{ fnsFormat(dataItem.time_range[1], 'yyyy-MM-dd') }}
+      </div>
+    </template>
+  </records-browsing>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Course, School } from '~/lib/records';
-import { PaginatedRecords } from '~/lib/api/mappers';
+import { School } from '~/lib/records';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import { format as fnsFormat } from 'date-fns';
+import RecordsBrowsing from '~/components/database/RecordsBrowsing/RecordsBrowsing.vue';
 
-@Component
+@Component({
+  components: { RecordsBrowsing },
+})
 export default class CoursesListing extends Vue {
   @Prop({ required: true }) readonly school!: School;
 
   fnsFormat = fnsFormat;
 
-  getCoursesQueryState = this.$api.newQueryState<PaginatedRecords<Course>>();
-  tableColumns = [
+  searchToken = Date.now();
+
+  columns = [
     { name: 'id', cell: { type: RecordLink, entity: 'courses' }, size: 60 },
     { name: 'name', cell: { type: Name }, headerText: () => 'Name' },
     {
@@ -49,31 +48,30 @@ export default class CoursesListing extends Vue {
     { name: 'time_range', headerText: () => 'Duration', slot: 'time_range' },
   ];
 
+  actions = [
+    {
+      variant: 'outline-primary',
+      text: 'app.common.label.add',
+      icon: 'plus',
+      onClick: () => {
+        this.$router.push({
+          path: '/database/courses/new',
+          params: { school_id: this.school.id.toString() },
+        });
+      },
+    },
+  ];
+
   @Watch('school')
   onPageChanged () {
-    this.reloadCourses();
+    this.searchToken = Date.now();
   }
 
-  mounted () {
-    this.reloadCourses();
-  }
-
-  get currentCountryId (): null | number {
-    return this.$store.state.session.currentCountry?.id ?? null;
-  }
-
-  reloadCourses () {
-    this.getCoursesQueryState.reset();
-    this.fetchCourses();
-  }
-
-  async fetchCourses () {
-    const query = this.$api.queries.courses.index;
-    await this.$api.request(query({
+  onBuildQuery () {
+    return this.$api.queries.courses.index({
       school_id: this.school.id,
-      country_id: this.currentCountryId,
-      per_page: 50,
-    }), this.getCoursesQueryState);
+      country_id: this.$store.state.session.currentCountryId,
+    });
   }
 }
 </script>

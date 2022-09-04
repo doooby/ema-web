@@ -67,7 +67,7 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import { buildFormFields, FormFieldDefinition, formToRecordParams, prefillFormValues } from '../Form';
-import { RecordChange, RecordError } from '~/lib/api/mappers';
+import { RecordChange, RecordChangeError } from '~/lib/api/mappers';
 
 @Component({
   components: { RecordErrors },
@@ -81,7 +81,7 @@ export default class EditPage extends Vue {
   formValues = prefillFormValues(this.formFields);
   getQueryState = this.$api.newQueryState();
   saveQueryState = this.$api.newQueryState<RecordChange>();
-  errors = null as null | RecordError[];
+  errors = null as null | RecordChangeError[];
 
   @Watch('entity')
   @Watch('recordId')

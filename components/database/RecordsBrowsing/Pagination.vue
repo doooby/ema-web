@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex justify-content-end db--records-pagination"
+    class="d-flex justify-content-end db--records-browsing--pagination"
     @click="onPageSelect"
   >
     <div :class="{ current: current === 1 }">

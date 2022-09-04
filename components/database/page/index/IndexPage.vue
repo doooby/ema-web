@@ -8,7 +8,7 @@
       />
     </div>
     <div class="container-fluid emy-4">
-      <div class="border-primary row no-gutters emb-2">
+      <div class="row no-gutters emb-2">
         <div class="col-lg-6">
           <t value="db.record.shared.label.records_count" />
           <span>: </span>
@@ -59,7 +59,7 @@ import {
 } from '~/components/Form';
 import { DataTable } from '~/components/DataTable';
 import SearchForm from './SearchForm.vue';
-import RecordsPagination from '../../RecordsPagination.vue';
+import RecordsPagination from '../../RecordsBrowsing/Pagination.vue';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordActions, { Action as ActionItem } from '~/components/database/cells/RecordActions.vue';
 
@@ -104,7 +104,7 @@ export default class IndexPage extends Vue {
     return this.searchQueryState.running;
   }
 
-  get records (): null | PaginatedRecords {
+  get records (): null | PaginatedRecords<any> {
     return this.searchQueryState.value;
   }
 

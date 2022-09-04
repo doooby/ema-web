@@ -50,7 +50,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { buildFormFields, FormFieldDefinition, formToRecordParams, prefillFormValues } from '~/components/Form';
-import { RecordChange, RecordError } from '~/lib/api/mappers';
+import { RecordChange, RecordChangeError } from '~/lib/api/mappers';
 import RecordErrors from './RecordErrors.vue';
 
 @Component({
@@ -64,7 +64,7 @@ export default class NewPage extends Vue {
   formFields = buildFormFields(this.fields);
   formValues = prefillFormValues(this.formFields);
   createQueryState = this.$api.newQueryState<RecordChange>();
-  errors = null as null | RecordError[];
+  errors = null as null | RecordChangeError[];
 
   @Watch('entity')
   @Watch('fields')

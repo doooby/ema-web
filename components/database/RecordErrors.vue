@@ -15,12 +15,12 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { RecordError } from '~/lib/api/mappers';
+import { RecordChangeError } from '~/lib/api/mappers';
 import classNames from 'classnames';
 
 export default Vue.extend({
   props: {
-    errors: { type: Array as PropType<RecordError[]>, default: null },
+    errors: { type: Array as PropType<RecordChangeError[]>, default: null },
   },
   computed: {
     className (): string {

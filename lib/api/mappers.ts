@@ -2,7 +2,15 @@ import { parseISO as parseDate } from 'date-fns';
 
 type Labels = { [name: string]: undefined | string };
 
-export type RecordError = [ string, string ];
+export interface Record {
+  id: number;
+}
+
+export interface InvalidRecord extends Record {
+  __invalid: true,
+}
+
+export type RecordChangeError = [ string, string ];
 
 export type RecordGet<R=any> =
   { success: false } | {
@@ -13,11 +21,11 @@ export type RecordGet<R=any> =
 export interface RecordChange {
   success: boolean;
   record_id?: number;
-  errors?: RecordError[];
+  errors?: RecordChangeError[];
 }
 
-export interface PaginatedRecords<R=any> {
-  records: R[];
+export interface PaginatedRecords<R extends Record> {
+  records: (InvalidRecord | R)[];
   total: number;
   page: number;
   pages_count: number;
@@ -292,7 +300,7 @@ export function changedRecord (value: any): RecordChange {
   }));
 }
 
-export function paginatedRecords<R, A> (
+export function paginatedRecords<R extends Record, A> (
   value: any,
   fillParams: (value: any, associations?: A) => R,
   mapAssociations?: (value: any) => A,

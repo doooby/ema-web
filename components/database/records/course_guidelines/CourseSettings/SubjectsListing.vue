@@ -79,7 +79,7 @@ import SearchModal from '~/components/database/SearchModal.vue';
 import IntegerInput from '~/components/Form/primitives/IntegerInput.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 import * as mappers from '~/lib/api/mappers';
-import { RecordError } from '~/lib/api/mappers';
+import { RecordChangeError } from '~/lib/api/mappers';
 import { StandardizedCourse } from '~/lib/records';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 
@@ -132,7 +132,7 @@ export default class SubjectsListing extends Vue {
   searchShown = false;
   modified = false;
   queryUpdateSettings = this.$api.newQueryState<mappers.RecordChange>();
-  errors = null as null | RecordError[];
+  errors = null as null | RecordChangeError[];
 
   @Watch('settings')
   onSettingsChanged () {

@@ -15,6 +15,10 @@ export default class UserModule extends VuexModule {
   languageModalShown: boolean = false;
   debugTranslations: boolean = false;
 
+  get currentCountryId (): null | number {
+    return this.currentCountry?.id ?? null;
+  }
+
   @Mutation
   setCurrentUser (user: null | SessionUser) {
     this.currentUser = user;

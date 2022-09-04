@@ -11,7 +11,7 @@
         <table-cell
           :column="column"
           :data-item="dataItem"
-          :template="templates[column.name]"
+          :template="templates[`cell-${column.name}` || column.name]"
         />
       </td>
       <td />
