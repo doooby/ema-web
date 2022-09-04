@@ -6,8 +6,7 @@ const { object, recordId, prop, assoc, val } = mappers;
 export interface EducationLevel {
   id: number;
   country: mappers.AssociatedRecord<Country>;
-  name_en: string;
-  name: string;
+  name: [string, string];
   level: number;
 }
 
@@ -19,8 +18,7 @@ export function mapEducationLevel (value: any, associations?: EducationLevelAsso
   return object(value, root => ({
     id: recordId(root),
     country: assoc('country', root, associations?.country),
-    name_en: prop('name_en', root, val.string),
-    name: prop('name', root, val.string),
+    name: prop('name', root, val.nameTuple),
     level: prop('level', root, val.integer),
   }));
 }

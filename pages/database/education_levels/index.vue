@@ -27,8 +27,8 @@ export default class extends DatabasePage {
 
   tableColumns = [
     { name: 'id', cell: { type: RecordLink, onlyId: true }, size: 60 },
-    { name: 'level' },
-    { name: 'name', cell: { type: Name } },
+    { name: 'level', size: 80 },
+    { name: 'name', cell: { type: Name }, size: 400 },
   ];
 }
 </script>

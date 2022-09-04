@@ -2,14 +2,15 @@ import * as mappers from '~/lib/api/mappers';
 import { FormFieldDefinition } from '~/components/Form';
 import * as dbFields from '~/components/database/controls';
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
+import { EducationLevel } from '~/lib/records/education_level';
+import { assocList } from '~/lib/api/mappers';
 
-const { object, recordId, prop, maybeAssoc, val } = mappers;
+const { object, recordId, prop, val } = mappers;
 
 export interface SchoolYear {
   id: number;
-  education_level?: mappers.AssociatedRecord;
-  name_en: string;
-  name: string;
+  name: [string, string];
+  education_levels: mappers.AssociatedRecord<EducationLevel>[];
   year_label: string;
   terms: { from: Date, to: Date }[];
 }
@@ -22,9 +23,8 @@ export const schoolYear = {
   mapRecord (value: any, associations?: SchoolYearAssociations): SchoolYear {
     return object(value, root => ({
       id: recordId(root),
-      education_level: maybeAssoc('education_level', root, associations?.education_level),
-      name_en: prop('name_en', root, val.string),
-      name: prop('name', root, val.string),
+      name: prop('name', root, val.nameTuple),
+      education_levels: assocList('education_levels', root, associations?.education_level),
       year_label: prop('year_label', root, val.string),
       terms: prop('terms', root, val.factories.listOfObjects(
         term => ({
@@ -43,14 +43,13 @@ export const schoolYear = {
     countryId: null | number;
   }): FormFieldDefinition[] {
     return [
-      [ 'education_level', dbFields.AssociatedRecord, {
+      [ 'name', 'name' ],
+      [ 'education_levels', dbFields.MultipleAssociatedRecords, {
         entity: 'education_levels',
         params: {
           country_id: countryId,
         },
       } ],
-      [ 'name_en', 'text' ],
-      [ 'name', 'text' ],
       [ 'terms', SchoolYearTerms.asControl ],
     ];
   },

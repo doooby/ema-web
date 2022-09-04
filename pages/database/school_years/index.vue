@@ -12,9 +12,9 @@ import IndexPage from '~/components/database/page/index/IndexPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
-import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
-import * as dbFields from '~/components/database/controls';
+import MultipleAssociatedRecordsLinks from '~/components/database/cells/MultipleAssociatedRecordsLinks.vue';
+import Name from '~/components/database/cells/Name.vue';
 
 @Component({
   components: { IndexPage },
@@ -24,12 +24,6 @@ export default class extends DatabasePage {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       [ 'search', 'text' ],
-      [ 'education_level_id', dbFields.AssociatedRecord, {
-        entity: 'education_levels',
-        params: {
-          country_id: this.currentCountryId,
-        },
-      } ],
     ];
   }
 
@@ -37,12 +31,12 @@ export default class extends DatabasePage {
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: RecordLink, onlyId: true }, size: 60 },
     {
-      name: 'education_level',
-      cell: { type: AssociatedRecordLink, entity: 'education_levels' },
+      name: 'education_levels',
+      cell: { type: MultipleAssociatedRecordsLinks, entity: 'education_levels', noLink: true },
+      size: 400,
     },
     { name: 'year_label' },
-    { name: 'name_en' },
-    { name: 'name' },
+    { name: 'name', cell: { type: Name } },
   ];
 
   actions = [

@@ -33,7 +33,7 @@ export default class extends DatabasePage {
     {
       name: 'education_levels',
       cell: { type: MultipleAssociatedRecordsLinks, entity: 'education_levels', noLink: true },
-      size: 500,
+      size: 400,
     },
     { name: 'name', cell: { type: Name } },
   ];
