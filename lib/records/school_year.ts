@@ -4,6 +4,7 @@ import * as dbFields from '~/components/database/controls';
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
 import { EducationLevel } from '~/lib/records/education_level';
 import { assocList } from '~/lib/api/mappers';
+import { asControl } from '~/components/database/controls';
 
 const { object, recordId, prop, val } = mappers;
 
@@ -50,7 +51,7 @@ export const schoolYear = {
           country_id: countryId,
         },
       } ],
-      [ 'terms', SchoolYearTerms.asControl ],
+      [ 'terms', asControl(SchoolYearTerms) ],
     ];
   },
 };

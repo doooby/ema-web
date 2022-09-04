@@ -37,7 +37,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Option } from '~/lib/types';
 
 @Component
-export default class SearchModal extends Vue {
+export default class SelectModal extends Vue {
   @Prop({ required: true }) readonly value!: boolean;
   @Prop() readonly blankOption?: boolean;
   @Prop({ required: true }) readonly list!: Option[];

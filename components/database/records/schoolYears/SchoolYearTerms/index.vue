@@ -39,13 +39,6 @@ export default class SchoolYearTerms extends Vue {
     },
   };
 
-  static get asControl (): FormFieldType {
-    return {
-      ...this.fieldType,
-      control: SchoolYearTerms,
-    };
-  }
-
   @Prop({ required: true }) field!: FormField;
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;

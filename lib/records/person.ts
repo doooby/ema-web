@@ -1,7 +1,7 @@
 import * as mappers from '~/lib/api/mappers';
-import * as dbFields from '~/components/database/controls';
-import { FormFieldDefinition } from '~/components/Form';
+import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import { Country } from '~/lib/records/country';
+import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
 
 const { object, recordId, prop, maybeProp, assoc, val } = mappers;
 
@@ -145,7 +145,7 @@ export const person = {
 
   recordControls (): FormFieldDefinition[] {
     return [
-      [ 'country', dbFields.AssociatedRecord, { entity: 'countries' } ],
+      [ 'country', asFieldType(AssociatedRecordField), { entity: 'countries' } ],
       [ 'family_name_en', 'text' ],
       [ 'family_name', 'text' ],
       [ 'given_name_en', 'text' ],

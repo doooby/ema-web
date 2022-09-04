@@ -8,8 +8,7 @@
         <span>{{ records ? records.total : 0 }}</span>
       </div>
       <browsing-pagination
-        :current="records ? records.page : 1"
-        :pages-count="records ? records.pages_count : 0"
+        :request-state="searchQueryState"
         @select="onGotoPage"
       />
     </div>
@@ -42,7 +41,7 @@ import { PaginatedRecords } from '~/lib/api/mappers';
     BrowsingPagination: Pagination,
   },
 })
-export default class RecordsBrowsing<R extends mappers.Record> extends Vue {
+export default class RecordsBrowsing<R extends mappers.RecordBase> extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly buildQuery!: () => QueryDefinition<mappers.PaginatedRecords<R>>;
   @Prop({ required: true }) readonly searchToken!: number;

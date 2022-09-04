@@ -84,3 +84,7 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
   }
   return params;
 }
+
+export function asFieldType (component: any): FormFieldType {
+  return { ...component.fieldType, control: component };
+}

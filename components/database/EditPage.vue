@@ -10,22 +10,7 @@
               <t :value="`db.record.${entity}.meta.s`" />
             </h2>
           </div>
-          <div class="position-relative">
-            <div class="position-absolute w-100" style="z-index: 1;">
-              <b-progress
-                v-if="getQueryState.running"
-                height="2px"
-                :value="100"
-                variant="info"
-                striped
-                animated
-              />
-              <b-alert v-if="getQueryState.fail" show variant="warning">
-                <b-icon icon="exclamation-triangle-fill" class="mr-3" />
-                <t value="app.record_not_found" />
-              </b-alert>
-            </div>
-          </div>
+          <loader-strip :request-state="getQueryState" />
           <div class="card-body pt-3 pb-0">
             <form-group
               v-if="$scopedSlots.layout"
@@ -68,9 +53,10 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import { buildFormFields, FormFieldDefinition, formToRecordParams, prefillFormValues } from '../Form';
 import { RecordChange, RecordChangeError } from '~/lib/api/mappers';
+import LoaderStrip from '~/components/database/LoaderStrip.vue';
 
 @Component({
-  components: { RecordErrors },
+  components: { RecordErrors, LoaderStrip },
 })
 export default class EditPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;

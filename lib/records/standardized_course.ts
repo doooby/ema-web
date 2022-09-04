@@ -1,19 +1,19 @@
 import * as mappers from '~/lib/api/mappers';
-import { maybeProp } from '~/lib/api/mappers';
 import { course, EducationLevel, Subject } from '~/lib/records';
-import { FormFieldDefinition } from '~/components/Form';
-import * as dbFields from '~/components/database/controls';
+import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import { asControl } from '~/components/database/controls';
-import GradingType from '~/components/database/controls/Course/GradingType.vue';
-import CourseSubjects from '~/components/database/controls/CourseSubjects/CourseSubjects.vue';
+import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
+import SubjectsField from '~/components/database/records/standardized_courses/SubjectsField.vue';
+import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
 
-const { object, recordId, prop, assoc, val } = mappers;
+const { object, recordId, prop, maybeProp, assoc, val } = mappers;
 
 export interface StandardizedCourse {
   id: number;
   name: [string, string];
   education_level: mappers.AssociatedRecord<EducationLevel>;
   grade: number;
+  is_formal: boolean;
   accreditation_authority?: [string, undefined | string];
   lesson_duration?: number;
   attendance_limit?: number;
@@ -30,7 +30,7 @@ export interface StandardizedCourseAssociations {
 export interface StandardizedCourseSubject {
   subject: mappers.AssociatedRecord<Subject>;
   grading: [string, string, undefined | string];
-  exam: boolean;
+  exam?: boolean;
 }
 
 export const standardizedCourse = {
@@ -40,6 +40,7 @@ export const standardizedCourse = {
       name: prop('name', root, val.nameTuple),
       education_level: assoc('education_level', root, associations?.education_level),
       grade: prop('grade', root, val.integer),
+      is_formal: prop('is_formal', root, val.boolean),
       accreditation_authority: maybeProp('accreditation_authority', root, val.factories.tuple2_1(
         val.string,
         val.string,
@@ -57,7 +58,7 @@ export const standardizedCourse = {
     return {
       subject: assoc('subject', item, associations?.subject),
       grading: prop('grading', item, course.mapGrading),
-      exam: prop('exam', item, val.boolean),
+      exam: maybeProp('exam', item, val.boolean),
     };
   }),
   mapAssociations: mappers.createAssociationsMapper<StandardizedCourseAssociations>(
@@ -66,30 +67,25 @@ export const standardizedCourse = {
   recordControls (countryId: null | number): FormFieldDefinition[] {
     return [
       [ 'name', 'name' ],
-      [ 'education_level', dbFields.AssociatedRecord, {
+      [ 'education_level', asFieldType(AssociatedRecordField), {
         entity: 'education_levels',
         params: {
           country_id: countryId,
         },
       } ],
       [ 'grade', 'integer', { maxLength: 2 } ],
+      [ 'is_formal', 'boolean' ],
       [ 'accreditation_authority', 'selectOrFill', {
-        options: standardizedCourse.accreditationAuthorityOptions(),
+        options: course.accreditationAuthorityOptions(),
       } ],
       [ 'lesson_duration', 'integer', { rightLabel: 'app.time.minutes.p' } ],
       [ 'attendance_limit', 'integer', {
         requireable: true,
         rightLabel: { text: '%' },
       } ],
-      [ 'preferred_grading', asControl(GradingType) ],
+      [ 'preferred_grading', asControl(GradingTypeField) ],
       [ 'description', 'textMultiline' ],
-      [ 'subjects', asControl(CourseSubjects) ],
+      [ 'subjects', asControl(SubjectsField) ],
     ];
-  },
-  accreditationAuthorityOptions () {
-    return Object.freeze([
-      { value: 'gov', text: 'db.record.standardized_courses.accreditation_authority.gov' },
-      { value: 'ngo', text: 'db.record.standardized_courses.accreditation_authority.ngo' },
-    ]);
   },
 };

@@ -17,9 +17,7 @@
         </div>
         <div class="col-lg-6">
           <records-pagination
-            v-if="records"
-            :current="records.page"
-            :pages-count="records.pages_count"
+            :request-state="searchQueryState"
             @select="onSelectPage"
           />
         </div>

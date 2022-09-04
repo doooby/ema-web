@@ -18,6 +18,10 @@ const ControlMixin = {
       const anyThis = this as any;
       return anyThis.context.namePrefix((anyThis.field as FormField).name);
     },
+    rawValue (): any {
+      const anyThis = this as any;
+      return anyThis.formValues[anyThis.field.name];
+    },
     debouncedOnChange () {
       const anyThis = this as any;
       const handler = (values: any) => anyThis.context.onChange(values);

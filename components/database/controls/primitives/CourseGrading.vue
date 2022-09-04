@@ -68,7 +68,7 @@ import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 @Component({
   components: { CheckboxInput },
 })
-export default class GradingType extends Vue {
+export default class CourseGrading extends Vue {
   @Prop() domId?: string;
   @Prop({ required: true }) value!: any;
 

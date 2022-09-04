@@ -21,9 +21,15 @@
           :record="{ id: item.subject.id, caption: item.subject.labels.caption }"
         />
       </template>
+      <template #cell-teacher="{ item }">
+        <show-record-link
+          entity="people"
+          :record="item.teacher ? { id: item.teacher.id, caption: item.teacher.labels.caption } : null"
+        />
+      </template>
       <template #cell-grading="{ item, index }">
         <div class="single-row-cell">
-          <grading-type-primitive
+          <course-grading
             :value="item.grading"
             @change="onUpdateItem(index, item, 'grading', $event)"
           />
@@ -63,26 +69,28 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { StandardizedCourseSubject, Subject } from '~/lib/records';
+import { CourseSubject, Subject } from '~/lib/records';
 import { AssociatedRecord } from '~/lib/api/mappers';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import SearchModal from '~/components/database/SearchModal.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
-import GradingTypePrimitive from '~/components/database/controls/primitives/Course/GradingType.vue';
+import CourseGrading from '~/components/database/controls/primitives/CourseGrading.vue';
 
 @Component({
   mixins: [ ControlMixin ],
-  components: { ShowRecordLink, SearchModal, CheckboxInput, GradingTypePrimitive },
+  components: { ShowRecordLink, SearchModal, CheckboxInput, CourseGrading },
 })
-export default class CourseSubjects extends Vue {
+export default class SubjectsField extends Vue {
   static fieldType: FormFieldType = {
     fillParams ({ name }: FormField, values: FormValues, record: any): any {
       let value = values[name];
       if (value) {
-        value = value.map(({ subject, ...item }: StandardizedCourseSubject) => ({
-          ...item,
-          subject_id: subject.id,
-        }));
+        value = value.map(({ subject, teacher, ...item }: CourseSubject) => {
+          const processedItem: any = { ...item, subject_id: subject.id };
+          if (!processedItem.exam) delete processedItem.exam;
+          if (teacher) processedItem.teacher_id = teacher.id;
+          return processedItem;
+        });
       }
       record[name] = value;
     },
@@ -92,7 +100,7 @@ export default class CourseSubjects extends Vue {
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;
 
-  get items (): StandardizedCourseSubject[] {
+  get items (): CourseSubject[] {
     return this.formValues[this.field.name] ?? [];
   }
 
@@ -102,7 +110,8 @@ export default class CourseSubjects extends Vue {
 
   selectSubjectModalShown = false;
   columns = [
-    { name: 'subject', size: 100 },
+    { name: 'subject' },
+    { name: 'teacher' },
     { name: 'grading', size: 250 },
     { name: 'exam', size: 100 },
   ];
@@ -123,7 +132,7 @@ export default class CourseSubjects extends Vue {
 
   onUpdateItem (
     index: number,
-    item: StandardizedCourseSubject,
+    item: CourseSubject,
     field: string,
     value: any,
   ) {

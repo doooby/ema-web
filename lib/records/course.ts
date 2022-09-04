@@ -1,18 +1,23 @@
 import * as mappers from '~/lib/api/mappers';
-import { EducationLevel, Person, School, SchoolYear, Subject } from '~/lib/records';
-import { FormFieldDefinition } from '~/components/Form';
-import * as dbFields from '~/components/database/controls';
-import { maybeProp, tuple } from '~/lib/api/mappers';
+import { EducationLevel, Person, School, SchoolYear, StandardizedCourse, Subject } from '~/lib/records';
+import { asFieldType, FormFieldDefinition } from '~/components/Form';
+import { asControl } from '~/components/database/controls';
+import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
+import SubjectsField from '~/components/database/records/courses/SubjectsField.vue';
+import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
+import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
 
-const { object, recordId, prop, assoc, val, maybeAssoc } = mappers;
+const { object, recordId, prop, assoc, val, maybeAssoc, maybeProp, tuple } = mappers;
 
 export interface Course {
   id: number;
   school: mappers.AssociatedRecord<School>;
   education_level: mappers.AssociatedRecord<EducationLevel>;
   school_year: undefined | mappers.AssociatedRecord<SchoolYear>;
+  standardized_course: undefined | mappers.AssociatedRecord<StandardizedCourse>;
   name: [string, string];
   grade: number;
+  is_formal: boolean;
   accreditation_authority: undefined | [string, undefined | string];
   lesson_duration: undefined | number;
   attendance_limit: undefined | number;
@@ -24,6 +29,7 @@ export interface CourseAssociations {
   school: mappers.AssociatedRecordsIndex,
   education_level: mappers.AssociatedRecordsIndex,
   school_year: mappers.AssociatedRecordsIndex,
+  standardized_course: mappers.AssociatedRecordsIndex,
   subject: mappers.AssociatedRecordsIndex,
   teacher: mappers.AssociatedRecordsIndex,
 }
@@ -32,7 +38,7 @@ export interface CourseSubject {
   subject: mappers.AssociatedRecord<Subject>;
   teacher?: mappers.AssociatedRecord<Person>;
   grading: [string, string, undefined | string];
-  exam: boolean;
+  exam?: boolean;
 }
 
 export const course = {
@@ -43,7 +49,9 @@ export const course = {
       school: assoc('school', root, associations?.school),
       education_level: assoc('education_level', root, associations?.education_level),
       school_year: maybeAssoc('school_year', root, associations?.school_year),
+      standardized_course: maybeAssoc('standardized_course', root, associations?.standardized_course),
       grade: prop('grade', root, val.integer),
+      is_formal: prop('is_formal', root, val.boolean),
       accreditation_authority: maybeProp('accreditation_authority', root, val.factories.tuple2_1(
         val.string,
         val.string,
@@ -60,6 +68,10 @@ export const course = {
   mapAssociations: mappers.createAssociationsMapper<CourseAssociations>(
     'school',
     'education_level',
+    'school_year',
+    'standardized_course',
+    'subject',
+    'teacher',
   ),
   mapGrading: val.factories.tuple3_2(
     val.string,
@@ -73,7 +85,7 @@ export const course = {
     subject: assoc('subject', item, associations?.subject),
     teacher: maybeAssoc('teacher', item, associations?.teacher),
     grading: prop('grading', item, course.mapGrading),
-    exam: prop('exam', item, val.boolean),
+    exam: maybeProp('exam', item, val.boolean),
   })),
   recordControls ({
     countryId,
@@ -81,21 +93,51 @@ export const course = {
     countryId: null | number;
   }): FormFieldDefinition[] {
     return [
-      [ 'school', dbFields.AssociatedRecord, {
+      [ 'school', asFieldType(AssociatedRecordField), {
         entity: 'schools',
         params: {
           country_id: countryId,
         },
       } ],
-      [ 'education_level', dbFields.AssociatedRecord, {
+      [ 'education_level', asFieldType(AssociatedRecordField), {
         entity: 'education_levels',
         params: {
           country_id: countryId,
         },
       } ],
-      [ 'grade', 'integer' ],
-      [ 'name_en', 'text' ],
-      [ 'name', 'text' ],
+      [ 'school_year', asFieldType(AssociatedRecordField), {
+        entity: 'school_years',
+        params: {
+          country_id: countryId,
+        },
+      } ],
+      [ 'standardized_course', asFieldType(AssociatedRecordField), {
+        entity: 'standardized_courses',
+        params: {
+          country_id: countryId,
+        },
+      } ],
+      [ 'name', 'name' ],
+      [ 'grade', 'integer', { maxLength: 2 } ],
+      [ 'is_formal', 'boolean' ],
+      [ 'accreditation_authority', 'selectOrFill', {
+        options: course.accreditationAuthorityOptions(),
+      } ],
+      [ 'lesson_duration', 'integer', { rightLabel: 'app.time.minutes.p' } ],
+      [ 'attendance_limit', 'integer', {
+        requireable: true,
+        rightLabel: { text: '%' },
+      } ],
+      [ 'preferred_grading', asControl(GradingTypeField) ],
+      [ 'description', 'textMultiline' ],
+      [ 'time_range', asControl(SchoolYearTerms) ],
+      [ 'subjects', asControl(SubjectsField) ],
     ];
+  },
+  accreditationAuthorityOptions () {
+    return Object.freeze([
+      { value: 'gov', text: 'db.record.courses.accreditation_authority.gov' },
+      { value: 'ngo', text: 'db.record.courses.accreditation_authority.ngo' },
+    ]);
   },
 };

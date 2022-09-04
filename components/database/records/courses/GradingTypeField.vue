@@ -5,7 +5,7 @@
     <template #label>
       <t :value="labelTranslation" />
     </template>
-    <grading-type-primitive
+    <course-grading
       :dom-id="domIdBase"
       :value="formValues[field.name]"
       @change="onChangeValue($event)"
@@ -17,13 +17,13 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import GradingTypePrimitive from '~/components/database/controls/primitives/Course/GradingType.vue';
+import CourseGrading from '~/components/database/controls/primitives/CourseGrading.vue';
 
 @Component({
   mixins: [ ControlMixin ],
-  components: { GradingTypePrimitive },
+  components: { CourseGrading },
 })
-export default class GradingType extends Vue {
+export default class GradingTypeField extends Vue {
   static fieldType: FormFieldType = {
     fillParams ({ name }, values, record) {
       record[name] = values[name] ?? [ '', '' ];

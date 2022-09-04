@@ -23,7 +23,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import * as dbFields from '~/components/database/controls';
+import { asFieldType } from '~/components/Form';
+import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
 
 export default Vue.extend({
   data () {
@@ -33,7 +34,7 @@ export default Vue.extend({
         basic_list: 'opt2',
       },
       formFields: [
-        [ 'association_country', dbFields.AssociatedRecord, { entity: 'countries' } ],
+        [ 'association_country', asFieldType(AssociatedRecordField), { entity: 'countries' } ],
       ],
     };
   },

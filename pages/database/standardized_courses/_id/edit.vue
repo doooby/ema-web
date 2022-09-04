@@ -9,6 +9,7 @@
         <div class="col-md-6">
           <form-field name="name" :context="context" :values="values" />
           <form-field name="education_level" :context="context" :values="values" />
+          <form-field name="is_formal" :context="context" :values="values" />
           <form-field name="grade" :context="context" :values="values" />
           <form-field name="accreditation_authority" :context="context" :values="values" />
         </div>

@@ -11,11 +11,11 @@
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import IndexPage from '~/components/database/page/index/IndexPage.vue';
-import { FormFieldDefinition } from '~/components/Form';
+import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
-import * as dbFields from '~/components/database/controls';
 import Name from '~/components/database/cells/Name.vue';
+import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
 
 @Component({
   components: { IndexPage },
@@ -25,7 +25,7 @@ export default class extends DatabasePage {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       [ 'search', 'text' ],
-      [ 'education_level_id', dbFields.AssociatedRecord, {
+      [ 'education_level_id', asFieldType(AssociatedRecordField), {
         entity: 'education_levels',
         params: {
           country_id: this.currentCountryId,

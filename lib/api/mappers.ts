@@ -2,12 +2,16 @@ import { parseISO as parseDate } from 'date-fns';
 
 type Labels = { [name: string]: undefined | string };
 
-export interface Record {
+export interface RecordBase {
   id: number;
 }
 
-export interface InvalidRecord extends Record {
+export interface InvalidRecord extends RecordBase {
   __invalid: true,
+}
+
+export interface AbbreviatedRecord extends RecordBase {
+  labels: Labels;
 }
 
 export type RecordChangeError = [ string, string ];
@@ -24,7 +28,7 @@ export interface RecordChange {
   errors?: RecordChangeError[];
 }
 
-export interface PaginatedRecords<R extends Record> {
+export interface PaginatedRecords<R extends RecordBase> {
   records: (InvalidRecord | R)[];
   total: number;
   page: number;
@@ -235,6 +239,12 @@ export const val = {
       labels: unsafeProp('labels', root, {}, value => recordLabels(value)),
     }));
   },
+  abbr (value: any): InvalidRecord | AbbreviatedRecord {
+    return object(value, root => ({
+      id: recordId(root),
+      labels: unsafeProp('labels', root, {}, value => recordLabels(value)),
+    }));
+  },
   factories: {
     listOfObjects<V> (map: (item: any) => V): ((value: any) => V[]) {
       return value => listOfObjects<V>(value, map);
@@ -300,7 +310,7 @@ export function changedRecord (value: any): RecordChange {
   }));
 }
 
-export function paginatedRecords<R extends Record, A> (
+export function paginatedRecords<R extends RecordBase, A> (
   value: any,
   fillParams: (value: any, associations?: A) => R,
   mapAssociations?: (value: any) => A,
@@ -313,6 +323,20 @@ export function paginatedRecords<R extends Record, A> (
     ));
     return {
       records,
+      total: prop('total', root, val.integer),
+      page: prop('page', root, val.integer),
+      pages_count: prop('pages_count', root, val.integer),
+      per_page: prop('per_page', root, val.integer),
+    };
+  });
+}
+
+export function paginatedAbbreviatedRecords (
+  value: any,
+): PaginatedRecords<AbbreviatedRecord> {
+  return object(value, (root) => {
+    return {
+      records: prop('records', root, value => list(value, val.abbr)),
       total: prop('total', root, val.integer),
       page: prop('page', root, val.integer),
       pages_count: prop('pages_count', root, val.integer),

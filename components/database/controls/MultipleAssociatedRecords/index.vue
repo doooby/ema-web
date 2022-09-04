@@ -3,7 +3,7 @@
     <template #label>
       <t :value="labelTranslation" />
     </template>
-    <div v-if="selectedCategories.length" class="association--text">
+    <div v-if="selectedCategories.length" class="form--control-label">
       <div
         v-for="category of selectedCategories"
         :key="category.id"
@@ -39,9 +39,9 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import SearchModal from '../AssociatedRecord/SearchModal.vue';
 import { AssociatedRecord } from '~/lib/api/mappers';
 import { SubjectCategory } from '~/lib/records';
+import SearchModal from '~/components/database/SearchModal.vue';
 
 @Component({
   mixins: [ ControlMixin ],

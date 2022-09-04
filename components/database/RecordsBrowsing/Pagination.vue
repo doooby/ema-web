@@ -27,28 +27,35 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { Component, Prop } from 'vue-property-decorator';
+import { RequestState } from '~/lib/api';
+import * as mappers from '~/lib/api/mappers';
 
-export default Vue.extend({
-  props: {
-    current: { type: Number, required: true },
-    pagesCount: { type: Number, required: true },
-  },
-  computed: {
-    pages (): number[] {
-      let start = this.current - 2;
-      if (start < 2) start = 2;
-      let end = this.current + 2;
-      if (this.pagesCount < end) end = this.pagesCount;
-      const list: number[] = [];
-      for (let i = start; i <= end; i += 1) list.push(i);
-      return list;
-    },
-  },
-  methods: {
-    onPageSelect (event: any) {
-      const page = Number(event.target.dataset.page);
-      if (!isNaN(page)) this.$emit('select', page);
-    },
-  },
-});
+@Component
+export default class Pagination<R extends mappers.RecordBase> extends Vue {
+  @Prop({ required: true }) readonly requestState!: RequestState<mappers.PaginatedRecords<R>>;
+
+  get current (): number {
+    return this.requestState.value?.page || 1;
+  }
+
+  get pagesCount (): number {
+    return this.requestState.value?.pages_count || 0;
+  }
+
+  get pages (): number[] {
+    let start = this.current - 2;
+    if (start < 2) start = 2;
+    let end = this.current + 2;
+    if (this.pagesCount < end) end = this.pagesCount;
+    const list: number[] = [];
+    for (let i = start; i <= end; i += 1) list.push(i);
+    return list;
+  }
+
+  onPageSelect (event: any) {
+    const page = Number(event.target.dataset.page);
+    if (!isNaN(page)) this.$emit('select', page);
+  }
+}
 </script>

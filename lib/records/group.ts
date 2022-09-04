@@ -1,8 +1,8 @@
 import * as mappers from '~/lib/api/mappers';
-import { FormFieldDefinition } from '~/components/Form';
-import * as dbFields from '~/components/database/controls';
+import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import { AssociatedRecord, list, tuple } from '~/lib/api/mappers';
 import { Subject } from '~/lib/records/subject';
+import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
 
 export interface Group {
   id: number;
@@ -49,7 +49,7 @@ export const group = {
     countryId: null | number;
   }): FormFieldDefinition[] {
     return [
-      [ 'course', dbFields.AssociatedRecord, {
+      [ 'course', asFieldType(AssociatedRecordField), {
         entity: 'courses',
         params: {
           country_id: countryId,

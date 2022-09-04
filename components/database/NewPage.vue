@@ -78,7 +78,7 @@ export default class NewPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
   @Prop() readonly prefetching?: boolean;
-  @Prop() readonly values?: FormValues;
+  @Prop() readonly values!: FormValues;
   @Prop() readonly cardClass?: string;
 
   formFields = buildFormFields(this.fields);

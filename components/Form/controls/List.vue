@@ -4,7 +4,7 @@
       <t :value="labelTranslation" />
     </template>
     <div class="d-flex">
-      <div class="flex-fill text-truncate association--text">
+      <div class="flex-fill text-truncate form--control-label">
         {{ valueText }}
       </div>
       <b-button :id="domIdBase" @click="onChevronClick">

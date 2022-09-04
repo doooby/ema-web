@@ -6,7 +6,7 @@
     <b-button :id="domId" :disabled="disabled" @click="modalShown = true">
       <b-icon icon="chevron-down" />
     </b-button>
-    <search-modal
+    <select-modal
       v-model="modalShown"
       :list="options"
       :selected="selectedOption"
@@ -15,21 +15,21 @@
       <template #title>
         <slot name="modal-title" />
       </template>
-    </search-modal>
+    </select-modal>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { MaybeData, Option } from '~/lib/types';
-import SearchModal from '~/components/Form/primitives/SearchModal.vue';
+import SelectModal from '~/components/Form/primitives/SelectModal.vue';
 
 export type OptionsSource =
   | { list: Option[] }
   | { fetch: () => Promise<MaybeData<Option[]>> };
 
 @Component({
-  components: { SearchModal },
+  components: { SelectModal },
 })
 export default class SelectWithModal extends Vue {
   @Prop({ default: () => undefined }) readonly domId?: string;
