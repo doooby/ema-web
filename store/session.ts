@@ -7,17 +7,13 @@ import * as localStorage from '~/lib/localStorage';
   stateFactory: true,
   namespaced: true,
 })
-export default class UserModule extends VuexModule {
+export default class SessionModule extends VuexModule {
   currentUser: null | SessionUser = null;
   currentCountry: null | mappers.AssociatedRecord = null;
 
   loginModalShown = false;
   languageModalShown: boolean = false;
   debugTranslations: boolean = false;
-
-  get currentCountryId (): null | number {
-    return this.currentCountry?.id ?? null;
-  }
 
   @Mutation
   setCurrentUser (user: null | SessionUser) {
@@ -70,5 +66,9 @@ export default class UserModule extends VuexModule {
       api.newQueryState(),
     );
     this.context.commit('setCurrentUser', session?.user ?? null);
+  }
+
+  get countryId (): null | number {
+    return this.currentCountry?.id ?? null;
   }
 }

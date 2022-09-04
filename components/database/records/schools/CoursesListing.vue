@@ -55,8 +55,10 @@ export default class CoursesListing extends Vue {
       icon: 'plus',
       onClick: () => {
         this.$router.push({
-          path: '/database/courses/new',
-          params: { school_id: this.school.id.toString() },
+          name: 'database-courses-new',
+          params: {
+            school_id: this.school.id.toString(),
+          },
         });
       },
     },
@@ -70,7 +72,7 @@ export default class CoursesListing extends Vue {
   onBuildQuery () {
     return this.$api.queries.courses.index({
       school_id: this.school.id,
-      country_id: this.$store.state.session.currentCountryId,
+      country_id: this.$store.getters['session/countryId'],
     });
   }
 }

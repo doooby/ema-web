@@ -37,6 +37,10 @@ export default {
     base: '/web/',
   },
 
+  i18n: {
+    strategy: 'no_prefix',
+  },
+
   publicRuntimeConfig: {
     apiBaseUrl: `${serverHostName}/api/web`,
   },

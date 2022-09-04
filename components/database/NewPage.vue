@@ -10,6 +10,18 @@
               <t :value="`db.record.${entity}.meta.s`" />
             </h2>
           </div>
+          <div class="position-relative">
+            <div class="position-absolute w-100" style="z-index: 1;">
+              <b-progress
+                v-if="prefetching"
+                height="2px"
+                :value="100"
+                variant="info"
+                striped
+                animated
+              />
+            </div>
+          </div>
           <div class="card-body pt-3 pb-0">
             <form-group
               v-if="$scopedSlots.layout"
@@ -49,7 +61,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { buildFormFields, FormFieldDefinition, formToRecordParams, prefillFormValues } from '~/components/Form';
+import {
+  buildFormFields,
+  FormFieldDefinition,
+  formToRecordParams,
+  FormValues,
+  prefillFormValues,
+} from '~/components/Form';
 import { RecordChange, RecordChangeError } from '~/lib/api/mappers';
 import RecordErrors from './RecordErrors.vue';
 
@@ -59,10 +77,12 @@ import RecordErrors from './RecordErrors.vue';
 export default class NewPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
+  @Prop() readonly prefetching?: boolean;
+  @Prop() readonly values?: FormValues;
   @Prop() readonly cardClass?: string;
 
   formFields = buildFormFields(this.fields);
-  formValues = prefillFormValues(this.formFields);
+  formValues = { ...prefillFormValues(this.formFields), ...this.values };
   createQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordChangeError[];
 
@@ -70,6 +90,11 @@ export default class NewPage extends Vue {
   @Watch('fields')
   onPageChanged () {
     this.updatePage();
+  }
+
+  @Watch('values')
+  onValuesChanged () {
+    this.formValues = { ...this.formValues, ...this.values };
   }
 
   mounted () {
