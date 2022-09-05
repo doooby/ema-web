@@ -1,5 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
-import { MappingError } from '~/lib/api/mappers';
+import { MappingError, safeRecord } from '~/lib/api/mappers';
 import { EducationLevel, Person, School, SchoolYear, StandardizedCourse, Subject } from '~/lib/records';
 import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
@@ -43,43 +43,30 @@ export interface CourseSubject {
 
 export const course = {
   mapRecord (value: any, associations?: CourseAssociations): mappers.InvalidRecord | Course {
-    try {
-      return mappers.object(value, root => ({
-        id: recordId(root),
-        name: prop('name', root, val.nameTuple),
-        school: assoc('school', root, associations?.school),
-        education_level: assoc('education_level', root, associations?.education_level),
-        school_year: maybeAssoc('school_year', root, associations?.school_year),
-        standardized_course: maybeAssoc('standardized_course', root, associations?.standardized_course),
-        grade: prop('grade', root, val.integer),
-        is_formal: prop('is_formal', root, val.boolean),
-        accreditation_authority: maybeProp('accreditation_authority', root, val.factories.tuple2_1(
-          val.string,
-          val.string,
-        )),
-        lesson_duration: maybeProp('lesson_duration', root, val.integer),
-        attendance_limit: maybeProp('attendance_limit', root, val.integer),
-        time_ranges: prop('time_ranges', root, time_ranges => mappers.list(
-          time_ranges,
-          time_range => mappers.object(time_range, object => ({
-            from: prop('from', object, val.date),
-            to: prop('to', object, val.date),
-          })),
-        )),
-        subjects: maybeProp('subjects', root, course.mapSubjectsFactory(associations)),
-      }));
-    } catch (error) {
-      if (error instanceof MappingError) error.finalize();
-      utils.warnOfError(error);
-      return mappers.object(value, root => ({
-        id: recordId(root),
-        __invalid: true,
-        __invalidRecord: {
-          error,
-          src: root,
-        },
-      }));
-    }
+    return mappers.safeRecord(value, record => ({
+      id: recordId(record),
+      name: prop('name', record, val.nameTuple),
+      school: assoc('school', record, associations?.school),
+      education_level: assoc('education_level', record, associations?.education_level),
+      school_year: maybeAssoc('school_year', record, associations?.school_year),
+      standardized_course: maybeAssoc('standardized_course', record, associations?.standardized_course),
+      grade: prop('grade', record, val.integer),
+      is_formal: prop('is_formal', record, val.boolean),
+      accreditation_authority: maybeProp('accreditation_authority', record, val.factories.tuple2_1(
+        val.string,
+        val.string,
+      )),
+      lesson_duration: maybeProp('lesson_duration', record, val.integer),
+      attendance_limit: maybeProp('attendance_limit', record, val.integer),
+      time_ranges: prop('time_ranges', record, time_ranges => mappers.list(
+        time_ranges,
+        time_range => mappers.object(time_range, object => ({
+          from: prop('from', object, val.date),
+          to: prop('to', object, val.date),
+        })),
+      )),
+      subjects: maybeProp('subjects', record, course.mapSubjectsFactory(associations)),
+    }));
   },
   mapAssociations: mappers.createAssociationsMapper<CourseAssociations>(
     'school',

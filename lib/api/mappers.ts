@@ -278,6 +278,26 @@ export const val = {
   },
 };
 
+export function safeRecord<R extends RecordBase> (
+  value: any,
+  mapper: (record: any) => R,
+): InvalidRecord | R {
+  try {
+    return object(value, mapper);
+  } catch (error) {
+    if (error instanceof MappingError) error.finalize();
+    utils.warnOfError(error);
+    return object(value, record => ({
+      id: recordId(record),
+      __invalid: true,
+      __invalidRecord: {
+        error,
+        src: record,
+      },
+    }));
+  }
+}
+
 export function record<R, A> (
   value: any,
   fillParams: (value: any, associations?: A) => R,

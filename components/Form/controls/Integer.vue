@@ -52,10 +52,6 @@ import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 
 export const type: FormFieldType = {
   name: 'integer',
-  fillParams ({ name }, values, record) {
-    record[name] = values[name] || '';
-    return record;
-  },
 };
 
 export default Vue.extend({

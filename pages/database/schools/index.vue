@@ -21,7 +21,7 @@ import Name from '~/components/database/cells/Name.vue';
 export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
     return [
-      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
+      [ 'country_id', 'hidden', { value: this.$store.getters['session/countryId'] } ],
       [ 'search', 'text' ],
     ];
   }
@@ -30,7 +30,7 @@ export default class extends DatabasePage {
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: RecordLink, entity: 'schools' }, size: 60 },
     { name: 'name', cell: { type: Name } },
-    { name: 'school_id' },
+    { name: 'external_id' },
   ];
 
   actions = [
