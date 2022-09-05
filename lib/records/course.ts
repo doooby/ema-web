@@ -1,11 +1,10 @@
 import * as mappers from '~/lib/api/mappers';
 import { EducationLevel, Person, School, SchoolYear, StandardizedCourse, Subject } from '~/lib/records';
 import { asFieldType, FormFieldDefinition } from '~/components/Form';
-import { asControl } from '~/components/database/controls';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/courses/SubjectsField.vue';
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
-import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
+import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
 
 const { object, recordId, prop, assoc, val, maybeAssoc, maybeProp, tuple } = mappers;
 
@@ -93,25 +92,25 @@ export const course = {
     countryId: null | number;
   }): FormFieldDefinition[] {
     return [
-      [ 'school', asFieldType(AssociatedRecordField), {
+      [ 'school', asFieldType(AbbreviatedRecordField), {
         entity: 'schools',
         params: {
           country_id: countryId,
         },
       } ],
-      [ 'education_level', asFieldType(AssociatedRecordField), {
+      [ 'education_level', asFieldType(AbbreviatedRecordField), {
         entity: 'education_levels',
         params: {
           country_id: countryId,
         },
       } ],
-      [ 'school_year', asFieldType(AssociatedRecordField), {
+      [ 'school_year', asFieldType(AbbreviatedRecordField), {
         entity: 'school_years',
         params: {
           country_id: countryId,
         },
       } ],
-      [ 'standardized_course', asFieldType(AssociatedRecordField), {
+      [ 'standardized_course', asFieldType(AbbreviatedRecordField), {
         entity: 'standardized_courses',
         params: {
           country_id: countryId,
@@ -128,10 +127,10 @@ export const course = {
         requireable: true,
         rightLabel: { text: '%' },
       } ],
-      [ 'preferred_grading', asControl(GradingTypeField) ],
+      [ 'preferred_grading', asFieldType(GradingTypeField) ],
       [ 'description', 'textMultiline' ],
-      [ 'time_range', asControl(SchoolYearTerms) ],
-      [ 'subjects', asControl(SubjectsField) ],
+      [ 'time_range', asFieldType(SchoolYearTerms) ],
+      [ 'subjects', asFieldType(SubjectsField) ],
     ];
   },
   accreditationAuthorityOptions () {

@@ -16,8 +16,8 @@
       <search-modal
         v-if="modalShown"
         :selected-records="selectedRecords"
-        :build-query="onBuildQuery"
-        @select="onSelectRecord($event)"
+        :build-query="onBuildSearchQuery"
+        @select="onSelectRecord"
       />
     </b-modal>
   </div>
@@ -41,7 +41,7 @@ export default class AbbreviatedRecordSelect extends Vue {
     return this.record ? [ this.record ] : [];
   }
 
-  onBuildQuery () {
+  onBuildSearchQuery () {
     return {
       path: `/${this.entity}`,
       mapper: payload => mappers.paginatedAbbreviatedRecords(payload),
@@ -49,8 +49,8 @@ export default class AbbreviatedRecordSelect extends Vue {
   }
 
   onSelectRecord (record: mappers.AbbreviatedRecord) {
-    this.$emit('select', record);
     this.modalShown = false;
+    this.$emit('select', record);
   }
 }
 </script>

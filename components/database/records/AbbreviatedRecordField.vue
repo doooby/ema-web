@@ -20,13 +20,13 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import AbbreviatedRecordSelect
-  from '~/components/database/controls/AbbreviatedRecordSelect/AbbreviatedRecordSelect.vue';
+  from '~/components/database/controls/AbbreviatedRecordSelect.vue';
 
 @Component({
   components: { AbbreviatedRecordSelect },
   mixins: [ ControlMixin ],
 })
-export default class AssociatedRecordField extends Vue {
+export default class AbbreviatedRecordField extends Vue {
   static fieldType: FormFieldType = {
     fillParams ({ name, options }, values, params) {
       params[options.paramsName || `${name}_id`] = values[name]?.id ?? '';

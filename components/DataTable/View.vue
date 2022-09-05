@@ -81,9 +81,13 @@ export default Vue.extend({
     // TODO why `this.anything` raises typescript issues?
     computedCellTemplates (): { [name: string]: any } {
       const templates = { ...this.templates } as { [name: string]: any };
+      const slots = this.$scopedSlots as { [name: string]: any };
       for (const column of (this.columns as DataTable.Column[])) {
-        const slot = column.slot && (this.$scopedSlots as { [name: string]: any })[column.slot];
+        let slot = column.slot && slots[column.slot];
         if (slot) templates[column.name] = slot;
+        const cellName = `cell-${column.name}`;
+        slot = slots[cellName];
+        if (slot) templates[cellName] = slot;
       }
       return templates;
     },

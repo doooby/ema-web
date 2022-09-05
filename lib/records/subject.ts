@@ -1,8 +1,8 @@
 import * as mappers from '~/lib/api/mappers';
 import { assocList } from '~/lib/api/mappers';
-import { FormFieldDefinition } from '~/components/Form';
+import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import { EducationLevel, SubjectCategory } from '~/lib/records';
-import * as dbFields from '~/components/database/controls';
+import AbbreviatedRecordsField from '~/components/database/AbbreviatedRecordsField.vue';
 
 const { object, recordId, prop, val } = mappers;
 
@@ -31,20 +31,14 @@ export const subject = {
     'education_level',
     'subject_category',
   ),
-  recordControls (countryId: null | number): FormFieldDefinition[] {
+  recordControls (): FormFieldDefinition[] {
     return [
       [ 'name', 'name' ],
-      [ 'education_levels', dbFields.MultipleAssociatedRecords, {
+      [ 'education_levels', asFieldType(AbbreviatedRecordsField), {
         entity: 'education_levels',
-        params: {
-          country_id: countryId,
-        },
       } ],
-      [ 'categories', dbFields.MultipleAssociatedRecords, {
+      [ 'categories', asFieldType(AbbreviatedRecordsField), {
         entity: 'subject_categories',
-        params: {
-          country_id: countryId,
-        },
       } ],
     ];
   },

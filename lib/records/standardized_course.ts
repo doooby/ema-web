@@ -1,10 +1,9 @@
 import * as mappers from '~/lib/api/mappers';
 import { course, EducationLevel, Subject } from '~/lib/records';
 import { asFieldType, FormFieldDefinition } from '~/components/Form';
-import { asControl } from '~/components/database/controls';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/standardized_courses/SubjectsField.vue';
-import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
+import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
 
 const { object, recordId, prop, maybeProp, assoc, val } = mappers;
 
@@ -67,7 +66,7 @@ export const standardizedCourse = {
   recordControls (countryId: null | number): FormFieldDefinition[] {
     return [
       [ 'name', 'name' ],
-      [ 'education_level', asFieldType(AssociatedRecordField), {
+      [ 'education_level', asFieldType(AbbreviatedRecordField), {
         entity: 'education_levels',
         params: {
           country_id: countryId,
@@ -83,9 +82,9 @@ export const standardizedCourse = {
         requireable: true,
         rightLabel: { text: '%' },
       } ],
-      [ 'preferred_grading', asControl(GradingTypeField) ],
+      [ 'preferred_grading', asFieldType(GradingTypeField) ],
       [ 'description', 'textMultiline' ],
-      [ 'subjects', asControl(SubjectsField) ],
+      [ 'subjects', asFieldType(SubjectsField) ],
     ];
   },
 };

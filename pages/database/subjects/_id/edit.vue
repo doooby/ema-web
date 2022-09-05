@@ -17,7 +17,7 @@ import { subject } from '~/lib/records';
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return subject.recordControls(this.currentCountryId);
+    return subject.recordControls();
   }
 }
 </script>

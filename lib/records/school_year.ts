@@ -1,10 +1,9 @@
 import * as mappers from '~/lib/api/mappers';
-import { FormFieldDefinition } from '~/components/Form';
-import * as dbFields from '~/components/database/controls';
+import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
 import { EducationLevel } from '~/lib/records/education_level';
 import { assocList } from '~/lib/api/mappers';
-import { asControl } from '~/components/database/controls';
+import AbbreviatedRecordsField from '~/components/database/AbbreviatedRecordsField.vue';
 
 const { object, recordId, prop, val } = mappers;
 
@@ -38,20 +37,13 @@ export const schoolYear = {
   mapAssociations: mappers.createAssociationsMapper<SchoolYearAssociations>(
     'education_level',
   ),
-  recordControls ({
-    countryId,
-  }: {
-    countryId: null | number;
-  }): FormFieldDefinition[] {
+  recordControls (): FormFieldDefinition[] {
     return [
       [ 'name', 'name' ],
-      [ 'education_levels', dbFields.MultipleAssociatedRecords, {
+      [ 'education_levels', asFieldType(AbbreviatedRecordsField), {
         entity: 'education_levels',
-        params: {
-          country_id: countryId,
-        },
       } ],
-      [ 'terms', asControl(SchoolYearTerms) ],
+      [ 'terms', asFieldType(SchoolYearTerms) ],
     ];
   },
 };

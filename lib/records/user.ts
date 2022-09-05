@@ -1,8 +1,7 @@
 import * as mappers from '~/lib/api/mappers';
-import { FormFieldDefinition } from '~/components/Form';
+import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import { Country } from '~/lib/records/country';
 import Privileges from '~/components/database/records/users/controls/Privileges.vue';
-import { asControl } from '~/components/database/controls';
 
 const { object, recordId, prop, maybeAssoc, val, list } = mappers;
 
@@ -77,7 +76,7 @@ export const user = {
     return [
       [ 'login', 'text' ],
       [ 'full_name', 'name' ],
-      [ 'privileges', asControl(Privileges) ],
+      [ 'privileges', asFieldType(Privileges) ],
       [ 'is_root', 'boolean' ],
     ];
   },

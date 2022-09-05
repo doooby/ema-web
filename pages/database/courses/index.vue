@@ -15,7 +15,7 @@ import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
-import AssociatedRecordField from '~/components/database/records/AssociatedRecordField.vue';
+import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
 
 @Component({
   components: { IndexPage },
@@ -25,13 +25,13 @@ export default class extends DatabasePage {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       [ 'search', 'text' ],
-      [ 'school_id', asFieldType(AssociatedRecordField), {
+      [ 'school_id', asFieldType(AbbreviatedRecordField), {
         entity: 'schools',
         params: {
           country_id: this.currentCountryId,
         },
       } ],
-      [ 'education_level_id', asFieldType(AssociatedRecordField), {
+      [ 'education_level_id', asFieldType(AbbreviatedRecordField), {
         entity: 'education_levels',
         params: {
           country_id: this.currentCountryId,
