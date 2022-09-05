@@ -6,7 +6,8 @@
     <show-record-link
       v-else
       :entity="column.cell.entity"
-      :record="{ id: dataItem.id, caption: caption }"
+      :record="dataItem"
+      :caption="caption"
     />
   </div>
 </template>
@@ -14,7 +15,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { DataTable } from '~/components/DataTable';
-import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
+import ShowRecordLink from '~/components/database/pages/ShowRecordLink.vue';
 
 @Component({
   components: { ShowRecordLink },

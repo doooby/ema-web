@@ -21,7 +21,7 @@ export default class Name extends Vue {
   @Prop({ required: true }) readonly dataItem!: any;
 
   get sanitizedValue (): [string, string] {
-    return this.dataItem[this.column.name];
+    return this.dataItem[this.column.name] ?? [];
   }
 }
 </script>

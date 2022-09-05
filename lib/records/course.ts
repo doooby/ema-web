@@ -1,4 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
+import { MappingError } from '~/lib/api/mappers';
 import { EducationLevel, Person, School, SchoolYear, StandardizedCourse, Subject } from '~/lib/records';
 import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
@@ -6,7 +7,7 @@ import SubjectsField from '~/components/database/records/courses/SubjectsField.v
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
 import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
 
-const { object, recordId, prop, assoc, val, maybeAssoc, maybeProp, tuple } = mappers;
+const { recordId, prop, assoc, val, maybeAssoc, maybeProp } = mappers;
 
 export interface Course {
   id: number;
@@ -20,7 +21,7 @@ export interface Course {
   accreditation_authority: undefined | [string, undefined | string];
   lesson_duration: undefined | number;
   attendance_limit: undefined | number;
-  time_ranges: [Date, Date];
+  time_ranges: { from: Date, to: Date }[];
   subjects: undefined | CourseSubject[];
 }
 
@@ -41,28 +42,44 @@ export interface CourseSubject {
 }
 
 export const course = {
-  mapRecord (value: any, associations?: CourseAssociations): Course {
-    return object(value, root => ({
-      id: recordId(root),
-      name: prop('name', root, val.nameTuple),
-      school: assoc('school', root, associations?.school),
-      education_level: assoc('education_level', root, associations?.education_level),
-      school_year: maybeAssoc('school_year', root, associations?.school_year),
-      standardized_course: maybeAssoc('standardized_course', root, associations?.standardized_course),
-      grade: prop('grade', root, val.integer),
-      is_formal: prop('is_formal', root, val.boolean),
-      accreditation_authority: maybeProp('accreditation_authority', root, val.factories.tuple2_1(
-        val.string,
-        val.string,
-      )),
-      lesson_duration: maybeProp('lesson_duration', root, val.integer),
-      attendance_limit: maybeProp('attendance_limit', root, val.integer),
-      time_ranges: prop('time_ranges', root, timeRange => tuple(timeRange, array => [
-        prop('0', array, val.date),
-        prop('1', array, val.date),
-      ])),
-      subjects: maybeProp('subjects', root, course.mapSubjectsFactory(associations)),
-    }));
+  mapRecord (value: any, associations?: CourseAssociations): mappers.InvalidRecord | Course {
+    try {
+      return mappers.object(value, root => ({
+        id: recordId(root),
+        name: prop('name', root, val.nameTuple),
+        school: assoc('school', root, associations?.school),
+        education_level: assoc('education_level', root, associations?.education_level),
+        school_year: maybeAssoc('school_year', root, associations?.school_year),
+        standardized_course: maybeAssoc('standardized_course', root, associations?.standardized_course),
+        grade: prop('grade', root, val.integer),
+        is_formal: prop('is_formal', root, val.boolean),
+        accreditation_authority: maybeProp('accreditation_authority', root, val.factories.tuple2_1(
+          val.string,
+          val.string,
+        )),
+        lesson_duration: maybeProp('lesson_duration', root, val.integer),
+        attendance_limit: maybeProp('attendance_limit', root, val.integer),
+        time_ranges: prop('time_ranges', root, time_ranges => mappers.list(
+          time_ranges,
+          time_range => mappers.object(time_range, object => ({
+            from: prop('from', object, val.date),
+            to: prop('to', object, val.date),
+          })),
+        )),
+        subjects: maybeProp('subjects', root, course.mapSubjectsFactory(associations)),
+      }));
+    } catch (error) {
+      if (error instanceof MappingError) error.finalize();
+      utils.warnOfError(error);
+      return mappers.object(value, root => ({
+        id: recordId(root),
+        __invalid: true,
+        __invalidRecord: {
+          error,
+          src: root,
+        },
+      }));
+    }
   },
   mapAssociations: mappers.createAssociationsMapper<CourseAssociations>(
     'school',

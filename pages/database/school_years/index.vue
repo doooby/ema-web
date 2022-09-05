@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import IndexPage from '~/components/database/page/index/IndexPage.vue';
+import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';

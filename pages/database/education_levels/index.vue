@@ -9,7 +9,7 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import IndexPage from '~/components/database/page/index/IndexPage.vue';
+import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';

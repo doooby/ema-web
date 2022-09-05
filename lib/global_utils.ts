@@ -11,9 +11,8 @@ export function warn (message: string, ...context: any) {
 }
 
 export function warnOfError (error: Error, ...context: any) {
-  console.log('EMA error', error.message);
-  if (context) console.log(...context);
   console.error(error);
+  if (context) console.log(...context);
 }
 
 export function formatDate (date?: Date): string {

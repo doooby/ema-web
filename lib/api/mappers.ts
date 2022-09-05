@@ -8,6 +8,12 @@ export interface RecordBase {
 
 export interface InvalidRecord extends RecordBase {
   __invalid: true,
+  __invalidRecord?: InvalidRecordDetails;
+}
+
+export interface InvalidRecordDetails {
+  error: MappingError;
+  src: any;
 }
 
 export interface AbbreviatedRecord extends RecordBase {

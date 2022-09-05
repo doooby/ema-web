@@ -9,12 +9,11 @@
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
-export default Vue.extend({
-  props: {
-    entity: { type: String, required: true },
-    record: { type: Object as PropType<{ id: number, caption: string }>, required: true },
-  },
-});
+@Component
+export default class ShowRecordLink extends Vue {
+  @Prop({ required: true }) readonly entity!: string;
+  @Prop({ required: true }) readonly record!: { id: number, caption: string };
+}
 </script>
