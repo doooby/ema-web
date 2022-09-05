@@ -5,7 +5,7 @@
     </template>
     <items-listing
       :columns="columns"
-      :items="items"
+      :items="subjects"
       @add="selectSubjectModalShown = true"
       @change="onChangeValue"
     >
@@ -50,9 +50,8 @@
       </template>
       <search-modal
         v-if="selectSubjectModalShown"
-        :query="$api.queries.subjects.searchAssociated"
-        :params="{ country_id: currentCountryId }"
-        :selected-ids="items.map(item => item.id)"
+        :selected-records="subjects"
+        :build-query="onBuildSearchQuery"
         @select="onAddSubject"
       />
     </b-modal>
@@ -69,6 +68,7 @@ import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import SearchModal from '~/components/database/SearchModal.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 import CourseGrading from '~/components/database/controls/primitives/CourseGrading.vue';
+import * as mappers from '~/lib/api/mappers';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -95,7 +95,7 @@ export default class SubjectsField extends Vue {
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;
 
-  get items (): StandardizedCourseSubject[] {
+  get subjects (): StandardizedCourseSubject[] {
     return this.formValues[this.field.name] ?? [];
   }
 
@@ -110,18 +110,25 @@ export default class SubjectsField extends Vue {
     { name: 'exam', size: 100 },
   ];
 
+  onBuildSearchQuery () {
+    return {
+      path: '/subjects',
+      mapper: mappers.paginatedAbbreviatedRecords,
+    };
+  }
+
   onAddSubject (subject: AssociatedRecord<Subject>) {
     this.selectSubjectModalShown = false;
-    const newItems = [ ...this.items ];
-    newItems.push(
+    const newSubjects = [ ...this.subjects ];
+    newSubjects.push(
       Object.freeze({
         subject,
         exam: false,
         grading: this.formValues.preferred_grading,
       }),
     );
-    Object.freeze(newItems);
-    (this as any).onChangeValue(newItems);
+    Object.freeze(newSubjects);
+    (this as any).onChangeValue(newSubjects);
   }
 
   onUpdateItem (
@@ -130,13 +137,13 @@ export default class SubjectsField extends Vue {
     field: string,
     value: any,
   ) {
-    const newItems = [ ...this.items ];
-    newItems[index] = Object.freeze({
+    const newSubjects = [ ...this.subjects ];
+    newSubjects[index] = Object.freeze({
       ...item,
       [field]: value,
     });
-    Object.freeze(newItems);
-    (this as any).onChangeValue(newItems);
+    Object.freeze(newSubjects);
+    (this as any).onChangeValue(newSubjects);
   }
 }
 </script>

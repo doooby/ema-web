@@ -77,14 +77,12 @@ export default class SearchModal extends Vue {
   ]);
 
   onInputDebounced = debounce(
-    (params) => { this.searchParams = params; },
+    (params) => {
+      this.searchParams = params;
+      this.search();
+    },
     800,
   );
-
-  @Watch('searchParams')
-  onSearchParamsChanged () {
-    this.search(this.searchParams);
-  }
 
   mounted () {
     this.search();
