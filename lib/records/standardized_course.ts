@@ -28,7 +28,7 @@ export interface StandardizedCourseAssociations {
 
 export interface StandardizedCourseSubject {
   subject: mappers.AssociatedRecord<Subject>;
-  grading: [string, string, undefined | string];
+  grading?: [string, string, undefined | string];
   exam?: boolean;
 }
 
@@ -56,7 +56,7 @@ export const standardizedCourse = {
   }): (value: any) => StandardizedCourseSubject[] => val.factories.listOfObjects((item) => {
     return {
       subject: assoc('subject', item, associations?.subject),
-      grading: prop('grading', item, course.mapGrading),
+      grading: maybeProp('grading', item, course.mapGrading),
       exam: maybeProp('exam', item, val.boolean),
     };
   }),

@@ -7,11 +7,11 @@
     :columns="columns"
     :actions="actions"
   >
-    <template #time_range="{ dataItem }">
-      <div v-if="dataItem.time_range">
-        {{ fnsFormat(dataItem.time_range[0], 'yyyy-MM-dd') }}
+    <template #time_ranges="{ dataItem }">
+      <div v-if="dataItem.time_ranges">
+        {{ fnsFormat(dataItem.time_ranges[0], 'yyyy-MM-dd') }}
         -
-        {{ fnsFormat(dataItem.time_range[1], 'yyyy-MM-dd') }}
+        {{ fnsFormat(dataItem.time_ranges[1], 'yyyy-MM-dd') }}
       </div>
     </template>
   </records-browsing>
@@ -45,7 +45,7 @@ export default class CoursesListing extends Vue {
       headerText: () => 'Education Level',
     },
     { name: 'grade', headerText: () => 'Grade' },
-    { name: 'time_range', headerText: () => 'Duration', slot: 'time_range' },
+    { name: 'time_ranges', headerText: () => 'Duration', slot: 'time_ranges' },
   ];
 
   actions = [

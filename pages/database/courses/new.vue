@@ -15,12 +15,13 @@
         </div>
         <div class="col-md-6">
           <form-field name="school_year" :context="context" :values="values" />
-          <form-field name="time_range" :context="context" :values="values" />
+          <form-field name="time_ranges" :context="context" :values="values" />
         </div>
         <div class="col-12">
           <div class="border-bottom my-2" />
         </div>
         <div class="col-md-6">
+          <form-field name="name" :context="context" :values="values" />
           <form-field name="education_level" :context="context" :values="values" />
           <form-field name="grade" :context="context" :values="values" />
           <form-field name="is_formal" :context="context" :values="values" />

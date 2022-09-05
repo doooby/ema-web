@@ -44,7 +44,7 @@ export default class AbbreviatedRecordSelect extends Vue {
   onBuildSearchQuery () {
     return {
       path: `/${this.entity}`,
-      mapper: payload => mappers.paginatedAbbreviatedRecords(payload),
+      mapper: mappers.paginatedAbbreviatedRecords,
     };
   }
 

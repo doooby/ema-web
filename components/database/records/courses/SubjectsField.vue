@@ -9,6 +9,12 @@
       @add="selectSubjectModalShown = true"
       @change="onChangeValue"
     >
+      <template #header-subject>
+        <t value="db.record.subjects.meta.s" />
+      </template>
+      <template #header-teacher>
+        <t value="db.record.courses.subjects.label.teacher" />
+      </template>
       <template #header-grading>
         <t value="db.record.courses.subjects.label.grading" />
       </template>
@@ -22,29 +28,25 @@
         />
       </template>
       <template #cell-teacher="{ item }">
-        <show-record-link
+        <AbbreviatedRecordSelect
           entity="people"
-          :record="item.teacher ? { id: item.teacher.id, caption: item.teacher.labels.caption } : null"
+          :record="item.teacher"
         />
       </template>
       <template #cell-grading="{ item, index }">
-        <div class="single-row-cell">
-          <course-grading
-            :value="item.grading"
-            @change="onUpdateItem(index, item, 'grading', $event)"
-          />
-        </div>
+        <course-grading
+          :value="item.grading"
+          @change="onUpdateItem(index, item, 'grading', $event)"
+        />
       </template>
       <template #cell-exam="{ item, index }">
-        <div class="single-row-cell">
-          <checkbox-input
-            class="mr-2"
-            :value="item.exam"
-            @change="onUpdateItem(index, item, 'exam', $event)"
-          >
-            <t value="app.common.label.required" />
-          </checkbox-input>
-        </div>
+        <checkbox-input
+          class="mr-2"
+          :value="item.exam"
+          @change="onUpdateItem(index, item, 'exam', $event)"
+        >
+          <t value="app.common.label.required" />
+        </checkbox-input>
       </template>
     </items-listing>
     <b-modal
@@ -56,9 +58,8 @@
       </template>
       <search-modal
         v-if="selectSubjectModalShown"
-        :query="$api.queries.subjects.searchAssociated"
-        :params="{ country_id: currentCountryId }"
-        :selected-ids="items.map(item => item.id)"
+        :selected-records="subjects"
+        :build-query="onBuildSearchQuery"
         @select="onAddSubject"
       />
     </b-modal>
@@ -75,10 +76,12 @@ import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import SearchModal from '~/components/database/SearchModal.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 import CourseGrading from '~/components/database/controls/primitives/CourseGrading.vue';
+import * as mappers from '~/lib/api/mappers';
+import AbbreviatedRecordSelect from '~/components/database/controls/AbbreviatedRecordSelect.vue';
 
 @Component({
   mixins: [ ControlMixin ],
-  components: { ShowRecordLink, SearchModal, CheckboxInput, CourseGrading },
+  components: { ShowRecordLink, SearchModal, CheckboxInput, CourseGrading, AbbreviatedRecordSelect },
 })
 export default class SubjectsField extends Vue {
   static fieldType: FormFieldType = {
@@ -101,11 +104,11 @@ export default class SubjectsField extends Vue {
   @Prop({ required: true }) formValues!: FormValues;
 
   get items (): CourseSubject[] {
-    return this.formValues[this.field.name] ?? [];
+    return (this as any).rawValue ?? [];
   }
 
-  get currentCountryId (): null | number {
-    return this.$store.state.session.currentCountry?.id ?? null;
+  get subjects (): mappers.AbbreviatedRecord[] {
+    return this.items.map(item => item.subject);
   }
 
   selectSubjectModalShown = false;
@@ -115,6 +118,13 @@ export default class SubjectsField extends Vue {
     { name: 'grading', size: 250 },
     { name: 'exam', size: 100 },
   ];
+
+  onBuildSearchQuery () {
+    return {
+      path: '/subjects',
+      mapper: mappers.paginatedAbbreviatedRecords,
+    };
+  }
 
   onAddSubject (subject: AssociatedRecord<Subject>) {
     this.selectSubjectModalShown = false;

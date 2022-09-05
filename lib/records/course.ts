@@ -20,7 +20,7 @@ export interface Course {
   accreditation_authority: undefined | [string, undefined | string];
   lesson_duration: undefined | number;
   attendance_limit: undefined | number;
-  time_range: [Date, Date];
+  time_ranges: [Date, Date];
   subjects: undefined | CourseSubject[];
 }
 
@@ -36,7 +36,7 @@ export interface CourseAssociations {
 export interface CourseSubject {
   subject: mappers.AssociatedRecord<Subject>;
   teacher?: mappers.AssociatedRecord<Person>;
-  grading: [string, string, undefined | string];
+  grading?: [string, string, undefined | string];
   exam?: boolean;
 }
 
@@ -57,7 +57,7 @@ export const course = {
       )),
       lesson_duration: maybeProp('lesson_duration', root, val.integer),
       attendance_limit: maybeProp('attendance_limit', root, val.integer),
-      time_range: prop('time_range', root, timeRange => tuple(timeRange, array => [
+      time_ranges: prop('time_ranges', root, timeRange => tuple(timeRange, array => [
         prop('0', array, val.date),
         prop('1', array, val.date),
       ])),
@@ -83,7 +83,7 @@ export const course = {
   }): (value: any) => CourseSubject[] => val.factories.listOfObjects(item => ({
     subject: assoc('subject', item, associations?.subject),
     teacher: maybeAssoc('teacher', item, associations?.teacher),
-    grading: prop('grading', item, course.mapGrading),
+    grading: maybeProp('grading', item, course.mapGrading),
     exam: maybeProp('exam', item, val.boolean),
   })),
   recordControls ({
@@ -129,7 +129,7 @@ export const course = {
       } ],
       [ 'preferred_grading', asFieldType(GradingTypeField) ],
       [ 'description', 'textMultiline' ],
-      [ 'time_range', asFieldType(SchoolYearTerms) ],
+      [ 'time_ranges', asFieldType(SchoolYearTerms) ],
       [ 'subjects', asFieldType(SubjectsField) ],
     ];
   },
