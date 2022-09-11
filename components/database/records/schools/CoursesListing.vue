@@ -55,8 +55,8 @@ export default class CoursesListing extends Vue {
       icon: 'plus',
       onClick: () => {
         this.$router.push({
-          name: 'database-courses-new',
-          params: {
+          path: '/database/courses/new',
+          query: {
             school_id: this.school.id.toString(),
           },
         });

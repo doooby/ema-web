@@ -1,6 +1,13 @@
 import * as mappers from '~/lib/api/mappers';
-import { MappingError, safeRecord } from '~/lib/api/mappers';
-import { EducationLevel, Person, School, SchoolYear, StandardizedCourse, Subject } from '~/lib/records';
+import {
+  EducationLevel,
+  Person,
+  School,
+  SchoolYear,
+  StandardizedCourse,
+  StandardizedCourseSubject,
+  Subject,
+} from '~/lib/records';
 import { asFieldType, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/courses/SubjectsField.vue';
@@ -34,11 +41,8 @@ export interface CourseAssociations {
   teacher: mappers.AssociatedRecordsIndex,
 }
 
-export interface CourseSubject {
-  subject: mappers.AssociatedRecord<Subject>;
+export interface CourseSubject extends StandardizedCourseSubject {
   teacher?: mappers.AssociatedRecord<Person>;
-  grading?: [string, string, undefined | string];
-  exam?: boolean;
 }
 
 export const course = {
@@ -142,5 +146,30 @@ export const course = {
       { value: 'gov', text: 'db.record.courses.accreditation_authority.gov' },
       { value: 'ngo', text: 'db.record.courses.accreditation_authority.ngo' },
     ]);
+  },
+  updateFormPerStandardizedCourse (values: any, record: StandardizedCourse) {
+    const {
+      name,
+      education_level,
+      grade,
+      is_formal,
+      accreditation_authority,
+      lesson_duration,
+      attendance_limit,
+      preferred_grading,
+      subjects,
+    } = record;
+    return {
+      ...values,
+      name,
+      education_level,
+      grade,
+      is_formal,
+      accreditation_authority,
+      lesson_duration,
+      attendance_limit,
+      preferred_grading,
+      subjects,
+    };
   },
 };

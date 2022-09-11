@@ -13,7 +13,7 @@
           <div class="position-relative">
             <div class="position-absolute w-100" style="z-index: 1;">
               <b-progress
-                v-if="prefetching"
+                v-if="processing"
                 height="2px"
                 :value="100"
                 variant="info"
@@ -25,9 +25,10 @@
           <div class="card-body pt-3 pb-0">
             <form-group
               v-if="$scopedSlots.layout"
-              v-model="formValues"
+              :value="formValues"
               :fields="formFields"
               :label-prefix="formFieldsLabelPrefix"
+              @input="onInput"
             >
               <template #layout="{ context, values }">
                 <slot name="layout" :context="context" :values="values" />
@@ -35,9 +36,10 @@
             </form-group>
             <form-group
               v-else
-              v-model="formValues"
+              :value="formValues"
               :fields="formFields"
               :label-prefix="formFieldsLabelPrefix"
+              @input="onInput"
             />
             <record-errors class="mb-3" :errors="errors" />
           </div>
@@ -77,12 +79,12 @@ import RecordErrors from './RecordErrors.vue';
 export default class NewPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
-  @Prop() readonly prefetching?: boolean;
-  @Prop() readonly values!: FormValues;
+  @Prop() readonly processing?: boolean;
+  @Prop() readonly value!: FormValues;
   @Prop() readonly cardClass?: string;
 
   formFields = buildFormFields(this.fields);
-  formValues = { ...prefillFormValues(this.formFields), ...this.values };
+  formValues = { ...prefillFormValues(this.formFields), ...this.value };
   createQueryState = this.$api.newQueryState<RecordChange>();
   errors = null as null | RecordChangeError[];
 
@@ -92,9 +94,9 @@ export default class NewPage extends Vue {
     this.updatePage();
   }
 
-  @Watch('values')
-  onValuesChanged () {
-    this.formValues = { ...this.formValues, ...this.values };
+  @Watch('value')
+  onValueChanged () {
+    this.formValues = { ...this.formValues, ...this.value };
   }
 
   mounted () {
@@ -127,11 +129,10 @@ export default class NewPage extends Vue {
     }
   }
 
-  updatePage () {
-    this.formFields = buildFormFields(this.fields);
-    this.formValues = prefillFormValues(this.formFields);
-    this.createQueryState.reset();
-    this.errors = null;
+  onInput (newValues: any) {
+    const previousValues = this.formValues;
+    this.formValues = { ...previousValues, ...newValues };
+    this.$emit('change', this.formValues, previousValues);
   }
 
   async onSubmit () {
@@ -153,6 +154,13 @@ export default class NewPage extends Vue {
 
   onCancel () {
     this.$router.go(-1);
+  }
+
+  updatePage () {
+    this.formFields = buildFormFields(this.fields);
+    this.formValues = prefillFormValues(this.formFields);
+    this.createQueryState.reset();
+    this.errors = null;
   }
 }
 </script>
