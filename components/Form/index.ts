@@ -1,8 +1,10 @@
-import { controlsIndex, voidFieldType } from './controls';
+import { controlsIndex, controlsIndex2, asFieldType } from './controls';
 import Group from './Group.vue';
 
 export {
   Group as FormGroup,
+  asFieldType,
+  controlsIndex2 as controls,
 };
 
 interface FieldOptions {
@@ -45,12 +47,12 @@ function getControlType (type: string | FormFieldType): FormFieldType {
     return customType;
   }
   if (typeOfType === 'string') {
-    const knownType = controlsIndex[type as string];
+    const knownType = controlsIndex2[type as string] ?? controlsIndex[type as string];
     if (knownType) return knownType;
   }
 
   utils.warn('Form controls - unknown type', type);
-  return voidFieldType;
+  return {};
 }
 
 export function buildFormFields (fields: FormFieldDefinition[]): FormField[] {
@@ -83,8 +85,4 @@ export function formToRecordParams (fields: FormField[], values: FormValues): Fo
     (field.type.fillParams ?? defaultFormToRecordParams)(field, values, params);
   }
   return params;
-}
-
-export function asFieldType (component: any): FormFieldType {
-  return { ...component.fieldType, control: component };
 }

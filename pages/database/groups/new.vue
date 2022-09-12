@@ -2,7 +2,7 @@
   <new-page
     entity="groups"
     :fields="fields"
-    @created="onCreated"
+    @create="onCreated"
   />
 </template>
 

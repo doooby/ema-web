@@ -2,7 +2,7 @@
   <new-page
     entity="schools"
     :fields="fields"
-    @created="onCreated"
+    @create="onCreated"
   />
 </template>
 

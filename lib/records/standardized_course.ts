@@ -1,6 +1,6 @@
 import * as mappers from '~/lib/api/mappers';
 import { course, EducationLevel, Subject } from '~/lib/records';
-import { asFieldType, FormFieldDefinition } from '~/components/Form';
+import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/standardized_courses/SubjectsField.vue';
 import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
@@ -65,7 +65,7 @@ export const standardizedCourse = {
   ),
   recordControls (countryId: null | number): FormFieldDefinition[] {
     return [
-      [ 'name', 'name' ],
+      [ 'name', controls.name ],
       [ 'education_level', asFieldType(AbbreviatedRecordField), {
         entity: 'education_levels',
         params: {

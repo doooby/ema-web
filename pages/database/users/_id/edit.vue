@@ -2,7 +2,7 @@
   <edit-page
     entity="users"
     :fields="fields"
-    @updated="onUpdated"
+    @update="onUpdated"
   />
 </template>
 

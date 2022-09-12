@@ -1,14 +1,13 @@
 import * as mappers from '~/lib/api/mappers';
 import {
   EducationLevel,
-  Person,
+  person,
   School,
   SchoolYear,
   StandardizedCourse,
   StandardizedCourseSubject,
-  Subject,
 } from '~/lib/records';
-import { asFieldType, FormFieldDefinition } from '~/components/Form';
+import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/courses/SubjectsField.vue';
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
@@ -42,7 +41,7 @@ export interface CourseAssociations {
 }
 
 export interface CourseSubject extends StandardizedCourseSubject {
-  teacher?: mappers.AssociatedRecord<Person>;
+  teacher?: mappers.AssociatedRecord<person.Person>;
 }
 
 export const course = {
@@ -124,7 +123,7 @@ export const course = {
           country_id: countryId,
         },
       } ],
-      [ 'name', 'name' ],
+      [ 'name', controls.name ],
       [ 'grade', 'integer', { maxLength: 2 } ],
       [ 'is_formal', 'boolean' ],
       [ 'accreditation_authority', 'selectOrFill', {

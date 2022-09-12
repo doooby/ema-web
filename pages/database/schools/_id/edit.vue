@@ -2,7 +2,7 @@
   <edit-page
     entity="schools"
     :fields="fields"
-    @updated="onUpdated"
+    @update="onUpdated"
   />
 </template>
 

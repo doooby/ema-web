@@ -1,5 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
-import { asFieldType, FormFieldDefinition } from '~/components/Form';
+import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import { Country } from '~/lib/records/country';
 import Privileges from '~/components/database/records/users/controls/Privileges.vue';
 
@@ -75,7 +75,7 @@ export const user = {
   entityControls (): FormFieldDefinition[] {
     return [
       [ 'login', 'text' ],
-      [ 'full_name', 'name' ],
+      [ 'full_name', controls.name ],
       [ 'privileges', asFieldType(Privileges) ],
       [ 'is_root', 'boolean' ],
     ];

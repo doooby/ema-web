@@ -1,5 +1,3 @@
-import VoidControl, { type as VoidControlType } from './Void.vue';
-
 import BooleanControl from './Boolean.vue';
 import CalendarControl, { type as CalendarControlType } from './Calendar.vue';
 import DateControl, { type as DateControlType } from './Date.vue';
@@ -13,13 +11,9 @@ import NameControl from './Name.vue';
 import TextMultilineControl, { type as TextMultilineControlType } from './TextMultiline.vue';
 import LocationControl from './Location.vue';
 import ListMultiple from '~/components/Form/controls/ListMultiple.vue';
+import { FormFieldType } from '~/components/Form';
 
 export const controlsIndex = {} as any;
-
-export const voidFieldType = {
-  ...VoidControlType,
-  control: VoidControl,
-};
 
 function add (type: any, control: any) {
   if (!type.name) throw new Error(`missing type.name: ${type.name}`);
@@ -40,6 +34,20 @@ add(SelectControl.fieldType, SelectControl);
 add(SelectOrFillControl.fieldType, SelectOrFillControl);
 add(TextControlType, TextControl);
 add(TextMultilineControlType, TextMultilineControl);
-add(NameControl.fieldType, NameControl);
 add(LocationControl.fieldType, LocationControl);
 add(ListMultiple.fieldType, ListMultiple);
+
+export function asFieldType (component: any): FormFieldType {
+  return { ...component.fieldType, control: component };
+}
+
+export const controlsIndex2 = {
+  name: asFieldType(NameControl),
+  date: asFieldType(DateControl),
+  select: asFieldType(SelectControl),
+  selectOrFill: asFieldType(SelectOrFillControl),
+  textMultiline: asFieldType(TextMultilineControl),
+  boolean: asFieldType(BooleanControl),
+  integer: asFieldType(IntegerControl),
+  text: asFieldType(TextControl),
+};

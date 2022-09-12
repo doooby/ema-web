@@ -16,7 +16,7 @@
       </template>
     </select-with-modal>
     <div v-if="definition.level.type === 'text'">
-      <text-input :value="value" :disabled="disabled" @change="onValueChange" />
+      <text-input :value="value" :disabled="disabled" @input="onValueChange" />
     </div>
   </div>
 </template>

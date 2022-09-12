@@ -8,14 +8,22 @@ export function index (params: Params) {
   return {
     path: '/people',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, person.mapRecord, person.mapAssociations),
+    mapper: (payload: any) => mappers.paginatedRecords(
+      payload,
+      person.parse,
+      person.parseAssociations,
+    ),
   };
 }
 
 export function show (personId: number) {
   return {
     path: `/people/${personId}`,
-    mapper: (payload: any) => record(payload, person.mapRecord, person.mapAssociations),
+    mapper: (payload: any) => record(
+      payload,
+      person.parse,
+      person.parseAssociations,
+    ),
   };
 }
 

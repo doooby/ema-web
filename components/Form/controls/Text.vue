@@ -18,7 +18,7 @@
         :dom-id="domIdBase"
         :interactive="interactive"
         :value="value"
-        @change="onChange"
+        @input="onChange"
       />
       <div v-if="rightLabelText" class="input-group-append">
         <span v-if="rightLabelText.text" class="input-group-text">

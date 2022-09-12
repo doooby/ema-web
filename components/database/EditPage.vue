@@ -128,8 +128,8 @@ export default class EditPage extends Vue {
   }
 
   onUpdated (record: any) {
-    if (this.$listeners.updated) {
-      this.$emit('updated', record);
+    if (this.$listeners.update) {
+      this.$emit('update', record);
     } else {
       this.$router.push({ path: `/database/${this.entity}` });
     }

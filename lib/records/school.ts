@@ -1,5 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
-import { asFieldType, FormFieldDefinition } from '~/components/Form';
+import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import AbbreviatedRecordsField from '~/components/database/AbbreviatedRecordsField.vue';
 
 export interface School {
@@ -47,7 +47,7 @@ export const school = {
       [ 'education_levels', asFieldType(AbbreviatedRecordsField), {
         entity: 'education_levels',
       } ],
-      [ 'name', 'name' ],
+      [ 'name', controls.name ],
       [ 'external_id', 'text' ],
       [ 'education_types', 'listMultiple', {
         options: Object.freeze([

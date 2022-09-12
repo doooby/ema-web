@@ -1,6 +1,6 @@
 import * as mappers from '~/lib/api/mappers';
 import { assocList } from '~/lib/api/mappers';
-import { asFieldType, FormFieldDefinition } from '~/components/Form';
+import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import { EducationLevel, SubjectCategory } from '~/lib/records';
 import AbbreviatedRecordsField from '~/components/database/AbbreviatedRecordsField.vue';
 
@@ -33,7 +33,7 @@ export const subject = {
   ),
   recordControls (): FormFieldDefinition[] {
     return [
-      [ 'name', 'name' ],
+      [ 'name', controls.name ],
       [ 'education_levels', asFieldType(AbbreviatedRecordsField), {
         entity: 'education_levels',
       } ],

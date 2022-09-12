@@ -1,43 +1,17 @@
+// TODO
+
 import * as mappers from '~/lib/api/mappers';
-import { asFieldType, FormFieldDefinition } from '~/components/Form';
+import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import { Country } from '~/lib/records/country';
 import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
 
 const { object, recordId, prop, maybeProp, assoc, val } = mappers;
 
-export interface Person {
-  id: number;
-  country: mappers.AssociatedRecord<Country>;
-  family_name_en: string;
-  family_name: string;
-  given_name_en: string;
-  given_name: string;
-  born_on?: Date;
-}
-
-export interface PersonAssociations {
-  country: mappers.AssociatedRecordsIndex,
-}
-
 // function mapOptions (list: string[]) {
 //   return list.map((value, index) => ({ value: String(index), caption: value }));
 // }
 
-export const person = {
-  mapRecord (value: any, associations?: PersonAssociations): Person {
-    return object(value, root => ({
-      id: recordId(root),
-      country: assoc('country', root, associations?.country),
-      family_name_en: prop('family_name_en', root, val.string),
-      family_name: prop('family_name', root, val.string),
-      given_name_en: prop('given_name_en', root, val.string),
-      given_name: prop('given_name', root, val.string),
-      born_on: maybeProp('born_on', root, val.date),
-    }));
-  },
-  mapAssociations: mappers.createAssociationsMapper<PersonAssociations>(
-    'country',
-  ),
+export const person_old = {
 
   // genderOptions: Object.freeze([
   //   { value: 'f', caption: 'Female' },
@@ -145,12 +119,13 @@ export const person = {
 
   recordControls (): FormFieldDefinition[] {
     return [
-      [ 'country', asFieldType(AbbreviatedRecordField), { entity: 'countries' } ],
-      [ 'family_name_en', 'text' ],
-      [ 'family_name', 'text' ],
-      [ 'given_name_en', 'text' ],
-      [ 'given_name', 'text' ],
-      [ 'born_on', 'date' ],
+      [ 'first_name', controls.name ],
+      [ 'last_name', controls.name ],
+      [ 'born_on', controls.date ],
+      [ 'gender', controls.date ],
+      [ 'gender', controls.select, {
+        // options: course.accreditationAuthorityOptions(),
+      } ],
       // [ 'last_name', dbFields.Name ],
       // [ 'born_on', 'date' ],
       // [ 'gender', 'list', { options: student.genderOptions } ],

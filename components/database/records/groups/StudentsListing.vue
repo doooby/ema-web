@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { Group, Person } from '~/lib/records';
+import { Group, person } from '~/lib/records';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 
@@ -23,7 +23,7 @@ import RecordLink from '~/components/database/cells/RecordLink.vue';
 export default class StudentsListing extends Vue {
   @Prop({ required: true }) readonly group!: Group;
 
-  getStudentsQueryState = this.$api.newQueryState<PaginatedRecords<Person>>();
+  getStudentsQueryState = this.$api.newQueryState<PaginatedRecords<person.Person>>();
   tableColumns = [
     { name: 'id', cell: { type: RecordLink, entity: 'people' }, size: 60 },
     { name: 'name_en', getText: ({ family_name_en, given_name_en }: any) => `${family_name_en}, ${given_name_en}` },

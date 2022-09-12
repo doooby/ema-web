@@ -122,8 +122,8 @@ export default class NewPage extends Vue {
   }
 
   onCreated (recordId: any) {
-    if (this.$listeners.created) {
-      this.$emit('created', recordId);
+    if (this.$listeners.create) {
+      this.$emit('create', recordId);
     } else {
       this.$router.push({ path: `/database/${this.entity}` });
     }

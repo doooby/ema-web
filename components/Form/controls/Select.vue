@@ -5,11 +5,11 @@
     <template #label>
       <t :value="labelTranslation" />
     </template>
-    <b-form-select
-      :id="domIdBase"
+    <select-input
+      :dom-id="domIdBase"
       :value="selected && selected.value"
       :options="options"
-      @change="onChange"
+      @input="onChange"
     />
   </b-form-group>
 </template>
@@ -19,9 +19,11 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import { Option } from '~/lib/types';
+import SelectInput from '~/components/Form/primitives/SelectInput.vue';
 
 @Component({
   mixins: [ ControlMixin ],
+  components: { SelectInput },
 })
 export default class Select extends Vue {
   static fieldType: FormFieldType = {
@@ -42,8 +44,11 @@ export default class Select extends Vue {
     return this.options.find(option => option.value === value);
   }
 
-  get options (): Array<Option> {
-    return this.field.options.options ?? [];
+  get options (): Option[] {
+    return (this.field.options.options ?? []).map(option => ({
+      value: option.value,
+      text: option.translated ? option.text : this.$t(option.text),
+    }));
   }
 
   onChange (value: any): void {

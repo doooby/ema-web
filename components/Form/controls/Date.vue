@@ -54,7 +54,7 @@ import ControlMixin from '../ControlMixin';
 
 const DAY_OPTIONS = times(31, val => val + 1);
 const MONTHS_OPTIONS = times(12, val => val + 1);
-const YEARS_OPTIONS = reverse(times(50, val => 2030 - val));
+const YEARS_OPTIONS = reverse(times(80, val => 2030 - val));
 
 export const type: FormFieldType = {
   name: 'date',

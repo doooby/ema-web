@@ -32,7 +32,7 @@ export default class TextInput extends Vue {
   }
 
   onInput (event: {target: HTMLInputElement}): void {
-    this.$emit('change', event.target.value);
+    this.$emit('input', event.target.value);
   }
 
   onCommit () {}

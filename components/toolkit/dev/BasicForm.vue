@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { buildFormFields, prefillFormValues } from '~/components/Form';
+import { buildFormFields, controls, prefillFormValues } from '~/components/Form';
 
 @Component
 export default class BasicForm extends Vue {
@@ -56,7 +56,7 @@ export default class BasicForm extends Vue {
     } ],
     [ 'date', 'date' ],
     [ 'calendar', 'calendar' ],
-    [ 'name', 'name' ],
+    [ 'name', controls.name ],
     [ 'text_interactive', 'text', { interactive: true } ],
     [ 'text_multiline', 'textMultiline' ],
   ]);

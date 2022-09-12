@@ -1,5 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
-import { asFieldType, FormFieldDefinition } from '~/components/Form';
+import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
 import { EducationLevel } from '~/lib/records/education_level';
 import { assocList } from '~/lib/api/mappers';
@@ -39,7 +39,7 @@ export const schoolYear = {
   ),
   recordControls (): FormFieldDefinition[] {
     return [
-      [ 'name', 'name' ],
+      [ 'name', controls.name ],
       [ 'education_levels', asFieldType(AbbreviatedRecordsField), {
         entity: 'education_levels',
       } ],

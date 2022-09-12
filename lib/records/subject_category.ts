@@ -1,6 +1,6 @@
 import * as mappers from '~/lib/api/mappers';
 import { Country } from '~/lib/records/country';
-import { FormFieldDefinition } from '~/components/Form';
+import { controls, FormFieldDefinition } from '~/components/Form';
 
 const { object, recordId, prop, val, assoc } = mappers;
 
@@ -27,7 +27,7 @@ export const subjectCategory = {
   ),
   recordControls (): FormFieldDefinition[] {
     return [
-      [ 'name', 'name' ],
+      [ 'name', controls.name ],
     ];
   },
 };
