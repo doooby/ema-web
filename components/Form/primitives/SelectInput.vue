@@ -1,7 +1,7 @@
 <template>
   <b-form-select
     :id="domId"
-    :value="selected && selected.value"
+    :value="value"
     :options="options"
     @change="$emit('input', $event)"
   />

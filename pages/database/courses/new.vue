@@ -5,8 +5,8 @@
     :value="values"
     :fields="fields"
     card-class="col-md-12 col-lg-8"
-    @create="onCreated"
     @change="onChange"
+    @create="onCreated"
   >
     <template #layout="{ context, values }">
       <div class="row">

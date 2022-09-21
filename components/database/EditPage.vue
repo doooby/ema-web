@@ -14,9 +14,10 @@
           <div class="card-body pt-3 pb-0">
             <form-group
               v-if="$scopedSlots.layout"
-              v-model="formValues"
+              :value="formValues"
               :fields="formFields"
               :label-prefix="formFieldsLabelPrefix"
+              @input="onInput"
             >
               <template #layout="{ context, values }">
                 <slot name="layout" :context="context" :values="values" />
@@ -24,9 +25,10 @@
             </form-group>
             <form-group
               v-else
-              v-model="formValues"
+              :value="formValues"
               :fields="formFields"
               :label-prefix="formFieldsLabelPrefix"
+              @input="onInput"
             />
             <record-errors class="mb-3" :errors="errors" />
           </div>
@@ -51,7 +53,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import RecordErrors from '~/components/database/RecordErrors.vue';
-import { buildFormFields, FormFieldDefinition, formToRecordParams, prefillFormValues } from '../Form';
+import { buildFormFields, FormFieldDefinition, formToRecordParams, FormValues, prefillFormValues } from '../Form';
 import { RecordChange, RecordChangeError } from '~/lib/api/mappers';
 import LoaderStrip from '~/components/database/LoaderStrip.vue';
 
@@ -61,6 +63,7 @@ import LoaderStrip from '~/components/database/LoaderStrip.vue';
 export default class EditPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
+  @Prop() readonly value!: FormValues;
   @Prop() readonly cardClass?: string;
 
   formFields = buildFormFields(this.fields);
@@ -79,6 +82,11 @@ export default class EditPage extends Vue {
   @Watch('record')
   onRecordChanged (newValue: any) {
     if (newValue) this.formValues = prefillFormValues(this.formFields, newValue);
+  }
+
+  @Watch('value')
+  onValueChanged () {
+    this.formValues = { ...this.formValues, ...this.value };
   }
 
   mounted () {
@@ -125,6 +133,12 @@ export default class EditPage extends Vue {
     return !this.record ||
       this.saveQueryState.running ||
       !!this.saveQueryState.value?.success;
+  }
+
+  onInput (newValues: any) {
+    const previousValues = this.formValues;
+    this.formValues = { ...previousValues, ...newValues };
+    this.$emit('change', this.formValues, previousValues);
   }
 
   onUpdated (record: any) {

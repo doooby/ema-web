@@ -47,3 +47,5 @@ export function caregiverRelationOptions () {
     { value: 'aunt', text: 'db.record.people.caregivers.relation.aunt' },
   ]);
 }
+
+caregiverRelationOptions.defaultValue = 'mother';

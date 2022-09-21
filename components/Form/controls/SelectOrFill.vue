@@ -15,7 +15,7 @@
       v-if="sanitizedValue[0] === otherOption"
       :id="`${domIdBase}_fill`"
       type="text"
-      class="form-control"
+      class="form-control emt-1"
       :value="sanitizedValue[1]"
       autocomplete="off"
       @blur="onFill"

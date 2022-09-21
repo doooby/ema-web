@@ -10,6 +10,7 @@ export function editControls (): FormFieldDefinition[] {
     [ 'gender', controls.select, {
       options: common.options.formalGenders(),
     } ],
+    [ 'citizen_id', controls.text ],
     [ 'passport_no', controls.text ],
     [ 'telephone_no', controls.text ],
     [ 'mother_tongue', controls.select, {

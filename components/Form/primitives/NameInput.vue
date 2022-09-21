@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="input-group emb-1">
+    <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text">
           <t value="form.field.name.en" />
@@ -16,7 +16,7 @@
       >
     </div>
 
-    <div class="input-group">
+    <div class="input-group emt-1">
       <div class="input-group-prepend">
         <span class="input-group-text">
           <t value="form.field.name.local" />

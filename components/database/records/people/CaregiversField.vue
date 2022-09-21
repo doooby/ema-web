@@ -21,8 +21,8 @@
       <template #header-details>
         <t value="db.record.people.caregivers.label.details" />
       </template>
-      <template #header-cfw>
-        <t value="db.record.people.caregivers.label.cfw" />
+      <template #header-cash_for_work>
+        <t value="db.record.people.caregivers.label.cash_for_work" />
       </template>
       <template #cell-relation="{ index, item }">
         <select-input
@@ -87,14 +87,14 @@
           />
         </b-form-group>
       </template>
-      <template #cell-cfw="{ index, item }">
+      <template #cell-cash_for_work="{ index, item }">
         <b-form-group>
           <template #label>
-            <t value="db.record.people.label.cfw" />
+            <t value="db.record.people.label.cash_for_work" />
           </template>
           <text-input
-            :value="item.cfw"
-            @input="onUpdateItem(index, item, 'cfw', $event)"
+            :value="item.cash_for_work"
+            @input="onUpdateItem(index, item, 'cash_for_work', $event)"
           />
         </b-form-group>
         <b-form-group>
@@ -136,7 +136,7 @@ export default class CaregiversField extends Vue {
     { name: 'name', size: 250 },
     { name: 'gender' },
     { name: 'details' },
-    { name: 'cfw' },
+    { name: 'cash_for_work' },
   ];
 
   get items (): person.PersonCaregiver[] {
@@ -154,7 +154,7 @@ export default class CaregiversField extends Vue {
   onAddItem () {
     const newItems = [ ...this.items ];
     newItems.push(
-      Object.freeze({}),
+      Object.freeze({ relation: person.caregiverRelationOptions.defaultValue }),
     );
     Object.freeze(newItems);
     (this as any).onChangeValue(newItems);
