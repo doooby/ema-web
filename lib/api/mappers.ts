@@ -239,6 +239,13 @@ export const val = {
       prop('1', tuple, val.string),
     ]);
   },
+  selectOrFillTuple (value: any): [string, undefined | string] {
+    if (!Array.isArray(value)) return [ '', undefined ];
+    return tuple(value, tuple => [
+      prop('0', tuple, val.string),
+      maybeProp('1', tuple, val.string),
+    ]);
+  },
   assoc<R=any> (value: any): AssociatedRecord<R> {
     return object(value, root => ({
       id: recordId(root),

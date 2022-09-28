@@ -24,6 +24,7 @@ export default class extends DatabasePage {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       [ 'search', 'text' ],
+      [ 'kobo_id', 'text' ],
     ];
   }
 

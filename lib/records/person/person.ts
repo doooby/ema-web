@@ -19,6 +19,8 @@ export function editControls (): FormFieldDefinition[] {
     [ 'spoken_languages', controls.select, {
       options: [],
     } ],
+    [ 'registered_on', controls.date ],
+    [ 'enrollment_reason', controls.textMultiline ],
     [ 'disability', controls.selectOrFill, {
       options: person.disabilityOptions(),
     } ],

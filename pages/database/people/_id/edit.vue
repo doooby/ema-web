@@ -25,6 +25,8 @@
         <div class="col-md-6">
           <form-field name="mother_tongue" :context="context" :values="values" />
           <form-field name="spoken_languages" :context="context" :values="values" />
+          <form-field name="registered_on" :context="context" :values="values" />
+          <form-field name="enrollment_reason" :context="context" :values="values" />
         </div>
         <div class="col-12">
           <div class="border-bottom my-2" />

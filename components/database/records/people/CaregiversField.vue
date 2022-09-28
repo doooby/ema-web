@@ -15,9 +15,6 @@
       <template #header-name>
         <t value="lexicon.name" />
       </template>
-      <template #header-gender>
-        <t value="db.record.people.caregivers.label.gender" />
-      </template>
       <template #header-details>
         <t value="db.record.people.caregivers.label.details" />
       </template>
@@ -25,7 +22,7 @@
         <t value="db.record.people.caregivers.label.cash_for_work" />
       </template>
       <template #cell-relation="{ index, item }">
-        <select-input
+        <select-or-fill-input
           :value="item.relation"
           :options="relationOptions"
           @input="onUpdateItem(index, item, 'relation', $event)"
@@ -50,13 +47,6 @@
             @input="onUpdateItem(index, item, 'last_name', $event)"
           />
         </b-form-group>
-      </template>
-      <template #cell-gender="{ index, item }">
-        <select-input
-          :value="item.relation"
-          :options="genderOptions"
-          @input="onUpdateItem(index, item, 'gender', $event)"
-        />
       </template>
       <template #cell-details="{ index, item }">
         <b-form-group>
@@ -119,10 +109,11 @@ import { common, person } from '~/lib/records';
 import SelectInput from '~/components/Form/primitives/SelectInput.vue';
 import NameInput from '~/components/Form/primitives/NameInput.vue';
 import TextInput from '~/components/Form/primitives/TextInput.vue';
+import SelectOrFillInput from '~/components/Form/primitives/SelectOrFillInput.vue';
 
 @Component({
   mixins: [ ControlMixin ],
-  components: { SelectInput, NameInput, TextInput },
+  components: { SelectOrFillInput, SelectInput, NameInput, TextInput },
 })
 export default class CaregiversField extends Vue {
   static fieldType: FormFieldType = {};
@@ -134,7 +125,6 @@ export default class CaregiversField extends Vue {
   columns = [
     { name: 'relation' },
     { name: 'name', size: 250 },
-    { name: 'gender' },
     { name: 'details' },
     { name: 'cash_for_work' },
   ];
@@ -154,7 +144,7 @@ export default class CaregiversField extends Vue {
   onAddItem () {
     const newItems = [ ...this.items ];
     newItems.push(
-      Object.freeze({ relation: person.caregiverRelationOptions.defaultValue }),
+      Object.freeze({ relation: [ person.caregiverRelationOptions.defaultValue, undefined ] }),
     );
     Object.freeze(newItems);
     (this as any).onChangeValue(newItems);
