@@ -21,7 +21,7 @@ export function editControls (): FormFieldDefinition[] {
     } ],
     [ 'registered_on', controls.date ],
     [ 'enrollment_reason', controls.textMultiline ],
-    [ 'disability', controls.selectOrFill, {
+    [ 'disability', controls.selectMultiple, {
       options: person.disabilityOptions(),
     } ],
     [ 'disability_diagnosis', controls.boolean ],

@@ -85,7 +85,7 @@ export default class extends DatabasePage {
 
   onChange (newValues) {
     // const oldValues = this.values;
-    if (!newValues.disability?.[0]) {
+    if (!newValues.disability?.length) {
       newValues = {
         ...newValues,
         disability_diagnosis: undefined,

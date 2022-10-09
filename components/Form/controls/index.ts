@@ -5,6 +5,7 @@ import HiddenControl from './Hidden.vue';
 import IntegerControl, { type as IntegerControlType } from './Integer.vue';
 import ListControl from './List.vue';
 import SelectControl from './Select.vue';
+import SelectMultipleControl from './SelectMultiple.vue';
 import SelectOrFillControl from './SelectOrFill.vue';
 import TextControl, { type as TextControlType } from './Text.vue';
 import NameControl from './Name.vue';
@@ -45,6 +46,7 @@ export const controlsIndex2 = {
   name: asFieldType(NameControl),
   date: asFieldType(DateControl),
   select: asFieldType(SelectControl),
+  selectMultiple: asFieldType(SelectMultipleControl),
   selectOrFill: asFieldType(SelectOrFillControl),
   textMultiline: asFieldType(TextMultilineControl),
   boolean: asFieldType(BooleanControl),
