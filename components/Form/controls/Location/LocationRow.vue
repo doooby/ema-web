@@ -50,7 +50,7 @@ export default class LocationRow extends Vue {
             ok: true,
             data: result.data.map(location => ({
               value: location.id.toString(),
-              text: location.name[0],
+              text: `${location.name[1]} (${location.name[0]})`,
             })),
           };
         } else {

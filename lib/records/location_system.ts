@@ -2,14 +2,14 @@ import * as mappers from '~/lib/api/mappers';
 
 export interface LocationSystem {
   id: number;
-  name: string[];
+  name: [string, string];
   levels: number;
   settings?: Record<string, undefined | LocationSystemLevel>;
 }
 
 export interface LocationSystemLevel {
   type: 's' | 't';
-  name: string[];
+  name: [string, string];
 }
 
 export const location_system = {

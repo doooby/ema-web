@@ -48,12 +48,13 @@ export default class Location extends Vue {
     else return value;
   }
 
-  get system (): LocationSystem {
-    return this.field.options.system ?? { id: -1, name: [], levels: 0 };
+  get system (): undefined | LocationSystem {
+    return this.field.options.system;
   }
 
   get levelDefinitions (): LocationSystemLevel[] {
     const list: LocationSystemLevel[] = [];
+    if (!this.system) return list;
     for (let i = 0; i < this.system.levels; i += 1) {
       const level = this.system.settings?.[i + 1];
       if (!level) break;
@@ -64,11 +65,8 @@ export default class Location extends Vue {
 
   onFetchLocations (index: number): Promise<MaybeData<Location[]>> {
     const fetchLocations = this.field.options.fetchLocations;
-    if (!fetchLocations) return Promise.resolve({ ok: false });
-    return fetchLocations(
-      this.system,
-      index < 2 ? undefined : this.values[index - 1],
-    );
+    if (!fetchLocations || !this.system) return Promise.resolve({ ok: false });
+    return fetchLocations(index === 0 ? undefined : this.values[index - 1]);
   }
 
   onChangeLocation (index: number, value: string) {

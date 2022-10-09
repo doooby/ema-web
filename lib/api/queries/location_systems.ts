@@ -1,9 +1,15 @@
 import * as mappers from '~/lib/api/mappers';
-import { course } from '~/lib/records';
+import { location_system } from '~/lib/records';
+import { Params } from '~/lib/api';
 
-export function show (systemId: number) {
+export function getAddressSystem (params: Params) {
   return {
-    path: `/location_systems/${systemId}`,
-    mapper: (payload: any) => mappers.record(payload, course.mapRecord, course.mapAssociations),
+    path: '/location_systems',
+    params: {
+      ...params,
+      label: 'address',
+      per_page: 1,
+    },
+    mapper: (payload: any) => mappers.paginatedRecords(payload, location_system.mapRecord),
   };
 }

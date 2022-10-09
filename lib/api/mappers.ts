@@ -235,8 +235,8 @@ export const val = {
   nameTuple (value: any): [string, string] {
     if (!Array.isArray(value)) throw new MappingError('invalid nameTuple');
     return tuple(value, tuple => [
-      prop('0', tuple, val.string),
-      prop('1', tuple, val.string),
+      maybeProp('0', tuple, val.string) ?? '',
+      maybeProp('1', tuple, val.string) ?? '',
     ]);
   },
   selectOrFillTuple (value: any): [string, undefined | string] {
@@ -345,14 +345,14 @@ export function changedRecord (value: any): RecordChange {
 
 export function paginatedRecords<R extends RecordBase, A> (
   value: any,
-  fillParams: (value: any, associations?: A) => R,
+  map: (value: any, associations?: A) => R,
   mapAssociations?: (value: any) => A,
 ): PaginatedRecords<R> {
   return object(value, (root) => {
     const associations = mapAssociations && prop('associations', root, mapAssociations);
     const records = prop('records', root, records => list(
       records,
-      item => fillParams(item, associations),
+      item => map(item, associations),
     ));
     return {
       records,

@@ -4,7 +4,7 @@ export interface Location {
   id: number;
   level: number;
   parent_id?: number;
-  name: string[];
+  name: [string, string];
 }
 
 export const location = {

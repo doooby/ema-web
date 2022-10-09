@@ -81,6 +81,7 @@ export default class extends DatabasePage {
   }
 
   get fields (): FormFieldDefinition[] {
+    if (this.processing) return [];
     return course.recordControls({ countryId: this.currentCountryId });
   }
 

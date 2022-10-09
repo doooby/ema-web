@@ -32,7 +32,12 @@ export default class SpecialsForm extends Vue {
           3: { type: 't', name: [ 'Town', 'Město' ] },
         },
       },
-      fetchLocations,
+      fetchLocations (parent_id?: number): Promise<MaybeData<Location[]>> {
+        return Promise.resolve({
+          ok: true,
+          data: addresses.locations.filter(location => location.parent_id === parent_id),
+        });
+      },
     } ],
   ]);
 
@@ -42,13 +47,6 @@ export default class SpecialsForm extends Vue {
     ...prefillFormValues(this.fields),
     ...this.defaultValues,
   };
-}
-
-function fetchLocations (_system: LocationSystem, parent_id?: number): Promise<MaybeData<Location[]>> {
-  return Promise.resolve({
-    ok: true,
-    data: addresses.locations.filter(location => location.parent_id === parent_id),
-  });
 }
 
 const addresses = {
