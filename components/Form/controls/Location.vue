@@ -6,11 +6,11 @@
     <ul>
       <li v-for="(level, index) in levelDefinitions" :key="index">
         <location-row
-          :definition="level"
-          :value="values[level.levelIndex]"
-          :parent-location-id="values[level.parentListLevelIndex]"
-          :disabled="level.levelIndex !== 0 && !values[level.levelIndex - 1]"
-          @change="onValueChange"
+          :level="level"
+          :value="values[index]"
+          :disabled="index !== 0 && !values[index - 1]"
+          :fetch-locations="() => onFetchLocations(index)"
+          @change="onChangeLocation(index, $event)"
         />
       </li>
     </ul>
@@ -21,8 +21,9 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { LocationSystem } from '~/lib/records';
-import LocationRow, { Definition } from '~/components/Form/controls/Location/LocationRow.vue';
+import { LocationSystem, LocationSystemLevel } from '~/lib/records';
+import LocationRow from '~/components/Form/controls/Location/LocationRow.vue';
+import { MaybeData } from '~/lib/types';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -48,35 +49,33 @@ export default class Location extends Vue {
   }
 
   get system (): LocationSystem {
-    return this.field.options.system ?? { id: -1, levels: [] };
+    return this.field.options.system ?? { id: -1, name: [], levels: 0 };
   }
 
-  get levelDefinitions (): Definition[] {
-    const fetchLocations = this.field.options.fetchLocations ??
-      (() => Promise.resolve({ ok: false }));
-    return this.system.levels.map((level, index) => {
-      return {
-        levelIndex: index,
-        level,
-        parentListLevelIndex: this.getParentListLevelIndex(index),
-        fetchLocations,
-      };
-    });
+  get levelDefinitions (): LocationSystemLevel[] {
+    const list: LocationSystemLevel[] = [];
+    for (let i = 0; i < this.system.levels; i += 1) {
+      const level = this.system.settings?.[i + 1];
+      if (!level) break;
+      list.push(level);
+    }
+    return list;
   }
 
-  onValueChange ({ index, value }: {index: number, value: string}) {
+  onFetchLocations (index: number): Promise<MaybeData<Location[]>> {
+    const fetchLocations = this.field.options.fetchLocations;
+    if (!fetchLocations) return Promise.resolve({ ok: false });
+    return fetchLocations(
+      this.system,
+      index < 2 ? undefined : this.values[index - 1],
+    );
+  }
+
+  onChangeLocation (index: number, value: string) {
     const newValues = [ ...this.values ];
     newValues[index] = value;
     newValues.length = index + 1;
-    this.context.onChange({ [this.field.name]: newValues });
-  }
-
-  getParentListLevelIndex (fromIndex: number): null | number {
-    for (let i = fromIndex - 1; i > -1; i -= 1) {
-      const source = this.system.levels[i];
-      if (source.type === 'list') return i;
-    }
-    return null;
+    (this as any).onChangeValue(Object.freeze(newValues));
   }
 }
 </script>

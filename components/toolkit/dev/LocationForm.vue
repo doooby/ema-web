@@ -15,7 +15,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { buildFormFields, prefillFormValues } from '~/components/Form';
-import { Location } from '~/lib/records';
+import { Location, LocationSystem } from '~/lib/records';
 import { MaybeData } from '~/lib/types';
 
 @Component
@@ -24,12 +24,13 @@ export default class SpecialsForm extends Vue {
     [ 'address', 'location', {
       system: {
         id: -1,
-        levels: [
-          { type: 'list', name: 'Kraj', name_en: 'County' },
-          { type: 'list', name: 'Okres', name_en: 'District' },
-          { type: 'text', name: 'Město', name_en: 'Town' },
-          { type: 'list', name: 'Psč', name_en: 'Post Number' },
-        ],
+        name: [ 'Address' ],
+        levels: 3,
+        settings: {
+          1: { type: 's', name: [ 'County', 'Kraj' ] },
+          2: { type: 's', name: [ 'District', 'Okres' ] },
+          3: { type: 't', name: [ 'Town', 'Město' ] },
+        },
       },
       fetchLocations,
     } ],
@@ -43,54 +44,47 @@ export default class SpecialsForm extends Vue {
   };
 }
 
-function fetchLocations (level: number, parent_id?: string): MaybeData<Location[]> {
-  let list = addresses.locations.filter(location => location.level === level);
-  if (parent_id) {
-    list = list.filter(location => location.parent_id === parent_id);
-  }
-  return { ok: true, data: list };
+function fetchLocations (_system: LocationSystem, parent_id?: number): Promise<MaybeData<Location[]>> {
+  return Promise.resolve({
+    ok: true,
+    data: addresses.locations.filter(location => location.parent_id === parent_id),
+  });
 }
 
 const addresses = {
   locations: [
     {
-      id: '1',
+      id: 1,
       level: 1,
-      name: 'Moravzkoslezský kraj',
-      name_en: 'Moravian-Silezian Country',
+      name: [ 'Moravian-Silezian Region', 'Moravzkoslezský kraj' ],
+      label: '01',
     },
     {
-      id: '2',
+      id: 2,
       level: 1,
-      name: 'Jiný Kraj',
-      name_en: 'Other Country',
+      name: [ 'Other Region', 'Jiný Kraj' ],
+      label: '02',
     },
     {
-      id: '3',
+      id: 3,
       level: 2,
-      parent_id: '1',
-      name: 'Frýdecko-Místecký okres',
-      name_en: 'FM distr.',
+      parent_id: 1,
+      name: [ 'FM distr.', 'Frýdecko-Místecký okres' ],
+      label: '01',
     },
     {
-      id: '4',
+      id: 4,
       level: 2,
-      parent_id: '1',
-      name: 'Novojičínský okres',
-      name_en: 'New jersey distr.',
+      parent_id: 1,
+      name: [ 'New jersey distr.', 'Novojičínský okres' ],
+      label: '02',
     },
     {
-      id: '5',
+      id: 5,
       level: 2,
-      parent_id: '2',
-      name: 'Jakýsi okrsek',
-      name_en: 'some distr.',
-    },
-    {
-      id: '5',
-      level: 4,
-      parent_id: '4',
-      name: '74221',
+      parent_id: 2,
+      name: [ 'some distr.', 'Jakýsi okrsek' ],
+      label: '01',
     },
   ],
 };
