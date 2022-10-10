@@ -77,7 +77,7 @@ import { person } from '~/lib/records';
   components: { EditPage },
 })
 export default class extends DatabasePage {
-  values = {} as any;LocationForm.vue:36
+  values = {} as any;
 
   get fields (): FormFieldDefinition[] {
     return person.editControls();
