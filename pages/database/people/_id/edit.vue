@@ -77,14 +77,13 @@ import { person } from '~/lib/records';
   components: { EditPage },
 })
 export default class extends DatabasePage {
-  values = {} as any;
+  values = {} as any;LocationForm.vue:36
 
   get fields (): FormFieldDefinition[] {
     return person.editControls();
   }
 
   onChange (newValues) {
-    // const oldValues = this.values;
     if (!newValues.disability?.length) {
       newValues = {
         ...newValues,

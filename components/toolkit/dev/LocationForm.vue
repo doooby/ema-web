@@ -36,7 +36,7 @@ export default class SpecialsForm extends Vue {
         return Promise.resolve({
           ok: true,
           data: addresses.locations.filter(location => location.parent_id === parent_id),
-        });
+        }) as any;
       },
     } ],
   ]);
