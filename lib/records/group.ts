@@ -7,8 +7,7 @@ import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRec
 export interface Group {
   id: number;
   course: mappers.AssociatedRecord;
-  name_en: string
-  name: string
+  name: [string, string];
   term: number;
 }
 
@@ -35,8 +34,7 @@ export const group = {
     return object(value, root => ({
       id: recordId(root),
       course: assoc('course', root, associations?.course),
-      name_en: prop('name_en', root, val.string),
-      name: prop('name', root, val.string),
+      name: prop('name', root, val.nameTuple),
       term: prop('term', root, val.integer),
     }));
   },
@@ -55,8 +53,7 @@ export const group = {
           country_id: countryId,
         },
       } ],
-      [ 'name_en', 'text' ],
-      [ 'name', 'text' ],
+      [ 'name', 'name' ],
       [ 'term', 'integer' ],
     ];
   },

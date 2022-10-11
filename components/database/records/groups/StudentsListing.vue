@@ -18,6 +18,8 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { Group, person } from '~/lib/records';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
+import Name from '~/components/database/cells/Name.vue';
+import { getFatherNameLocal } from '~/lib/records/person';
 
 @Component
 export default class StudentsListing extends Vue {
@@ -26,8 +28,9 @@ export default class StudentsListing extends Vue {
   getStudentsQueryState = this.$api.newQueryState<PaginatedRecords<person.Person>>();
   tableColumns = [
     { name: 'id', cell: { type: RecordLink, entity: 'people' }, size: 60 },
-    { name: 'name_en', getText: ({ family_name_en, given_name_en }: any) => `${family_name_en}, ${given_name_en}` },
-    { name: 'name', getText: ({ family_name, given_name }: any) => `${family_name}, ${given_name}` },
+    { name: 'first_name', cell: { type: Name }, headerText: () => 'First Name' },
+    { name: 'last_name', cell: { type: Name }, headerText: () => 'Last Name' },
+    { name: 'father_name', getText: record => person.getFatherNameLocal(record), headerText: () => 'Father Name' },
   ];
 
   @Watch('group')

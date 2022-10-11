@@ -22,14 +22,14 @@
     <template #details="{ record }">
       <table class="table">
         <show-page-table-row label="db.record.people.label.family_name">
-          {{ record.family_name_en }}
+          {{ record.last_name[1] }}
           <br>
-          <small>{{ record.family_name }}</small>
+          <small>{{ record.last_name[0] }}</small>
         </show-page-table-row>
         <show-page-table-row label="db.record.people.label.given_name">
-          {{ record.given_name_en }}
+          {{ record.first_name[1] }}
           <br>
-          <small>{{ record.given_name }}</small>
+          <small>{{ record.first_name[0] }}</small>
         </show-page-table-row>
         <show-page-table-row label="db.record.people.label.born_on">
           {{ $d(record.born_on) }}

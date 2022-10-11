@@ -18,6 +18,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { Course, Subject } from '~/lib/records';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
+import Name from '~/components/database/cells/Name.vue';
 
 @Component
 export default class SubjectsListing extends Vue {
@@ -26,8 +27,7 @@ export default class SubjectsListing extends Vue {
   getSubjectsQueryState = this.$api.newQueryState<PaginatedRecords<Subject>>();
   tableColumns = [
     { name: 'id', cell: { type: RecordLink, onlyId: true }, size: 60 },
-    { name: 'name_en' },
-    { name: 'name' },
+    { name: 'name', cell: { type: Name }, headerText: () => 'Name' },
   ];
 
   @Watch('course')

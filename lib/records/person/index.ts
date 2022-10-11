@@ -1,3 +1,5 @@
+import { person } from '~/lib/records';
+
 export * from './type';
 export * from './person';
 
@@ -84,3 +86,7 @@ export function caregiverRelationOptions () {
 }
 
 caregiverRelationOptions.defaultValue = 'mother';
+
+export function getFatherNameLocal (person: person.Person): string {
+  return person.caregivers?.find(caregiver => caregiver.relation[0] === 'father')?.first_name?.[1] ?? '';
+}

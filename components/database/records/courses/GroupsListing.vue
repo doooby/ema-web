@@ -18,6 +18,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { Course, Group } from '~/lib/records';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
+import Name from '~/components/database/cells/Name.vue';
 
 @Component
 export default class GroupsListing extends Vue {
@@ -26,7 +27,7 @@ export default class GroupsListing extends Vue {
   getGroupsQueryState = this.$api.newQueryState<PaginatedRecords<Group>>();
   tableColumns = [
     { name: 'id', cell: { type: RecordLink, entity: 'groups' }, size: 60 },
-    { name: 'name_en', headerText: () => 'Name' },
+    { name: 'name', cell: { type: Name }, headerText: () => 'Name' },
     { name: 'term', headerText: () => 'term' },
   ];
 
