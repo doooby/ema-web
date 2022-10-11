@@ -37,12 +37,13 @@ import TextInput from '~/components/Form/primitives/TextInput.vue';
 })
 export default class LocationRow extends Vue {
   @Prop({ required: true }) level!: LocationSystemLevel;
+  @Prop({ required: true }) parentValue!: undefined | string;
   @Prop({ required: true }) value!: undefined | string;
   @Prop({ required: true }) disabled!: boolean;
   @Prop({ required: true }) fetchLocations!: () => Promise<MaybeData<Location[]>>;
 
   get optionSource (): OptionsSource {
-    return {
+    const source = {
       fetch: async (): Promise<MaybeData<Option[]>> => {
         const result = await this.fetchLocations();
         if (result.ok) {
@@ -58,6 +59,8 @@ export default class LocationRow extends Vue {
         }
       },
     };
+    (source as any).__parent = this.parentValue; // so that it reloads when father changes
+    return source;
   }
 }
 </script>

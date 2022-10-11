@@ -16,12 +16,20 @@ export function editControls (): FormFieldDefinition[] {
     [ 'mother_tongue', controls.select, {
       options: [],
     } ],
+    [ 'outside_school', controls.select, {
+      options: person.outsideSchool(),
+    } ],
+    [ 'nationality', controls.select, {
+      options: [],
+    } ],
     [ 'spoken_languages', controls.select, {
       options: [],
     } ],
     [ 'registered_on', controls.date ],
-    [ 'enrollment_reason', controls.textMultiline ],
-    [ 'disability', 'listMultiple', {
+    [ 'enrollment_reasons', controls.listMultiple, {
+      options: person.enrollmentReasons(),
+    } ],
+    [ 'disabilities', controls.listMultiple, {
       options: person.disabilityOptions(),
     } ],
     [ 'disability_diagnosis', controls.boolean ],

@@ -18,6 +18,7 @@
         <div class="col-md-6">
           <form-field name="born_on" :context="context" :values="values" />
           <form-field name="gender" :context="context" :values="values" />
+          <form-field name="nationality" :context="context" :values="values" />
           <form-field name="citizen_id" :context="context" :values="values" />
           <form-field name="passport_no" :context="context" :values="values" />
           <form-field name="telephone_no" :context="context" :values="values" />
@@ -26,21 +27,22 @@
           <form-field name="mother_tongue" :context="context" :values="values" />
           <form-field name="spoken_languages" :context="context" :values="values" />
           <form-field name="registered_on" :context="context" :values="values" />
-          <form-field name="enrollment_reason" :context="context" :values="values" />
+          <form-field name="enrollment_reasons" :context="context" :values="values" />
+          <form-field name="outside_school" :context="context" :values="values" />
         </div>
         <div class="col-12">
           <div class="border-bottom my-2" />
         </div>
         <div class="col-md-6">
-          <form-field name="disability" :context="context" :values="values" />
+          <form-field name="disabilities" :context="context" :values="values" />
         </div>
         <div class="col-md-6" />
-        <div v-if="values.disability && values.disability[0]" class="col-md-6">
+        <div v-if="values.disabilities && values.disabilities[0]" class="col-md-6">
           <form-field name="disability_diagnosis" :context="context" :values="values" />
           <form-field name="assistance_needed" :context="context" :values="values" />
           <form-field name="assistance_provided" :context="context" :values="values" />
         </div>
-        <div v-if="values.disability && values.disability[0]" class="col-md-6">
+        <div v-if="values.disabilities && values.disabilities[0]" class="col-md-6">
           <form-field name="disability_note" :context="context" :values="values" />
         </div>
         <div class="col-12">
@@ -84,7 +86,7 @@ export default class extends DatabasePage {
   }
 
   onChange (newValues) {
-    if (!newValues.disability?.length) {
+    if (!newValues.disabilities?.length) {
       newValues = {
         ...newValues,
         disability_diagnosis: undefined,

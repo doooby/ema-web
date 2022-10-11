@@ -16,11 +16,13 @@ export interface Person {
   citizen_id?: string;
   passport_no?: string;
   telephone_no?: string;
-  enrollment_reason?: string;
+  enrollment_reasons?: string[];
   registered_on?: Date;
   mother_tongue?: string;
+  outside_school?: string;
+  nationality?: string;
   spoken_languages?: string[];
-  disability?: [string, undefined | string];
+  disabilities?: [string, undefined | string];
   disability_diagnosis?: boolean;
   assistance_needed?: boolean;
   assistance_provided?: boolean;
@@ -55,9 +57,11 @@ export function parse (value: any, associations?: Associations): Person {
     passport_no: mappers.maybeProp('passport_no', root, mappers.val.string),
     telephone_no: mappers.maybeProp('telephone_no', root, mappers.val.string),
     mother_tongue: mappers.maybeProp('mother_tongue', root, mappers.val.string),
+    outside_school: mappers.maybeProp('outside_school', root, mappers.val.string),
+    nationality: mappers.maybeProp('nationality', root, mappers.val.string),
     spoken_languages: mappers.maybeProp('mother_tongue', root, value => mappers.list(value, mappers.val.string)),
-    enrollment_reason: mappers.maybeProp('enrollment_reason', root, mappers.val.string),
-    disability: mappers.maybeProp('disability', root, mappers.val.selectOrFillTuple),
+    enrollment_reasons: mappers.maybeProp('enrollment_reasons', root, value => mappers.list(value, mappers.val.string)),
+    disabilities: mappers.maybeProp('disabilities', root, mappers.val.selectOrFillTuple),
     disability_diagnosis: mappers.maybeProp('disability_diagnosis', root, mappers.val.boolean),
     assistance_needed: mappers.maybeProp('assistance_needed', root, mappers.val.boolean),
     assistance_provided: mappers.maybeProp('assistance_provided', root, mappers.val.boolean),

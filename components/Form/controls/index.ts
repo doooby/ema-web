@@ -52,4 +52,5 @@ export const controlsIndex2 = {
   boolean: asFieldType(BooleanControl),
   integer: asFieldType(IntegerControl),
   text: asFieldType(TextControl),
+  listMultiple: asFieldType(ListMultiple),
 };

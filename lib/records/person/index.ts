@@ -10,9 +10,43 @@ export function disabilityOptions () {
     'mental',
     'communication',
     'autism',
+    'other',
   ];
   return Object.freeze(list.map(value => ({
     value, text: `db.record.people.disabilities.${value}`,
+  })));
+}
+
+export function enrollmentReasons () {
+  const list = [
+    'education',
+    'closest_school',
+    'sole_school',
+    'best_school',
+    'is_behind',
+    'needs_pss',
+    'center_help',
+    'community_integration',
+    'social_net',
+    'safest_place',
+    'needs_social',
+  ];
+  return Object.freeze(list.map(value => ({
+    value, text: `db.record.people.enrolment_reasons.${value}`,
+  })));
+}
+
+export function outsideSchool () {
+  const list = [
+    'less than one month',
+    '1-2 months',
+    '1-2 years',
+    'More than 2 years',
+    '7-12 months',
+    '3-6 months',
+  ];
+  return Object.freeze(list.map(value => ({
+    value, text: value,
   })));
 }
 

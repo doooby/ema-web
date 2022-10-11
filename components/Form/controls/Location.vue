@@ -7,6 +7,7 @@
       <li v-for="(level, index) in levelDefinitions" :key="index">
         <location-row
           :level="level"
+          :parent-value="values[index - 1]"
           :value="values[index]"
           :disabled="index !== 0 && !values[index - 1]"
           :fetch-locations="() => onFetchLocations(index)"

@@ -7,7 +7,7 @@ export interface School {
   country: mappers.AbbreviatedRecord;
   education_levels: mappers.AbbreviatedRecord[];
   name: [string, string];
-  address: string [];
+  address?: string[];
   external_id: string;
   education_types: string[];
   gender_dedications: string[];
@@ -38,7 +38,7 @@ export const school = {
       classrooms_count: mappers.prop('classrooms_count', record, mappers.val.integer),
       male_latrines_count: mappers.prop('male_latrines_count', record, mappers.val.integer),
       female_latrines_count: mappers.prop('female_latrines_count', record, mappers.val.integer),
-      address: mappers.prop('address', record,
+      address: mappers.maybeProp('address', record,
         education_types => mappers.list(education_types, mappers.val.string),
       ),
     }));
