@@ -6,7 +6,7 @@
       {{ record.name_en }}
     </template>
 
-    <template #actions="{ record }">
+    <template #actions="{ record, reloadRecord }">
       <ul>
         <li>
           <show-page-action
@@ -15,6 +15,15 @@
           >
             <t value="db.page.edit.action" />
           </show-page-action>
+        </li>
+        <li>
+          <archive-record-action
+            entity="schools"
+            :record-id="record.id"
+            @archived="reloadRecord"
+          >
+            <t value="db.page.archive.action" />
+          </archive-record-action>
         </li>
       </ul>
     </template>
@@ -55,6 +64,7 @@
 import ShowPage from '~/components/database/ShowPage.vue';
 import { Component } from 'vue-property-decorator';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
+import ArchiveRecordAction from '~/components/database/ArchiveRecordAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import CoursesListing from '~/components/database/records/schools/CoursesListing.vue';
@@ -71,6 +81,7 @@ enum Tabs {
     ShowPageAction,
     ShowPageTableRow,
     CoursesListing,
+    ArchiveRecordAction,
   },
 })
 export default class extends DatabasePage {

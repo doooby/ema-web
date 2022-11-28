@@ -89,8 +89,8 @@ export default class IndexPage extends Vue {
 
   get searchQueryBuilder () {
     const entity = this.entity;
-    const entityQueries = (this.$api.queries as any)[entity];
-    const queryBuilder = entityQueries?.index;
+    const queries = (this.$api.queries as any)[entity];
+    const queryBuilder = queries?.record?.index ?? queries?.index;
     if (!queryBuilder) {
       utils.warn(`database.IndexPage: index query is missing for entity ${entity}.`);
       return;

@@ -109,7 +109,8 @@ export default class NewPage extends Vue {
 
   get saveQuery (): any {
     const entity = this.entity;
-    const query = (this.$api.queries as any)[entity]?.create;
+    const queries = (this.$api.queries as any)[entity];
+    const query = queries.record?.create ?? queries.create;
     if (query) return query;
     return function () {
       utils.raise(new Error(`database.NewPage: create query is missing for ${entity}`));

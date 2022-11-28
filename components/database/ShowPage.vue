@@ -18,13 +18,13 @@
       </div>
       <div class="row">
         <div class="col-md-4 col-lg-3 overflow-hidden">
-          <slot name="actions" :record="record" :reloadRecord="reloadRecord" />
+          <slot name="actions" :record="record" :reload-record="reloadRecord" />
         </div>
         <div class="col emb-6">
-          <slot name="details" :record="record" />
+          <slot name="details" :record="record" :reload-record="reloadRecord" />
         </div>
       </div>
-      <slot name="container" :record="record" />
+      <slot name="container" :record="record" :reload-record="reloadRecord" />
     </div>
   </div>
 </template>
@@ -71,14 +71,14 @@ export default class ShowPage extends Vue {
   }
 
   async fetchRecord () {
-    const entityQueries = (this.$api.queries as any)[this.entity];
-    const queryBuilder = entityQueries?.get || entityQueries?.show;
-    if (!queryBuilder) {
+    const queries = (this.$api.queries as any)[this.entity];
+    const query = queries?.record?.show ?? queries?.get ?? queries?.show;
+    if (!query) {
       utils.warn('database.ShowPage: get/show query is missing.', { entity: this.entity });
       return;
     }
 
-    await this.$api.request(queryBuilder(this.recordId), this.getQueryState);
+    await this.$api.request(query(this.recordId), this.getQueryState);
     if (this.record) {
       this.$emit('load', this.record);
     }
