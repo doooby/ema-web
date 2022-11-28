@@ -5,14 +5,14 @@
     @click="modalShown = true"
   >
     <b-icon icon="archive" class="emr-4" />
-    <t value="db.page.archive.action" />
+    <t value="db.action.archive.action" />
     <b-modal v-model="modalShown" centered @ok="onArchive">
       <template #modal-title>
-        <t value="db.page.archive.modal.title" />
+        <t value="db.action.archive.action" />
       </template>
       <div>
         <p>
-          <t value="db.page.archive.modal.text" />
+          <t value="db.action.archive.modal_text" />
         </p>
       </div>
     </b-modal>
