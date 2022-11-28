@@ -16,6 +16,6 @@ export default class DatabasePageBase extends Vue {
   }
 
   get currentCountryId (): null | number {
-    return this.$store.state.session.currentCountry?.id ?? null;
+    return this.$store.state.session.country?.country?.id ?? null;
   }
 }

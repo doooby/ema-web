@@ -21,9 +21,11 @@ import DatabasePageLoaded from '~/components/DatabasePageLoaded.vue';
   components: { EditPage, DatabasePageLoaded },
 })
 export default class extends DatabasePageBase {
-
   get fields (): FormFieldDefinition[] {
-    return school.recordControls(this.addressOptions);
+    return school.recordControls({
+      countryId: this.currentCountryId,
+      addressOptions: this.addressOptions,
+    });
   }
 
   get addressOptions () {

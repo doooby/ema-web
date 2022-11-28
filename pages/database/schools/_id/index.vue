@@ -40,7 +40,7 @@
             {{ record.external_id }}
           </show-page-table-row>
           <show-page-table-row label="db.record.schools.label.director">
-            <show-record-link
+            <link-abbreviated-record
               v-if="record.director"
               entity="people"
               :record="record.director"
@@ -79,9 +79,9 @@ import ArchiveRecordAction from '~/components/database/ArchiveRecordAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import CoursesListing from '~/components/database/records/schools/CoursesListing.vue';
-import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import DatabasePageLoaded from '~/components/DatabasePageLoaded.vue';
 import AddressText from '~/components/database/records/location_systems/AddressText.vue';
+import LinkAbbreviatedRecord from '~/components/database/components/LinkAbbreviatedRecord.vue';
 
 enum Tabs {
   courses,
@@ -94,11 +94,11 @@ enum Tabs {
     ShowPage,
     ShowPageAction,
     ShowPageTableRow,
-    ShowRecordLink,
     CoursesListing,
     ArchiveRecordAction,
     DatabasePageLoaded,
     AddressText,
+    LinkAbbreviatedRecord,
   },
 })
 export default class extends DatabasePage {

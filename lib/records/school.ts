@@ -1,6 +1,7 @@
 import * as mappers from '~/lib/api/mappers';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import AbbreviatedRecordsField from '~/components/database/AbbreviatedRecordsField.vue';
+import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
 
 export interface School {
   address?: string[];
@@ -49,13 +50,25 @@ export const school = {
   mapAssociations: mappers.createAssociationsMapper<SchoolAssociations>(
     'country', 'education_level', 'director',
   ),
-  recordControls (addressOptions?: any): FormFieldDefinition[] {
+  recordControls ({
+    countryId,
+    addressOptions,
+  }: {
+    countryId: null | number;
+    addressOptions: any;
+  }): FormFieldDefinition[] {
     return [
       [ 'education_levels', asFieldType(AbbreviatedRecordsField), {
         entity: 'education_levels',
       } ],
       [ 'name', controls.name ],
       [ 'external_id', 'text' ],
+      [ 'director', asFieldType(AbbreviatedRecordField), {
+        entity: 'people',
+        params: {
+          country_id: countryId,
+        },
+      } ],
       [ 'education_types', 'listMultiple', {
         options: Object.freeze([
           { value: 'formal', text: 'db.common.formal_education' },

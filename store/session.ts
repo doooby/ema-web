@@ -42,6 +42,7 @@ export default class SessionModule extends VuexModule {
   setCountry (country: null | CountryData) {
     localStorage.set(localStorage.values.currentCountry, country?.country);
     this.country = country;
+    this.currentCountry = country?.country ?? null;
   }
 
   @Mutation

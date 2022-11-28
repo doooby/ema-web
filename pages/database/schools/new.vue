@@ -42,7 +42,10 @@ export default class extends DatabasePage {
 
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      ...school.recordControls(this.addressOptions),
+      ...school.recordControls({
+        countryId: this.currentCountryId,
+        addressOptions: this.addressOptions,
+      }),
     ];
   }
 
