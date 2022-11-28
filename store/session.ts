@@ -1,7 +1,8 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import { SessionUser } from '~/lib/records';
+import { Country, SessionUser, loadCountryData } from '~/lib/records';
 import * as mappers from '~/lib/api/mappers';
 import * as localStorage from '~/lib/localStorage';
+import { CountryData } from '~/store/session/country';
 
 @Module({
   stateFactory: true,
@@ -9,7 +10,9 @@ import * as localStorage from '~/lib/localStorage';
 })
 export default class SessionModule extends VuexModule {
   currentUser: null | SessionUser = null;
+  // REMOVE
   currentCountry: null | mappers.AssociatedRecord = null;
+  country: null | CountryData = null;
 
   loginModalShown = false;
   languageModalShown: boolean = false;
@@ -28,10 +31,17 @@ export default class SessionModule extends VuexModule {
     this.currentUser = null;
   }
 
+  // REMOVE
   @Mutation
   setCurrentCountry (country: null | mappers.AssociatedRecord) {
     localStorage.set(localStorage.values.currentCountry, country);
     this.currentCountry = country;
+  }
+
+  @Mutation
+  setCountry (country: null | CountryData) {
+    localStorage.set(localStorage.values.currentCountry, country?.country);
+    this.country = country;
   }
 
   @Mutation
@@ -66,6 +76,20 @@ export default class SessionModule extends VuexModule {
       api.newQueryState(),
     );
     this.context.commit('setCurrentUser', session?.user ?? null);
+  }
+
+  @Action
+  async switchCountry ({
+    country,
+    api,
+  }: {
+    country: null | mappers.AssociatedRecord
+    api: any
+  }) {
+    const data = country
+      ? await loadCountryData(country, api)
+      : null;
+    this.context.commit('setCountry', data);
   }
 
   get countryId (): null | number {

@@ -12,7 +12,7 @@ import NewPage from '~/components/database/NewPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
-import { Location, LocationSystem, school } from '~/lib/records';
+import { Location, location_system, school } from '~/lib/records';
 import { MaybeData } from '~/lib/types';
 
 @Component({
@@ -20,7 +20,7 @@ import { MaybeData } from '~/lib/types';
 })
 export default class extends DatabasePage {
   processing = true;
-  addressSystem: undefined | LocationSystem = undefined;
+  addressSystem: undefined | location_system.LocationSystem = undefined;
 
   async mounted () {
     const result = await this.$api.request(

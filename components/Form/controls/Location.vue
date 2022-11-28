@@ -22,7 +22,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { LocationSystem, LocationSystemLevel } from '~/lib/records';
+import { location_system } from '~/lib/records';
 import LocationRow from '~/components/Form/controls/Location/LocationRow.vue';
 import { MaybeData } from '~/lib/types';
 
@@ -49,12 +49,12 @@ export default class Location extends Vue {
     else return value;
   }
 
-  get system (): undefined | LocationSystem {
+  get system (): undefined | location_system.LocationSystem {
     return this.field.options.system;
   }
 
-  get levelDefinitions (): LocationSystemLevel[] {
-    const list: LocationSystemLevel[] = [];
+  get levelDefinitions (): location_system.LocationSystemLevel[] {
+    const list: location_system.LocationSystemLevel[] = [];
     if (!this.system) return list;
     for (let i = 0; i < this.system.levels; i += 1) {
       const level = this.system.settings?.[i + 1];

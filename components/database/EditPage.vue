@@ -113,7 +113,8 @@ export default class EditPage extends Vue {
 
   get getQuery (): any {
     const entity = this.entity;
-    const query = (this.$api.queries as any)[entity]?.show;
+    const queries = (this.$api.queries as any)[entity];
+    const query = queries.record?.show ?? queries.show;
     if (query) return () => query(this.recordId);
     return function () {
       utils.raise(new Error(`database.EditPage: get/show query is missing for ${entity}`));
@@ -122,7 +123,8 @@ export default class EditPage extends Vue {
 
   get saveQuery (): any {
     const entity = this.entity;
-    const query = (this.$api.queries as any)[entity]?.update;
+    const queries = (this.$api.queries as any)[entity];
+    const query = queries.record?.update ?? queries.update;
     if (query) return (params: any) => query(this.recordId, params);
     return function () {
       utils.raise(new Error(`database.EditPage: update query is missing for ${entity}`));

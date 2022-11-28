@@ -6,6 +6,8 @@ export function index (params: Params) {
   return {
     path: '/locations',
     params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, location.mapRecord),
+    mapper: (payload: any) => mappers.paginatedRecords(
+      payload, location.mapRecord,
+    ),
   };
 }

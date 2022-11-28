@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Location, LocationSystemLevel } from '~/lib/records';
+import { Location, location_system } from '~/lib/records';
 import SelectWithModal, { OptionsSource } from '~/components/Form/primitives/SelectWithModal.vue';
 import { MaybeData, Option } from '~/lib/types';
 import TextInput from '~/components/Form/primitives/TextInput.vue';
@@ -36,7 +36,7 @@ import TextInput from '~/components/Form/primitives/TextInput.vue';
   components: { SelectWithModal, TextInput },
 })
 export default class LocationRow extends Vue {
-  @Prop({ required: true }) level!: LocationSystemLevel;
+  @Prop({ required: true }) level!: location_system.LocationSystemLevel;
   @Prop({ required: true }) parentValue!: undefined | string;
   @Prop({ required: true }) value!: undefined | string;
   @Prop({ required: true }) disabled!: boolean;

@@ -15,7 +15,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { buildFormFields, prefillFormValues } from '~/components/Form';
-import { Location, LocationSystem } from '~/lib/records';
+import { Location } from '~/lib/records';
 import { MaybeData } from '~/lib/types';
 
 @Component

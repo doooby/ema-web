@@ -3,48 +3,51 @@ import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import AbbreviatedRecordsField from '~/components/database/AbbreviatedRecordsField.vue';
 
 export interface School {
-  id: number;
-  country: mappers.AbbreviatedRecord;
-  education_levels: mappers.AbbreviatedRecord[];
-  name: [string, string];
   address?: string[];
-  external_id: string;
-  education_types: string[];
-  gender_dedications: string[];
+  id: number;
   classrooms_count: number;
-  male_latrines_count: number;
+  country: mappers.AbbreviatedRecord;
+  director?: mappers.AbbreviatedRecord;
+  education_levels: mappers.AbbreviatedRecord[];
+  education_types: string[];
+  external_id: string;
   female_latrines_count: number;
+  gender_dedications: string[];
+  male_latrines_count: number;
+  name: [string, string];
 }
 
 export interface SchoolAssociations {
   country: mappers.AssociatedRecordsIndex,
   education_level: mappers.AssociatedRecordsIndex,
+  director: mappers.AssociatedRecordsIndex,
 }
 
 export const school = {
   mapRecord (value: any, associations?: SchoolAssociations): mappers.InvalidRecord | School {
     return mappers.safeRecord(value, record => ({
-      id: mappers.recordId(record),
-      country: mappers.assoc('country', record, associations?.country),
-      education_levels: mappers.assocList('education_levels_ids', record, associations?.education_level),
-      name: mappers.prop('name', record, mappers.val.nameTuple),
-      external_id: mappers.prop('external_id', record, mappers.val.string),
-      education_types: mappers.prop('education_types', record,
-        education_types => mappers.list(education_types, mappers.val.string),
-      ),
-      gender_dedications: mappers.prop('gender_dedications', record,
-        gender_dedications => mappers.list(gender_dedications, mappers.val.string),
-      ),
-      classrooms_count: mappers.prop('classrooms_count', record, mappers.val.integer),
-      male_latrines_count: mappers.prop('male_latrines_count', record, mappers.val.integer),
-      female_latrines_count: mappers.prop('female_latrines_count', record, mappers.val.integer),
       address: mappers.maybeProp('address', record,
         education_types => mappers.list(education_types, mappers.val.string),
       ),
+      id: mappers.recordId(record),
+      classrooms_count: mappers.prop('classrooms_count', record, mappers.val.integer),
+      country: mappers.assoc('country', record, associations?.country),
+      director: mappers.maybeAssoc('director', record, associations?.director),
+      education_levels: mappers.assocList('education_levels_ids', record, associations?.education_level),
+      education_types: mappers.prop('education_types', record,
+        education_types => mappers.list(education_types, mappers.val.string),
+      ),
+      external_id: mappers.prop('external_id', record, mappers.val.string),
+      female_latrines_count: mappers.prop('female_latrines_count', record, mappers.val.integer),
+      gender_dedications: mappers.prop('gender_dedications', record,
+        gender_dedications => mappers.list(gender_dedications, mappers.val.string),
+      ),
+      male_latrines_count: mappers.prop('male_latrines_count', record, mappers.val.integer),
+      name: mappers.prop('name', record, mappers.val.nameTuple),
     }));
   },
   mapAssociations: mappers.createAssociationsMapper<SchoolAssociations>(
-    'country', 'education_level',
+    'country', 'education_level', 'director',
   ),
   recordControls (addressOptions?: any): FormFieldDefinition[] {
     return [
