@@ -48,6 +48,7 @@ export default class Privileges extends Vue {
   get privilegesTypesOptions () {
     return [
       { value: 'country_admin', text: this.$t('db.record.users.privileges.country_admin') },
+      { value: 'collector', text: this.$t('db.record.users.privileges.collector') },
     ];
   }
 

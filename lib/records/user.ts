@@ -16,7 +16,7 @@ export interface User {
 }
 
 export interface UserPrivilege {
-  type: null | 'country_admin';
+  type: null | 'country_admin' | 'collector';
   [ opt: string ]: any;
 }
 
@@ -40,6 +40,7 @@ export const mapUserAssociations = mappers.createAssociationsMapper<UserAssociat
   'country',
 );
 
+// TODO for know it registers only type of the privilege
 export function mapUserPrivilege (value: any): UserPrivilege {
   // noinspection UnnecessaryLocalVariableJS
   const privilege = {

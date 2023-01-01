@@ -64,7 +64,7 @@
               v-for="name of privilegesList(record)"
               :key="name"
             >
-              <t :value="`db.record.users.label.${name}`" />
+              <t :value="`db.record.users.privileges.${name}`" />
             </li>
           </ul>
         </show-page-table-row>
@@ -98,7 +98,7 @@ export default class extends DatabasePage {
 
   privilegesList (record: User): string[] {
     if (record.is_root) return [ 'is_root' ];
-    return [];
+    return record.privileges.map(privilege => privilege.type ?? 'null');
   }
 }
 </script>
