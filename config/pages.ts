@@ -5,6 +5,7 @@ export interface Resource {
 
 export const dbPages: Resource[] = [
   { name: 'users', pages: [ '', 'new' ] },
+  { name: 'projects', pages: [ '', 'new' ] },
   { name: 'education_levels', pages: [ '' ] },
   { name: 'courses', pages: [ '', 'new' ] },
   { name: 'standardized_courses', pages: [ '', 'new' ] },

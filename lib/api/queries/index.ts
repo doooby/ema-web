@@ -12,6 +12,7 @@ import * as subjects from './subjects';
 import * as subject_categories from './subject_categories';
 import * as location_systems from './location_systems';
 import * as locations from './locations';
+import * as projects from './projects';
 
 export default {
   countries,
@@ -28,4 +29,5 @@ export default {
   subject_categories,
   location_systems,
   locations,
+  projects,
 };

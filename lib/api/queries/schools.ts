@@ -20,11 +20,3 @@ export function searchAssociated (params?: Params) {
     mapper: (payload: any) => mappers.associatedRecords<School>(payload),
   };
 }
-
-export function update (schoolId: number, school: Params) {
-  return {
-    path: `/schools/${schoolId}/update`,
-    params: { school },
-    mapper: mappers.changedRecord,
-  };
-}

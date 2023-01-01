@@ -1,8 +1,11 @@
 <template>
   <div class="single-row-cell">
-    <div v-if="sanitizedValue[0]">
+    <div v-if="sanitizedValue[0] && sanitizedValue[1]">
       {{ sanitizedValue[1] }}
       <br>
+      <small>{{ sanitizedValue[0] }}</small>
+    </div>
+    <div v-if="sanitizedValue[0]">
       <small>{{ sanitizedValue[0] }}</small>
     </div>
     <div v-else>
