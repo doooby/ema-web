@@ -1,8 +1,8 @@
 <template>
-  <b-form-group
-    :label="labelTranslation"
-    :label-for="domIdBase"
-  >
+  <b-form-group>
+    <template #label>
+      <t :value="labelTranslation" />
+    </template>
     <b-form-datepicker
       :id="domIdBase"
       :value="sanitizedValue"

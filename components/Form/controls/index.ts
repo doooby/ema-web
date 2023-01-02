@@ -45,6 +45,7 @@ export function asFieldType (component: any): FormFieldType {
 export const controlsIndex2 = {
   name: asFieldType(NameControl),
   date: asFieldType(DateControl),
+  calendar: asFieldType(CalendarControl),
   select: asFieldType(SelectControl),
   selectMultiple: asFieldType(SelectMultipleControl),
   selectOrFill: asFieldType(SelectOrFillControl),
