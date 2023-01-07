@@ -3,6 +3,7 @@
     entity="education_levels"
     :search-fields="searchFields"
     :table-columns="tableColumns"
+    :actions="actions"
   />
 </template>
 
@@ -26,9 +27,14 @@ export default class extends DatabasePage {
   }
 
   tableColumns = [
+    { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: RecordLink, onlyId: true }, size: 60 },
     { name: 'level', size: 80 },
     { name: 'name', cell: { type: Name }, size: 400 },
+  ];
+
+  actions = [
+    { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
   ];
 }
 </script>

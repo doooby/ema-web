@@ -1,28 +1,36 @@
-import * as mappers from '~/lib/api/mappers';
-import { Country } from '~/lib/records/country';
-
-const { object, recordId, prop, assoc, val } = mappers;
+import * as mp from '~/lib/api/mappers';
+import { controls, FormFieldDefinition } from '~/components/Form';
 
 export interface EducationLevel {
   id: number;
-  country: mappers.AssociatedRecord<Country>;
+  country: mp.AbbreviatedRecord;
   name: [string, string];
   level: number;
 }
 
 export interface EducationLevelAssociations {
-  country: mappers.AssociatedRecordsIndex,
+  country: mp.AssociatedRecordsIndex,
 }
 
-export function mapEducationLevel (value: any, associations?: EducationLevelAssociations): EducationLevel {
-  return object(value, root => ({
-    id: recordId(root),
-    country: assoc('country', root, associations?.country),
-    name: prop('name', root, val.nameTuple),
-    level: prop('level', root, val.integer),
-  }));
-}
+export const educationLevel = {
+  mapRecord (value: any, associations?: EducationLevelAssociations): mp.InvalidRecord | EducationLevel {
+    return mp.safeRecord(value, root => ({
+      id: mp.recordId(root),
+      country: mp.assoc('country', root, associations?.country),
+      name: mp.prop('name', root, mp.val.nameTuple),
+      level: mp.prop('level', root, mp.val.integer),
+    }));
+  },
 
-export const mapEducationLevelAssociations = mappers.createAssociationsMapper<EducationLevelAssociations>(
-  'country',
-);
+  mapAssociations: mp.createAssociationsMapper<EducationLevelAssociations>(
+    'country',
+  ),
+
+  recordControls (): FormFieldDefinition[] {
+    return [
+      [ 'level', controls.integer ],
+      [ 'name', controls.name ],
+    ];
+  },
+
+};

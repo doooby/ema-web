@@ -1,5 +1,5 @@
 import { Params } from '..';
-import * as mappers from '../mappers';
+import * as mp from '../mappers';
 import { project, Project, ProjectAssociations } from '~/lib/records';
 import { recordEndpoints } from '~/lib/api/queries/lib/records';
 
@@ -17,6 +17,6 @@ export function searchAssociated (params?: Params) {
   return {
     path: '/projects?assoc=1',
     params,
-    mapper: (payload: any) => mappers.associatedRecords<Project>(payload),
+    mapper: (payload: any) => mp.associatedRecords<Project>(payload),
   };
 }

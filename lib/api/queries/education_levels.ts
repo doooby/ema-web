@@ -1,19 +1,22 @@
 import { Params } from '..';
-import * as mappers from '../mappers';
-import { EducationLevel, mapEducationLevel, mapEducationLevelAssociations } from '~/lib/records';
+import * as mp from '../mappers';
+import { educationLevel, EducationLevel, EducationLevelAssociations } from '~/lib/records';
+import { recordEndpoints } from '~/lib/api/queries/lib/records';
 
-export function index (params: Params) {
-  return {
-    path: '/education_levels',
-    params,
-    mapper: (payload: any) => mappers.paginatedRecords(payload, mapEducationLevel, mapEducationLevelAssociations),
-  };
-}
+export const record = recordEndpoints<
+  EducationLevel,
+  EducationLevelAssociations
+  >({
+    entity: 'education_levels',
+    paramName: 'education_level',
+    mapRecord: educationLevel.mapRecord,
+    mapAssociations: educationLevel.mapAssociations,
+  });
 
 export function searchAssociated (params?: Params) {
   return {
     path: '/education_levels?assoc=1',
     params,
-    mapper: (payload: any) => mappers.associatedRecords<EducationLevel>(payload),
+    mapper: (payload: any) => mp.associatedRecords<EducationLevel>(payload),
   };
 }

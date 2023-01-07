@@ -30,6 +30,7 @@ export default class extends DatabasePage {
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: RecordLink, entity: 'projects' }, size: 60 },
     { name: 'name', cell: { type: Name } },
+    { name: 'code' },
   ];
 
   actions = [
