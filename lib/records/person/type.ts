@@ -59,7 +59,7 @@ export function parse (value: any, associations?: Associations): Person {
     mother_tongue: mappers.maybeProp('mother_tongue', root, mappers.val.string),
     outside_school: mappers.maybeProp('outside_school', root, mappers.val.string),
     nationality: mappers.maybeProp('nationality', root, mappers.val.string),
-    spoken_languages: mappers.maybeProp('mother_tongue', root, value => mappers.list(value, mappers.val.string)),
+    spoken_languages: mappers.maybeProp('spoken_languages', root, value => mappers.list(value, mappers.val.string)),
     enrollment_reasons: mappers.maybeProp('enrollment_reasons', root, value => mappers.list(value, mappers.val.string)),
     disabilities: mappers.maybeProp('disabilities', root, mappers.val.selectOrFillTuple),
     disability_diagnosis: mappers.maybeProp('disability_diagnosis', root, mappers.val.boolean),

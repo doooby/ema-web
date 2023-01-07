@@ -22,7 +22,7 @@ export function editControls (): FormFieldDefinition[] {
     [ 'nationality', controls.select, {
       options: [],
     } ],
-    [ 'spoken_languages', controls.select, {
+    [ 'spoken_languages', controls.listMultiple, {
       options: [],
     } ],
     [ 'registered_on', controls.date ],
