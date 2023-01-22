@@ -3,23 +3,13 @@
     class="d-flex justify-content-end db--records-browsing--pagination"
     @click="onPageSelect"
   >
-    <div :class="{ current: current === 1 }">
-      <div data-page="1">
-        1
-      </div>
-    </div>
-    <div v-if="current > 4">
-      <div>
-        ...
-      </div>
-    </div>
     <div
-      v-for="page of pages"
+      v-for="{page, text} of slots"
       :key="page"
       :class="{ current: current === page }"
     >
       <div :data-page="page">
-        {{ page }}
+        {{ text }}
       </div>
     </div>
   </div>
@@ -30,6 +20,12 @@ import Vue from 'vue';
 import { Component, Prop } from 'vue-property-decorator';
 import { RequestState } from '~/lib/api';
 import * as mappers from '~/lib/api/mappers';
+import { uniq } from 'lodash';
+
+interface Slot {
+  page: number;
+  text: string
+}
 
 @Component
 export default class Pagination<R extends mappers.RecordBase> extends Vue {
@@ -44,13 +40,38 @@ export default class Pagination<R extends mappers.RecordBase> extends Vue {
   }
 
   get pages (): number[] {
-    let start = this.current - 2;
-    if (start < 2) start = 2;
-    let end = this.current + 2;
-    if (this.pagesCount < end) end = this.pagesCount;
-    const list: number[] = [];
-    for (let i = start; i <= end; i += 1) list.push(i);
-    return list;
+    let list: number[] = [];
+
+    list.push(1);
+    list.push(this.current - 5);
+    list.push(this.current - 2);
+    list.push(this.current - 1);
+    list.push(this.current);
+    list.push(this.current + 1);
+    list.push(this.current + 2);
+    list.push(this.current + 5);
+    list.push(this.pagesCount);
+
+    list = list.sort((a, b) => a - b);
+    list = list.filter(page => page > 0 && page < (this.pagesCount + 1));
+    return uniq(list);
+  }
+
+  get slots (): Slot[] {
+    const slots: Slot[] = [];
+
+    for (let i = 0, len = this.pages.length, last = len - 1; i < len; i += 1) {
+      const page = this.pages[i];
+      if (i === 0 && this.current !== 1) {
+        slots.push({ page, text: '«' });
+      } else if (i === last && this.current !== this.pagesCount) {
+        slots.push({ page, text: '»' });
+      } else {
+        slots.push({ page, text: String(page) });
+      }
+    }
+
+    return slots;
   }
 
   onPageSelect (event: any) {
