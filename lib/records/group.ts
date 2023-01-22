@@ -7,12 +7,14 @@ import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRec
 export interface Group {
   id: number;
   course: mappers.AssociatedRecord;
+  school: mappers.AssociatedRecord;
   name: [string, string];
   term: number;
 }
 
 export interface GroupAssociations {
   course: mappers.AssociatedRecordsIndex,
+  school: mappers.AssociatedRecordsIndex,
 }
 
 export namespace GroupSchedule {
@@ -34,12 +36,13 @@ export const group = {
     return object(value, root => ({
       id: recordId(root),
       course: assoc('course', root, associations?.course),
+      school: assoc('school', root, associations?.school),
       name: prop('name', root, val.nameTuple),
       term: prop('term', root, val.integer),
     }));
   },
   mapAssociations: mappers.createAssociationsMapper<GroupAssociations>(
-    'course',
+    'course', 'school',
   ),
   recordControls ({
     countryId,

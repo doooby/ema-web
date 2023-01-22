@@ -1,24 +1,15 @@
 <template>
-  <div class="single-row-cell">
-    <div v-if="sanitizedValue[0] && sanitizedValue[1]">
-      {{ sanitizedValue[1] }}
-      <br>
-      <small>{{ sanitizedValue[0] }}</small>
-    </div>
-    <div v-if="sanitizedValue[0]">
-      <small>{{ sanitizedValue[0] }}</small>
-    </div>
-    <div v-else>
-      {{ sanitizedValue[1] }}
-    </div>
-  </div>
+  <text-names :value="sanitizedValue" class-name="single-row-cell" />
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { DataTable } from '~/components/DataTable';
+import TextNames from '~/components/database/components/TextNames.vue';
 
-@Component
+@Component({
+  components: { TextNames },
+})
 export default class Name extends Vue {
   @Prop({ required: true }) readonly column!: DataTable.Column;
   @Prop({ required: true }) readonly dataItem!: any;

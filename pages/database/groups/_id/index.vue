@@ -22,14 +22,21 @@
     <template #details="{ record }">
       <table class="table">
         <show-page-table-row label="db.record.groups.label.name">
-          {{ record.name_en }}
-          <br>
-          <small>{{ record.name }}</small>
+          <text-names :value="record.name" />
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.course">
           <show-record-link
             entity="courses"
             :record="{ id: record.course.id, caption: record.course.labels.caption }"
+          />
+        </show-page-table-row>
+        <show-page-table-row label="db.record.groups.label.school">
+          <div v-if="record.school.labels.name">
+            {{ record.school.labels.name }}
+          </div>
+          <show-record-link
+            entity="schools"
+            :record="{ id: record.school.id, caption: record.school.labels.caption }"
           />
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.year">
@@ -67,6 +74,7 @@ import { DatabasePage } from '~/components';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import StudentsListing from '~/components/database/records/groups/StudentsListing.vue';
 import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
+import TextNames from '~/components/database/components/TextNames.vue';
 
 enum Tabs {
   students,
@@ -81,6 +89,7 @@ enum Tabs {
     ShowRecordLink,
     StudentsListing,
     GroupAttendance,
+    TextNames,
   },
 })
 export default class extends DatabasePage {
