@@ -14,6 +14,7 @@ import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
+import MultilineText from '~/components/database/cells/MultilineText.vue';
 
 @Component({
   components: { IndexPage },
@@ -31,6 +32,7 @@ export default class extends DatabasePage {
     { name: 'id', cell: { type: RecordLink, entity: 'projects' }, size: 60 },
     { name: 'name', cell: { type: Name } },
     { name: 'code' },
+    { name: 'donors', cell: { type: MultilineText } },
   ];
 
   actions = [
