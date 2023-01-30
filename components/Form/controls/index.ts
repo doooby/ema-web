@@ -39,19 +39,23 @@ add(LocationControl.fieldType, LocationControl);
 add(ListMultiple.fieldType, ListMultiple);
 
 export function asFieldType (component: any): FormFieldType {
-  return { ...component.fieldType, control: component };
+  const type = component.fieldType;
+  if (!type) {
+    throw new Error('invalid field');
+  }
+  return { ...type, control: component };
 }
 
 export const controlsIndex2 = {
   name: asFieldType(NameControl),
-  date: asFieldType(DateControl),
-  calendar: asFieldType(CalendarControl),
+  date: { ...DateControlType, control: DateControl },
+  calendar: { ...CalendarControlType, control: CalendarControl },
   select: asFieldType(SelectControl),
   selectMultiple: asFieldType(SelectMultipleControl),
   selectOrFill: asFieldType(SelectOrFillControl),
-  textMultiline: asFieldType(TextMultilineControl),
+  textMultiline: { ...TextMultilineControlType, control: TextMultilineControl },
   boolean: asFieldType(BooleanControl),
-  integer: asFieldType(IntegerControl),
-  text: asFieldType(TextControl),
+  integer: { ...IntegerControlType, control: IntegerControl },
+  text: { ...TextControlType, control: TextControl },
   listMultiple: asFieldType(ListMultiple),
 };

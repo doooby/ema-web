@@ -16,7 +16,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { parseISO as parseDate } from 'date-fns';
-import { FormFieldType, FormField, FormValues, FormGroupContext } from '..';
+import { FormField, FormFieldType, FormGroupContext, FormValues } from '..';
 import ControlMixin from '../ControlMixin';
 
 export const type: FormFieldType = {
@@ -27,8 +27,7 @@ export const type: FormFieldType = {
   },
   fillParams ({ name }, values, record) {
     const date = values[name];
-    record[name] = date ? utils.formatDate(date) : '';
-    record[name] = values[name] || '';
+    record[name] = (date && utils.formatDate(date)) ?? '';
     return record;
   },
 };

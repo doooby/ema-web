@@ -64,8 +64,7 @@ export const type: FormFieldType = {
   },
   fillParams ({ name }, values, record) {
     const date = values[name];
-    record[name] = date ? utils.formatDate(date) : '';
-    record[name] = values[name] || '';
+    record[name] = (date && utils.formatDate(date)) ?? '';
     return record;
   },
 };
