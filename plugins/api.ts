@@ -3,7 +3,7 @@ import { QueryDefinition, RequestResponse, RequestState } from '~/lib/api';
 import queries from '~/lib/api/queries';
 import { MappingError } from '~/lib/api/mappers';
 
-export class ApiPlugin {
+class ApiPlugin {
   queries = queries;
   context: Context;
 

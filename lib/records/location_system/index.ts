@@ -1,6 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
 import { location_system } from '~/lib/records';
-import { RequestState } from '~/lib/api';
 
 export * from './types';
 
