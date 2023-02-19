@@ -17,7 +17,7 @@ import { material_kit } from '~/lib/records';
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return material_kit.recordControls();
+    return material_kit.controls.all();
   }
 }
 </script>

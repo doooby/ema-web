@@ -1,16 +1,16 @@
-import { Params, parsers } from '~/lib/api2';
+import { Params, parsers, RecordAssociations } from '~/lib/api2';
 
 export function recordQueries<R> (
   path: string,
   paramName: string,
-  parser: (value: unknown) => R,
+  recordParser: (value: unknown, associations?: RecordAssociations) => R,
 ) {
   return {
     search (params: Params) {
       return {
         path: `/${path}`,
         params,
-        reducer: parsers.searchResponsePayload(parser),
+        reducer: parsers.searchResponsePayload(recordParser),
       };
     },
     create (record: Params) {

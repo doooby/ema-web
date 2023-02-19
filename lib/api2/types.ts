@@ -2,10 +2,10 @@ export interface Params {
   [field: string]: any;
 }
 
-export interface QueryDefinition<V> {
+export interface QueryDefinition<D = never> {
   path: string;
   params?: Params;
-  reducer: (payload: unknown) => V;
+  reducer: (payload: unknown) => D;
 }
 
 export interface RequestState<V> {
@@ -35,7 +35,6 @@ export interface SearchRecordsResponsePayload<R = never> {
   total: number;
   per_page: number;
   records: R[];
-  associations?: Record<string, undefined | BRecordsIndex>;
 }
 
 export type UpdatedRecordResponsePayload =
@@ -48,3 +47,5 @@ export interface BRecord {
 }
 
 export type BRecordsIndex = Record<string, undefined | BRecord>;
+
+export type RecordAssociations = Record<string, undefined | BRecordsIndex>;

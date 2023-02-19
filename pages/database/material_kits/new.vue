@@ -19,7 +19,7 @@ export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.$store.getters['session/countryId'] } ],
-      ...material_kit.recordControls(),
+      ...material_kit.controls.all(),
     ];
   }
 }

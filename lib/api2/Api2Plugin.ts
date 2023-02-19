@@ -1,9 +1,14 @@
 import { Context } from '@nuxt/types';
 import { RequestResponse, QueryDefinition, RequestState } from '~/lib/api2';
 import { wai } from 'wai';
+import { material_kit } from '~/lib/records';
 
 export default class Api2Plugin {
   context: Context;
+
+  queries = {
+    material_kits: material_kit.queries,
+  };
 
   constructor (context: Context) {
     this.context = context;
@@ -17,11 +22,11 @@ export default class Api2Plugin {
   }
 
   async request<V> (
-    stateRef: RequestState<V>,
+    state: RequestState<V>,
     query: QueryDefinition<V>,
   ): Promise<void> {
-    stateRef.response = undefined;
-    stateRef.processing = true;
+    state.response = undefined;
+    state.processing = true;
 
     let response;
     try {
@@ -36,13 +41,13 @@ export default class Api2Plugin {
 
     if (response.ok) {
       try {
-        stateRef.response = {
+        state.response = {
           ok: true,
           payload: query.reducer(response.payload),
         };
       } catch (error: any) {
         if (error instanceof wai.MappingError) error.seal(response.payload);
-        stateRef.response = {
+        state.response = {
           ok: false,
           message: 'bad_payload',
           error,
@@ -50,10 +55,10 @@ export default class Api2Plugin {
       }
     } else {
       utils.warn('api2 request failed', response);
-      stateRef.response = response;
+      state.response = response;
     }
 
-    stateRef.processing = false;
+    state.processing = false;
   }
 
   async processRequest (path: string, postData?: any): Promise<RequestResponse<never>> {

@@ -1,5 +1,4 @@
 import * as countries from './countries';
-import * as material_kits from './material_kits';
 import * as users from './users';
 import * as courses from './courses';
 import * as standardized_courses from './standardized_courses';
@@ -17,7 +16,6 @@ import * as projects from './projects';
 
 export default {
   countries,
-  material_kits,
   users,
   courses,
   standardized_courses,

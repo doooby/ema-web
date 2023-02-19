@@ -1,25 +1,30 @@
 import { wai } from 'wai';
 import {
   BRecordsIndex,
-  ErrorMessage,
+  ErrorMessage, RecordAssociations,
   SearchRecordsResponsePayload,
   UpdatedRecordResponsePayload,
+  mappers,
 } from '~/lib/api2';
 
 export function searchResponsePayload<R> (
-  parseRecord: (value: unknown) => R,
+  parseRecord: (value: unknown, associations?: RecordAssociations) => R,
 ): (value: unknown) => SearchRecordsResponsePayload<R> {
   return wai.object(
-    value => ({
-      page: wai.prop('page', value, wai.integer),
-      pages_count: wai.prop('pages_count', value, wai.integer),
-      total: wai.prop('total', value, wai.integer),
-      per_page: wai.prop('per_page', value, wai.integer),
-      records: wai.prop('records', value, parseListOfRecords(parseRecord)),
-      associations: wai.prop(
-        'associations', value, wai.nullable(parseRecordsAssociations),
-      ),
-    }),
+    (value) => {
+      const associations = wai.prop(
+        'associations', value, wai.nullable(parseRecordsAssociations()),
+      );
+      return {
+        page: wai.prop('page', value, wai.integer),
+        pages_count: wai.prop('pages_count', value, wai.integer),
+        total: wai.prop('total', value, wai.integer),
+        per_page: wai.prop('per_page', value, wai.integer),
+        records: wai.prop('records', value, parseListOfRecords(
+          value => parseRecord(value, associations),
+        )),
+      };
+    },
   );
 }
 
@@ -61,29 +66,17 @@ function parseListOfRecords<R> (
   return wai.listOf(parseRecord);
 }
 
-function mapIndex<I> (
-  item: (value: unknown) => I,
-): (value: unknown) => Record<string, I> {
-  return wai.object((value) => {
-    for (const key of Object.keys(value)) {
-      value[key] = item(value[key]);
-    }
-    return value;
-  });
-}
-
 function parseRecordsAssociations (
-  value: unknown,
-): Record<string, undefined | BRecordsIndex> {
-  return mapIndex(
-    mapIndex(
+): (value: unknown) => Record<string, undefined | BRecordsIndex> {
+  return mappers.mapIndex(
+    mappers.mapIndex(
       wai.object((value) => {
         const id = wai.prop('id', value, wai.string);
         return {
-          ...mapIndex(wai.string),
+          ...mappers.mapIndex(wai.string),
           id,
         };
       }),
     ),
-  )(value);
+  );
 }
