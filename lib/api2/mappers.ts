@@ -1,4 +1,4 @@
-import { wai } from 'wai';
+import { wai } from '~/vendor/wai';
 import { RecordAssociations, BRecord } from '~/lib/api2';
 
 // TODO move to wai ?

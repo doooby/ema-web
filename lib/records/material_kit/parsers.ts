@@ -1,5 +1,5 @@
 import { material_kit } from '~/lib/records';
-import { wai } from 'wai';
+import { wai } from '~/vendor/wai';
 import { RecordAssociations } from '~/lib/api2';
 import { mapAssociation } from '~/lib/api2/mappers';
 

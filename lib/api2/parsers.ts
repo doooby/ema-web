@@ -1,4 +1,4 @@
-import { wai } from 'wai';
+import { wai } from '~/vendor/wai';
 import {
   BRecordsIndex,
   ErrorMessage, RecordAssociations,

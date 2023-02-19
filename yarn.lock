@@ -11017,9 +11017,8 @@ w3c-xmlserializer@^2.0.0:
   dependencies:
     xml-name-validator "^3.0.0"
 
-"wai@github:doooby/wai#v0.4.3":
+"wai@file:../../doooby/wai":
   version "0.4.3"
-  resolved "https://codeload.github.com/doooby/wai/tar.gz/677b72ed506c45b688f91af503661203087ce70f"
   dependencies:
     typescript "^4.8.3"
 

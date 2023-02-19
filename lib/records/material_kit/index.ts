@@ -1,4 +1,6 @@
+import * as controls from './controls';
+import * as parsers from './parsers';
+import * as queries from './queries';
 export * from './types';
-export * as controls from './controls';
-export * as parsers from './parsers';
-export * as queries from './queries';
+
+export { controls, parsers, queries };

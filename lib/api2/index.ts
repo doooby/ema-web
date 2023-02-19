@@ -1,5 +1,6 @@
+import * as mappers from './mappers';
+import * as parsers from './parsers';
+import Api2Plugin from './Api2Plugin';
 export * from './types';
 export * from './helpers';
-export * as mappers from './mappers';
-export * as parsers from './parsers';
-export { default as Api2Plugin } from './Api2Plugin';
+export { mappers, parsers, Api2Plugin };

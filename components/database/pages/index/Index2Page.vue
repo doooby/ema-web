@@ -91,13 +91,14 @@ export default class IndexPage extends Vue {
   }
 
   get searchQueryBuilder () {
-    const entity = this.entity;
-    const queryBuilder = (this.$api2.queries as any)[entity]?.search;
-    if (!queryBuilder) {
-      utils.warn(`database.Index2Page: index query is missing for entity ${entity}.`);
-      return;
-    }
-    return queryBuilder;
+    return;
+    // const entity = this.entity;
+    // const queryBuilder = (this.$api2.queries as any)[entity]?.search;
+    // if (!queryBuilder) {
+    //   utils.warn(`database.Index2Page: index query is missing for entity ${entity}.`);
+    //   return;
+    // }
+    // return queryBuilder;
   }
 
   get searchQueryState (): RequestState {
@@ -166,10 +167,10 @@ export default class IndexPage extends Vue {
 
   search (page?: number) {
     const params = formToRecordParams(this.searchFormFields, this.searchValues);
-    this.$api2.request(
-      this.searchQueryState2,
-      this.searchQueryBuilder({ ...params, page }),
-    );
+    // this.$api2.request(
+    //   this.searchQueryState2,
+    //   this.searchQueryBuilder({ ...params, page }),
+    // );
   }
 }
 </script>
