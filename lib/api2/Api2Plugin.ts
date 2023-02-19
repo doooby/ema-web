@@ -1,14 +1,14 @@
 import { Context } from '@nuxt/types';
 import { RequestResponse, QueryDefinition, RequestState } from '~/lib/api2';
-// import { wai } from '~/vendor/wai';
+import { wai } from '~/vendor/wai';
 import { material_kit } from '~/lib/records';
 
 export default class Api2Plugin {
   context: Context;
 
-  // queries = {
-  //   material_kits: material_kit.queries,
-  // };
+  queries = {
+    material_kits: material_kit.queries,
+  };
 
   constructor (context: Context) {
     this.context = context;
@@ -46,7 +46,7 @@ export default class Api2Plugin {
           payload: query.reducer(response.payload),
         };
       } catch (error: any) {
-        // if (error instanceof wai.MappingError) error.seal(response.payload);
+        if (error instanceof wai.MappingError) error.seal(response.payload);
         state.response = {
           ok: false,
           message: 'bad_payload',
