@@ -17,6 +17,7 @@ export const dbPages: Resource[] = [
   { name: 'school_years', pages: [ '', 'new' ] },
   { name: 'groups', pages: [ '', 'new' ] },
   { name: 'people', pages: [ '', 'new' ] },
+  { name: 'work_agreements', pages: [ '', 'new' ] },
 ];
 
 export function resourcePath (name: string, page: string): string {

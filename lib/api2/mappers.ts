@@ -1,5 +1,6 @@
 import { wai } from '~/vendor/wai';
 import { RecordAssociations, BRecord } from '~/lib/api2';
+import { parseISO as parseDate } from 'date-fns';
 
 // TODO move to wai ?
 
@@ -13,6 +14,17 @@ export function mapIndex<I> (
     }
     return value;
   });
+}
+
+export function mapDate (value): Date {
+  if (typeof value !== 'string') {
+    throw new wai.MappingError('not date');
+  }
+  const date = parseDate(value);
+  if (!date || isNaN(date as any)) {
+    throw new wai.MappingError('not date');
+  }
+  return date;
 }
 
 export function mapAssociation (

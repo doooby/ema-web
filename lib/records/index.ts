@@ -3,6 +3,7 @@ import * as donor from './donor';
 import * as person from './person';
 import * as location_system from './location_system';
 import * as material_kit from './material_kit';
+import * as work_agreement from './work_agreement';
 export * from './country';
 export * from './course';
 export * from './standardized_course';
@@ -21,4 +22,5 @@ export {
   person,
   location_system,
   material_kit,
+  work_agreement,
 };
