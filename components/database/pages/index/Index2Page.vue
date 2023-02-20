@@ -40,7 +40,7 @@
               :entity="entity"
               :record="dataItem"
               :actions="actions"
-            />searchQueryBuilder
+            />
           </template>
         </data-table-view>
       </div>

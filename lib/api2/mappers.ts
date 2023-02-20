@@ -3,6 +3,7 @@ import { RecordAssociations, BRecord } from '~/lib/api2';
 
 // TODO move to wai ?
 
+// TODO produces wrong error messages
 export function mapIndex<I> (
   item: (value: unknown) => I,
 ): (value: unknown) => Record<string, I> {
@@ -19,11 +20,12 @@ export function mapAssociation (
   associations: undefined | RecordAssociations,
 ): (value: unknown) => BRecord {
   const index = associations?.[name];
-  if (!associations || !index) {
-    throw new wai.MappingError('association missing');
-  }
 
   return (value: unknown) => {
+    if (!associations || !index) {
+      throw new wai.MappingError('association missing');
+    }
+
     const bRecord = index[String(value)];
     if (!bRecord) {
       throw new wai.MappingError('association missing');
