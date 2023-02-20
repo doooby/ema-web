@@ -24,11 +24,6 @@ export type RequestResponse<V> =
   payload: V;
 }
 
-export interface ErrorMessage {
-  label: string;
-  message: string;
-}
-
 export interface SearchRecordsResponsePayload<R = never> {
   page: number;
   pages_count: number;
@@ -38,7 +33,7 @@ export interface SearchRecordsResponsePayload<R = never> {
 }
 
 export type UpdatedRecordResponsePayload =
-  | { success: false; record_id?: string; errors: ErrorMessage[] }
+  | { success: false; record_id?: string; errors: [string, string][] }
   | { success: true; record_id: string }
 
 export interface BRecord {

@@ -90,14 +90,16 @@ export default class IndexPage extends Vue {
     this.updatePage();
   }
 
-  get searchQueryBuilder () {
+  get searchQuery () {
     const entity = this.entity;
-    const queryBuilder = (this.$api2.queries as any)[entity]?.search;
-    if (!queryBuilder) {
+    const query = (this.$api2.queries as any)[entity]?.search;
+    if (query) return query;
+
+    if (!query) {
       utils.warn(`database.Index2Page: index query is missing for entity ${entity}.`);
       return;
     }
-    return queryBuilder;
+    return query;
   }
 
   get searchQueryState (): RequestState {
@@ -165,10 +167,12 @@ export default class IndexPage extends Vue {
   }
 
   search (page?: number) {
+    if (this.searchQueryState2.processing) return;
+
     const params = formToRecordParams(this.searchFormFields, this.searchValues);
     this.$api2.request(
       this.searchQueryState2,
-      this.searchQueryBuilder({ ...params, page }),
+      this.searchQuery({ ...params, page }),
     );
   }
 }

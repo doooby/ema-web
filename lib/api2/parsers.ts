@@ -1,7 +1,7 @@
 import { wai } from '~/vendor/wai';
 import {
   BRecordsIndex,
-  ErrorMessage, RecordAssociations,
+  RecordAssociations,
   SearchRecordsResponsePayload,
   UpdatedRecordResponsePayload,
   mappers,
@@ -49,14 +49,11 @@ export function updatedRecordResponsePayload (
   );
 }
 
-export function errorMessage (value: unknown): ErrorMessage {
-  return wai.object(value => ({
-    label: wai.prop('label', value, wai.string),
-    message: wai.prop('message', value, wai.string),
-  }))(value);
+export function errorMessage (value: unknown): [string, string] {
+  return wai.tuple(wai.string, wai.string)(value);
 }
 
-export function errorMessages (value: unknown): ErrorMessage[] {
+export function errorMessages (value: unknown): [string, string][] {
   return wai.nullable(wai.listOf(errorMessage))(value) ?? [];
 }
 

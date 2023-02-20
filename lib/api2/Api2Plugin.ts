@@ -51,7 +51,7 @@ export default class Api2Plugin {
 
         state.response = {
           ok: false,
-          message: 'bad_payload',
+          message: 'request_failed',
           error,
         };
       }
@@ -92,5 +92,18 @@ export default class Api2Plugin {
       response.message = response.message || 'unknown_error';
     }
     return response;
+  }
+
+  getQuery (entity: string, action: string): (...args: any[]) => QueryDefinition<any> {
+    const query = (this.queries as any)[entity]?.[action];
+    if (query) {
+      return query;
+    } else {
+      return function () {
+        const error = new Error(`$api2 query missing ${entity}.${action}`);
+        utils.warnOfError(error);
+        throw error;
+      };
+    }
   }
 }

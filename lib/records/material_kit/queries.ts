@@ -16,7 +16,7 @@ export function create (record: Params) {
   return {
     path: `/${path}/create`,
     params: { [param_name]: record },
-    reducer: parsers.updatedRecordResponsePayload,
+    reducer: parsers.updatedRecordResponsePayload(),
   };
 }
 
@@ -24,6 +24,6 @@ export function update (id: string, record: Params) {
   return {
     path: `/${path}/${id}/update`,
     params: { [param_name]: record },
-    reducer: parsers.updatedRecordResponsePayload,
+    reducer: parsers.updatedRecordResponsePayload(),
   };
 }
