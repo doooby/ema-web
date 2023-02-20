@@ -2,12 +2,16 @@ import { Context } from '@nuxt/types';
 import { RequestState as V1RequestState } from '~/lib/api';
 import { RequestResponse, QueryDefinition, RequestState } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
-import { material_kit } from '~/lib/records';
+import {
+  donor,
+  material_kit,
+} from '~/lib/records';
 
 export default class Api2Plugin {
   context: Context;
 
   queries = {
+    donors: donor.queries,
     material_kits: material_kit.queries,
   };
 

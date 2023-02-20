@@ -1,13 +1,13 @@
 import { Params, parsers } from '~/lib/api2';
-import { material_kit } from '~/lib/records';
+import { donor } from '~/lib/records';
 
-const path = 'material_kits';
+const path = 'donors';
 
 export function search (params: Params) {
   return {
     path: `/${path}`,
     params,
-    reducer: parsers.searchResponsePayload(material_kit.parsers.record),
+    reducer: parsers.searchResponsePayload(donor.parsers.record),
   };
 }
 

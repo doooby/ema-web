@@ -1,4 +1,5 @@
 import * as common from './common';
+import * as donor from './donor';
 import * as person from './person';
 import * as location_system from './location_system';
 import * as material_kit from './material_kit';
@@ -16,6 +17,7 @@ export * from './subject_category';
 export * from './user';
 export {
   common,
+  donor,
   person,
   location_system,
   material_kit,
