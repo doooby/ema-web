@@ -76,7 +76,7 @@ import { UpdatedRecordResponsePayload } from '~/lib/api2';
 @Component({
   components: { RecordErrors },
 })
-export default class NewPage extends Vue {
+export default class New2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
   @Prop() readonly processing?: boolean;
@@ -106,12 +106,9 @@ export default class NewPage extends Vue {
     return `db.record.${this.entity}.label`;
   }
 
-  get saveQuery (): any {
-    return this.$api2.getQuery(this.entity, 'create');
-  }
-
   get isControlsDisabled (): boolean {
     return false;
+    // TODO fix
     // return this.createQueryState2.processing ||
     //   !!(this.createQueryState2.response?.ok && this.createQueryState2.response.payload.success);
   }
@@ -131,7 +128,7 @@ export default class NewPage extends Vue {
     return null;
   }
 
-  onCreated (recordId: any) {
+  onCreated (recordId: string) {
     if (this.$listeners.create) {
       this.$emit('create', recordId);
     } else {
@@ -150,9 +147,11 @@ export default class NewPage extends Vue {
     const params = formToRecordParams(this.formFields, this.formValues);
     await this.$api2.request(
       this.createQueryState2,
-      this.saveQuery(params),
+      this.$api2.getQuery(this.entity, 'create')(params),
     );
-    if (this.createQueryState2.response?.ok && this.createQueryState2.response.payload.success) {
+    if (this.createQueryState2.response?.ok &&
+      this.createQueryState2.response.payload.success
+    ) {
       this.onCreated(this.createQueryState2.response.payload.record_id);
     }
   }

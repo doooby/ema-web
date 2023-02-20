@@ -90,47 +90,8 @@ export default class IndexPage extends Vue {
     this.updatePage();
   }
 
-  get searchQuery () {
-    const entity = this.entity;
-    const query = (this.$api2.queries as any)[entity]?.search;
-    if (query) return query;
-
-    if (!query) {
-      utils.warn(`database.Index2Page: index query is missing for entity ${entity}.`);
-      return;
-    }
-    return query;
-  }
-
   get searchQueryState (): RequestState {
-    const response = this.searchQueryState2.response;
-    if (this.isFetching || !response) {
-      return {
-        running: true,
-        value: null,
-        fail: null,
-        error: null,
-        reset () {},
-      };
-    }
-
-    if (response.ok) {
-      return {
-        running: false,
-        value: response.payload,
-        fail: null,
-        error: null,
-        reset () {},
-      };
-    } else {
-      return {
-        running: false,
-        value: null,
-        fail: response.message,
-        error: null,
-        reset () {},
-      };
-    }
+    return this.$api2.mapResponseToV1RequestState(this.searchQueryState2);
   }
 
   get isFetching (): boolean {
@@ -172,7 +133,7 @@ export default class IndexPage extends Vue {
     const params = formToRecordParams(this.searchFormFields, this.searchValues);
     this.$api2.request(
       this.searchQueryState2,
-      this.searchQuery({ ...params, page }),
+      this.$api2.getQuery(this.entity, 'search')({ ...params, page, }),
     );
   }
 }

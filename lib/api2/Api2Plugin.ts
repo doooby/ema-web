@@ -1,4 +1,5 @@
 import { Context } from '@nuxt/types';
+import { RequestState as V1RequestState } from '~/lib/api';
 import { RequestResponse, QueryDefinition, RequestState } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import { material_kit } from '~/lib/records';
@@ -103,6 +104,37 @@ export default class Api2Plugin {
         const error = new Error(`$api2 query missing ${entity}.${action}`);
         utils.warnOfError(error);
         throw error;
+      };
+    }
+  }
+
+  mapResponseToV1RequestState<V = never> (request: RequestState<V>): V1RequestState {
+    const { processing, response } = request;
+    if (processing || !response) {
+      return {
+        running: true,
+        value: null,
+        fail: null,
+        error: null,
+        reset () {},
+      };
+    }
+
+    if (response.ok) {
+      return {
+        running: false,
+        value: response.payload,
+        fail: null,
+        error: null,
+        reset () {},
+      };
+    } else {
+      return {
+        running: false,
+        value: null,
+        fail: response.message,
+        error: null,
+        reset () {},
       };
     }
   }

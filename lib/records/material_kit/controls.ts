@@ -4,6 +4,6 @@ export function all (): FormFieldDefinition[] {
   return [
     [ 'name', controls.name ],
     [ 'code', controls.text ],
-    [ 'contents', controls.text ],
+    [ 'contents', controls.textMultiline ],
   ];
 }
