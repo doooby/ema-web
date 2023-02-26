@@ -12,10 +12,11 @@
 <script lang="ts">
 import { Component, Prop } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
+import { FormGroupContext } from '~/components/Form';
 
 @Component
 export default class extends DatabasePage {
-  @Prop({ required: true }) readonly context!: any;
+  @Prop({ required: true }) readonly context!: FormGroupContext;
   @Prop({ required: true }) readonly values!: any;
 }
 </script>

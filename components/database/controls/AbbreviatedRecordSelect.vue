@@ -49,10 +49,14 @@ export default class AbbreviatedRecordSelect extends Vue {
 
   get linkRecord () {
     if (!this.record) return null;
-    return {
-      id: this.record.id,
-      caption: this.record.labels.caption,
-    };
+    if (this.record.labels) {
+      return {
+        id: this.record.id,
+        caption: this.record.labels.caption,
+      };
+    } else {
+      return this.record;
+    }
   }
 
   onBuildSearchQuery () {

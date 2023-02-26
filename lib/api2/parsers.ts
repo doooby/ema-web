@@ -70,7 +70,7 @@ function parseRecordsAssociations (
       wai.object((value) => {
         const id = wai.prop('id', value, wai.string);
         return {
-          ...mappers.mapIndex(wai.string),
+          ...mappers.mapIndex(wai.string)(value),
           id,
         };
       }),
