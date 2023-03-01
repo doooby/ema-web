@@ -16,15 +16,15 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { SessionUser } from '~/lib/records';
+import { user2 } from '~/lib/records';
 import { buildFormFields, FormField } from '~/components/Form';
 import * as mappers from '~/lib/api/mappers';
 
 @Component
 export default class ResourcesMenuCountrySwitch extends Vue {
   get viableCountries (): mappers.AssociatedRecord[] {
-    const user: SessionUser = this.$store.state.session.currentUser;
-    return user?.countries ?? [];
+    const currentUser: user2.SessionUser = this.$store.state.session.currentUser;
+    return currentUser?.countries ?? [];
   }
 
   get currentCountryId (): null | number {

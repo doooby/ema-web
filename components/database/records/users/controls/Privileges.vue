@@ -19,7 +19,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import ControlMixin from '~/components/Form/ControlMixin';
-import { mapUserPrivilege, UserPrivilege } from '~/lib/records';
+import { user } from '~/lib/records';
 import { list } from '~/lib/api/mappers';
 
 @Component({
@@ -37,7 +37,7 @@ export default class Privileges extends Vue {
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;
 
-  get items (): UserPrivilege[] {
+  get items (): user.UserPrivilege[] {
     return this.formValues[this.field.name] ?? [];
   }
 
@@ -54,11 +54,11 @@ export default class Privileges extends Vue {
 
   onAdd () {
     const newItems = [ ...this.items ];
-    newItems.push(mapUserPrivilege(null));
+    newItems.push(user.mapUserPrivilege(null));
     this.context.onChange({ [this.field.name]: newItems });
   }
 
-  onChange (newItems: UserPrivilege[]) {
+  onChange (newItems: user.UserPrivilege[]) {
     this.context.onChange({ [this.field.name]: newItems });
   }
 
@@ -69,7 +69,7 @@ export default class Privileges extends Vue {
   }
 }
 
-function createEmptyItem (type: string): UserPrivilege {
+function createEmptyItem (type: string): user.UserPrivilege {
   return { type: type as any };
 }
 </script>

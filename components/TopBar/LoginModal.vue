@@ -78,7 +78,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState } from 'vuex';
-import { SessionUser } from '~/lib/records';
+import { user } from '~/lib/records';
 import { RequestResponse } from '~/lib/api';
 import { AssociatedRecord } from '~/lib/api/mappers';
 
@@ -96,7 +96,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      currentUser: (state: any): null | SessionUser => state.session.currentUser,
+      currentUser: (state: any): null | user.SessionUser => state.session.currentUser,
       shown: (state: any) => state.session.loginModalShown,
     }),
     countriesOptions (): { value: string; text: string }[] {

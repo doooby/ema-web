@@ -1,5 +1,5 @@
 import { Component, Vue } from 'vue-property-decorator';
-import { SessionUser } from '~/lib/records';
+import { user } from '~/lib/records';
 import { Context } from '@nuxt/types';
 
 @Component({
@@ -11,7 +11,7 @@ import { Context } from '@nuxt/types';
   },
 })
 export default class DatabasePageBase extends Vue {
-  get currentUser (): null | SessionUser {
+  get currentUser (): null | user.SessionUser {
     return this.$store.state.session.currentUser;
   }
 

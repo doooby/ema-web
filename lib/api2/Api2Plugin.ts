@@ -5,6 +5,7 @@ import { wai } from '~/vendor/wai';
 import {
   donor,
   material_kit,
+  user,
   work_agreement,
 } from '~/lib/records';
 
@@ -14,6 +15,7 @@ export default class Api2Plugin {
   queries = {
     donors: donor.queries,
     material_kits: material_kit.queries,
+    users: user.queries,
     work_agreements: work_agreement.queries,
   };
 

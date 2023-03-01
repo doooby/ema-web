@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import { Country, SessionUser, loadCountryData } from '~/lib/records';
+import { user2, loadCountryData } from '~/lib/records';
 import * as mappers from '~/lib/api/mappers';
 import * as localStorage from '~/lib/localStorage';
 import { CountryData } from '~/store/session/country';
@@ -9,7 +9,7 @@ import { CountryData } from '~/store/session/country';
   namespaced: true,
 })
 export default class SessionModule extends VuexModule {
-  currentUser: null | SessionUser = null;
+  currentUser: null | user2.SessionUser = null;
   // REMOVE
   currentCountry: null | mappers.AssociatedRecord = null;
   country: null | CountryData = null;
@@ -19,7 +19,7 @@ export default class SessionModule extends VuexModule {
   debugTranslations: boolean = false;
 
   @Mutation
-  setCurrentUser (user: null | SessionUser) {
+  setCurrentUser (user: null | user2.SessionUser) {
     this.currentUser = user;
     if (user === null) {
       this.debugTranslations = false;

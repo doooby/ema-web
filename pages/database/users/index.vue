@@ -1,5 +1,5 @@
 <template>
-  <index-page
+  <index2-page
     entity="users"
     :search-fields="searchFields"
     :table-columns="tableColumns"
@@ -10,14 +10,14 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { FormFieldDefinition } from '~/components/Form';
-import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
+import Index2Page from '~/components/database/pages/index/Index2Page.vue';
+import BRecordLink from '~/components/database/cells/BRecordLink.vue';
 
 @Component({
-  components: { IndexPage },
+  components: { Index2Page },
 })
 export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
@@ -32,16 +32,18 @@ export default class extends DatabasePage {
     ];
   }
 
-  tableColumns = [
-    { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-    { name: 'id', cell: { type: RecordLink, entity: 'users' }, size: 60 },
-    {
-      name: 'country',
-      cell: { type: AssociatedRecordLink, entity: 'countries', noLink: true },
-    },
-    { name: 'login' },
-    { name: 'full_name', cell: { type: Name } },
-  ];
+  get tableColumns () {
+    return [
+      { name: 'actions', slot: 'actions', headerText: false, size: 40 },
+      { name: 'id', cell: { type: RecordLink, entity: 'users' }, size: 60 },
+      (this.currentUser?.countries && this.currentUser.countries.length > 1
+        ? { name: 'country', cell: { type: BRecordLink, noLink: true } }
+        : undefined
+      ),
+      { name: 'login' },
+      { name: 'full_name', cell: { type: Name } },
+    ].filter(a => a);
+  }
 
   actions = [
     { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },

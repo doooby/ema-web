@@ -26,7 +26,7 @@ export default class SubjectsListing extends Vue {
 
   getSubjectsQueryState = this.$api.newQueryState<PaginatedRecords<Subject>>();
   tableColumns = [
-    { name: 'id', cell: { type: RecordLink, onlyId: true }, size: 60 },
+    { name: 'id', cell: { type: RecordLink, noLink: true }, size: 60 },
     { name: 'name', cell: { type: Name }, headerText: () => 'Name' },
   ];
 

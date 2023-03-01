@@ -1,5 +1,4 @@
 import * as countries from './countries';
-import * as users from './users';
 import * as courses from './courses';
 import * as standardized_courses from './standardized_courses';
 import * as education_levels from './education_levels';
@@ -16,7 +15,6 @@ import * as projects from './projects';
 
 export default {
   countries,
-  users,
   courses,
   standardized_courses,
   education_levels,

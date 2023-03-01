@@ -53,7 +53,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import DropdownMenu from './DropdownMenu.vue';
-import { SessionUser } from '~/lib/records';
+import { user } from '~/lib/records';
 
 @Component({
   components: {
@@ -61,7 +61,7 @@ import { SessionUser } from '~/lib/records';
   },
 })
 export default class TopBar extends Vue {
-  get currentUser (): null | SessionUser {
+  get currentUser (): null | user.SessionUser {
     return this.$store.state.session.currentUser;
   }
 }
