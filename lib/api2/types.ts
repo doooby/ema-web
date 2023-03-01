@@ -33,8 +33,8 @@ export interface SearchRecordsResponsePayload<R = never> {
 }
 
 export type UpdatedRecordResponsePayload =
-  | { success: false; record_id?: string; errors: [string, string][] }
-  | { success: true; record_id: string }
+  | { record_id: undefined; errors: [string, string][] }
+  | { record_id: string }
 
 export interface BRecord {
   id: string;

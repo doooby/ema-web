@@ -119,7 +119,7 @@ export default class New2Page extends Vue {
       return [ [ 'server', response.message ] ];
     }
 
-    if (response?.ok && !response.payload.success) {
+    if (response?.ok && response.payload.record_id === undefined) {
       if (response.payload.errors.length) {
         return response.payload.errors;
       }
@@ -150,7 +150,7 @@ export default class New2Page extends Vue {
       this.$api2.getQuery(this.entity, 'create')(params),
     );
     if (this.createQueryState2.response?.ok &&
-      this.createQueryState2.response.payload.success
+      this.createQueryState2.response.payload.record_id
     ) {
       this.onCreated(this.createQueryState2.response.payload.record_id);
     }

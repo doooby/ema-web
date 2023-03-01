@@ -32,16 +32,11 @@ export function updatedRecordResponsePayload (
 ): (value: unknown) => UpdatedRecordResponsePayload {
   return wai.object(
     (value) => {
-      const success = wai.prop('success', value, wai.boolean);
-      if (success) {
-        return {
-          success: true,
-          record_id: wai.prop('record_id', value, wai.string),
-        };
+      const record_id = wai.prop('record_id', value, wai.nullable(wai.string));
+      if (record_id?.length) {
+        return { record_id };
       } else {
         return {
-          success: false,
-          record_id: wai.prop('record_id', value, wai.nullable(wai.string)),
           errors: wai.prop('errors', value, errorMessages),
         };
       }

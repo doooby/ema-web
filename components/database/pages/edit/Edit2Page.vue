@@ -119,7 +119,7 @@ export default class Edit2Page extends Vue {
       return [ [ 'server', response.message ] ];
     }
 
-    if (response?.ok && !response.payload.success) {
+    if (response?.ok && response.payload.record_id === undefined) {
       if (response.payload.errors.length) {
         return response.payload.errors;
       }
@@ -172,7 +172,7 @@ export default class Edit2Page extends Vue {
       this.$api2.getQuery(this.entity, 'update')(this.recordId, params),
     );
     if (this.saveQueryState2.response?.ok &&
-      this.saveQueryState2.response.payload.success
+      this.saveQueryState2.response.payload.record_id
     ) {
       this.onUpdated(this.saveQueryState2.response.payload.record_id);
     }
