@@ -1,20 +1,25 @@
 <template>
-  <new-page
+  <new2-page
     entity="users"
     :fields="fields"
-    @create="onCreated"
-  />
+    :show-after-update="true"
+  >
+    <template #layout="{ context, values }">
+      <record-form :context="context" :values="values" />
+    </template>
+  </new2-page>
 </template>
 
 <script lang="ts">
-import NewPage from '~/components/database/NewPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { user } from '~/lib/records';
 import { FormFieldDefinition } from '~/components/Form';
+import New2Page from '~/components/database/pages/new/New2Page.vue';
+import RecordForm from '~/components/database/records/users/RecordForm.vue';
 
 @Component({
-  components: { NewPage },
+  components: { New2Page, RecordForm },
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
@@ -22,10 +27,6 @@ export default class extends DatabasePage {
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       ...user.entityControls(),
     ];
-  }
-
-  onCreated (recordId: Number) {
-    this.$router.push({ path: `/database/users/${recordId}` });
   }
 }
 </script>

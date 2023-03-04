@@ -1,43 +1,51 @@
 <template>
   <div class="page-content">
-    <div class="container pt-4 pb-5">
-      <div class="row justify-content-md-center">
-        <div :class="['card px-0', cardClass]">
-          <div class="card-header">
-            <h2 class="m-0">
-              <t value="db.page.edit.title" />
+    <div class="container mt-4 mb-5">
+
+      <div class="row">
+        <div class="col justify-content-md-center">
+          <div :class="['card px-0', cardClass]">
+
+            <div class="card-header">
+              <h2 class="m-0">
+                <t value="db.page.edit.title" />
               &#32;
-              <t :value="`db.record.${entity}.meta.s`" />
-            </h2>
-          </div>
-          <loader-strip :request-state="getQueryState" />
-          <div class="card-body pt-3 pb-0">
-            <form-group
-              :value="formValues"
-              :fields="formFields"
-              :label-prefix="formFieldsLabelPrefix"
-              @input="onInput"
-            >
-              <template #layout="{ context, values }">
-                <slot name="layout" :context="context" :values="values" />
-              </template>
-            </form-group>
-            <record-errors class="mb-3" :errors="errors" />
-          </div>
-          <div class="card-footer d-flex justify-content-between">
-            <div>
-              <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
-                <t value="app.action.save" />
-              </b-button>
+                <t :value="`db.record.${entity}.meta.s`" />
+              </h2>
             </div>
-            <div>
-              <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
-                <t value="app.action.cancel" />
-              </b-button>
+
+            <loader-strip :request-state="getQueryState" />
+            <div class="card-body pt-3 pb-0">
+              <form-group
+                :value="formValues"
+                :fields="formFields"
+                :label-prefix="formFieldsLabelPrefix"
+                @input="onInput"
+              >
+                <template #layout="{ context, values }">
+                  <slot name="layout" :context="context" :values="values" />
+                </template>
+              </form-group>
+              <record-errors class="mb-3" :errors="errors" />
             </div>
+
+            <div class="card-footer d-flex justify-content-between">
+              <div>
+                <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
+                  <t value="app.action.save" />
+                </b-button>
+              </div>
+              <div>
+                <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
+                  <t value="app.action.cancel" />
+                </b-button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -102,7 +110,7 @@ export default class Edit2Page extends Vue {
   }
 
   get isControlsDisabled (): boolean {
-    return false;
+    throw new Error('nope - FIX !');
     // TODO fix
     // return !this.record ||
     //   this.saveQueryState.running ||

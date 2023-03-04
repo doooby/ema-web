@@ -116,6 +116,10 @@ export default class Api2Plugin {
     }
   }
 
+  mapPayload<V = never> (request: RequestState<V>) {
+    return (request.response?.ok && request.response.payload) || undefined;
+  }
+
   mapResponseToV1RequestState<V = never> (request: RequestState<V>): V1RequestState {
     const { processing, response } = request;
     if (processing || !response) {

@@ -42,7 +42,7 @@ export default class Privileges extends Vue {
   }
 
   columns = [
-    { name: 'type' },
+    { name: 'type', size: 300 },
   ];
 
   get privilegesTypesOptions () {

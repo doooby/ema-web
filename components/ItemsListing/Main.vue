@@ -29,7 +29,7 @@
         <tr v-for="(item, i) of items" :key="i">
           <td>
             <div class="single-row-cell d-flex justify-content-center align-items-center epy-2">
-              <btn-mini variant="danger" icon="x" @click="onRemove(i)" />
+              <btn-mini variant="secondary" icon="x" @click="onRemove(i)" />
             </div>
           </td>
           <td v-for="column of computedColumns" :key="column.key">

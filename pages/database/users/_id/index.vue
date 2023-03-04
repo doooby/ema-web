@@ -1,5 +1,5 @@
 <template>
-  <show-page
+  <show2-page
     entity="users"
   >
     <template #title="{ record }">
@@ -23,10 +23,7 @@
           >
             <t value="db.record.users.change_pass" />
           </show-page-action>
-          <change-password-modal
-            v-model="changePassModalShown"
-            :record="record"
-          />
+          <change-password-modal v-model="changePassModalShown" :record="record" />
         </li>
         <li>
           <show-page-action
@@ -70,22 +67,23 @@
         </show-page-table-row>
       </table>
     </template>
-  </show-page>
+
+  </show2-page>
 </template>
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import ShowPage from '~/components/database/ShowPage.vue';
+import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import ChangePasswordModal from '~/components/database/records/users/ChangePasswordModal.vue';
 import LockModal from '~/components/database/records/users/LockModal.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
-import { User } from '~/lib/records';
+import { user } from '~/lib/records';
 
 @Component({
   components: {
-    ShowPage,
+    Show2Page,
     ShowPageAction,
     ShowPageTableRow,
     ChangePasswordModal,
@@ -96,7 +94,7 @@ export default class extends DatabasePage {
   changePassModalShown = false;
   lockModalShown = false;
 
-  privilegesList (record: User): string[] {
+  privilegesList (record: user.User): string[] {
     if (record.is_root) return [ 'is_root' ];
     return record.privileges.map(privilege => privilege.type ?? 'null');
   }

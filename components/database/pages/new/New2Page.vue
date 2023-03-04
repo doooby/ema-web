@@ -82,6 +82,7 @@ export default class New2Page extends Vue {
   @Prop() readonly processing?: boolean;
   @Prop() readonly value!: FormValues;
   @Prop() readonly cardClass?: string;
+  @Prop() readonly showAfterUpdate?: boolean;
 
   formFields = buildFormFields(this.fields);
   formValues = { ...prefillFormValues(this.formFields), ...this.value };
@@ -129,7 +130,9 @@ export default class New2Page extends Vue {
   }
 
   onCreated (recordId: string) {
-    if (this.$listeners.create) {
+    if (this.showAfterUpdate) {
+      this.$router.push({ path: `/database/${this.entity}/${recordId}` });
+    } else if (this.$listeners.create) {
       this.$emit('create', recordId);
     } else {
       this.$router.push({ path: `/database/${this.entity}` });

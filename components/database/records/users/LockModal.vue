@@ -34,6 +34,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { UpdatedRecordResponsePayload } from '~/lib/api2';
 
 export default Vue.extend({
   props: {
@@ -45,6 +46,7 @@ export default Vue.extend({
       form: {
         wipePassword: false,
       },
+      request: this.$api2.newQueryState<UpdatedRecordResponsePayload>(),
     };
   },
   methods: {
@@ -56,13 +58,14 @@ export default Vue.extend({
     },
     async onSubmit (event: any) {
       event.preventDefault();
+      if (this.request.processing) return;
 
-      await this.$api.request(
-        this.$api.queries.users.lock(this.record.id, {
+      await this.$api2.request(
+        this.request,
+        this.$api2.getQuery('users', 'lock')(this.record.id, {
           lock: !this.record.lock,
           wipe_password: this.form.wipePassword,
         }),
-        this.$api.newQueryState(),
       );
 
       this.onHidden();

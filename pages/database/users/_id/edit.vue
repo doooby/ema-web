@@ -1,27 +1,28 @@
 <template>
-  <edit-page
+  <edit2-page
     entity="users"
     :fields="fields"
-    @update="onUpdated"
-  />
+    :show-after-update="true"
+  >
+    <template #layout="{ context, values }">
+      <record-form :context="context" :values="values" />
+    </template>
+  </edit2-page>
 </template>
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
-import EditPage from '~/components/database/EditPage.vue';
 import { DatabasePage } from '~/components';
 import { user } from '~/lib/records';
+import Edit2Page from '~/components/database/pages/edit/Edit2Page.vue';
+import RecordForm from '~/components/database/records/users/RecordForm.vue';
 
 @Component({
-  components: { EditPage },
+  components: { Edit2Page, RecordForm },
 })
 export default class extends DatabasePage {
   fields = [
     ...user.entityControls(),
   ];
-
-  onUpdated (record: any) {
-    this.$router.push({ path: `/database/users/${record.id}` });
-  }
 }
 </script>

@@ -32,6 +32,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { UpdatedRecordResponsePayload } from '~/lib/api2';
 
 export default Vue.extend({
   props: {
@@ -44,6 +45,7 @@ export default Vue.extend({
         password: '',
         error: null as null | [ string, string ],
       },
+      request: this.$api2.newQueryState<UpdatedRecordResponsePayload>(),
     };
   },
   methods: {
@@ -56,17 +58,19 @@ export default Vue.extend({
     },
     async onSubmit (event: any) {
       event.preventDefault();
+      if (this.request.processing) return;
 
       const { password } = this.form;
-      const result = await this.$api.request(
-        this.$api.queries.users.changePassword(this.record.id, password),
-        this.$api.newQueryState(),
+      await this.$api2.request(
+        this.request,
+        this.$api2.getQuery('users', 'changePassword')(this.record.id, password),
       );
 
-      if (result?.success) {
+      const payload = this.$api2.mapPayload(this.request);
+      if (payload?.record_id) {
         this.onHidden();
       } else {
-        this.form.error = result?.errors?.[0] || [ 'base', 'unknown' ];
+        this.form.error = (payload && payload.record_id === undefined && payload.errors[0]) || [ 'base', 'unknown' ];
       }
     },
   },

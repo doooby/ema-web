@@ -68,7 +68,7 @@ import { RequestState } from '~/lib/api';
 @Component({
   components: { SearchForm, RecordsPagination, RecordActions },
 })
-export default class IndexPage extends Vue {
+export default class Index2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly searchFields!: FormFieldDefinition[];
   @Prop({ required: true }) readonly tableColumns!: DataTable.Column[];
@@ -133,7 +133,7 @@ export default class IndexPage extends Vue {
     const params = formToRecordParams(this.searchFormFields, this.searchValues);
     this.$api2.request(
       this.searchQueryState2,
-      this.$api2.getQuery(this.entity, 'search')({ ...params, page, }),
+      this.$api2.getQuery(this.entity, 'search')({ ...params, page }),
     );
   }
 }

@@ -10,7 +10,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 
 @Component
-export default class extends DatabasePage {
+export default class RecordForm extends DatabasePage {
   @Prop({ required: true }) readonly context!: any;
   @Prop({ required: true }) readonly values!: any;
 }

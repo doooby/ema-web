@@ -20,8 +20,11 @@ module.exports = {
     curly: [ 'error', 'multi-line' ],
     camelcase: [ 'off' ],
     'no-use-before-define': [ 'off' ],
-    'vue/require-valid-default-prop': [ 'off' ],
     'no-console': [ 'off' ],
     'no-new': [ 'off' ],
+    'vue/require-valid-default-prop': [ 'off' ],
+    'vue/multiline-html-element-content-newline': [ 'error', {
+      allowEmptyLines: true,
+    } ],
   },
 };

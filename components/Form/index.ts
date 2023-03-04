@@ -7,7 +7,7 @@ export {
   controlsIndex2 as controls,
 };
 
-interface FieldOptions {
+export interface FieldOptions {
   [option: string]: any;
 }
 
