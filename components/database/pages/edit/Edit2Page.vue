@@ -110,11 +110,7 @@ export default class Edit2Page extends Vue {
   }
 
   get isControlsDisabled (): boolean {
-    throw new Error('nope - FIX !');
-    // TODO fix
-    // return !this.record ||
-    //   this.saveQueryState.running ||
-    //   !!this.saveQueryState.value?.success;
+    return !this.record || this.saveQueryState2.processing;
   }
 
   get getQueryState () : RequestState {

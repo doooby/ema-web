@@ -108,10 +108,7 @@ export default class New2Page extends Vue {
   }
 
   get isControlsDisabled (): boolean {
-    return false;
-    // TODO fix
-    // return this.createQueryState2.processing ||
-    //   !!(this.createQueryState2.response?.ok && this.createQueryState2.response.payload.success);
+    return this.createQueryState2.processing;
   }
 
   get errors (): null | [string, string][] {
