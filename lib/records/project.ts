@@ -7,6 +7,7 @@ export interface Project {
   country: mp.AbbreviatedRecord;
   name: [string, string];
   code?: string;
+  short_name_en?: string;
   starts_on?: Date;
   ends_on?: Date;
   donors?: string;
@@ -26,6 +27,7 @@ export const project = {
       country: mp.assoc('country', root, associations?.country),
       name: mp.prop('name', root, mp.val.nameTuple),
       code: mp.maybeProp('code', root, mp.val.string),
+      short_name_en: mp.maybeProp('short_name_en', root, mp.val.string),
       starts_on: mp.maybeProp('starts_on', root, mp.val.date),
       ends_on: mp.maybeProp('ends_on', root, mp.val.date),
       donors: mp.maybeProp('donors', root, mp.val.string),
@@ -42,6 +44,7 @@ export const project = {
     return [
       [ 'name', controls.name ],
       [ 'code', controls.text ],
+      [ 'short_name_en', controls.text ],
       [ 'starts_on', controls.calendar ],
       [ 'ends_on', controls.calendar ],
       [ 'donors', controls.textMultiline ],
