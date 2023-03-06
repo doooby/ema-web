@@ -32,6 +32,7 @@ export default class extends DatabasePage {
     { name: 'id', cell: { type: RecordLink, entity: 'projects' }, size: 60 },
     { name: 'name', cell: { type: Name } },
     { name: 'code' },
+    { name: 'short_name_en' },
     { name: 'donors', cell: { type: MultilineText } },
   ];
 

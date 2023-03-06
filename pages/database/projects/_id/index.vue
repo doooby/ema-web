@@ -24,6 +24,9 @@
         <show-page-table-row label="db.record.projects.label.code">
           {{ record.code }}
         </show-page-table-row>
+        <show-page-table-row label="db.record.projects.label.short_name_en">
+          {{ record.short_name_en }}
+        </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.duration">
           {{ record.starts_on ? $d(record.starts_on) : '' }}
           -
