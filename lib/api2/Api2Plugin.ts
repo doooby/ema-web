@@ -72,6 +72,7 @@ export default class Api2Plugin {
     state.processing = false;
   }
 
+  // TODO postData must be FormData to allow file uploading
   async processRequest (path: string, postData?: any): Promise<RequestResponse<never>> {
     const headers: any = {
       'Content-Type': 'application/json',

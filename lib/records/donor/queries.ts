@@ -7,7 +7,7 @@ export function search (params: Params) {
   return {
     path: `/${path}`,
     params,
-    reducer: parsers.searchResponsePayload(donor.parsers.record),
+    reducer: parsers.searchResponsePayload(donor.parseRecord),
   };
 }
 

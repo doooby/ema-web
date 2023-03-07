@@ -24,7 +24,7 @@ export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.$store.getters['session/countryId'] } ],
-      ...donor.controls.all(),
+      ...donor.entityControls(),
     ];
   }
 }

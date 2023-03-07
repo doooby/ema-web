@@ -2,6 +2,7 @@ import BooleanControl from './Boolean.vue';
 import CalendarControl, { type as CalendarControlType } from './Calendar.vue';
 import DateControl, { type as DateControlType } from './Date.vue';
 import HiddenControl from './Hidden.vue';
+import ImageFile from './ImageFile.vue';
 import IntegerControl, { type as IntegerControlType } from './Integer.vue';
 import ListControl from './List.vue';
 import SelectControl from './Select.vue';
@@ -55,6 +56,7 @@ export const controlsIndex2 = {
   selectOrFill: asFieldType(SelectOrFillControl),
   textMultiline: { ...TextMultilineControlType, control: TextMultilineControl },
   boolean: asFieldType(BooleanControl),
+  imageFile: asFieldType(ImageFile),
   integer: { ...IntegerControlType, control: IntegerControl },
   text: { ...TextControlType, control: TextControl },
   listMultiple: asFieldType(ListMultiple),

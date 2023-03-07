@@ -1,6 +1,5 @@
 import { Params, parsers } from '~/lib/api2';
 import { user } from '~/lib/records';
-import * as mappers from '~/lib/api/mappers';
 
 const path = 'users';
 

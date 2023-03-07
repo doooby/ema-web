@@ -1,9 +1,18 @@
+import { controls, FormFieldDefinition } from '~/components/Form';
+import { RecordAssociations } from '~/lib/api2';
 import { donor } from '~/lib/records';
 import { wai } from '~/vendor/wai';
-import { RecordAssociations } from '~/lib/api2';
 import { mapAssociation } from '~/lib/api2/mappers';
 
-export function record (
+export function entityControls (): FormFieldDefinition[] {
+  return [
+    [ 'name', controls.name ],
+    [ 'code', controls.selectMultiple ],
+    // [ 'logo', controls.imageFile ], // TODO
+  ];
+}
+
+export function parseRecord (
   value: unknown,
   associations?: RecordAssociations,
 ): donor.Donor {
