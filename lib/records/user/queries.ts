@@ -45,3 +45,11 @@ export function lock (
     reducer: parsers.updatedRecordResponsePayload(),
   };
 }
+
+export function archive (id: number) {
+  return {
+    path: `/${path}/${id}/update`,
+    params: { record: { archive: '1' } },
+    reducer: parsers.updatedRecordResponsePayload(),
+  };
+}

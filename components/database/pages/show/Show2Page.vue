@@ -1,11 +1,17 @@
 <template>
   <div class="page-content">
-    <b-alert :show="!record && getQueryState.running" variant="info" class="m-2">
+    <b-alert v-if="!record && getQueryState.running" show variant="info" class="m-2">
       <t value="app.loading" />
     </b-alert>
-    <b-alert :show="recordLoadFailed" variant="warning" class="m-2">
-      <t value="app.record_not_found" />
-    </b-alert>
+    <div v-if="recordLoadFailed">
+      <b-alert show variant="warning" class="m-2">
+        <t value="app.record_not_found" />
+        <div class="mt-2" />
+        <nuxt-link :to="pathToIndex">
+          <t value="db.pages.show.goto_index" />
+        </nuxt-link>
+      </b-alert>
+    </div>
 
     <div v-if="record" class="container">
       <div class="emt-6 emb-6">
@@ -32,6 +38,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { SearchRecordsResponsePayload } from '~/lib/api2';
+import { resourcePath } from '~/config/pages';
 
 @Component
 export default class Show2Page extends Vue {
@@ -48,6 +55,10 @@ export default class Show2Page extends Vue {
 
   mounted () {
     this.updatePage();
+  }
+
+  get pathToIndex () {
+    return resourcePath(this.entity, '');
   }
 
   get recordId () {
