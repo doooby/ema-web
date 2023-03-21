@@ -76,16 +76,16 @@ export function schoolTransportOptions () {
 
 export function caregiverRelationOptions () {
   return Object.freeze([
-    { value: 'sister', text: 'db.record.people.caregivers.relation.sister' },
-    { value: 'stepfather', text: 'db.record.people.caregivers.relation.father' },
-    { value: 'father', text: 'db.record.people.caregivers.relation.father' },
-    { value: 'brother', text: 'db.record.people.caregivers.relation.brother' },
-    { value: 'stepmother', text: 'db.record.people.caregivers.relation.mother' },
-    { value: 'grandfather', text: 'db.record.people.caregivers.relation.father' },
-    { value: 'uncle', text: 'db.record.people.caregivers.relation.uncle' },
     { value: 'mother', text: 'db.record.people.caregivers.relation.mother' },
+    { value: 'father', text: 'db.record.people.caregivers.relation.father' },
+    { value: 'stepmother', text: 'db.record.people.caregivers.relation.stepmother' },
+    { value: 'stepfather', text: 'db.record.people.caregivers.relation.stepfather' },
+    { value: 'grandmother', text: 'db.record.people.caregivers.relation.grandmother' },
+    { value: 'grandfather', text: 'db.record.people.caregivers.relation.grandfather' },
     { value: 'aunt', text: 'db.record.people.caregivers.relation.aunt' },
-    { value: 'grandmother', text: 'db.record.people.caregivers.relation.mother' },
+    { value: 'uncle', text: 'db.record.people.caregivers.relation.uncle' },
+    { value: 'sister', text: 'db.record.people.caregivers.relation.sister' },
+    { value: 'brother', text: 'db.record.people.caregivers.relation.brother' },
   ]);
 }
 
