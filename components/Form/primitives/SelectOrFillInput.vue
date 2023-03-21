@@ -45,7 +45,10 @@ export default class SelectOrFillInput extends Vue {
 
   get optionsWithOther (): Option[] {
     return [
-      ...this.options,
+      ...this.options.map(option => ({
+        value: option.value,
+        text: option.translated ? option.text : this.$t(option.text) as string,
+      })),
       { value: OTHER_OPTION, text: this.$t('app.common.label.other') as string },
     ];
   }
