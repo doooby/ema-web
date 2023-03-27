@@ -29,6 +29,12 @@
         <show-page-table-row label="db.record.courses.label.grade">
           {{ record.grade }}
         </show-page-table-row>
+        <show-page-table-row label="db.record.schools.meta.s">
+          <show-record-link
+            entity="schools"
+            :record="{ id: record.school.id, caption: record.school.labels.caption }"
+          />
+        </show-page-table-row>
         <show-page-table-row label="db.record.courses.label.education_level">
           {{ record.education_level.labels.caption }}
         </show-page-table-row>
@@ -63,6 +69,7 @@ import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import SubjectsListing from '~/components/database/records/courses/SubjectsListing.vue';
 import GroupsListing from '~/components/database/records/courses/GroupsListing.vue';
+import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 
 enum Tabs {
   subjects,
@@ -76,6 +83,7 @@ enum Tabs {
     ShowPageTableRow,
     SubjectsListing,
     GroupsListing,
+    ShowRecordLink,
   },
 })
 export default class extends DatabasePage {

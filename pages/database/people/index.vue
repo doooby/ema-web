@@ -25,12 +25,17 @@ export default class extends DatabasePage {
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
       [ 'search', 'text' ],
       [ 'kobo_id', 'text' ],
+      [ 'school_year_id', 'text' ],
+      [ 'group_id', 'text' ],
+      [ 'course_id', 'text' ],
+      [ 'school_id', 'text' ],
     ];
   }
 
   tableColumns = [
     { name: 'actions', slot: 'actions', headerText: false, size: 40 },
     { name: 'id', cell: { type: RecordLink, entity: 'people' }, size: 60 },
+    { name: 'student_kobo_no' },
     { name: 'first_name', cell: { type: Name } },
     { name: 'last_name', cell: { type: Name } },
     { name: 'born_on', cell: { type: Date } },

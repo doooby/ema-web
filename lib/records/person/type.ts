@@ -8,6 +8,7 @@ export interface Associations {
 export interface Person {
   id: number;
   country: mappers.AssociatedRecord<Country>;
+  student_kobo_no?: string;
   first_name: [string, string];
   last_name: [string, string];
   caregivers?: PersonCaregiver[];
@@ -47,6 +48,7 @@ export interface PersonCaregiver {
 export function parse (value: any, associations?: Associations): Person {
   return mappers.object(value, root => ({
     id: mappers.recordId(root),
+    student_kobo_no: mappers.maybeProp('student_kobo_no', root, mappers.val.string),
     country: mappers.assoc('country', root, associations?.country),
     first_name: mappers.prop('first_name', root, mappers.val.nameTuple),
     last_name: mappers.prop('last_name', root, mappers.val.nameTuple),

@@ -21,6 +21,9 @@
 
     <template #details="{ record }">
       <table class="table">
+        <show-page-table-row label="db.record.people.label.student_kobo_no">
+          {{ record.student_kobo_no }}
+        </show-page-table-row>
         <show-page-table-row label="db.record.people.label.family_name">
           {{ record.last_name[1] }}
           <br>
