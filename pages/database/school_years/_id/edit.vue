@@ -10,7 +10,7 @@ import EditPage from '~/components/database/EditPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
-import { schoolYear } from '~/lib/records';
+import { school_year } from '~/lib/records';
 
 @Component({
   components: { EditPage },
@@ -19,7 +19,7 @@ export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.$store.getters['session/countryId'] } ],
-      ...schoolYear.recordControls(),
+      ...school_year.controls.all(),
     ];
   }
 }
