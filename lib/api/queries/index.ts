@@ -5,7 +5,6 @@ import * as education_levels from './education_levels';
 import * as groups from './groups';
 import * as people from './people';
 import * as schools from './schools';
-import * as school_years from './school_years';
 import * as session from './session';
 import * as subjects from './subjects';
 import * as subject_categories from './subject_categories';
@@ -21,7 +20,6 @@ export default {
   groups,
   people,
   schools,
-  school_years,
   session,
   subjects,
   subject_categories,

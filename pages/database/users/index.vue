@@ -14,7 +14,7 @@ import { FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
 import Index2Page from '~/components/database/pages/index/Index2Page.vue';
-import BRecordLink from '~/components/database/cells/BRecordLink.vue';
+import BRecordCell from '~/components/database/cells/BRecordCell.vue';
 
 @Component({
   components: { Index2Page },
@@ -37,7 +37,7 @@ export default class extends DatabasePage {
       { name: 'actions', slot: 'actions', headerText: false, size: 40 },
       { name: 'id', cell: { type: RecordLink, entity: 'users' }, size: 60 },
       (this.currentUser?.countries && this.currentUser.countries.length > 1
-        ? { name: 'country', cell: { type: BRecordLink, noLink: true } }
+        ? { name: 'country', cell: { type: BRecordCell } }
         : undefined
       ),
       { name: 'login' },

@@ -1,27 +1,22 @@
 <template>
   <div class="single-row-cell">
-    <div v-if="bRecord">
-      <code v-if="column.cell.noLink">
-        [{{ bRecord.id }}] {{ caption }}
-      </code>
-      <show-record-link
-        v-else
-        :entity="column.cell.entity"
-        :record="{ id: bRecord.id, caption: caption }"
-      />
-    </div>
+    <b-record-link
+      v-if="bRecord"
+      :entity="column.cell.entity"
+      :record="bRecord"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { DataTable } from '~/components/DataTable';
-import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
+import BRecordLink from '~/components/database/records/BRecordLink.vue';
 
 @Component({
-  components: { ShowRecordLink },
+  components: { BRecordLink },
 })
-export default class BRecordLink extends Vue {
+export default class BRecordLinkCell extends Vue {
   @Prop({ required: true }) readonly column!: DataTable.Column;
   @Prop({ required: true }) readonly dataItem!: any;
 
