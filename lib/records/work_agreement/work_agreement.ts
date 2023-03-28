@@ -2,10 +2,10 @@ import { RecordAssociations, recordsQueries } from '~/lib/api2';
 import { work_agreement } from '~/lib/records';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapDate } from '~/lib/api2/mappers';
-import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
-import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
+import { controls, FormFieldDefinition } from '~/components/Form';
+import { dbFields } from '~/components/database/fields';
 
-const path = 'work_agreements';
+export const entity = 'work_agreements';
 
 export function parseRecord (
   value: unknown,
@@ -27,23 +27,14 @@ export function parseRecord (
 }
 
 export const queries = {
-  search: recordsQueries.search(path, parseRecord),
-  create: recordsQueries.create(path),
-  update: recordsQueries.update(path),
+  search: recordsQueries.search(entity, parseRecord),
+  create: recordsQueries.create(entity),
+  update: recordsQueries.update(entity),
 };
 
-export function recordControls ({
-  countryId,
-}: {
-  countryId: null | number;
-}): FormFieldDefinition[] {
+export function recordControls (): FormFieldDefinition[] {
   return [
-    [ 'person', asFieldType(AbbreviatedRecordField), {
-      entity: 'people',
-      params: {
-        country_id: countryId,
-      },
-    } ],
+    [ 'person', dbFields.selectBRecord, { entity: 'people' } ],
     [ 'position', controls.text ],
     [ 'starts_on', controls.calendar ],
     [ 'ends_on', controls.calendar ],

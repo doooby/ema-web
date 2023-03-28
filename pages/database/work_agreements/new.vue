@@ -22,10 +22,7 @@ import RecordForm from '~/components/database/records/work_agreements/RecordForm
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return [
-      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      ...work_agreement.recordControls({ countryId: this.currentCountryId }),
-    ];
+    return work_agreement.recordControls();
   }
 }
 </script>

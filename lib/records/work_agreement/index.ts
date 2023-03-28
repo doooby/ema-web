@@ -1,2 +1,2 @@
-export * from './types';
-export * from './record';
+export * from './WorkAgreement';
+export * from './work_agreement';

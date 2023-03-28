@@ -22,10 +22,7 @@ import RecordForm from '~/components/database/records/donors/RecordForm.vue';
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return [
-      [ 'country_id', 'hidden', { value: this.$store.getters['session/countryId'] } ],
-      ...donor.entityControls(),
-    ];
+    return donor.entityControls();
   }
 }
 </script>

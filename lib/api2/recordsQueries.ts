@@ -1,5 +1,6 @@
 import { Params, RecordAssociations } from '~/lib/api2/types';
 import { parsers } from '~/lib/api2/index';
+import { bRecordMapper } from '~/lib/api2/parsers';
 
 export function search<R> (
   path: string,
@@ -10,6 +11,18 @@ export function search<R> (
       path: `/${path}`,
       params,
       reducer: parsers.searchResponsePayload(parseRecord),
+    };
+  };
+}
+
+export function searchB (
+  path: string,
+) {
+  return function search (params: Params) {
+    return {
+      path: `/${path}`,
+      params: { ...params, b_record: '1' },
+      reducer: parsers.searchResponsePayload(bRecordMapper()),
     };
   };
 }

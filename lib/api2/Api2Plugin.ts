@@ -4,7 +4,7 @@ import { RequestResponse, QueryDefinition, RequestState } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import {
   donor,
-  material_kit, school_year,
+  material_kit, person, school_year,
   user,
   work_agreement,
 } from '~/lib/records';
@@ -18,6 +18,7 @@ export default class Api2Plugin {
     school_years: school_year.queries,
     users: user.queries,
     work_agreements: work_agreement.queries,
+    people: person.queries,
   };
 
   constructor (context: Context) {

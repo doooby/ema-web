@@ -38,6 +38,7 @@ export default class SelectBRecord extends Vue {
     </template>
     <b-records-select
       :entity="entity"
+      :single-record="true"
       :records="records"
       :title="labelTranslation"
       @change="onChangeValue($event[0])"

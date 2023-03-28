@@ -1,6 +1,13 @@
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
-import { person, common } from '~/lib/records';
+import { common, person } from '~/lib/records';
 import CaregiversField from '~/components/database/records/people/CaregiversField.vue';
+import { recordsQueries } from '~/lib/api2';
+
+export const entity = 'people';
+
+export const queries = {
+  searchB: recordsQueries.searchB(entity),
+};
 
 export function editControls (): FormFieldDefinition[] {
   return [

@@ -4,7 +4,7 @@ import {
   RecordAssociations,
   SearchRecordsResponsePayload,
   UpdatedRecordResponsePayload,
-  mappers,
+  mappers, BRecord,
 } from '~/lib/api2';
 
 export function searchResponsePayload<R> (
@@ -62,16 +62,20 @@ function parseRecordsAssociations (
 ): (value: unknown) => Record<string, undefined | BRecordsIndex> {
   return mappers.mapIndex(
     mappers.mapIndex(
-      wai.object((value) => {
-        // TODO this is inefficient
-        const id = wai.prop('id', value, wai.string);
-        const caption = wai.prop('caption', value, wai.string);
-        return {
-          ...mappers.mapIndex(wai.nullable(wai.string))(value),
-          id,
-          caption,
-        };
-      }),
+      bRecordMapper(),
     ),
   );
+}
+
+export function bRecordMapper (): (value: unknown) => BRecord {
+  return wai.object((value) => {
+    // TODO this is inefficient
+    const id = wai.prop('id', value, wai.string);
+    const caption = wai.prop('caption', value, wai.string);
+    return {
+      ...mappers.mapIndex(wai.nullable(wai.string))(value),
+      id,
+      caption,
+    };
+  });
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Watch } from 'vue-property-decorator';
 import Vue from 'vue';
 import { BRecord, SearchRecordsResponsePayload } from '~/lib/api2';
 import Pagination from '~/components/database/RecordsBrowsing/Pagination.vue';
@@ -27,8 +27,9 @@ export default class SearchBRecordsModal extends Vue {
   searchValue = '';
   searchQueryState = this.$api2.newQueryState<SearchRecordsResponsePayload<BRecord>>();
 
-  mounted () {
-    this.onSearch();
+  @Watch('value')
+  onValueChange (value) {
+    if (value) this.onSearch();
   }
 
   get searchQueryStateV1 (): RequestState {
@@ -55,8 +56,10 @@ export default class SearchBRecordsModal extends Vue {
 
     let query;
     try {
-      query = this.$api2.getQuery(this.entity, 'search')({
-        b_record: true, page, search: this.searchValue,
+      query = this.$api2.getQuery(this.entity, 'searchB')({
+        country_id: this.$store.getters['session/countryId'],
+        page,
+        search: this.searchValue,
       });
     } catch (error) {
       this.searchQueryState.response = {
@@ -88,7 +91,10 @@ function bRecordLabels ({ caption: _, ...labels }: BRecord) {
           label-for="SearchBRecords_search"
         >
           <div class="input-group">
-            <div class="input-group-prepend">
+            <div
+              class="input-group-prepend button-like"
+              @click="onSearch()"
+            >
               <span class="input-group-text">
                 🔍
               </span>
@@ -98,8 +104,7 @@ function bRecordLabels ({ caption: _, ...labels }: BRecord) {
               v-model="searchValue"
               type="text"
               class="form-control"
-              @input="onSearch"
-              @keypress.ctrl.enter="onSearch"
+              @keypress.enter="onSearch()"
             >
           </div>
         </b-form-group>
@@ -109,7 +114,7 @@ function bRecordLabels ({ caption: _, ...labels }: BRecord) {
         <div>
           <t value="db.record.shared.label.records_count" />
           <span>: </span>
-          <span>{{ cachedQueryState.value?.total ?? 0 }}</span>
+          <span>{{ searchQueryStateV1.value?.total ?? 0 }}</span>
         </div>
         <browsing-pagination
           :request-state="searchQueryStateV1"
