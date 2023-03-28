@@ -1,19 +1,15 @@
-import { BRecord, RecordAssociations } from '~/lib/api2';
+import { RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import { mapAssociation } from '~/lib/api2/mappers';
+import { material_kit } from '~/lib/records';
+import { controls, FormFieldDefinition } from '~/components/Form';
 
-export interface MaterialKit {
-  id: string;
-  country: BRecord;
-  name: string[];
-  code?: string;
-  contents?: string;
-}
+export const entity = 'material_kits';
 
-export function parserRecord (
+export function parseRecord (
   value: unknown,
   associations?: RecordAssociations,
-): MaterialKit {
+): material_kit.MaterialKit {
   return wai.object(value => ({
     id: wai.prop('id', value, wai.string),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
@@ -21,4 +17,18 @@ export function parserRecord (
     code: wai.prop('code', value, wai.nullable(wai.string)),
     contents: wai.prop('contents', value, wai.nullable(wai.string)),
   }))(value);
+}
+
+export const queries = {
+  search: recordsQueries.search(entity, parseRecord),
+  create: recordsQueries.create(entity),
+  update: recordsQueries.update(entity),
+};
+
+export function allControls (): FormFieldDefinition[] {
+  return [
+    [ 'name', controls.name ],
+    [ 'code', controls.text ],
+    [ 'contents', controls.textMultiline ],
+  ];
 }
