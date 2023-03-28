@@ -38,6 +38,7 @@ export type UpdatedRecordResponsePayload =
 
 export interface BRecord {
   id: string;
+  caption: string;
   [label: string]: undefined | string;
 }
 

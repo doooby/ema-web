@@ -1,31 +1,34 @@
 <script lang="ts">
 import Vue from 'vue';
 import { BRecord } from '~/lib/api2';
+import { Component, Prop } from 'vue-property-decorator';
 
 const entitiesWithShowPage = [
   'people',
 ];
 
-export default Vue.extend({
-  props: {
-    entity: { type: String, required: true },
-    record: { type: Object as Vue.PropType<BRecord>, required: true },
-    newTab: { type: Boolean, default: false },
-  },
-  computed: {
-    hasShowPage () {
-      return entitiesWithShowPage.includes(this.entity);
-    },
-    path () {
-      return `/database/${this.entity}/${this.record.id}`;
-    },
-    fullPath () {
-      let base = this.$router.options.base;
-      if (base?.endsWith('/')) base = base.substring(0, base.length - 1);
-      return `${base}${this.path}`;
-    },
-  },
-});
+@Component({
+  components: { BRecordLink },
+})
+export default class BRecordLink extends Vue {
+  @Prop({ required: true }) readonly entity!: string;
+  @Prop({ required: true }) readonly record!: BRecord;
+  @Prop({ default: false }) readonly newTab!: boolean;
+
+  get hasShowPage () {
+    return entitiesWithShowPage.includes(this.entity);
+  }
+
+  get path () {
+    return `/database/${this.entity}/${this.record.id}`;
+  }
+
+  get fullPath () {
+    let base = this.$router.options.base;
+    if (base?.endsWith('/')) base = base.substring(0, base.length - 1);
+    return `${base}${this.path}`;
+  }
+}
 </script>
 
 <template>
