@@ -3,7 +3,6 @@ import {
   EducationLevel,
   person,
   School,
-  SchoolYear,
   StandardizedCourse,
   StandardizedCourseSubject,
 } from '~/lib/records';
@@ -19,7 +18,7 @@ export interface Course {
   id: number;
   school: mappers.AssociatedRecord<School>;
   education_level: mappers.AssociatedRecord<EducationLevel>;
-  school_year: undefined | mappers.AssociatedRecord<SchoolYear>;
+  school_year: undefined | mappers.AssociatedRecord;
   standardized_course: undefined | mappers.AssociatedRecord<StandardizedCourse>;
   name: [string, string];
   grade: number;

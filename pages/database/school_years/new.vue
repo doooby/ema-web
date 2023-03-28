@@ -24,7 +24,7 @@ export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      ...school_year.controls.all(),
+      ...school_year.allControls(),
     ];
   }
 }
