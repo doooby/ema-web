@@ -3,9 +3,10 @@ import { Component, Prop } from 'vue-property-decorator';
 import Vue from 'vue';
 import { BRecord } from '~/lib/api2';
 import SearchBRecordsModal from '~/components/database/modals/SearchBRecordsModal.vue';
+import BRecordLink from '~/components/database/BRecordLink.vue';
 
 @Component({
-  components: { SearchBRecordsModal },
+  components: { SearchBRecordsModal, BRecordLink },
 })
 export default class BRecordsSelect extends Vue {
   @Prop({ required: true }) readonly entity!: string;
@@ -40,15 +41,13 @@ export default class BRecordsSelect extends Vue {
 
 <template>
   <div class="d-flex">
-    <div class="controls--label flex-fill">
+    <div class="controls--label flex-fill d-flex flex-wrap">
       <div
         v-for="record of records"
         :key="record.id"
-        class="d-flex align-items-center"
+        class="mr-3 d-flex align-items-center"
       >
-        <span class="emr-2">
-          {{ record.caption }}
-        </span>
+        <b-record-link class="mr-1" :entity="entity" :record="record" :new-tab="true" />
         <btn-mini variant="secondary" icon="x" @click="onRemoveRecord(record)" />
       </div>
     </div>

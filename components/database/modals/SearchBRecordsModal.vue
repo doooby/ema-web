@@ -81,7 +81,11 @@ function bRecordLabels ({ caption: _, ...labels }: BRecord) {
 </script>
 
 <template>
-  <b-modal :visible="value" @hidden="$emit('input', false)">
+  <b-modal
+    :visible="value"
+    hide-footer
+    @hidden="$emit('input', false)"
+  >
     <template #modal-title>
       <t :value="title || `db.modals.SearchBRecordsModal.title`" />
     </template>

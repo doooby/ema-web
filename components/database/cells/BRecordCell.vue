@@ -11,7 +11,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { DataTable } from '~/components/DataTable';
-import BRecordLink from '~/components/database/records/BRecordLink.vue';
+import BRecordLink from '~/components/database/BRecordLink.vue';
 
 @Component({
   components: { BRecordLink },

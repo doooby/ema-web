@@ -14,7 +14,7 @@
     </div>
     <b-alert v-if="requestState.fail" show variant="warning">
       <b-icon icon="exclamation-triangle-fill" class="mr-3" />
-      <t value="app.record_not_found" />
+      <t :value="`app.${requestState.fail ?? 'request_fail'}`" />
     </b-alert>
   </div>
 </template>

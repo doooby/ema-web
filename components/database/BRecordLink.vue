@@ -8,7 +8,6 @@ const entitiesWithShowPage = [
 ];
 
 @Component({
-  components: { BRecordLink },
 })
 export default class BRecordLink extends Vue {
   @Prop({ required: true }) readonly entity!: string;
