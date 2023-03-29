@@ -1,16 +1,10 @@
 import { controls, FormFieldDefinition } from '~/components/Form';
-import { RecordAssociations } from '~/lib/api2';
+import { RecordAssociations, recordsQueries } from '~/lib/api2';
 import { donor } from '~/lib/records';
 import { wai } from '~/vendor/wai';
 import { mapAssociation } from '~/lib/api2/mappers';
 
-export function entityControls (): FormFieldDefinition[] {
-  return [
-    [ 'name', controls.name ],
-    [ 'code', controls.selectMultiple ],
-    // [ 'logo', controls.imageFile ], // TODO
-  ];
-}
+export const entity = 'donors';
 
 export function parseRecord (
   value: unknown,
@@ -22,4 +16,18 @@ export function parseRecord (
     name: wai.prop('name', value, wai.listOf(wai.string)),
     code: wai.prop('code', value, wai.nullable(wai.string)),
   }))(value);
+}
+
+export const queries = {
+  search: recordsQueries.search(entity, parseRecord),
+  searchB: recordsQueries.searchB(entity),
+  create: recordsQueries.create(entity),
+  update: recordsQueries.update(entity),
+};
+
+export function entityControls (): FormFieldDefinition[] {
+  return [
+    [ 'name', controls.name ],
+    [ 'code', controls.text ],
+  ];
 }

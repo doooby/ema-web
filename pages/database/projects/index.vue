@@ -1,5 +1,5 @@
 <template>
-  <index-page
+  <index2-page
     entity="projects"
     :search-fields="searchFields"
     :table-columns="tableColumns"
@@ -10,14 +10,13 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
-import MultilineText from '~/components/database/cells/MultilineText.vue';
+import Index2Page from '~/components/database/pages/index/Index2Page.vue';
 
 @Component({
-  components: { IndexPage },
+  components: { Index2Page },
 })
 export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
@@ -33,7 +32,6 @@ export default class extends DatabasePage {
     { name: 'name', cell: { type: Name } },
     { name: 'code' },
     { name: 'short_name_en' },
-    { name: 'donors', cell: { type: MultilineText } },
   ];
 
   actions = [

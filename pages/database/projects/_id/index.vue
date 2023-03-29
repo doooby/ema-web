@@ -1,5 +1,5 @@
 <template>
-  <show-page
+  <show2-page
     entity="projects"
   >
     <template #title="{ record }">
@@ -33,7 +33,14 @@
           {{ record.ends_on ? $d(record.ends_on) : '' }}
         </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.donors">
-          <pre>{{ record.donors }}</pre>
+          <div class="d-flex">
+            <div
+              v-for="donor in (record.donors || [])"
+              :key="donor.id"
+            >
+              <b-record-link entity="donors" :record="donor" />
+            </div>
+          </div>
         </show-page-table-row>
       </table>
     </template>
@@ -50,27 +57,27 @@
           v-for="school in (record.schools || [])"
           :key="school.id"
         >
-          <link-abbreviated-record entity="schools" :record="school" />
+          <b-record-link entity="schools" :record="school" />
         </li>
       </ul>
     </template>
-  </show-page>
+  </show2-page>
 </template>
 
 <script lang="ts">
-import ShowPage from '~/components/database/ShowPage.vue';
 import { Component } from 'vue-property-decorator';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
-import LinkAbbreviatedRecord from '~/components/database/components/LinkAbbreviatedRecord.vue';
+import Show2Page from '~/components/database/pages/show/Show2Page.vue';
+import BRecordLink from '~/components/database/BRecordLink.vue';
 
 @Component({
   components: {
-    ShowPage,
+    Show2Page,
     ShowPageAction,
     ShowPageTableRow,
-    LinkAbbreviatedRecord,
+    BRecordLink,
   },
 })
 export default class extends DatabasePage {}

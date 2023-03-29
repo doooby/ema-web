@@ -6,6 +6,7 @@ import {
   donor,
   material_kit, person, school_year,
   user,
+  project,
   work_agreement,
 } from '~/lib/records';
 
@@ -15,10 +16,11 @@ export default class Api2Plugin {
   queries = {
     donors: donor.queries,
     material_kits: material_kit.queries,
+    projects: project.queries,
+    people: person.queries,
     school_years: school_year.queries,
     users: user.queries,
     work_agreements: work_agreement.queries,
-    people: person.queries,
   };
 
   constructor (context: Context) {

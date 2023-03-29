@@ -15,7 +15,7 @@ export function parseRecord (
   return wai.object(value => ({
     id: wai.prop('id', value, wai.string),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
-    education_levels: wai.prop('education_levels', value, wai.listOf(mapAssociation('education_levels', associations))),
+    education_levels: wai.prop('education_levels_ids', value, wai.listOf(mapAssociation('education_levels', associations))),
     name: wai.prop('name', value, wai.listOf(wai.string)),
     year_label: wai.prop('year_label', value, wai.string),
     terms: wai.prop('terms', value, wai.listOf(parseTerm)),

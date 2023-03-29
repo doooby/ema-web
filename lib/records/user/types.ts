@@ -12,7 +12,7 @@ export interface User {
 }
 
 export interface UserPrivilege {
-  type: null | 'country_admin' | 'collector';
+  type: null | 'country_admin' | 'collector' | 'data_officer';
   [ opt: string ]: any;
 }
 

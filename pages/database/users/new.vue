@@ -2,7 +2,7 @@
   <new2-page
     entity="users"
     :fields="fields"
-    :show-after-update="true"
+    :show-after-create="true"
   >
     <template #layout="{ context, values }">
       <record-form :context="context" :values="values" />

@@ -103,25 +103,26 @@ export default class extends DatabasePage {
   }
 
   async fillPerSchoolYear (values) {
-    this.processing = true;
-
-    const result = await this.$api.request(
-      this.$api.queries.school_years.show(values.school_year.id),
-      this.$api.newQueryState(),
-    );
-    if (result?.success) {
-      this.values = {
-        ...values,
-        time_ranges: result.record.terms,
-      };
-    } else {
-      this.values = {
-        ...values,
-        school_year: null,
-      };
-    }
-
-    this.processing = false;
+    throw 'nyi';
+    // this.processing = true;
+    //
+    // const result = await this.$api.request(
+    //   this.$api.queries.school_years.show(values.school_year.id),
+    //   this.$api.newQueryState(),
+    // );
+    // if (result?.success) {
+    //   this.values = {
+    //     ...values,
+    //     time_ranges: result.record.terms,
+    //   };
+    // } else {
+    //   this.values = {
+    //     ...values,
+    //     school_year: null,
+    //   };
+    // }
+    //
+    // this.processing = false;
   }
 
   async fillPerStandardizedCourse (values) {

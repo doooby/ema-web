@@ -5,6 +5,7 @@ import { Component, Prop } from 'vue-property-decorator';
 
 const entitiesWithShowPage = [
   'people',
+  'projects',
 ];
 
 @Component({
@@ -35,7 +36,7 @@ export default class BRecordLink extends Vue {
     <code v-if="!hasShowPage">
       [{{ record.id }}] {{ record.caption }}
     </code>
-    <nuxt-link v-if="!newTab" :to="path">
+    <nuxt-link v-else-if="!newTab" :to="path">
       <b-icon icon="card-heading" variant="primary" />
       {{ record.caption }}
     </nuxt-link>

@@ -24,7 +24,6 @@
           </div>
           <div class="card-body pt-3 pb-0">
             <form-group
-              v-if="$scopedSlots.layout"
               :value="formValues"
               :fields="formFields"
               :label-prefix="formFieldsLabelPrefix"
@@ -34,13 +33,6 @@
                 <slot name="layout" :context="context" :values="values" />
               </template>
             </form-group>
-            <form-group
-              v-else
-              :value="formValues"
-              :fields="formFields"
-              :label-prefix="formFieldsLabelPrefix"
-              @input="onInput"
-            />
             <record-errors class="mb-3" :errors="errors" />
           </div>
           <div class="card-footer d-flex justify-content-between">
@@ -82,7 +74,7 @@ export default class New2Page extends Vue {
   @Prop() readonly processing?: boolean;
   @Prop() readonly value!: FormValues;
   @Prop() readonly cardClass?: string;
-  @Prop() readonly showAfterUpdate?: boolean;
+  @Prop() readonly showAfterCreate?: boolean;
 
   formFields = buildFormFields(this.getFieldsWithCountry());
   formValues = { ...prefillFormValues(this.formFields), ...this.value };
@@ -127,7 +119,7 @@ export default class New2Page extends Vue {
   }
 
   onCreated (recordId: string) {
-    if (this.showAfterUpdate) {
+    if (this.showAfterCreate) {
       this.$router.push({ path: `/database/${this.entity}/${recordId}` });
     } else if (this.$listeners.create) {
       this.$emit('create', recordId);
