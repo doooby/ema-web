@@ -4,7 +4,7 @@ import { mapAssociation } from '~/lib/api2/mappers';
 import { material_kit } from '~/lib/records';
 import { controls, FormFieldDefinition } from '~/components/Form';
 
-export const entity = 'material_kits';
+export const entity = 'education_levels';
 
 export function parseRecord (
   value: unknown,
@@ -14,8 +14,7 @@ export function parseRecord (
     id: wai.prop('id', value, wai.string),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
     name: wai.prop('name', value, wai.listOf(wai.string)),
-    code: wai.prop('code', value, wai.nullable(wai.string)),
-    contents: wai.prop('contents', value, wai.nullable(wai.string)),
+    level: wai.prop('level', value, wai.integer),
   }))(value);
 }
 
@@ -26,10 +25,9 @@ export const queries = {
   update: recordsQueries.update(entity),
 };
 
-export function allControls (): FormFieldDefinition[] {
+export function entityControls (): FormFieldDefinition[] {
   return [
     [ 'name', controls.name ],
-    [ 'code', controls.text ],
-    [ 'contents', controls.textMultiline ],
+    [ 'level', controls.integer ],
   ];
 }

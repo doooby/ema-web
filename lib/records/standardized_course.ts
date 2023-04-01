@@ -1,5 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
-import { course, EducationLevel, Subject } from '~/lib/records';
+import { course, Subject } from '~/lib/records';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/standardized_courses/SubjectsField.vue';
@@ -10,7 +10,7 @@ const { object, recordId, prop, maybeProp, assoc, val } = mappers;
 export interface StandardizedCourse {
   id: number;
   name: [string, string];
-  education_level: mappers.AssociatedRecord<EducationLevel>;
+  education_level: mappers.AssociatedRecord;
   grade: number;
   is_formal: boolean;
   accreditation_authority?: [string, undefined | string];

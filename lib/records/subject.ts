@@ -1,7 +1,7 @@
 import * as mappers from '~/lib/api/mappers';
 import { assocList } from '~/lib/api/mappers';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
-import { EducationLevel, SubjectCategory } from '~/lib/records';
+import { SubjectCategory } from '~/lib/records';
 import AbbreviatedRecordsField from '~/components/database/AbbreviatedRecordsField.vue';
 
 const { object, recordId, prop, val } = mappers;
@@ -9,7 +9,7 @@ const { object, recordId, prop, val } = mappers;
 export interface Subject {
   id: number;
   name: [string, string];
-  education_levels: mappers.AssociatedRecord<EducationLevel>[];
+  education_levels: mappers.AssociatedRecord[];
   categories: mappers.AssociatedRecord<SubjectCategory>[];
 }
 

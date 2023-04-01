@@ -1,6 +1,5 @@
 import * as mappers from '~/lib/api/mappers';
 import {
-  EducationLevel,
   person,
   School,
   StandardizedCourse,
@@ -17,7 +16,7 @@ const { recordId, prop, assoc, val, maybeAssoc, maybeProp } = mappers;
 export interface Course {
   id: number;
   school: mappers.AssociatedRecord<School>;
-  education_level: mappers.AssociatedRecord<EducationLevel>;
+  education_level: mappers.AssociatedRecord;
   school_year: undefined | mappers.AssociatedRecord;
   standardized_course: undefined | mappers.AssociatedRecord<StandardizedCourse>;
   name: [string, string];

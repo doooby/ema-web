@@ -31,6 +31,7 @@ function parseTerm (value): { from: Date, to: Date } {
 
 export const queries = {
   search: recordsQueries.search(entity, parseRecord),
+  searchB: recordsQueries.searchB(entity),
   create: recordsQueries.create(entity),
   update: recordsQueries.update(entity),
 };
