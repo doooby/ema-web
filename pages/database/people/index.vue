@@ -11,10 +11,11 @@
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
-import { FormFieldDefinition } from '~/components/Form';
+import { controls, FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Date from '~/components/database/cells/Date.vue';
 import Name from '~/components/database/cells/Name.vue';
+import { dbFields } from '~/components/database/fields';
 
 @Component({
   components: { IndexPage },
@@ -23,12 +24,12 @@ export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      [ 'search', 'text' ],
-      [ 'kobo_id', 'text' ],
-      [ 'school_year_id', 'text' ],
+      [ 'search', controls.text ],
+      [ 'kobo_id', controls.text ],
+      [ 'school_year', dbFields.selectBRecord, { entity: 'school_years' } ],
       [ 'group_id', 'text' ],
       [ 'course_id', 'text' ],
-      [ 'school_id', 'text' ],
+      [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
     ];
   }
 
