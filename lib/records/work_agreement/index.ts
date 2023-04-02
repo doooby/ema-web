@@ -1,2 +1,2 @@
-export * from './WorkAgreement';
+export * from './types';
 export * from './work_agreement';

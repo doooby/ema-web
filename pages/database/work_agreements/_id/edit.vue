@@ -22,7 +22,10 @@ import { work_agreement } from '~/lib/records';
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return work_agreement.recordControls();
+    return [
+      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
+      ...work_agreement.recordControls(),
+    ];
   }
 }
 </script>

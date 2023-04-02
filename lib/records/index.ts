@@ -1,3 +1,4 @@
+import * as application_record from './application_record';
 import * as common from './common';
 import * as donor from './donor';
 import * as education_level from './education_level';
@@ -18,6 +19,7 @@ export * from './school';
 export * from './subject';
 export * from './subject_category';
 export {
+  application_record,
   common,
   donor,
   education_level,
