@@ -15,15 +15,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { Group, person } from '~/lib/records';
+import { group, person } from '~/lib/records';
 import { PaginatedRecords } from '~/lib/api/mappers';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
-import { getFatherNameLocal } from '~/lib/records/person';
 
 @Component
 export default class StudentsListing extends Vue {
-  @Prop({ required: true }) readonly group!: Group;
+  @Prop({ required: true }) readonly group!: group.Group;
 
   getStudentsQueryState = this.$api.newQueryState<PaginatedRecords<person.Person>>();
   tableColumns = [

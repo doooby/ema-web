@@ -6,11 +6,11 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Group } from '~/lib/records';
+import { group } from '~/lib/records';
 
 @Component
 export default class GroupAttendance extends Vue {
-  @Prop({ required: true }) readonly group!: Group;
+  @Prop({ required: true }) readonly group!: group.Group;
 
   get urlGenerateMonth (): string {
     return `/server/pdf/group_attendance/${this.group.id}`;

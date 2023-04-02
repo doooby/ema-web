@@ -15,16 +15,17 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Course, Group } from '~/lib/records';
-import { PaginatedRecords } from '~/lib/api/mappers';
+import { Course } from '~/lib/records';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
+import { SearchRecordsResponsePayload } from '~/lib/api2';
+import { RequestState } from '~/lib/api';
 
 @Component
 export default class GroupsListing extends Vue {
   @Prop({ required: true }) readonly course!: Course;
 
-  getGroupsQueryState = this.$api.newQueryState<PaginatedRecords<Group>>();
+  getGroupsQueryState2 = this.$api2.newQueryState<SearchRecordsResponsePayload>();
   tableColumns = [
     { name: 'id', cell: { type: RecordLink, entity: 'groups' }, size: 60 },
     { name: 'name', cell: { type: Name }, headerText: () => 'Name' },
@@ -40,8 +41,8 @@ export default class GroupsListing extends Vue {
     this.reloadGroups();
   }
 
-  get currentCountryId (): null | number {
-    return this.$store.state.session.currentCountry?.id ?? null;
+  get getGroupsQueryState (): RequestState {
+    return this.$api2.mapResponseToV1RequestState(this.getGroupsQueryState2);
   }
 
   reloadGroups () {
@@ -49,13 +50,17 @@ export default class GroupsListing extends Vue {
     this.fetchGroups();
   }
 
-  async fetchGroups () {
-    const query = this.$api.queries.groups.index;
-    await this.$api.request(query({
-      course_id: this.course.id,
-      country_id: this.currentCountryId,
-      per_page: 50,
-    }), this.getGroupsQueryState);
+  fetchGroups () {
+    if (this.getGroupsQueryState2.processing) return;
+
+    this.$api2.request(
+      this.getGroupsQueryState2,
+      this.$api2.getQuery('groups', 'search')({
+        course_id: this.course.id,
+        country_id: this.$store.getters['session/countryId'],
+        per_page: 50,
+      }),
+    );
   }
 }
 </script>
