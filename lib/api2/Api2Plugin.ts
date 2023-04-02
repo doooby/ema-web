@@ -5,6 +5,7 @@ import { wai } from '~/vendor/wai';
 import {
   donor,
   education_level,
+  group,
   material_kit,
   person,
   project,
@@ -20,6 +21,7 @@ export default class Api2Plugin {
   queries = {
     donors: donor.queries,
     education_levels: education_level.queries,
+    groups: group.queries,
     material_kits: material_kit.queries,
     projects: project.queries,
     people: person.queries,

@@ -18,6 +18,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { UpdatedRecordResponsePayload } from '~/lib/api2';
+import { formatISO } from 'date-fns';
 
 export default Vue.extend({
   props: {
@@ -40,7 +41,10 @@ export default Vue.extend({
 
       await this.$api2.request(
         this.request,
-        this.$api2.getQuery(this.entity, 'archive')(this.recordId),
+        this.$api2.getQuery(this.entity, 'update')(
+          this.recordId,
+          { archived_at: formatISO(new Date()) },
+        ),
       );
 
       this.onHidden();

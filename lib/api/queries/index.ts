@@ -1,7 +1,6 @@
 import * as countries from './countries';
 import * as courses from './courses';
 import * as standardized_courses from './standardized_courses';
-import * as groups from './groups';
 import * as people from './people';
 import * as schools from './schools';
 import * as session from './session';
@@ -14,7 +13,6 @@ export default {
   countries,
   courses,
   standardized_courses,
-  groups,
   people,
   schools,
   session,

@@ -4,8 +4,11 @@ import { BRecord } from '~/lib/api2';
 import { Component, Prop } from 'vue-property-decorator';
 
 const entitiesWithShowPage = [
+  'courses',
+  'groups',
   'people',
   'projects',
+  'schools',
 ];
 
 @Component({

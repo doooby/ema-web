@@ -1,29 +1,29 @@
 <template>
-  <new-page
+  <new2-page
     entity="groups"
     :fields="fields"
-    @create="onCreated"
-  />
+    :show-after-create="true"
+  >
+    <template #layout="{ context, values }">
+      <record-form :context="context" :values="values" />
+    </template>
+  </new2-page>
 </template>
 
 <script lang="ts">
-import NewPage from '~/components/database/NewPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
 import { group } from '~/lib/records';
+import New2Page from '~/components/database/pages/new/New2Page.vue';
+import RecordForm from '~/components/database/records/groups/RecordForm.vue';
 
 @Component({
-  components: { NewPage },
+  components: { New2Page, RecordForm },
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return group.recordControls({ countryId: this.currentCountryId });
-  }
-
-  onCreated (recordId: Number) {
-    this.$router.push({ path: `/database/groups/${recordId}` });
+    return group.entityControls();
   }
 }
-
 </script>

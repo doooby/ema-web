@@ -1,5 +1,5 @@
 <template>
-  <index-page
+  <index2-page
     entity="groups"
     :search-fields="searchFields"
     :table-columns="tableColumns"
@@ -8,21 +8,24 @@
 </template>
 
 <script lang="ts">
-import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import { FormFieldDefinition } from '~/components/Form';
-import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
+import { controls, FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
+import Index2Page from '~/components/database/pages/index/Index2Page.vue';
+import BRecordLinkCell from '~/components/database/cells/BRecordCell.vue';
+import { dbFields } from '~/components/database/fields';
 
 @Component({
-  components: { IndexPage },
+  components: { Index2Page },
 })
 export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      [ 'search', 'text' ],
+      [ 'search', controls.text ],
+      [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
+      [ 'course_id', controls.text ],
     ];
   }
 
@@ -31,15 +34,14 @@ export default class extends DatabasePage {
     { name: 'id', cell: { type: RecordLink, entity: 'groups' }, size: 60 },
     {
       name: 'school',
-      cell: { type: AssociatedRecordLink, entity: 'schools' },
+      cell: { type: BRecordLinkCell, entity: 'schools' },
     },
     {
       name: 'course',
-      cell: { type: AssociatedRecordLink, entity: 'courses' },
+      cell: { type: BRecordLinkCell, entity: 'courses' },
     },
     { name: 'name_en' },
-    { name: 'year' },
-    { name: 'term' },
+    { name: 'term', size: 80 },
   ];
 
   actions = [

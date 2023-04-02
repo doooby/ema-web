@@ -33,11 +33,11 @@ export const queries = {
 
 export function entityControls (): FormFieldDefinition[] {
   return [
+    [ 'schools', dbFields.selectManyBRecords, { entity: 'schools' } ],
+    [ 'donors', dbFields.selectManyBRecords, { entity: 'donors' } ],
     [ 'name', controls.name ],
     [ 'code', controls.text ],
     [ 'short_name_en', controls.text ],
-    [ 'schools', dbFields.selectManyBRecords, { entity: 'schools' } ],
-    [ 'donors', dbFields.selectManyBRecords, { entity: 'donors' } ],
     [ 'starts_on', controls.calendar ],
     [ 'ends_on', controls.calendar ],
   ];
