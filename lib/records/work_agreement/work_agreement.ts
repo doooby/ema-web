@@ -13,7 +13,7 @@ export function parseRecord (
 ): work_agreement.WorkAgreement {
   return wai.object(value => ({
     ...application_record.parseSharedAttributes(value),
-    country: wai.prop('country_id', value, mapAssociation('countries', associations)),
+    school: wai.prop('school_id', value, mapAssociation('schools', associations)),
     person: wai.prop('person_id', value, mapAssociation('people', associations)),
     projects: wai.prop('projects_ids', value, mapAssociations('projects', associations)),
     donors: wai.prop('donors_ids', value, mapAssociations('donors', associations)),
@@ -34,6 +34,7 @@ export const queries = {
 
 export function recordControls (): FormFieldDefinition[] {
   return [
+    [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
     [ 'person', dbFields.selectBRecord, { entity: 'people' } ],
     [ 'projects', dbFields.selectManyBRecords, { entity: 'projects' } ],
     [ 'donors', dbFields.selectManyBRecords, { entity: 'donors' } ],

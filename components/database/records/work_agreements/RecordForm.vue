@@ -1,5 +1,6 @@
 <template>
   <div>
+    <form-field name="school" :context="context" :values="values" />
     <form-field name="person" :context="context" :values="values" />
     <form-field name="projects" :context="context" :values="values" />
     <form-field name="donors" :context="context" :values="values" />

@@ -1,11 +1,11 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { School, school, SchoolAssociations } from '~/lib/records';
+import { school } from '~/lib/records';
 import { recordEndpoints } from '~/lib/api/queries/lib/records';
 
 export const record = recordEndpoints<
-  School,
-  SchoolAssociations
+  school.School,
+  school.SchoolAssociations
   >({
     entity: 'schools',
     paramName: 'school',
@@ -17,6 +17,6 @@ export function searchAssociated (params?: Params) {
   return {
     path: '/schools?assoc=1',
     params,
-    mapper: (payload: any) => mappers.associatedRecords<School>(payload),
+    mapper: (payload: any) => mappers.associatedRecords(payload),
   };
 }

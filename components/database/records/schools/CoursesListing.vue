@@ -19,7 +19,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { School } from '~/lib/records';
+import { school } from '~/lib/records';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import Name from '~/components/database/cells/Name.vue';
 import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
@@ -30,7 +30,7 @@ import RecordsBrowsing from '~/components/database/RecordsBrowsing/RecordsBrowsi
   components: { RecordsBrowsing },
 })
 export default class CoursesListing extends Vue {
-  @Prop({ required: true }) readonly school!: School;
+  @Prop({ required: true }) readonly school!: school.School;
 
   fnsFormat = fnsFormat;
 

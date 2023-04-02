@@ -2,7 +2,7 @@ import { BRecord } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 
 export interface WorkAgreement extends application_record.SharedAttributes {
-  country: BRecord;
+  school: BRecord;
   person: BRecord;
   projects?: BRecord[];
   donors?: BRecord[];
