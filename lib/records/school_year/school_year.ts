@@ -1,10 +1,10 @@
 import { RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
-import { mapAssociation, mapDate } from '~/lib/api2/mappers';
+import { mapAssociation, mapAssociations, mapDate } from '~/lib/api2/mappers';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
-import AbbreviatedRecordsField from '~/components/database/AbbreviatedRecordsField.vue';
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
 import { school_year } from '~/lib/records';
+import { dbFields } from '~/components/database/fields';
 
 export const entity = 'school_years';
 
@@ -15,7 +15,7 @@ export function parseRecord (
   return wai.object(value => ({
     id: wai.prop('id', value, wai.string),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
-    education_levels: wai.prop('education_levels_ids', value, wai.listOf(mapAssociation('education_levels', associations))),
+    education_levels: wai.prop('education_levels_ids', value, mapAssociations('education_levels', associations)),
     name: wai.prop('name', value, wai.listOf(wai.string)),
     year_label: wai.prop('year_label', value, wai.string),
     terms: wai.prop('terms', value, wai.listOf(parseTerm)),
@@ -39,9 +39,7 @@ export const queries = {
 export function allControls (): FormFieldDefinition[] {
   return [
     [ 'name', controls.name ],
-    [ 'education_levels', asFieldType(AbbreviatedRecordsField), {
-      entity: 'education_levels',
-    } ],
+    [ 'education_levels', dbFields.selectManyBRecords, { entity: 'education_levels' } ],
     [ 'terms', asFieldType(SchoolYearTerms) ],
   ];
 }

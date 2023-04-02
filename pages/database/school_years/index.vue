@@ -1,5 +1,5 @@
 <template>
-  <index-page
+  <index2-page
     entity="school_years"
     :search-fields="searchFields"
     :table-columns="tableColumns"
@@ -8,16 +8,16 @@
 </template>
 
 <script lang="ts">
-import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
 import RecordLink from '~/components/database/cells/RecordLink.vue';
 import MultipleAssociatedRecordsLinks from '~/components/database/cells/MultipleAssociatedRecordsLinks.vue';
 import Name from '~/components/database/cells/Name.vue';
+import Index2Page from '~/components/database/pages/index/Index2Page.vue';
 
 @Component({
-  components: { IndexPage },
+  components: { Index2Page },
 })
 export default class extends DatabasePage {
   get searchFields (): FormFieldDefinition[] {
