@@ -2,14 +2,7 @@
 import Vue from 'vue';
 import { BRecord } from '~/lib/api2';
 import { Component, Prop } from 'vue-property-decorator';
-
-const entitiesWithShowPage = [
-  'courses',
-  'groups',
-  'people',
-  'projects',
-  'schools',
-];
+import { entitiesWithShowPage } from '~/config/pages';
 
 @Component({
 })
@@ -35,16 +28,16 @@ export default class BRecordLink extends Vue {
 </script>
 
 <template>
-  <div class="d-inline">
+  <div class="d-inline db--b-record-link text-truncate">
     <code v-if="!hasShowPage">
       [{{ record.id }}] {{ record.caption }}
     </code>
-    <nuxt-link v-else-if="!newTab" :to="path">
-      <b-icon icon="card-heading" variant="primary" />
+    <nuxt-link v-else-if="!newTab" :to="path" class="icon-link">
+      <b-icon icon="card-heading" />
       {{ record.caption }}
     </nuxt-link>
-    <a v-else :href="fullPath" target="_blank" @click.stop>
-      <b-icon icon="card-heading" variant="primary" />
+    <a v-else :href="fullPath" target="_blank" class="icon-link" @click.stop>
+      <b-icon icon="card-heading" />
       {{ record.caption }}
     </a>
   </div>

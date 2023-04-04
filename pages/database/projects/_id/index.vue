@@ -70,7 +70,7 @@ import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
-import BRecordLink from '~/components/database/BRecordLink.vue';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 @Component({
   components: {

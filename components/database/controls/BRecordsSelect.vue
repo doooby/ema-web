@@ -3,7 +3,7 @@ import { Component, Prop } from 'vue-property-decorator';
 import Vue from 'vue';
 import { BRecord } from '~/lib/api2';
 import SearchBRecordsModal from '~/components/database/modals/SearchBRecordsModal.vue';
-import BRecordLink from '~/components/database/BRecordLink.vue';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 @Component({
   components: { SearchBRecordsModal, BRecordLink },
@@ -47,11 +47,11 @@ export default class BRecordsSelect extends Vue {
         :key="record.id"
         class="mr-3 d-flex align-items-center"
       >
-        <b-record-link class="mr-1" :entity="entity" :record="record" :new-tab="true" />
+        <b-record-link class="mr-2" :entity="entity" :record="record" :new-tab="true" />
         <btn-mini variant="secondary" icon="x" @click="onRemoveRecord(record)" />
       </div>
     </div>
-    <b-button variant="secondary" @click="modalShown = true">
+    <b-button variant="secondary" size="sm" @click="modalShown = true">
       <b-icon :icon="singleRecord ? 'chevron-down' : 'plus'" />
     </b-button>
     <search-b-records-modal

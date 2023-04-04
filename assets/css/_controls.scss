@@ -1,4 +1,8 @@
 .controls--label {
   background-color: $input-bg;
-  @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
+  padding: $input-padding-y $input-padding-x;
+  @include font-size($input-font-size);
+  line-height: $input-line-height;
+  border: $input-border-width solid $input-border-color;
+  @include border-radius($input-border-radius, 0);
 }

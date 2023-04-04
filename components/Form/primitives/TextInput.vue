@@ -7,7 +7,7 @@
     :disabled="disabled"
     autocomplete="off"
     v-on="interactive ? { input: onInput} : { blur: onInput }"
-    @keypress.ctrl.enter="onCommit"
+    @keypress.enter.stop="onSubmit"
   >
 </template>
 
@@ -35,7 +35,9 @@ export default class TextInput extends Vue {
     this.$emit('input', event.target.value);
   }
 
-  onCommit () {}
+  onSubmit (event: {target: HTMLInputElement}): void {
+    this.$emit('submit', event.target.value);
+  }
 }
 
 function sanitizeValue (value: any): string {
