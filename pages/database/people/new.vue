@@ -84,7 +84,7 @@ export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return [
       [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      ...person.editControls(),
+      ...person.entityControls(),
     ];
   }
 

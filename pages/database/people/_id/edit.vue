@@ -82,7 +82,7 @@ export default class extends DatabasePage {
   values = {} as any;
 
   get fields (): FormFieldDefinition[] {
-    return person.editControls();
+    return person.entityControls();
   }
 
   onChange (newValues) {

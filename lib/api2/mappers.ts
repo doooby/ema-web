@@ -1,6 +1,7 @@
 import { wai } from '~/vendor/wai';
 import { RecordAssociations, BRecord } from '~/lib/api2';
 import { parseISO as parseDate } from 'date-fns';
+import { maybeProp, prop, tuple } from '~/lib/api/mappers';
 
 // TODO move to wai ?
 
@@ -25,6 +26,14 @@ export function mapDate (value): Date {
     throw new wai.MappingError('not date');
   }
   return date;
+}
+
+export function mapSelectOrFillTuple (value: any): [string, undefined | string] {
+  if (!Array.isArray(value)) return [ '', undefined ];
+  return wai.tuple(
+    wai.string,
+    wai.nullable(wai.string),
+  )(value);
 }
 
 export function mapAssociation (

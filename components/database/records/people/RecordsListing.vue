@@ -5,6 +5,8 @@ import ARecordLink from '~/components/database/components/ARecordLink.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
 import { Params } from '~/lib/api2';
+import Name from '~/components/database/cells/Name.vue';
+import Date from '~/components/database/cells/Date.vue';
 
 @Component({
   components: { ARecordsListing, ARecordLink, TextNames },
@@ -16,8 +18,10 @@ export default class RecordsListing extends Vue {
   tableColumns = [
     ...this.initialColumns,
     { name: 'id', size: 80 },
-    { name: 'level', size: 80 },
-    { name: 'name', size: 400 },
+    { name: 'student_kobo_no' },
+    { name: 'first_name', cell: { type: Name } },
+    { name: 'last_name', cell: { type: Name } },
+    { name: 'born_on', cell: { type: Date } },
   ];
 }
 </script>
@@ -25,7 +29,7 @@ export default class RecordsListing extends Vue {
 <template>
   <a-records-listing
     :class="$attrs.class"
-    entity="education_levels"
+    entity="people"
     :table-columns="tableColumns"
     :params="params"
     @list="$emit('list', $event)"
@@ -42,13 +46,19 @@ export default class RecordsListing extends Vue {
           <slot :name="`col-${column.name}`" :record="record" />
         </td>
         <td>
-          <a-record-link :id="record.id" entity="education_levels" />
+          <a-record-link :id="record.id" entity="people" />
         </td>
         <td>
-          {{ record.level }}
+          {{ record.student_kobo_no }}
         </td>
         <td>
-          <text-names class-name="single-row-cell" :value="record.name" />
+          <text-names class-name="single-row-cell" :value="record.first_name" />
+        </td>
+        <td>
+          <text-names class-name="single-row-cell" :value="record.last_name" />
+        </td>
+        <td>
+          <span v-if="record.born_on">{{ $d(record.born_on) }}</span>
         </td>
         <td />
       </tr>

@@ -1,0 +1,78 @@
+$EMA-primary: #E74011;
+$EMA-primary-contrast: #f3e1e1;
+
+$EMA-top-bar-height: 60;
+$EMA-top-bar-login-height: 40;
+
+$gl-sizes: (
+  1: 2,
+  2: 4,
+  3: 8,
+  4: 12,
+  5: 18,
+  6: 24,
+  7: 32,
+  8: 40,
+);
+
+$sizing-large-x-y-sizes: (
+  9: 50,
+  10: 60,
+  11: 76,
+  12: 94,
+  13: 120,
+  14: 146,
+  15: 180,
+  16: 214,
+  17: 260,
+  18: 306,
+);
+
+$font-line-heights: (
+  '075': 0.75rem !important,
+  '085': 0.85rem !important,
+  '1': 1rem !important,
+  '15': 1.15rem !important,
+  '25': 1.25rem !important,
+  '50': 1.50rem !important,
+  '75': 1.75rem !important,
+);
+
+@function size($size) {
+  @return map-get($gl-sizes, $size);
+}
+
+@function px ($value) {
+  @return #{$value}px;
+}
+
+@function px-size($size) {
+  @return #{size($size)}px;
+}
+
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
+
+$body-bg: white;
+$body-color: #1a1a1a;
+
+$enable-shadows: false;
+$btn-focus-box-shadow: none;
+
+$enable-rounded: false;
+
+$input-font-size: .875rem;
+$input-padding-y: .25rem;
+$input-padding-x: .5rem;
+$input-bg: #c2c0bf;
+
+$label-margin-bottom: px-size(1);

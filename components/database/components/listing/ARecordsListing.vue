@@ -21,6 +21,11 @@ export default class ARecordsListing extends Vue {
     this.fetchRecords();
   }
 
+  @Watch('records')
+  onRecordsChanged () {
+    this.$emit('list', this.records);
+  }
+
   mounted () {
     this.fetchRecords();
   }
@@ -71,7 +76,8 @@ export default class ARecordsListing extends Vue {
       :columns="tableColumns"
     >
       <template #header-cell="{ column }">
-        <t :value="`db.record.${entity}.label.${column.name}`" />
+        <slot v-if="$scopedSlots[`col-h-${column.name}`]" :name="`col-h-${column.name}`" />
+        <t v-else :value="`db.record.${entity}.label.${column.name}`" />
       </template>
       <template #content>
         <tbody v-if="showError">
