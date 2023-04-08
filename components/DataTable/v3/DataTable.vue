@@ -37,7 +37,7 @@ export default class DataTable extends Vue {
   > table {
     table-layout: fixed;
 
-    tbody > tr {
+    > tbody > tr {
       border-bottom: 1px solid $input-bg;
       &:last-child { border-bottom: none; }
 

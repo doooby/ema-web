@@ -1,67 +1,67 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { DataTable } from '~/components/DataTable';
 import ARecordLink from '~/components/database/components/ARecordLink.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
-import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
+import ARecordsListing2 from '~/components/database/components/listing/ARecordsListing2.vue';
 import { Params } from '~/lib/api2';
-import Name from '~/components/database/cells/Name.vue';
-import Date from '~/components/database/cells/Date.vue';
+import { Column } from '~/components/DataTable/v3';
+import { h } from 'vue';
 
 @Component({
-  components: { ARecordsListing, ARecordLink, TextNames },
+  components: { ARecordsListing2, ARecordLink, TextNames },
 })
 export default class RecordsListing extends Vue {
-  @Prop({ default: () => [] }) readonly initialColumns!: DataTable.Column[];
+  @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
 
-  tableColumns = [
-    ...this.initialColumns,
+  columns = [
     { name: 'id', size: 80 },
-    { name: 'student_kobo_no' },
-    { name: 'first_name', cell: { type: Name } },
-    { name: 'last_name', cell: { type: Name } },
-    { name: 'born_on', cell: { type: Date } },
+    { name: 'student_kobo_no', renderHeader: this.renderHeader },
+    { name: 'first_name', renderHeader: this.renderHeader },
+    { name: 'last_name', renderHeader: this.renderHeader },
+    { name: 'born_on', renderHeader: this.renderHeader },
   ];
+
+  renderHeader (column) {
+    return h('t', {
+      props: { value: `db.record.people.label.${column.name}` },
+      class: 'text-break',
+    });
+  }
 }
 </script>
 
 <template>
-  <a-records-listing
+  <a-records-listing2
     :class="$attrs.class"
     entity="people"
-    :table-columns="tableColumns"
+    :initial-columns="initialColumns"
+    :columns="columns"
     :params="params"
-    @list="$emit('list', $event)"
+    @change="$emit('change', $event)"
   >
-    <template
-      v-for="name of initialColumns.map(col => `col-h-${col.name}`)"
-      #[name]
-    >
-      <slot :name="name" />
-    </template>
-    <template #body="{ records }">
-      <tr v-for="record of records" :key="record.id">
-        <td v-for="column in initialColumns" :key="column.name">
-          <slot :name="`col-${column.name}`" :record="record" />
-        </td>
-        <td>
+    <template #row="{ record }">
+      <td>
+        <div class="text-center">
           <a-record-link :id="record.id" entity="people" />
-        </td>
-        <td>
-          {{ record.student_kobo_no }}
-        </td>
-        <td>
-          <text-names class-name="single-row-cell" :value="record.first_name" />
-        </td>
-        <td>
-          <text-names class-name="single-row-cell" :value="record.last_name" />
-        </td>
-        <td>
-          <span v-if="record.born_on">{{ $d(record.born_on) }}</span>
-        </td>
-        <td />
-      </tr>
+        </div>
+      </td>
+      <td>
+        {{ record.student_kobo_no }}
+      </td>
+      <td>
+        <text-names class-name="single-row-cell" :value="record.first_name" />
+      </td>
+      <td>
+        <text-names class-name="single-row-cell" :value="record.last_name" />
+      </td>
+      <td>
+        <span v-if="record.born_on">{{ $d(record.born_on) }}</span>
+      </td>
+      <td />
     </template>
-  </a-records-listing>
+    <template #footer>
+      <slot name="footer" />
+    </template>
+  </a-records-listing2>
 </template>

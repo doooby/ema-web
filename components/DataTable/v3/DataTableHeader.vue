@@ -2,7 +2,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Column } from '~/components/DataTable/v3/types';
 
-const DynamicHeader = Vue.extend({
+const HeaderContent = Vue.extend({
   functional: true,
   render (_, { props }: any): Vue.VNode {
     return props.column.renderHeader(props.column);
@@ -10,7 +10,7 @@ const DynamicHeader = Vue.extend({
 });
 
 @Component({
-  components: { DynamicHeader },
+  components: { HeaderContent },
 })
 export default class DataTableHeader extends Vue {
   @Prop({ required: true }) readonly column!: Column;
@@ -23,7 +23,7 @@ export default class DataTableHeader extends Vue {
     scope="col"
   >
     <div class="mx-2 d-flex align-items-center">
-      <dynamic-header v-if="column.renderHeader" :column="column" />
+      <header-content v-if="column.renderHeader" :column="column" />
       <slot v-else />
     </div>
   </th>

@@ -1,5 +1,5 @@
 <template>
-  <index3-page
+  <index4-page
     entity="people"
     :search-fields="searchFields"
     :actions="actions"
@@ -11,10 +11,10 @@ import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
-import Index3Page from '~/components/database/pages/index/Index3Page.vue';
+import Index4Page from '~/components/database/pages/index/index4Page.vue';
 
 @Component({
-  components: { Index3Page },
+  components: { Index4Page },
 })
 export default class extends DatabasePage {
   searchFields = [

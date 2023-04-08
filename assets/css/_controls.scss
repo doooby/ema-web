@@ -5,4 +5,5 @@
   line-height: $input-line-height;
   border: $input-border-width solid $input-border-color;
   @include border-radius($input-border-radius, 0);
+  overflow-x: scroll;
 }

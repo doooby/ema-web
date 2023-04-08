@@ -5,24 +5,25 @@ import SearchForm from '~/components/database/components/listing/SearchForm.vue'
 import RecordActions, { Action } from '~/components/database/cells/RecordActions.vue';
 
 import EducationLevels from '~/components/database/records/education_levels/RecordsListing.vue';
-// import People from '~/components/database/records/people/RecordsListing.vue';
+import People from '~/components/database/records/people/RecordsListing.vue';
+import { h } from 'vue';
+import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
 const RecordsListing = Vue.extend({
   functional: true,
   props: [ 'component', 'initialColumns', 'params' ],
   render (createElement, context): Vue.VNode {
     const component = context.props.component;
-    if (!component) return createElement('span', {}, '');
+    if (!component) return createElement('span', '');
     return createElement(component, {
       props: {
         initialColumns: context.props.initialColumns,
         params: context.props.params,
       },
       class: 'mt-2',
-      scopedSlots: { ...context.scopedSlots },
       on: {
-        list (records) {
-          context.listeners.list(records);
+        change (records) {
+          (context as any).listeners.change(records);
         },
       },
     });
@@ -36,7 +37,7 @@ const RecordsListing = Vue.extend({
     RecordActions,
   },
 })
-export default class Index3Page extends Vue {
+export default class Index4Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly searchFields!: FormFieldDefinition[];
   @Prop({ required: true }) readonly actions!: Action[];
@@ -52,14 +53,30 @@ export default class Index3Page extends Vue {
   }
 
   initialColumns = [
-    // { name: 'selection', size: 40 },
-    { name: 'actions', headerText: false, size: 40 },
+    {
+      name: 'actions',
+      size: 65,
+      renderCell: record => h(
+        ActionsCell,
+        {
+          props: {
+            entity: this.entity,
+            record,
+            selected: this.selectedRecords.includes(record),
+            actions: this.actions,
+          },
+          on: {
+            change: () => this.toggleSelect(record),
+          },
+        },
+      ),
+    },
   ];
 
   get listingComponent () {
     switch (this.entity) {
       case 'education_levels': return EducationLevels;
-      // case 'people': return People;
+      case 'people': return People;
       default: return null;
     }
   }
@@ -108,30 +125,15 @@ export default class Index3Page extends Vue {
         :fields="searchFields"
         @search="searchParams=$event"
       />
+<!--      <div class="mt-2">-->
+<!--        group actions-->
+<!--      </div>-->
       <records-listing
         :initial-columns="initialColumns"
         :params="searchParams"
         :component="listingComponent"
-        @list="records = $event"
-      >
-        <template #col-h-selection>
-          <b-form-checkbox :checked="isAllSelected" @change="toggleSelectAll" />
-        </template>
-        <template #col-selection="{record}">
-          <b-form-checkbox
-            class="ml-2"
-            :checked="selectedRecords.includes(record)"
-            @change="toggleSelect(record)"
-          />
-        </template>
-        <template #col-actions="{ record }">
-          <record-actions
-            :entity="entity"
-            :record="record"
-            :actions="actions"
-          />
-        </template>
-      </records-listing>
+        @change="$emit('change', $event)"
+      />
     </div>
   </div>
 </template>
