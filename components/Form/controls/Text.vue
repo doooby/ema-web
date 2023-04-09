@@ -19,6 +19,7 @@
         :interactive="interactive"
         :value="value"
         @input="onChange"
+        @submit="onSubmit"
       />
       <div v-if="rightLabelText" class="input-group-append">
         <span v-if="rightLabelText.text" class="input-group-text">
@@ -80,6 +81,10 @@ export default Vue.extend({
   methods: {
     onChange (newValue: string) {
       (this as any).debouncedOnChange({ [this.field.name]: newValue });
+    },
+    onSubmit (value) {
+      (this as any).onChangeValue(value);
+      this.context.onSubmit();
     },
   },
 });

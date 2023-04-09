@@ -32,6 +32,7 @@ export default class SearchForm extends Vue {
         :fields="formFields"
         :label-prefix="`db.record.${entity}.label`"
         @input="onValuesChange"
+        @submit="onSearch"
       >
         <template #layout="{ context, values }">
           <div

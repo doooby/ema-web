@@ -75,6 +75,9 @@ export default Vue.extend({
             this.$emit('change');
           }
         },
+        onSubmit: () => {
+          this.$emit('submit');
+        },
       };
     },
   },

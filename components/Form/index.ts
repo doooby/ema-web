@@ -35,6 +35,7 @@ export interface FormGroupContext {
   fieldLabelKey(name: string): string,
   field(name: string): undefined | FormField;
   onChange(changes: FormValues): void;
+  onSubmit(): void;
 }
 
 function getControlType (type: string | FormFieldType): FormFieldType {
