@@ -32,10 +32,6 @@ export default class BRecordLink extends Vue {
     <code v-if="!hasShowPage">
       [{{ record.id }}] {{ record.caption }}
     </code>
-    <nuxt-link v-else-if="!newTab" :to="path" class="icon-link">
-      <b-icon icon="card-heading" />
-      {{ record.caption }}
-    </nuxt-link>
     <a v-else :href="fullPath" target="_blank" class="icon-link" @click.stop>
       <b-icon icon="card-heading" />
       {{ record.caption }}

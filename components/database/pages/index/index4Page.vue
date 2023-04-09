@@ -56,6 +56,7 @@ export default class Index4Page extends Vue {
     {
       name: 'actions',
       size: 65,
+      fixedSize: true,
       renderCell: record => h(
         ActionsCell,
         {

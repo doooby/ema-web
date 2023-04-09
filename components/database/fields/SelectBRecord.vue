@@ -32,11 +32,12 @@ export default class SelectBRecord extends Vue {
 </script>
 
 <template>
-  <b-form-group>
+  <b-form-group :label-for="domIdBase">
     <template #label>
       <t :value="labelTranslation" />
     </template>
     <b-records-select
+      :dom-id="domIdBase"
       :entity="entity"
       :single-record="true"
       :records="records"

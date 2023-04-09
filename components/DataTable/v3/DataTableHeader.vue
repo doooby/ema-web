@@ -1,6 +1,9 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Column } from '~/components/DataTable/v3/types';
+import DataTableHeaderLimit from '~/components/DataTable/v3/DataTableHeaderLimit.vue';
+
+const minWidth = 50;
 
 const HeaderContent = Vue.extend({
   functional: true,
@@ -10,10 +13,17 @@ const HeaderContent = Vue.extend({
 });
 
 @Component({
-  components: { HeaderContent },
+  components: { HeaderContent, DataTableHeaderLimit },
 })
 export default class DataTableHeader extends Vue {
   @Prop({ required: true }) readonly column!: Column;
+
+  defaultSize = this.column.size;
+
+  onShift (value) {
+    this.column.size += value;
+    if (this.column.size < minWidth) this.column.size = minWidth;
+  }
 }
 </script>
 
@@ -23,8 +33,15 @@ export default class DataTableHeader extends Vue {
     scope="col"
   >
     <div class="mx-2 d-flex align-items-center">
-      <header-content v-if="column.renderHeader" :column="column" />
-      <slot v-else />
+      <div class="flex-fill">
+        <header-content v-if="column.renderHeader" :column="column" />
+        <slot v-else />
+      </div>
+      <data-table-header-limit
+        v-if="!column.fixedSize"
+        @shift="onShift"
+        @reset="column.size = defaultSize"
+      />
     </div>
   </th>
 </template>

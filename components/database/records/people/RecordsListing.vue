@@ -16,10 +16,10 @@ export default class RecordsListing extends Vue {
 
   columns = [
     { name: 'id', size: 80 },
-    { name: 'student_kobo_no', renderHeader: this.renderHeader },
-    { name: 'first_name', renderHeader: this.renderHeader },
-    { name: 'last_name', renderHeader: this.renderHeader },
-    { name: 'born_on', renderHeader: this.renderHeader },
+    { name: 'student_kobo_no', size: 180, renderHeader: this.renderHeader },
+    { name: 'first_name', size: 180, renderHeader: this.renderHeader },
+    { name: 'last_name', size: 180, renderHeader: this.renderHeader },
+    { name: 'born_on', size: 180, renderHeader: this.renderHeader },
   ];
 
   renderHeader (column) {

@@ -13,6 +13,7 @@ export default class BRecordsSelect extends Vue {
   @Prop({ required: true }) readonly records!: BRecord[];
   @Prop({ default: false }) readonly singleRecord!: boolean;
   @Prop({ default: undefined }) readonly title!: string;
+  @Prop({ default: undefined }) readonly domId!: string;
 
   modalShown = false;
 
@@ -40,14 +41,14 @@ export default class BRecordsSelect extends Vue {
 </script>
 
 <template>
-  <div class="d-flex">
+  <div :id="domId" class="d-flex">
     <div class="controls--label flex-fill d-flex flex-wrap">
       <div
         v-for="record of records"
         :key="record.id"
         class="mr-3 d-flex align-items-center"
       >
-        <b-record-link class="mr-2" :entity="entity" :record="record" :new-tab="true" />
+        <b-record-link class="mr-2" :entity="entity" :record="record" />
         <btn-mini variant="secondary" icon="x" @click="onRemoveRecord(record)" />
       </div>
     </div>
