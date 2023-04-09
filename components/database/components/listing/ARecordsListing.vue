@@ -2,15 +2,28 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import SearchPagination from '~/components/database/components/listing/SearchPagination.vue';
 import { Params, SearchRecordsResponsePayload } from '~/lib/api2';
-import { DataTable } from '~/components/DataTable';
+import { Column, DataTable, DataTableHeadersRow } from '~/components/DataTable/v3';
+
+const CellContent = Vue.extend({
+  functional: true,
+  render (_, { props }: any): Vue.VNode {
+    return props.column.renderCell(props.record);
+  },
+});
 
 @Component({
-  components: { SearchPagination },
+  components: {
+    SearchPagination,
+    DataTable,
+    DataTableHeadersRow,
+    CellContent,
+  },
 })
 export default class ARecordsListing extends Vue {
   @Prop({ required: true }) readonly entity!: string;
+  @Prop({ default: () => [] }) readonly initialColumns!: Column[];
+  @Prop({ required: true }) readonly columns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
-  @Prop({ required: true }) readonly tableColumns!: DataTable.Column[];
 
   currentQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>()
   liveQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>();
@@ -23,7 +36,7 @@ export default class ARecordsListing extends Vue {
 
   @Watch('records')
   onRecordsChanged () {
-    this.$emit('list', this.records);
+    this.$emit('change', this.records);
   }
 
   mounted () {
@@ -36,6 +49,10 @@ export default class ARecordsListing extends Vue {
     } else {
       return this.currentQuery.response.message;
     }
+  }
+
+  get allColumns () {
+    return [ ...this.initialColumns, ...this.columns ];
   }
 
   get records (): never[] {
@@ -71,37 +88,37 @@ export default class ARecordsListing extends Vue {
       </div>
       <search-pagination :query="currentQuery" @select="fetchRecords" />
     </div>
-    <data-table2-view
+    <data-table
       class="mt-2"
-      :columns="tableColumns"
+      :columns="allColumns"
     >
-      <template #header-cell="{ column }">
-        <slot v-if="$scopedSlots[`col-h-${column.name}`]" :name="`col-h-${column.name}`" />
-        <t v-else :value="`db.record.${entity}.label.${column.name}`" />
-      </template>
-      <template #content>
-        <tbody v-if="showError">
-          <tr>
-            <td :colspan="tableColumns.length + 1">
-              <b-alert variant="warning" show class="m-0">
-                <t value="data_table.fetch_fail" />
-                <span />
-                <t :value="`app.processing.${showError}`" />
-              </b-alert>
-            </td>
-          </tr>
-        </tbody>
-        <tbody v-if="records">
-          <slot name="body" :records="records" />
-        </tbody>
-        <tbody v-if="$slots['footer-cell']">
-          <tr>
-            <td :colspan="tableColumns.length + 1">
-              <slot name="footer-cell" />
-            </td>
-          </tr>
-        </tbody>
-      </template>
-    </data-table2-view>
+      <data-table-headers-row :columns="allColumns" />
+      <tbody v-if="showError">
+        <tr>
+          <td :colspan="allColumns.length + 1">
+            <b-alert variant="warning" show class="m-0">
+              <t value="data_table.fetch_fail" />
+              <span />
+              <t :value="`app.processing.${showError}`" />
+            </b-alert>
+          </td>
+        </tr>
+      </tbody>
+      <tbody>
+        <tr v-for="(record, index) of records" :key="`${index}-${record.id}`">
+          <td v-for="column of initialColumns" :key="column.name">
+            <cell-content v-if="column.renderCell" :column="column" :record="record" />
+          </td>
+          <slot name="row" :record="record" />
+        </tr>
+      </tbody>
+      <tbody v-if="$slots['footer']">
+        <tr>
+          <td :colspan="allColumns.length + 1">
+            <slot name="footer" />
+          </td>
+        </tr>
+      </tbody>
+    </data-table>
   </div>
 </template>

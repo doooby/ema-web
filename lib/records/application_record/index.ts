@@ -1,5 +1,8 @@
 import { wai } from '~/vendor/wai';
 import { mapDate } from '~/lib/api2/mappers';
+import { Column } from '~/components/DataTable/v3';
+import { h } from 'vue';
+import Translation from '~/components/toolkit/Translation.vue';
 
 export interface SharedAttributes {
   id: string;
@@ -15,4 +18,21 @@ export function parseSharedAttributes (value): SharedAttributes {
     updated_at: wai.prop('updated_at', value, wai.nullable(mapDate)),
     archived_at: wai.prop('archived_at', value, wai.nullable(mapDate)),
   };
+}
+
+export function fillDataTableColumns (entity: string, columns: (Partial<Column>)[]): Column[] {
+  function renderHeader (column) {
+    return h(Translation, {
+      props: { value: `db.record.${entity}.label.${column.name}` },
+      class: 'text-break',
+    });
+  }
+
+  for (const column of columns) {
+    if (!column.size) column.size = 180;
+    if (!column.renderHeader) {
+      column.renderHeader = renderHeader;
+    }
+  }
+  return columns as Column[];
 }

@@ -19,7 +19,6 @@ import Index4Page from '~/components/database/pages/index/index4Page.vue';
 export default class extends DatabasePage {
   searchFields = [
     [ 'search', controls.text ],
-    [ 'kobo_id', controls.text ],
     [ 'school_year', dbFields.selectBRecord, { entity: 'school_years' } ],
     [ 'group_id', 'text' ],
     [ 'course_id', 'text' ],

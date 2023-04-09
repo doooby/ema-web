@@ -2,13 +2,13 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ARecordLink from '~/components/database/components/ARecordLink.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
-import ARecordsListing2 from '~/components/database/components/listing/ARecordsListing2.vue';
+import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
 import { Params } from '~/lib/api2';
 import { Column } from '~/components/DataTable/v3';
-import { h } from 'vue';
+import { application_record } from '~/lib/records';
 
 @Component({
-  components: { ARecordsListing2, ARecordLink, TextNames },
+  components: { ARecordsListing, ARecordLink, TextNames },
 })
 export default class RecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -16,23 +16,18 @@ export default class RecordsListing extends Vue {
 
   columns = [
     { name: 'id', size: 80 },
-    { name: 'student_kobo_no', size: 180, renderHeader: this.renderHeader },
-    { name: 'first_name', size: 180, renderHeader: this.renderHeader },
-    { name: 'last_name', size: 180, renderHeader: this.renderHeader },
-    { name: 'born_on', size: 180, renderHeader: this.renderHeader },
+    ...application_record.fillDataTableColumns('people', [
+      { name: 'student_kobo_no' },
+      { name: 'first_name' },
+      { name: 'last_name' },
+      { name: 'born_on' },
+    ]),
   ];
-
-  renderHeader (column) {
-    return h('t', {
-      props: { value: `db.record.people.label.${column.name}` },
-      class: 'text-break',
-    });
-  }
 }
 </script>
 
 <template>
-  <a-records-listing2
+  <a-records-listing
     :class="$attrs.class"
     entity="people"
     :initial-columns="initialColumns"
@@ -63,5 +58,5 @@ export default class RecordsListing extends Vue {
     <template #footer>
       <slot name="footer" />
     </template>
-  </a-records-listing2>
+  </a-records-listing>
 </template>

@@ -3,11 +3,11 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { FormFieldDefinition } from '~/components/Form';
 import SearchForm from '~/components/database/components/listing/SearchForm.vue';
 import RecordActions, { Action } from '~/components/database/cells/RecordActions.vue';
+import { h } from 'vue';
+import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
 import EducationLevels from '~/components/database/records/education_levels/RecordsListing.vue';
 import People from '~/components/database/records/people/RecordsListing.vue';
-import { h } from 'vue';
-import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
 const RecordsListing = Vue.extend({
   functional: true,

@@ -1,5 +1,5 @@
 <template>
-  <index3-page
+  <index4-page
     entity="education_levels"
     :search-fields="searchFields"
     :actions="actions"
@@ -9,12 +9,12 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import Index3Page from '~/components/database/pages/index/Index3Page.vue';
 import { controls } from '~/components/Form';
+import Index4Page from '~/components/database/pages/index/index4Page.vue';
 
 @Component({
   components: {
-    Index3Page,
+    Index4Page,
   },
 })
 export default class extends DatabasePage {
