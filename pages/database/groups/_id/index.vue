@@ -79,7 +79,7 @@ import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
-import StudentsListing from '~/components/database/records/groups/StudentsListing.vue';
+import StudentsListing from '~/components/database/records/groups/StudentsListing/StudentsListing.vue';
 import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';

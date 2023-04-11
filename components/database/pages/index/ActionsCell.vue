@@ -16,7 +16,7 @@ export default class ActionsCell extends Vue {
 </script>
 
 <template>
-  <div class="d-flex">
+  <div class="d-flex align-items-center">
     <b-form-checkbox
       class="ml-2"
       :checked="selected"

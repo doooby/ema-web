@@ -81,7 +81,7 @@ export default class ARecordsListing extends Vue {
 <template>
   <div :class="$attrs.class">
     <div class="d-flex justify-content-between">
-      <div>
+      <div class="ml-1">
         <div v-if="liveQuery.processing" class="spinner-border spinner-border-sm" role="status">
           <span class="sr-only" />
         </div>

@@ -6,8 +6,8 @@ import RecordActions, { Action } from '~/components/database/cells/RecordActions
 import { h } from 'vue';
 import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
-import EducationLevels from '~/components/database/records/education_levels/RecordsListing.vue';
-import People from '~/components/database/records/people/RecordsListing.vue';
+import EducationLevelsListing from '~/components/database/records/education_levels/RecordsListing.vue';
+import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
 
 const RecordsListing = Vue.extend({
   functional: true,
@@ -76,8 +76,8 @@ export default class Index4Page extends Vue {
 
   get listingComponent () {
     switch (this.entity) {
-      case 'education_levels': return EducationLevels;
-      case 'people': return People;
+      case 'education_levels': return EducationLevelsListing;
+      case 'people': return PeopleListing;
       default: return null;
     }
   }
@@ -126,14 +126,14 @@ export default class Index4Page extends Vue {
         :fields="searchFields"
         @search="searchParams=$event"
       />
-<!--      <div class="mt-2">-->
-<!--        group actions-->
-<!--      </div>-->
+      <!--      <div class="mt-2">-->
+      <!--        group actions-->
+      <!--      </div>-->
       <records-listing
         :initial-columns="initialColumns"
         :params="searchParams"
         :component="listingComponent"
-        @change="$emit('change', $event)"
+        @change="records = $event"
       />
     </div>
   </div>
