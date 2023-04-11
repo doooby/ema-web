@@ -1,7 +1,9 @@
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import { group } from '~/lib/records';
 import ConfirmModal, { ActionState } from '~/components/database/modals/ConfirmActionModal.vue';
+import { SearchRecordsResponsePayload } from '~/lib/api2';
+import { difference } from 'lodash';
 
 @Component({
   components: { ConfirmModal },
@@ -12,17 +14,27 @@ export default class RemoveStudents extends Vue {
 
   modalShown = false;
   modalState = ActionState.idle;
+  query = this.$api2.newQueryState<SearchRecordsResponsePayload>();
 
-  onSubmit () {
+  async onSubmit () {
     this.modalState = ActionState.processing;
-    setTimeout(() => {
-      // this.modalState = ActionState.fail;
+
+    await this.$api2.request(
+      this.query,
+      this.$api2.getQuery('groups', 'change_students')({
+        id: this.group.id,
+        students_ids: difference(this.group.students?.map(r => r.id), this.ids),
+      }),
+    );
+
+    const { response } = this.query;
+    if (response?.ok) {
       this.modalState = ActionState.success;
-      setTimeout(() => {
-        this.modalShown = false;
-      }, 400);
-    }, 1000);
-    console.log(this.ids, this.group.id);
+      this.modalShown = false;
+      this.$emit('done');
+    } else {
+      this.modalState = ActionState.fail;
+    }
   }
 
   onShow () {

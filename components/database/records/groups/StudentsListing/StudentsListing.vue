@@ -71,6 +71,10 @@ export default class StudentsListing extends Vue {
       this.selectedIds.push(...this.records.map(r => r.id));
     }
   }
+
+  onRefresh () {
+    this.searchParams = { ...this.searchParams };
+  }
 }
 </script>
 
@@ -99,7 +103,7 @@ export default class StudentsListing extends Vue {
           <template #button-content>
             <b-icon icon="three-dots-vertical" />
           </template>
-          <remove-students :group="group" :ids="selectedIds" />
+          <remove-students :group="group" :ids="selectedIds" @done="onRefresh" />
         </b-dropdown>
       </div>
     </div>

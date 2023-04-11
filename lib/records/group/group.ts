@@ -1,4 +1,4 @@
-import { RecordAssociations, recordsQueries } from '~/lib/api2';
+import { Params, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { application_record, group } from '~/lib/records';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations } from '~/lib/api2/mappers';
@@ -26,6 +26,13 @@ export const queries = {
   searchB: recordsQueries.searchB(entity),
   create: recordsQueries.create(entity),
   update: recordsQueries.update(entity),
+  change_students (params: Params) {
+    return {
+      path: `/${entity}/${params.id}/change_students`,
+      params: { students_ids: params.students_ids },
+      reducer: parsers.updatedRecordResponsePayload(),
+    };
+  },
 };
 
 export function entityControls (): FormFieldDefinition[] {

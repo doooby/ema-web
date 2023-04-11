@@ -67,6 +67,7 @@ export default class Api2Plugin {
           payload: query.reducer(response.payload),
         };
       } catch (error: any) {
+        console.log('wut', error);
         if (error instanceof wai.MappingError) error.seal(response.payload);
         utils.warnOfError(error, { payload: response.payload });
 
