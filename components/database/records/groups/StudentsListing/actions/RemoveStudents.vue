@@ -46,7 +46,10 @@ export default class RemoveStudents extends Vue {
 
 <template>
   <b-dropdown-item @click="onShow">
-    <t value="db.record.groups.students.actions.RemoveStudents.button" />
+    <div class="d-flex align-items-center">
+      <b-icon icon="back" class="font-12 mr-2" />
+      <t value="db.record.groups.students.actions.RemoveStudents.button" />
+    </div>
     <confirm-modal
       v-model="modalShown"
       :state="modalState"

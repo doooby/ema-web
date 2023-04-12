@@ -94,14 +94,11 @@ export default class StudentsListing extends Vue {
       <div class="ml-3">
         <b-dropdown
           :disabled="!selectedIds.length"
-          no-caret
-          variant="link"
-          dropright
           size="sm"
           toggle-class="p-0"
         >
           <template #button-content>
-            <b-icon icon="three-dots-vertical" />
+            <t value="db.record.groups.students.actions.btn_caption" />
           </template>
           <remove-students :group="group" :ids="selectedIds" @done="onRefresh" />
         </b-dropdown>
