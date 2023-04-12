@@ -95,7 +95,7 @@ export default class StudentsListing extends Vue {
         <b-dropdown
           :disabled="!selectedIds.length"
           size="sm"
-          toggle-class="p-0"
+          toggle-class="py-0"
         >
           <template #button-content>
             <t value="db.record.groups.students.actions.btn_caption" />
