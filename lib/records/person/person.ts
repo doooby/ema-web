@@ -1,9 +1,9 @@
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import { common, person } from '~/lib/records';
 import CaregiversField from '~/components/database/records/people/CaregiversField.vue';
-import { Params, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
+import { RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
-import { mapAssociation, mapDate, mapSelectOrFillTuple } from '~/lib/api2/mappers';
+import { mapAssociation, mapDate, mapName, mapSelectOrFillTuple } from '~/lib/api2/mappers';
 import { parseSharedAttributes } from '~/lib/records/application_record';
 
 export const entity = 'people';
@@ -16,8 +16,8 @@ export function parseRecord (
     ...parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
     student_kobo_no: wai.prop('student_kobo_no', value, wai.nullable(wai.string)),
-    first_name: wai.prop('first_name', value, wai.listOf(wai.string)),
-    last_name: wai.prop('last_name', value, wai.listOf(wai.string)),
+    first_name: wai.prop('first_name', value, mapName),
+    last_name: wai.prop('last_name', value, mapName),
     caregivers: wai.prop('caregivers', value, wai.nullable(wai.listOf(mapCaregiver))),
     born_on: wai.prop('born_on', value, wai.nullable(mapDate)),
     gender: wai.prop('gender', value, wai.nullable(wai.string)),
@@ -45,8 +45,8 @@ export function parseRecord (
 function mapCaregiver (value): person.PersonCaregiver {
   return wai.object(value => ({
     relation: wai.prop('relation', value, mapSelectOrFillTuple),
-    first_name: wai.prop('first_name', value, wai.nullable(wai.listOf(wai.string))),
-    last_name: wai.prop('last_name', value, wai.nullable(wai.listOf(wai.string))),
+    first_name: wai.prop('first_name', value, wai.nullable(mapName)),
+    last_name: wai.prop('last_name', value, wai.nullable(mapName)),
     citizen_id: wai.prop('citizen_id', value, wai.nullable(wai.string)),
     phone_no: wai.prop('phone_no', value, wai.nullable(wai.string)),
     email: wai.prop('email', value, wai.nullable(wai.string)),

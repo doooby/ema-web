@@ -28,6 +28,10 @@ export function mapDate (value): Date {
   return date;
 }
 
+export function mapName (value): string[] {
+  return wai.listOf(value => wai.nullable(wai.string)(value) ?? '')(value);
+}
+
 export function mapSelectOrFillTuple (value: any): [string, undefined | string] {
   if (!Array.isArray(value)) return [ '', undefined ];
   return wai.tuple(
