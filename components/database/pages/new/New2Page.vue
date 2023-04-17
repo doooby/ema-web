@@ -87,7 +87,7 @@ export default class New2Page extends Vue {
   @Prop() readonly cardClass?: string;
   @Prop() readonly showAfterCreate?: boolean;
 
-  formFields = buildFormFields(this.getFieldsWithCountry());
+  formFields = buildFormFields(this.fields);
   formValues = { ...prefillFormValues(this.formFields), ...this.value };
   createQueryState2 = this.$api2.newQueryState<UpdatedRecordResponsePayload>();
 
@@ -148,6 +148,7 @@ export default class New2Page extends Vue {
   async onSubmit () {
     if (this.createQueryState2.processing) return;
     const params = formToRecordParams(this.formFields, this.formValues);
+    params.country_id = this.$store.getters['session/countryId'];
     await this.$api2.request(
       this.createQueryState2,
       this.$api2.getQuery(this.entity, 'create')(params),
@@ -159,19 +160,12 @@ export default class New2Page extends Vue {
     }
   }
 
-  getFieldsWithCountry (): FormFieldDefinition[] {
-    return [
-      [ 'country_id', 'hidden', { value: this.$store.getters['session/countryId'] } ],
-      ...this.fields,
-    ];
-  }
-
   onCancel () {
     this.$router.go(-1);
   }
 
   updatePage () {
-    this.formFields = buildFormFields(this.getFieldsWithCountry());
+    this.formFields = buildFormFields(this.fields);
     this.formValues = prefillFormValues(this.formFields);
     this.createQueryState2.response = undefined;
     this.createQueryState2.processing = false;

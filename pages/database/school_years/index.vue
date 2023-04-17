@@ -1,8 +1,7 @@
 <template>
-  <index2-page
+  <index4-page
     entity="school_years"
     :search-fields="searchFields"
-    :table-columns="tableColumns"
     :actions="actions"
   />
 </template>
@@ -10,33 +9,15 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import { FormFieldDefinition } from '~/components/Form';
-import RecordLink from '~/components/database/cells/RecordLink.vue';
-import MultipleAssociatedRecordsLinks from '~/components/database/cells/MultipleAssociatedRecordsLinks.vue';
-import Name from '~/components/database/cells/Name.vue';
-import Index2Page from '~/components/database/pages/index/Index2Page.vue';
+import { controls } from '~/components/Form';
+import Index4Page from '~/components/database/pages/index/index4Page.vue';
 
 @Component({
-  components: { Index2Page },
+  components: { Index4Page },
 })
 export default class extends DatabasePage {
-  get searchFields (): FormFieldDefinition[] {
-    return [
-      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      [ 'search', 'text' ],
-    ];
-  }
-
-  tableColumns = [
-    { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-    { name: 'id', cell: { type: RecordLink, noLink: true }, size: 60 },
-    {
-      name: 'education_levels',
-      cell: { type: MultipleAssociatedRecordsLinks, entity: 'education_levels', noLink: true },
-      size: 400,
-    },
-    { name: 'year_label' },
-    { name: 'name', cell: { type: Name } },
+  searchFields = [
+    [ 'search', controls.text ],
   ];
 
   actions = [

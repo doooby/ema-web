@@ -12,7 +12,6 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import { FormFieldDefinition } from '~/components/Form';
 import { school_year } from '~/lib/records';
 import Edit2Page from '~/components/database/pages/edit/Edit2Page.vue';
 import RecordForm from '~/components/database/records/school_years/RecordForm.vue';
@@ -21,11 +20,8 @@ import RecordForm from '~/components/database/records/school_years/RecordForm.vu
   components: { Edit2Page, RecordForm },
 })
 export default class extends DatabasePage {
-  get fields (): FormFieldDefinition[] {
-    return [
-      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      ...school_year.recordControls(),
-    ];
+  get fields () {
+    return school_year.recordControls();
   }
 }
 </script>

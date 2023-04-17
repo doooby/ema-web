@@ -38,6 +38,6 @@ export function recordControls (): FormFieldDefinition[] {
   return [
     [ 'name', controls.name ],
     [ 'education_levels', dbFields.selectManyBRecords, { entity: 'education_levels' } ],
-    [ 'categories', dbFields.selectManyBRecords, { entity: 'categories' } ],
+    [ 'categories', dbFields.selectManyBRecords, { entity: 'subject_categories' } ],
   ];
 }

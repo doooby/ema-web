@@ -11,14 +11,15 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
 @Component({
   components: { BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
-export default class extends Vue {
+export default class RecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
 
   columns = [
     { name: 'id', size: 80 },
-    ...application_record.fillDataTableColumns('subjects', [
+    ...application_record.fillDataTableColumns('school_years', [
       { name: 'name' },
+      { name: 'year_label' },
       { name: 'education_levels', size: 400 },
     ]),
   ];
@@ -28,7 +29,7 @@ export default class extends Vue {
 <template>
   <a-records-listing
     :class="$attrs.class"
-    entity="subjects"
+    entity="school_years"
     :initial-columns="initialColumns"
     :columns="columns"
     :params="params"
@@ -36,10 +37,13 @@ export default class extends Vue {
   >
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="subjects" />
+        <a-record-link :id="record.id" entity="school_years" />
       </td>
       <td>
         <text-names class-name="single-row-cell" :value="record.name" />
+      </td>
+      <td>
+        {{ record.year_label }}
       </td>
       <td>
         <div v-for="education_level of record.education_levels" :key="education_level.id">
