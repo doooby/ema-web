@@ -1,7 +1,7 @@
 import { RecordAssociations, recordsQueries } from '~/lib/api2';
 import { application_record, project } from '~/lib/records';
 import { wai } from '~/vendor/wai';
-import { mapAssociation, mapDate, mapName } from '~/lib/api2/mappers';
+import { mapAssociation, mapAssociations, mapDate, mapName } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
 
@@ -14,8 +14,8 @@ export function parseRecord (
   return wai.object(value => ({
     ...application_record.parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
-    schools: wai.prop('schools_ids', value, wai.nullable(wai.listOf(mapAssociation('schools', associations)))),
-    donors: wai.prop('donors_ids', value, wai.nullable(wai.listOf(mapAssociation('donors', associations)))),
+    schools: wai.prop('schools_ids', value, mapAssociations('schools', associations)),
+    donors: wai.prop('donors_ids', value, mapAssociations('donors', associations)),
     name: wai.prop('name', value, mapName),
     code: wai.prop('code', value, wai.nullable(wai.string)),
     short_name_en: wai.prop('short_name_en', value, wai.nullable(wai.string)),

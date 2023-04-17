@@ -22,7 +22,7 @@ import RecordForm from '~/components/database/records/material_kits/RecordForm.v
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return material_kit.allControls();
+    return material_kit.recordControls();
   }
 }
 </script>

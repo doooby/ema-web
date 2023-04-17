@@ -22,7 +22,7 @@ import RecordForm from '~/components/database/records/school_years/RecordForm.vu
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return school_year.allControls();
+    return school_year.recordControls();
   }
 }
 

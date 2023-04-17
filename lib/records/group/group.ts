@@ -1,7 +1,7 @@
 import { Params, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { application_record, group } from '~/lib/records';
 import { wai } from '~/vendor/wai';
-import { mapAssociation, mapAssociations } from '~/lib/api2/mappers';
+import { mapAssociation, mapAssociations, mapName } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
 
@@ -16,7 +16,7 @@ export function parseRecord (
     course: wai.prop('course_id', value, mapAssociation('courses', associations)),
     school: wai.prop('school_id', value, mapAssociation('schools', associations)),
     students: wai.prop('students_ids', value, mapAssociations('students', associations)),
-    name: wai.prop('name', value, wai.listOf(wai.string)),
+    name: wai.prop('name', value, mapName),
     term: wai.prop('term', value, wai.integer),
   }))(value);
 }

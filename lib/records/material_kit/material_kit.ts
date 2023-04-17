@@ -26,7 +26,7 @@ export const queries = {
   update: recordsQueries.update(entity),
 };
 
-export function allControls (): FormFieldDefinition[] {
+export function recordControls (): FormFieldDefinition[] {
   return [
     [ 'name', controls.name ],
     [ 'code', controls.text ],
