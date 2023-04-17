@@ -16,8 +16,8 @@ export default class RecordsListing extends Vue {
 
   columns = [
     { name: 'id', size: 80 },
-    ...application_record.fillDataTableColumns('education_levels', [
-      { name: 'level', size: 80 },
+    ...application_record.fillDataTableColumns('donors', [
+      { name: 'code' },
       { name: 'name' },
     ]),
   ];
@@ -27,7 +27,7 @@ export default class RecordsListing extends Vue {
 <template>
   <a-records-listing
     :class="$attrs.class"
-    entity="education_levels"
+    entity="donors"
     :initial-columns="initialColumns"
     :columns="columns"
     :params="params"
@@ -35,10 +35,10 @@ export default class RecordsListing extends Vue {
   >
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="education_levels" />
+        <a-record-link :id="record.id" entity="donors" />
       </td>
       <td>
-        {{ record.level }}
+        {{ record.code }}
       </td>
       <td>
         <text-names class-name="single-row-cell" :value="record.name" />

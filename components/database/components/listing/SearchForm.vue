@@ -45,7 +45,7 @@ export default class SearchForm extends Vue {
         </template>
       </form-group>
       <div>
-        <b-button size="sm" variant="outline-primary" @click="onSearch">
+        <b-button size="sm" variant="primary" @click="onSearch">
           <b-icon icon="search" class="mr-1" />
           <t value="db.listing.SearchForm.btn_search" />
         </b-button>

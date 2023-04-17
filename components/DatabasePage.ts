@@ -1,7 +1,6 @@
 import { Context } from '@nuxt/types';
 import { Component, Vue } from 'vue-property-decorator';
 import * as localStorage from '~/lib/localStorage';
-import { user2 } from '~/lib/records';
 
 @Component({
   layout: 'database',
@@ -12,14 +11,6 @@ import { user2 } from '~/lib/records';
   },
 })
 export default class DatabasePage extends Vue {
-  get currentUser (): null | user2.SessionUser {
-    return this.$store.state.session.currentUser;
-  }
-
-  get currentCountryId (): null | number {
-    return this.$store.getters['session/countryId'];
-  }
-
   beforeMount () {
     const user = this.$store.state.session.currentUser;
     if (!user) return;

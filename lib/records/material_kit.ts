@@ -1,10 +1,17 @@
-import { RecordAssociations, recordsQueries } from '~/lib/api2';
+import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapName } from '~/lib/api2/mappers';
-import { application_record, material_kit } from '~/lib/records';
+import { application_record, material_kit } from '~/lib/records/index';
 import { controls, FormFieldDefinition } from '~/components/Form';
 
 export const entity = 'material_kits';
+
+export interface MaterialKit extends application_record.SharedAttributes {
+  country: BRecord;
+  name: string[];
+  code?: string;
+  contents?: string;
+}
 
 export function parseRecord (
   value: unknown,

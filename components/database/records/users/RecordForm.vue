@@ -26,11 +26,11 @@
 
 <script lang="ts">
 import { Component, Prop } from 'vue-property-decorator';
-import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
+import Vue from 'vue';
 
 @Component
-export default class extends DatabasePage {
+export default class RecordForm extends Vue {
   @Prop({ required: true }) readonly context!: any;
   @Prop({ required: true }) readonly values!: any;
 

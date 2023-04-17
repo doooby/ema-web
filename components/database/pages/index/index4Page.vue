@@ -7,7 +7,9 @@ import { h } from 'vue';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
+import DonorsListing from '~/components/database/records/donors/RecordsListing.vue';
 import EducationLevelsListing from '~/components/database/records/education_levels/RecordsListing.vue';
+import MaterialKitsListing from '~/components/database/records/material_kits/RecordsListing.vue';
 import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
 
 const RecordsListing = Vue.extend({
@@ -78,7 +80,9 @@ export default class Index4Page extends Vue {
 
   get listingComponent () {
     switch (this.entity) {
+      case 'donors': return DonorsListing;
       case 'education_levels': return EducationLevelsListing;
+      case 'material_kits': return MaterialKitsListing;
       case 'people': return PeopleListing;
       default: return null;
     }
@@ -116,7 +120,7 @@ export default class Index4Page extends Vue {
         <nuxt-link
           :to="`/database/${entity}/new`"
           tag="button"
-          class="btn btn-secondary"
+          class="btn btn-outline-secondary"
         >
           <b-icon icon="clipboard-plus" class="mr-1" />
           <t value="db.page.new.action" />

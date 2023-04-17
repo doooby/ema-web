@@ -13,9 +13,7 @@ import { controls } from '~/components/Form';
 import Index4Page from '~/components/database/pages/index/index4Page.vue';
 
 @Component({
-  components: {
-    Index4Page,
-  },
+  components: { Index4Page },
 })
 export default class extends DatabasePage {
   searchFields = [

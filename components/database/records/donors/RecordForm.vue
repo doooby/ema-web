@@ -6,11 +6,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop } from 'vue-property-decorator';
-import { DatabasePage } from '~/components';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class extends DatabasePage {
+export default class extends Vue {
   @Prop({ required: true }) readonly context!: any;
   @Prop({ required: true }) readonly values!: any;
 }

@@ -1,10 +1,16 @@
 import { controls, FormFieldDefinition } from '~/components/Form';
-import { RecordAssociations, recordsQueries } from '~/lib/api2';
+import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { application_record, donor } from '~/lib/records';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapName } from '~/lib/api2/mappers';
 
 export const entity = 'donors';
+
+export interface Donor extends application_record.SharedAttributes {
+  country: BRecord;
+  name: string[];
+  code?: string;
+}
 
 export function parseRecord (
   value: unknown,
