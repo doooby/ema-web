@@ -8,9 +8,10 @@
           <t :value="`db.record.${entity}.meta.p`" />
         </nuxt-link>
       </h4>
+
       <div class="row mt-3">
         <div class="col justify-content-md-center">
-          <div :class="['card px-0', cardClass]">
+          <div :class="['card', cardClass]">
 
             <div class="card-header">
               <div class="d-flex align-items-center">

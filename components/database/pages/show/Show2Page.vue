@@ -1,36 +1,46 @@
 <template>
   <loaded-page class="page-content">
-    <b-alert v-if="!record && getQueryState.running" show variant="info" class="m-2">
-      <t value="app.loading" />
-    </b-alert>
-    <div v-if="recordLoadFailed">
-      <b-alert show variant="warning" class="m-2">
-        <t value="app.record_not_found" />
-        <div class="mt-2" />
-        <nuxt-link :to="pathToIndex">
-          <t value="db.pages.show.goto_index" />
+    <div class="container pt-4 pb-5">
+      <h4>
+        <nuxt-link
+          :to="`/database/${entity}`"
+        >
+          <t :value="`db.record.${entity}.meta.p`" />
         </nuxt-link>
-      </b-alert>
-    </div>
+      </h4>
 
-    <div v-if="record" class="container">
-      <div class="emt-6 emb-6">
-        <h2 class="text-center text-secondary">
-          <t :value="`db.record.${entity}.meta.s`" />
-        </h2>
-        <h3 class="d-flex align-items-center">
-          <slot name="title" :record="record" />
-        </h3>
+      <b-alert v-if="!record && getQueryState.processing" show variant="info" class="m-2">
+        <t value="app.loading" />
+      </b-alert>
+      <div v-if="recordLoadFailed">
+        <b-alert show variant="warning" class="m-2">
+          <t value="app.record_not_found" />
+          <div class="mt-2" />
+          <nuxt-link :to="pathToIndex">
+            <t value="db.pages.show.goto_index" />
+          </nuxt-link>
+        </b-alert>
       </div>
-      <div class="row">
-        <div class="col-md-4 col-lg-3 overflow-hidden">
-          <slot name="actions" :record="record" :reload-record="reloadRecord" />
+
+      <div v-if="record" class="container">
+        <div class="emt-6 emb-6">
+          <h2 class="text-center text-secondary">
+            <t :value="`db.record.${entity}.meta.s`" />
+          </h2>
+          <h3 class="d-flex align-items-center">
+            <slot name="title" :record="record" />
+          </h3>
         </div>
-        <div class="col emb-6">
-          <slot name="details" :record="record" :reload-record="reloadRecord" />
+        <div class="row">
+          <div class="col-md-4 col-lg-3 overflow-hidden">
+            <slot name="actions" :record="record" :reload-record="reloadRecord" />
+          </div>
+          <div class="col emb-6">
+            <slot name="details" :record="record" :reload-record="reloadRecord" />
+          </div>
         </div>
+        <slot name="container" :record="record" :reload-record="reloadRecord" />
       </div>
-      <slot name="container" :record="record" :reload-record="reloadRecord" />
     </div>
   </loaded-page>
 </template>

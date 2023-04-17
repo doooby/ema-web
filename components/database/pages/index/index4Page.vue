@@ -11,6 +11,7 @@ import DonorsListing from '~/components/database/records/donors/RecordsListing.v
 import EducationLevelsListing from '~/components/database/records/education_levels/RecordsListing.vue';
 import MaterialKitsListing from '~/components/database/records/material_kits/RecordsListing.vue';
 import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
+import ProjectsListing from '~/components/database/records/projects/RecordsListing.vue';
 import UsersListing from '~/components/database/records/users/RecordsListing.vue';
 
 const RecordsListing = Vue.extend({
@@ -85,6 +86,7 @@ export default class Index4Page extends Vue {
       case 'education_levels': return EducationLevelsListing;
       case 'material_kits': return MaterialKitsListing;
       case 'people': return PeopleListing;
+      case 'projects': return ProjectsListing;
       case 'users': return UsersListing;
       default: return null;
     }
@@ -116,8 +118,8 @@ export default class Index4Page extends Vue {
 
 <template>
   <loaded-page class="page-content">
-    <div class="container my-3">
-      <h1><t :value="`db.menu.resource.${entity}`" /></h1>
+    <div class="container pt-4 pb-5">
+      <h4><t :value="`db.menu.resource.${entity}`" /></h4>
       <div>
         <nuxt-link
           :to="`/database/${entity}/new`"

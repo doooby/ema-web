@@ -2,7 +2,7 @@
   <edit2-page
     entity="projects"
     :fields="fields"
-    :show-after-update="1"
+    :show-after-update="true"
   >
     <template #layout="{ context, values }">
       <record-form :context="context" :values="values" />
