@@ -31,7 +31,7 @@ export const queries = {
   update: recordsQueries.update(entity),
 };
 
-export function entityControls (): FormFieldDefinition[] {
+export function recordControls (): FormFieldDefinition[] {
   return [
     [ 'schools', dbFields.selectManyBRecords, { entity: 'schools' } ],
     [ 'donors', dbFields.selectManyBRecords, { entity: 'donors' } ],

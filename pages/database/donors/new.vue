@@ -22,7 +22,7 @@ import RecordForm from '~/components/database/records/donors/RecordForm.vue';
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return donor.entityControls();
+    return donor.recordControls();
   }
 }
 </script>

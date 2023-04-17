@@ -1,10 +1,16 @@
-import { RecordAssociations, recordsQueries } from '~/lib/api2';
+import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapName } from '~/lib/api2/mappers';
-import { education_level, application_record } from '~/lib/records';
+import { education_level, application_record } from '~/lib/records/index';
 import { controls, FormFieldDefinition } from '~/components/Form';
 
 export const entity = 'education_levels';
+
+export interface EducationLevel extends application_record.SharedAttributes {
+  country: BRecord;
+  name: string[];
+  level: number;
+}
 
 export function parseRecord (
   value: unknown,

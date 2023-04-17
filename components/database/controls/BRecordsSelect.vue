@@ -18,12 +18,8 @@ export default class BRecordsSelect extends Vue {
   modalShown = false;
 
   onRemoveRecord (record: BRecord) {
-    const list = this.records.slice();
-    const index = list.indexOf(record);
-    if (index !== -1) {
-      list.splice(index, 1);
-      this.$emit('change', list);
-    }
+    const list = this.records.filter(({ id }) => id !== record.id);
+    this.$emit('change', list);
   }
 
   onSelect (record: BRecord) {

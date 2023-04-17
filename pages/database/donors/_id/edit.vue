@@ -22,7 +22,7 @@ import { donor } from '~/lib/records';
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
-    return donor.entityControls();
+    return donor.recordControls();
   }
 }
 </script>

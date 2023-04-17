@@ -1,7 +1,6 @@
 import { wai } from '~/vendor/wai';
 import { RecordAssociations, BRecord } from '~/lib/api2';
 import { parseISO as parseDate } from 'date-fns';
-import { maybeProp, prop, tuple } from '~/lib/api/mappers';
 
 // TODO move to wai ?
 
@@ -11,7 +10,14 @@ export function mapIndex<I> (
 ): (value: unknown) => Record<string, I> {
   return wai.object((value) => {
     for (const key of Object.keys(value)) {
-      value[key] = item(value[key]);
+      try {
+        value[key] = item(value[key]);
+      } catch (error) {
+        if (error instanceof wai.MappingError) {
+          error.addPropertyTrace(key, parent);
+        }
+        throw error;
+      }
     }
     return value;
   });

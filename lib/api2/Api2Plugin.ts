@@ -11,6 +11,7 @@ import {
   project,
   school,
   school_year,
+  subject,
   user,
   work_agreement,
 } from '~/lib/records';
@@ -27,6 +28,7 @@ export default class Api2Plugin {
     people: person.queries,
     schools: school.queries,
     school_years: school_year.queries,
+    subjects: subject.queries,
     users: user.queries,
     work_agreements: work_agreement.queries,
   };
@@ -67,7 +69,6 @@ export default class Api2Plugin {
           payload: query.reducer(response.payload),
         };
       } catch (error: any) {
-        console.log('wut', error);
         if (error instanceof wai.MappingError) error.seal(response.payload);
         utils.warnOfError(error, { payload: response.payload });
 
