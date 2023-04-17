@@ -30,4 +30,5 @@ export const entitiesWithShowPage = [
   'people',
   'projects',
   'schools',
+  'users',
 ];

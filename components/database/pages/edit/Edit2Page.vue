@@ -1,20 +1,33 @@
 <template>
   <loaded-page class="page-content">
     <div class="container mt-4 mb-5">
-
-      <div class="row">
+      <h4>
+        <nuxt-link
+          :to="`/database/${entity}`"
+        >
+          <t :value="`db.record.${entity}.meta.p`" />
+        </nuxt-link>
+      </h4>
+      <div class="row mt-3">
         <div class="col justify-content-md-center">
           <div :class="['card px-0', cardClass]">
 
             <div class="card-header">
-              <h2 class="m-0">
-                <t value="db.page.edit.title" />
-              &#32;
-                <t :value="`db.record.${entity}.meta.s`" />
-              </h2>
+              <div class="d-flex align-items-center">
+                <div class="mr-3 d-flex align-items-center" style="min-width: 60px;">
+                  <div v-if="!record" class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                  <a-record-link v-else :id="record.id" :entity="entity" />
+                </div>
+                <h2 class="m-0">
+                  <t value="db.page.edit.title" />
+                  &#32;
+                  <t :value="`db.record.${entity}.meta.s`" />
+                </h2>
+              </div>
             </div>
 
-            <loader-strip :request-state="getQueryState" />
             <div class="card-body pt-3 pb-0">
               <form-group
                 :value="formValues"
@@ -54,13 +67,12 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import { buildFormFields, FormFieldDefinition, formToRecordParams, FormValues, prefillFormValues } from '../../../Form';
-import LoaderStrip from '~/components/database/LoaderStrip.vue';
 import { SearchRecordsResponsePayload, UpdatedRecordResponsePayload } from '~/lib/api2';
-import { RequestState } from '~/lib/api';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
+import ARecordLink from '~/components/database/components/ARecordLink.vue';
 
 @Component({
-  components: { LoadedPage, RecordErrors, LoaderStrip },
+  components: { ARecordLink, LoadedPage, RecordErrors },
 })
 export default class Edit2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;
@@ -112,10 +124,6 @@ export default class Edit2Page extends Vue {
 
   get isControlsDisabled (): boolean {
     return !this.record || this.saveQueryState2.processing;
-  }
-
-  get getQueryState () : RequestState {
-    return this.$api2.mapResponseToV1RequestState(this.getQueryState2);
   }
 
   get errors (): null | [string, string][] {

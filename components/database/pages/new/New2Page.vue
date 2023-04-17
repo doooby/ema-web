@@ -1,50 +1,59 @@
 <template>
   <loaded-page class="page-content">
     <div class="container pt-4 pb-5">
-      <div class="row justify-content-md-center">
-        <div :class="['card px-0', cardClass]">
-          <div class="card-header">
-            <h2 class="m-0">
-              <t value="db.page.new.title" />
+      <h4>
+        <nuxt-link
+          :to="`/database/${entity}`"
+        >
+          <t :value="`db.record.${entity}.meta.p`" />
+        </nuxt-link>
+      </h4>
+      <div class="row mt-3">
+        <div class="col justify-content-md-center">
+          <div :class="['card px-0', cardClass]">
+            <div class="card-header">
+              <h2 class="m-0">
+                <t value="db.page.new.title" />
                 &#32;
-              <t :value="`db.record.${entity}.meta.s`" />
-            </h2>
-          </div>
-          <div class="position-relative">
-            <div class="position-absolute w-100" style="z-index: 1;">
-              <b-progress
-                v-if="processing"
-                height="2px"
-                :value="100"
-                variant="info"
-                striped
-                animated
-              />
+                <t :value="`db.record.${entity}.meta.s`" />
+              </h2>
             </div>
-          </div>
-          <div class="card-body pt-3 pb-0">
-            <form-group
-              :value="formValues"
-              :fields="formFields"
-              :label-prefix="formFieldsLabelPrefix"
-              @input="onInput"
-            >
-              <template #layout="{ context, values }">
-                <slot name="layout" :context="context" :values="values" />
-              </template>
-            </form-group>
-            <record-errors class="mb-3" :errors="errors" />
-          </div>
-          <div class="card-footer d-flex justify-content-between">
-            <div>
-              <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
-                <t value="app.action.save" />
-              </b-button>
+            <div class="position-relative">
+              <div class="position-absolute w-100" style="z-index: 1;">
+                <b-progress
+                  v-if="processing"
+                  height="2px"
+                  :value="100"
+                  variant="info"
+                  striped
+                  animated
+                />
+              </div>
             </div>
-            <div>
-              <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
-                <t value="app.action.cancel" />
-              </b-button>
+            <div class="card-body pt-3 pb-0">
+              <form-group
+                :value="formValues"
+                :fields="formFields"
+                :label-prefix="formFieldsLabelPrefix"
+                @input="onInput"
+              >
+                <template #layout="{ context, values }">
+                  <slot name="layout" :context="context" :values="values" />
+                </template>
+              </form-group>
+              <record-errors class="mb-3" :errors="errors" />
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+              <div>
+                <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
+                  <t value="app.action.save" />
+                </b-button>
+              </div>
+              <div>
+                <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
+                  <t value="app.action.cancel" />
+                </b-button>
+              </div>
             </div>
           </div>
         </div>
