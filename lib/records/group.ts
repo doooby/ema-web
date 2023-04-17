@@ -1,5 +1,5 @@
-import { Params, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
-import { application_record, group } from '~/lib/records';
+import { BRecord, Params, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
+import { application_record } from '~/lib/records';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations, mapName } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
@@ -7,10 +7,18 @@ import { dbFields } from '~/components/database/fields';
 
 export const entity = 'groups';
 
+export interface Group extends application_record.SharedAttributes {
+  course: BRecord;
+  school: BRecord;
+  students?: BRecord[];
+  name: string[];
+  term: number;
+}
+
 export function parseRecord (
   value: unknown,
   associations?: RecordAssociations,
-): group.Group {
+): Group {
   return wai.object(value => ({
     ...application_record.parseSharedAttributes(value),
     course: wai.prop('course_id', value, mapAssociation('courses', associations)),

@@ -9,6 +9,7 @@ import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
 import DonorsListing from '~/components/database/records/donors/RecordsListing.vue';
 import EducationLevelsListing from '~/components/database/records/education_levels/RecordsListing.vue';
+import GroupsListing from '~/components/database/records/groups/RecordsListing.vue';
 import MaterialKitsListing from '~/components/database/records/material_kits/RecordsListing.vue';
 import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
 import ProjectsListing from '~/components/database/records/projects/RecordsListing.vue';
@@ -87,6 +88,7 @@ export default class Index4Page extends Vue {
     switch (this.entity) {
       case 'donors': return DonorsListing;
       case 'education_levels': return EducationLevelsListing;
+      case 'groups': return GroupsListing;
       case 'material_kits': return MaterialKitsListing;
       case 'people': return PeopleListing;
       case 'projects': return ProjectsListing;
