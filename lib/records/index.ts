@@ -8,6 +8,8 @@ import * as material_kit from './material_kit';
 import * as person from './person';
 import * as school from './school';
 import * as school_year from './school_year';
+import * as subject from './subject';
+import * as subject_category from './subject_category';
 import * as user from './user';
 import * as user2 from './user2';
 import * as work_agreement from './work_agreement';
@@ -16,8 +18,6 @@ export * from './country';
 export * from './course';
 export * from './standardized_course';
 export * from './location';
-export * from './subject';
-export * from './subject_category';
 export {
   application_record,
   common,
@@ -30,6 +30,8 @@ export {
   material_kit,
   school,
   school_year,
+  subject,
+  subject_category,
   user,
   user2,
   work_agreement,
