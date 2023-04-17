@@ -1,5 +1,5 @@
 <template>
-  <index-page
+  <index4-page
     entity="schools"
     :search-fields="searchFields"
     :table-columns="tableColumns"

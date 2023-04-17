@@ -2,7 +2,7 @@ import { controls, FormFieldDefinition } from '~/components/Form';
 import { RecordAssociations, recordsQueries } from '~/lib/api2';
 import { donor } from '~/lib/records';
 import { wai } from '~/vendor/wai';
-import { mapAssociation } from '~/lib/api2/mappers';
+import { mapAssociation, mapName } from '~/lib/api2/mappers';
 
 export const entity = 'donors';
 
@@ -13,7 +13,7 @@ export function parseRecord (
   return wai.object(value => ({
     id: wai.prop('id', value, wai.string),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
-    name: wai.prop('name', value, wai.listOf(wai.string)),
+    name: wai.prop('name', value, mapName),
     code: wai.prop('code', value, wai.nullable(wai.string)),
   }))(value);
 }
