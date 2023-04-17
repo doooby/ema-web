@@ -39,10 +39,6 @@ export default class SubjectsListing extends Vue {
     this.reloadSubjects();
   }
 
-  get currentCountryId (): null | number {
-    return this.$store.state.session.currentCountry?.id ?? null;
-  }
-
   reloadSubjects () {
     this.getSubjectsQueryState.reset();
     this.fetchSubjects();
@@ -52,7 +48,7 @@ export default class SubjectsListing extends Vue {
     const query = this.$api.queries.subjects.index;
     await this.$api.request(query({
       course_id: this.course.id,
-      country_id: this.currentCountryId,
+      country_id: this.$store.getters['session/countryId'],
       per_page: 50,
     }), this.getSubjectsQueryState);
   }

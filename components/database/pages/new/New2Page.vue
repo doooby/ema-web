@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content">
+  <loaded-page class="page-content">
     <div class="container pt-4 pb-5">
       <div class="row justify-content-md-center">
         <div :class="['card px-0', cardClass]">
@@ -50,7 +50,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </loaded-page>
 </template>
 
 <script lang="ts">
@@ -64,9 +64,10 @@ import {
 } from '~/components/Form';
 import RecordErrors from '../../RecordErrors.vue';
 import { UpdatedRecordResponsePayload } from '~/lib/api2';
+import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 
 @Component({
-  components: { RecordErrors },
+  components: { LoadedPage, RecordErrors },
 })
 export default class New2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;

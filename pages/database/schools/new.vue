@@ -25,7 +25,7 @@ export default class extends DatabasePage {
   async mounted () {
     const result = await this.$api.request(
       this.$api.queries.location_systems.getAddressSystem({
-        country_id: this.currentCountryId,
+        country_id: this.$store.getters['session/countryId'],
       }),
       this.$api.newQueryState(),
     );
@@ -40,10 +40,11 @@ export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     if (this.processing) return [];
 
+    const countryId = this.$store.getters['session/countryId'];
     return [
-      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
+      [ 'country_id', 'hidden', { value: countryId } ],
       ...school.recordControls({
-        countryId: this.currentCountryId,
+        countryId,
         addressOptions: this.addressOptions,
       }),
     ];

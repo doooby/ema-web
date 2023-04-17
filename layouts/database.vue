@@ -2,11 +2,11 @@
   <div>
     <top-bar />
     <div class="page-body">
-      <resources-menu />
+      <resources-menu v-if="userPresent" />
       <div v-if="userPresent">
         <Nuxt />
       </div>
-      <div v-else>
+      <div v-else class="p-3">
         <b-alert show variant="info">
           <t value="app.user_not_present" />
         </b-alert>

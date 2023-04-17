@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content">
+  <loaded-page class="page-content">
     <div class="container mt-4 mb-5">
 
       <div class="row">
@@ -47,7 +47,7 @@
       </div>
 
     </div>
-  </div>
+  </loaded-page>
 </template>
 
 <script lang="ts">
@@ -57,9 +57,10 @@ import { buildFormFields, FormFieldDefinition, formToRecordParams, FormValues, p
 import LoaderStrip from '~/components/database/LoaderStrip.vue';
 import { SearchRecordsResponsePayload, UpdatedRecordResponsePayload } from '~/lib/api2';
 import { RequestState } from '~/lib/api';
+import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 
 @Component({
-  components: { RecordErrors, LoaderStrip },
+  components: { LoadedPage, RecordErrors, LoaderStrip },
 })
 export default class Edit2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;

@@ -10,9 +10,8 @@ import { CountryData } from '~/store/session/country';
 })
 export default class SessionModule extends VuexModule {
   currentUser: null | user2.SessionUser = null;
-  // REMOVE
-  currentCountry: null | mappers.AssociatedRecord = null;
-  country: null | CountryData = null;
+  user: null | user2.SessionUser = null;
+  countryData: null | CountryData = null;
 
   loginModalShown = false;
   languageModalShown: boolean = false;
@@ -21,6 +20,7 @@ export default class SessionModule extends VuexModule {
   @Mutation
   setCurrentUser (user: null | user2.SessionUser) {
     this.currentUser = user;
+    this.user = user;
     if (user === null) {
       this.debugTranslations = false;
     }
@@ -29,20 +29,13 @@ export default class SessionModule extends VuexModule {
   @Mutation
   requestAuthnFailed () {
     this.currentUser = null;
-  }
-
-  // REMOVE
-  @Mutation
-  setCurrentCountry (country: null | mappers.AssociatedRecord) {
-    localStorage.set(localStorage.values.currentCountry, country);
-    this.currentCountry = country;
+    this.user = null;
   }
 
   @Mutation
-  setCountry (country: null | CountryData) {
-    localStorage.set(localStorage.values.currentCountry, country?.country);
-    this.country = country;
-    this.currentCountry = country?.country ?? null;
+  setCountryData (countryData: null | CountryData) {
+    localStorage.set(localStorage.values.currentCountry, countryData?.country);
+    this.countryData = countryData;
   }
 
   @Mutation
@@ -87,13 +80,14 @@ export default class SessionModule extends VuexModule {
     country: null | mappers.AssociatedRecord
     api: any
   }) {
-    const data = country
-      ? await loadCountryData(country, api)
-      : null;
-    this.context.commit('setCountry', data);
+    this.context.commit('setCountryData', null);
+    if (!country) return;
+
+    const data = await loadCountryData(country, api);
+    this.context.commit('setCountryData', data);
   }
 
   get countryId (): null | number {
-    return this.currentCountry?.id ?? null;
+    return this.countryData?.country?.id ?? null;
   }
 }

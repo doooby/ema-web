@@ -1,7 +1,7 @@
 import { Context } from '@nuxt/types';
 import { Component, Vue } from 'vue-property-decorator';
-import { user2 } from '~/lib/records';
 import * as localStorage from '~/lib/localStorage';
+import { user2 } from '~/lib/records';
 
 @Component({
   layout: 'database',
@@ -17,14 +17,22 @@ export default class DatabasePage extends Vue {
   }
 
   get currentCountryId (): null | number {
-    return this.$store.state.session.currentCountry?.id ?? null;
+    return this.$store.getters['session/countryId'];
   }
 
   beforeMount () {
-    const currentUser = this.currentUser;
-    if (!currentUser) return;
+    const user = this.$store.state.session.currentUser;
+    if (!user) return;
+
     const savedId = localStorage.get(localStorage.values.currentCountry)?.id;
-    const country = currentUser.countries.find(country => country.id === savedId) ?? currentUser.countries[0];
-    this.$store.commit('session/setCurrentCountry', country ?? null);
+    const country = user.countries.find(country => country.id === savedId) ?? user.countries[0];
+    if (country && country.id === this.$store.getters['session/countryId']) {
+      return;
+    }
+
+    this.$store.dispatch('session/switchCountry', {
+      country: country ?? null,
+      api: this.$api,
+    });
   }
 }

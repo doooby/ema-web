@@ -1,7 +1,10 @@
 <template>
   <div class="page-menu ep-3">
     <nuxt-link to="/database">
-      <t value="db.menu.index_page" />
+      <t class="h5" value="db.menu.index_page" />
+      <div v-if>
+
+      </div>
     </nuxt-link>
     <country-switch />
     <hr>
@@ -10,7 +13,7 @@
       :resource="currentResource"
     />
     <hr>
-    <resources-listing v-if="userPresent" />
+    <resources-listing />
   </div>
 </template>
 
@@ -25,8 +28,8 @@ import { dbPages, Resource } from '~/config/pages';
   components: { CountrySwitch, CurrentResource, ResourcesListing },
 })
 export default class ResourcesMenu extends Vue {
-  get userPresent (): boolean {
-    return !!this.$store.state.session.currentUser;
+  get user () {
+    return this.$store.state.session.currentUser;
   }
 
   get currentResource (): undefined | Resource {

@@ -30,7 +30,7 @@ import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 
 @Component
-export default class RecordForm extends DatabasePage {
+export default class extends DatabasePage {
   @Prop({ required: true }) readonly context!: any;
   @Prop({ required: true }) readonly values!: any;
 

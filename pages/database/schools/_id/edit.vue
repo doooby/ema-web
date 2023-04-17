@@ -1,11 +1,9 @@
 <template>
-  <database-page-loaded>
-    <edit-page
-      entity="schools"
-      :fields="fields"
-      @update="onUpdated"
-    />
-  </database-page-loaded>
+  <edit-page
+    entity="schools"
+    :fields="fields"
+    @update="onUpdated"
+  />
 </template>
 
 <script lang="ts">
@@ -14,22 +12,21 @@ import { Component } from 'vue-property-decorator';
 import { FormFieldDefinition } from '~/components/Form';
 import { Location, school } from '~/lib/records';
 import { MaybeData } from '~/lib/types';
-import DatabasePageBase from '~/components/DatabasePageBase';
-import DatabasePageLoaded from '~/components/DatabasePageLoaded.vue';
+import { DatabasePage } from '~/components';
 
 @Component({
-  components: { EditPage, DatabasePageLoaded },
+  components: { EditPage },
 })
-export default class extends DatabasePageBase {
+export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return school.recordControls({
-      countryId: this.currentCountryId,
+      countryId: this.$store.getters['session/countryId'],
       addressOptions: this.addressOptions,
     });
   }
 
   get addressOptions () {
-    const addressSystem = this.$store.state.session.country?.addressSystem;
+    const addressSystem = this.$store.state.session.countryData?.addressSystem;
     if (!addressSystem) return;
     return {
       system: addressSystem,

@@ -1,5 +1,5 @@
 <template>
-  <div class="page-content">
+  <loaded-page class="page-content">
     <b-alert v-if="!record && getQueryState.running" show variant="info" class="m-2">
       <t value="app.loading" />
     </b-alert>
@@ -32,15 +32,18 @@
       </div>
       <slot name="container" :record="record" :reload-record="reloadRecord" />
     </div>
-  </div>
+  </loaded-page>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { SearchRecordsResponsePayload } from '~/lib/api2';
 import { resourcePath } from '~/config/pages';
+import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 
-@Component
+@Component({
+  components: { LoadedPage },
+})
 export default class Show2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;
 

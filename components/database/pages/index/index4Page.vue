@@ -4,6 +4,7 @@ import { FormFieldDefinition } from '~/components/Form';
 import SearchForm from '~/components/database/components/listing/SearchForm.vue';
 import RecordActions, { Action } from '~/components/database/cells/RecordActions.vue';
 import { h } from 'vue';
+import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
 import EducationLevelsListing from '~/components/database/records/education_levels/RecordsListing.vue';
@@ -32,6 +33,7 @@ const RecordsListing = Vue.extend({
 
 @Component({
   components: {
+    LoadedPage,
     SearchForm,
     RecordsListing,
     RecordActions,
@@ -107,7 +109,7 @@ export default class Index4Page extends Vue {
 </script>
 
 <template>
-  <div class="page-content">
+  <loaded-page class="page-content">
     <div class="container my-3">
       <h1><t :value="`db.menu.resource.${entity}`" /></h1>
       <div>
@@ -136,5 +138,5 @@ export default class Index4Page extends Vue {
         @change="records = $event"
       />
     </div>
-  </div>
+  </loaded-page>
 </template>

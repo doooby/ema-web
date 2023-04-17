@@ -99,10 +99,6 @@ export default class SubjectsField extends Vue {
     return this.formValues[this.field.name] ?? [];
   }
 
-  get currentCountryId (): null | number {
-    return this.$store.state.session.currentCountry?.id ?? null;
-  }
-
   selectSubjectModalShown = false;
   columns = [
     { name: 'subject' },

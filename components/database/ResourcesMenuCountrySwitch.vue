@@ -28,8 +28,7 @@ export default class ResourcesMenuCountrySwitch extends Vue {
   }
 
   get currentCountryId (): null | number {
-    const country = this.$store.state.session.currentCountry;
-    return country ? country.id : null;
+    return this.$store.getters['session/countryId'];
   }
 
   get fields (): FormField[] {
@@ -46,7 +45,10 @@ export default class ResourcesMenuCountrySwitch extends Vue {
   onSelectCountry (value: any): void {
     const { country: countryId } = value;
     const country = this.viableCountries.find(item => item.id === countryId);
-    this.$store.commit('session/setCurrentCountry', country ?? null);
+    this.$store.dispatch('session/switchCountry', {
+      country: country ?? null,
+      api: this.$api,
+    });
   }
 }
 </script>
