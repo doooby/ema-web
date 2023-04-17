@@ -17,6 +17,7 @@ import SchoolYearsListing from '~/components/database/records/school_years/Recor
 import SubjectCategoriesListing from '~/components/database/records/subject_categories/RecordsListing.vue';
 import SubjectsListing from '~/components/database/records/subjects/RecordsListing.vue';
 import UsersListing from '~/components/database/records/users/RecordsListing.vue';
+import WorkAgreementsListing from '~/components/database/records/work_agreements/RecordsListing.vue';
 
 const RecordsListing = Vue.extend({
   functional: true,
@@ -96,6 +97,7 @@ export default class Index4Page extends Vue {
       case 'subject_categories': return SubjectCategoriesListing;
       case 'subjects': return SubjectsListing;
       case 'users': return UsersListing;
+      case 'work_agreements': return WorkAgreementsListing;
       default: return null;
     }
   }

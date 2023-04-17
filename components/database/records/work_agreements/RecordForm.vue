@@ -18,7 +18,7 @@ import { FormGroupContext } from '~/components/Form';
 import Vue from 'vue';
 
 @Component
-export default class RecordForm extends Vue {
+export default class extends Vue {
   @Prop({ required: true }) readonly context!: FormGroupContext;
   @Prop({ required: true }) readonly values!: any;
 }

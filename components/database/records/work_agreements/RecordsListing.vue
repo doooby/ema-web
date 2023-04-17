@@ -9,28 +9,31 @@ import { Column } from '~/components/DataTable/v3';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 @Component({
-  components: { ARecordsListing, ARecordLink, BRecordLink, TextNames },
+  components: { ARecordsListing, ARecordLink, TextNames, BRecordLink },
 })
-export default class RecordsListing extends Vue {
+export default class extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
 
-  columns = [
-    { name: 'id', size: 80 },
-    ...application_record.fillDataTableColumns('groups', [
-      { name: 'course' },
-      { name: 'term', size: 80 },
-      { name: 'name' },
-      { name: 'school', size: 300 },
-    ]),
-  ];
+  get columns (): any {
+    return [
+      { name: 'id', size: 80 },
+      ...application_record.fillDataTableColumns('work_agreements', [
+        { name: 'position' },
+        { name: 'person' },
+        { name: 'school', size: 300 },
+        { name: 'validity' },
+        { name: 'resigned_on' },
+      ]),
+    ];
+  }
 }
 </script>
 
 <template>
   <a-records-listing
     :class="$attrs.class"
-    entity="groups"
+    entity="work_agreements"
     :initial-columns="initialColumns"
     :columns="columns"
     :params="params"
@@ -38,19 +41,26 @@ export default class RecordsListing extends Vue {
   >
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="groups" />
+        <a-record-link :id="record.id" entity="work_agreements" />
       </td>
       <td>
-        <b-record-link :record="record.course" entity="courses" />
+        {{ record.position }}
       </td>
       <td>
-        {{ record.term }}
+        <b-record-link entity="people" :record="record.person" />
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
+        <b-record-link entity="schools" :record="record.school" />
       </td>
       <td>
-        <b-record-link :record="record.school" entity="schools" />
+        <div>
+          <span>{{ record.starts_on && $d(record.starts_on) }}</span>
+          <span>-</span>
+          <span>{{ record.ends_on && $d(record.ends_on) }}</span>
+        </div>
+      </td>
+      <td>
+        {{ record.resigned_on && $d(record.resigned_on) }}
       </td>
       <td />
     </template>

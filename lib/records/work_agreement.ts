@@ -1,5 +1,5 @@
-import { RecordAssociations, recordsQueries } from '~/lib/api2';
-import { application_record, work_agreement } from '~/lib/records';
+import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
+import { application_record } from '~/lib/records/index';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations, mapDate } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
@@ -7,10 +7,22 @@ import { dbFields } from '~/components/database/fields';
 
 export const entity = 'work_agreements';
 
+export interface WorkAgreement extends application_record.SharedAttributes {
+  school: BRecord;
+  person: BRecord;
+  projects?: BRecord[];
+  donors?: BRecord[];
+  position?: string;
+  starts_on?: Date;
+  ends_on?: Date;
+  resigned_on?: Date;
+  comment?: string;
+}
+
 export function parseRecord (
   value: unknown,
   associations?: RecordAssociations,
-): work_agreement.WorkAgreement {
+): WorkAgreement {
   return wai.object(value => ({
     ...application_record.parseSharedAttributes(value),
     school: wai.prop('school_id', value, mapAssociation('schools', associations)),
