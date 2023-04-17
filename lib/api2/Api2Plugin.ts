@@ -12,6 +12,7 @@ import {
   school,
   school_year,
   subject,
+  subject_category,
   user,
   work_agreement,
 } from '~/lib/records';
@@ -20,17 +21,18 @@ export default class Api2Plugin {
   context: Context;
 
   queries = {
-    donors: donor.queries,
-    education_levels: education_level.queries,
-    groups: group.queries,
-    material_kits: material_kit.queries,
-    projects: project.queries,
-    people: person.queries,
-    schools: school.queries,
-    school_years: school_year.queries,
-    subjects: subject.queries,
-    users: user.queries,
-    work_agreements: work_agreement.queries,
+    [donor.entity]: donor.queries,
+    [education_level.entity]: education_level.queries,
+    [group.entity]: group.queries,
+    [material_kit.entity]: material_kit.queries,
+    [project.entity]: project.queries,
+    [person.entity]: person.queries,
+    [school.entity]: school.queries,
+    [school_year.entity]: school_year.queries,
+    [subject.entity]: subject.queries,
+    [subject_category.entity]: subject_category.queries,
+    [user.entity]: user.queries,
+    [work_agreement.entity]: work_agreement.queries,
   };
 
   constructor (context: Context) {

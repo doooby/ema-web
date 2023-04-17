@@ -12,6 +12,7 @@ import EducationLevelsListing from '~/components/database/records/education_leve
 import MaterialKitsListing from '~/components/database/records/material_kits/RecordsListing.vue';
 import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
 import ProjectsListing from '~/components/database/records/projects/RecordsListing.vue';
+import SubjectCategoriesListing from '~/components/database/records/subject_categories/RecordsListing.vue';
 import SubjectsListing from '~/components/database/records/subjects/RecordsListing.vue';
 import UsersListing from '~/components/database/records/users/RecordsListing.vue';
 
@@ -88,6 +89,7 @@ export default class Index4Page extends Vue {
       case 'material_kits': return MaterialKitsListing;
       case 'people': return PeopleListing;
       case 'projects': return ProjectsListing;
+      case 'subject_categories': return SubjectCategoriesListing;
       case 'subjects': return SubjectsListing;
       case 'users': return UsersListing;
       default: return null;
