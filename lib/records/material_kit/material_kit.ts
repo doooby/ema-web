@@ -1,7 +1,7 @@
 import { RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapName } from '~/lib/api2/mappers';
-import { material_kit } from '~/lib/records';
+import { application_record, material_kit } from '~/lib/records';
 import { controls, FormFieldDefinition } from '~/components/Form';
 
 export const entity = 'material_kits';
@@ -11,7 +11,7 @@ export function parseRecord (
   associations?: RecordAssociations,
 ): material_kit.MaterialKit {
   return wai.object(value => ({
-    id: wai.prop('id', value, wai.string),
+    ...application_record.parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
     name: wai.prop('name', value, mapName),
     code: wai.prop('code', value, wai.nullable(wai.string)),

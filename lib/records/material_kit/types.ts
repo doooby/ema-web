@@ -1,7 +1,7 @@
 import { BRecord } from '~/lib/api2';
+import { application_record } from '~/lib/records';
 
-export interface MaterialKit {
-  id: string;
+export interface MaterialKit extends application_record.SharedAttributes {
   country: BRecord;
   name: string[];
   code?: string;

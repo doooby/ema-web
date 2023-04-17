@@ -1,4 +1,4 @@
-import { user } from '~/lib/records';
+import { application_record, user } from '~/lib/records';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import Privileges from '~/components/database/records/users/controls/Privileges.vue';
 import { RecordAssociations } from '~/lib/api2';
@@ -19,7 +19,7 @@ export function parseRecord (
   associations?: RecordAssociations,
 ): user.User {
   return wai.object(value => ({
-    id: wai.prop('id', value, wai.string),
+    ...application_record.parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapOptionalAssociation('countries', associations)),
     login: wai.prop('login', value, wai.string),
     full_name: wai.prop('full_name', value, mapName),
