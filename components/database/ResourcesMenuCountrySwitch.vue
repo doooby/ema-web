@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { user2 } from '~/lib/records';
-import { buildFormFields, FormField } from '~/components/Form';
+import { buildFormFields, controls, FormField } from '~/components/Form';
 import * as mappers from '~/lib/api/mappers';
 
 @Component
@@ -38,7 +38,7 @@ export default class ResourcesMenuCountrySwitch extends Vue {
       text: country.labels.caption,
     }));
     return buildFormFields([
-      [ 'country', 'list', { label, options } ],
+      [ 'country', controls.select, { label, options } ],
     ]);
   }
 
