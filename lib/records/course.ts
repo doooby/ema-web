@@ -115,6 +115,6 @@ export function recordControls (): FormFieldDefinition[] {
     [ 'preferred_grading', asFieldType(GradingTypeField) ],
     [ 'description', controls.textMultiline ],
     [ 'time_ranges', asFieldType(SchoolYearTerms) ],
-    // [ 'subjects', asFieldType(SubjectsField) ],
+    [ 'subjects', asFieldType(SubjectsField) ],
   ];
 }

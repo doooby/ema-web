@@ -1,5 +1,5 @@
 <template>
-  <show-page
+  <show2-page
     entity="courses"
   >
     <template #title="{ record }">
@@ -32,11 +32,11 @@
         <show-page-table-row label="db.record.schools.meta.s">
           <show-record-link
             entity="schools"
-            :record="{ id: record.school.id, caption: record.school.labels.caption }"
+            :record="{ id: record.school.id, caption: record.school.caption }"
           />
         </show-page-table-row>
         <show-page-table-row label="db.record.courses.label.education_level">
-          {{ record.education_level.labels.caption }}
+          {{ record.education_level.caption }}
         </show-page-table-row>
       </table>
     </template>
@@ -58,7 +58,7 @@
         </b-tab>
       </b-tabs>
     </template>
-  </show-page>
+  </show2-page>
 </template>
 
 <script lang="ts">
@@ -70,6 +70,7 @@ import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import SubjectsListing from '~/components/database/records/courses/SubjectsListing.vue';
 import GroupsListing from '~/components/database/records/courses/GroupsListing.vue';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
+import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 
 enum Tabs {
   subjects,
@@ -78,6 +79,7 @@ enum Tabs {
 
 @Component({
   components: {
+    Show2Page,
     ShowPage,
     ShowPageAction,
     ShowPageTableRow,

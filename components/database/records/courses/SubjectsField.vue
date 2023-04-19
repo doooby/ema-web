@@ -24,15 +24,15 @@
       <template #cell-subject="{ item }">
         <show-record-link
           entity="subjects"
-          :record="{ id: item.subject.id, caption: item.subject.labels.caption }"
+          :record="{ id: item.subject.id, caption: item.subject.caption }"
         />
       </template>
-      <template #cell-teacher="{ item }">
-        <AbbreviatedRecordSelect
-          entity="people"
-          :record="item.teacher"
-        />
-      </template>
+<!--      <template #cell-teacher="{ item }">-->
+<!--        <AbbreviatedRecordSelect-->
+<!--          entity="people"-->
+<!--          :record="item.teacher"-->
+<!--        />-->
+<!--      </template>-->
       <template #cell-grading="{ item, index }">
         <course-grading
           :value="item.grading"
@@ -70,7 +70,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { CourseSubject, Subject } from '~/lib/records';
+import { course } from '~/lib/records';
 import { AssociatedRecord } from '~/lib/api/mappers';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import SearchModal from '~/components/database/SearchModal.vue';
@@ -88,10 +88,11 @@ export default class SubjectsField extends Vue {
     fillParams ({ name }: FormField, values: FormValues, record: any): any {
       let value = values[name];
       if (value) {
-        value = value.map(({ subject, teacher, ...item }: CourseSubject) => {
+        // value = value.map(({ subject, teacher, ...item }: course.CourseSubject) => {
+        value = value.map(({ subject, ...item }: course.CourseSubject) => {
           const processedItem: any = { ...item, subject_id: subject.id };
           if (!processedItem.exam) delete processedItem.exam;
-          if (teacher) processedItem.teacher_id = teacher.id;
+          // if (teacher) processedItem.teacher_id = teacher.id;
           return processedItem;
         });
       }
