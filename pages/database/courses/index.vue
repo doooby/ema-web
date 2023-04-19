@@ -1,8 +1,7 @@
 <template>
-  <index-page
+  <index4-page
     entity="courses"
     :search-fields="searchFields"
-    :table-columns="tableColumns"
     :actions="actions"
   />
 </template>
@@ -10,52 +9,19 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import IndexPage from '~/components/database/pages/index/IndexPage.vue';
-import { asFieldType, FormFieldDefinition } from '~/components/Form';
-import AssociatedRecordLink from '~/components/database/cells/AssociatedRecordLink.vue';
-import RecordLink from '~/components/database/cells/RecordLink.vue';
-import Name from '~/components/database/cells/Name.vue';
-import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
+import { controls } from '~/components/Form';
+import Index4Page from '~/components/database/pages/index/index4Page.vue';
+import { dbFields } from '~/components/database/fields';
 
 @Component({
-  components: { IndexPage },
+  components: { Index4Page },
 })
 export default class extends DatabasePage {
-  get searchFields (): FormFieldDefinition[] {
-    return [
-      [ 'country_id', 'hidden', { value: this.currentCountryId } ],
-      [ 'search', 'text' ],
-      [ 'school_id', asFieldType(AbbreviatedRecordField), {
-        entity: 'schools',
-        params: {
-          country_id: this.currentCountryId,
-        },
-      } ],
-      [ 'education_level_id', asFieldType(AbbreviatedRecordField), {
-        entity: 'education_levels',
-        params: {
-          country_id: this.currentCountryId,
-        },
-      } ],
-    ];
-  }
-
-  tableColumns = [
-    { name: 'actions', slot: 'actions', headerText: false, size: 40 },
-    { name: 'id', cell: { type: RecordLink, entity: 'courses' }, size: 60 },
-    { name: 'name', cell: { type: Name } },
-    {
-      name: 'school',
-      cell: { type: AssociatedRecordLink, entity: 'schools' },
-    },
-    {
-      name: 'education_level',
-      cell: { type: AssociatedRecordLink, entity: 'education_levels', noLink: true },
-    },
-    { name: 'grade' },
-    { name: 'accreditation_authority' },
-    { name: 'description' },
-  ];
+  searchFields = [
+    [ 'search', controls.text ],
+    [ 'school_id', dbFields.selectBRecord, { entity: 'schools' } ],
+    [ 'education_level_id', dbFields.selectBRecord, { entity: 'education_levels' } ],
+  ]
 
   actions = [
     { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },

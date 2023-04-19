@@ -4,6 +4,7 @@ import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/standardized_courses/SubjectsField.vue';
 import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
+import { BRecord } from '~/lib/api2';
 
 const { object, recordId, prop, maybeProp, assoc, val } = mappers;
 
@@ -28,6 +29,12 @@ export interface StandardizedCourseAssociations {
 
 export interface StandardizedCourseSubject {
   subject: mappers.AssociatedRecord<Subject>;
+  grading?: [string, string, undefined | string];
+  exam?: boolean;
+}
+
+export interface StandardizedCourseSubject2 {
+  subject: BRecord;
   grading?: [string, string, undefined | string];
   exam?: boolean;
 }

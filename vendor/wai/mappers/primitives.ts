@@ -1,5 +1,4 @@
 import { wai } from '~/vendor/wai';
-import { parseISO as parseDate } from 'date-fns';
 
 export function integer (value): number {
   if (typeof value !== 'number' || !Number.isInteger(value)) {

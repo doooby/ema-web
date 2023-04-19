@@ -7,6 +7,7 @@ import { h } from 'vue';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
+import CoursesListing from '~/components/database/records/courses/RecordsListing.vue';
 import DonorsListing from '~/components/database/records/donors/RecordsListing.vue';
 import EducationLevelsListing from '~/components/database/records/education_levels/RecordsListing.vue';
 import GroupsListing from '~/components/database/records/groups/RecordsListing.vue';
@@ -87,6 +88,7 @@ export default class Index4Page extends Vue {
 
   get listingComponent () {
     switch (this.entity) {
+      case 'courses': return CoursesListing;
       case 'donors': return DonorsListing;
       case 'education_levels': return EducationLevelsListing;
       case 'groups': return GroupsListing;

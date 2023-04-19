@@ -46,6 +46,10 @@ export function mapSelectOrFillTuple (value: any): [string, undefined | string] 
   )(value);
 }
 
+export function mapLooseId (value): string {
+  return wai.string(typeof value === 'number' ? String(value) : value);
+}
+
 export function mapAssociation (
   name: string,
   associations: undefined | RecordAssociations,
@@ -55,7 +59,7 @@ export function mapAssociation (
   return (value: unknown) => {
     if (!index) throw new wai.MappingError('association missing');
 
-    const id = wai.string(value);
+    const id = mapLooseId(value);
     const bRecord = index[id];
     if (!bRecord) throw new wai.MappingError('association missing');
     return bRecord;
@@ -71,7 +75,7 @@ export function mapAssociations (
   return (value: unknown) => {
     if (!index) throw new wai.MappingError('association missing');
 
-    const ids = wai.nullable(wai.listOf(wai.string))(value);
+    const ids = wai.nullable(wai.listOf(mapLooseId))(value);
     if (!ids) return undefined;
 
     return ids.map((id, i) => {

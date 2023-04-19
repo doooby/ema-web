@@ -12,7 +12,6 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import { FormFieldDefinition } from '~/components/Form';
 import New2Page from '~/components/database/pages/new/New2Page.vue';
 import { donor } from '~/lib/records';
 import RecordForm from '~/components/database/records/donors/RecordForm.vue';
@@ -21,8 +20,6 @@ import RecordForm from '~/components/database/records/donors/RecordForm.vue';
   components: { New2Page, RecordForm },
 })
 export default class extends DatabasePage {
-  get fields (): FormFieldDefinition[] {
-    return donor.recordControls();
-  }
+  fields = donor.recordControls();
 }
 </script>

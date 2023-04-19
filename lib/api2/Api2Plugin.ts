@@ -3,6 +3,7 @@ import { RequestState as V1RequestState } from '~/lib/api';
 import { RequestResponse, QueryDefinition, RequestState } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import {
+  course,
   donor,
   education_level,
   group,
@@ -21,6 +22,7 @@ export default class Api2Plugin {
   context: Context;
 
   queries = {
+    [course.entity]: course.queries,
     [donor.entity]: donor.queries,
     [education_level.entity]: education_level.queries,
     [group.entity]: group.queries,

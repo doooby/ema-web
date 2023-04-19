@@ -1,28 +1,26 @@
 <template>
-  <edit-page
+  <edit2-page
     entity="courses"
     :fields="fields"
-    @update="onUpdated"
-  />
+    :show-after-update="true"
+  >
+    <template #layout="{ context, values }">
+      <record-form :context="context" :values="values" />
+    </template>
+  </edit2-page>
 </template>
 
 <script lang="ts">
-import EditPage from '~/components/database/EditPage.vue';
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import { FormFieldDefinition } from '~/components/Form';
 import { course } from '~/lib/records';
+import Edit2Page from '~/components/database/pages/edit/Edit2Page.vue';
+import RecordForm from '~/components/database/records/courses/RecordForm.vue';
 
 @Component({
-  components: { EditPage },
+  components: { RecordForm, Edit2Page },
 })
 export default class extends DatabasePage {
-  get fields (): FormFieldDefinition[] {
-    return course.recordControls({ countryId: this.currentCountryId });
-  }
-
-  onUpdated (record: any) {
-    this.$router.push({ path: `/database/courses/${record.id}` });
-  }
+  fields = course.recordControls();
 }
 </script>
