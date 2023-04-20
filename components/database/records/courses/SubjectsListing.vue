@@ -1,56 +1,30 @@
-<template>
-  <div>
-    <b-alert :show="getSubjectsQueryState.running" variant="info" class="m-2">
-      <t value="app.loading" />
-    </b-alert>
-    <div v-if="getSubjectsQueryState.value" class="row">
-      <data-table-view
-        class="col"
-        :columns="tableColumns"
-        :dataset="getSubjectsQueryState.value.records"
-      />
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { Course, Subject } from '~/lib/records';
-import { PaginatedRecords } from '~/lib/api/mappers';
-import RecordLink from '~/components/database/cells/RecordLink.vue';
-import Name from '~/components/database/cells/Name.vue';
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { course } from '~/lib/records';
+import RecordsListing from '~/components/database/records/subjects/RecordsListing.vue';
 
-@Component
+@Component({
+  components: {
+    RecordsListing,
+  },
+})
 export default class SubjectsListing extends Vue {
-  @Prop({ required: true }) readonly course!: Course;
+  @Prop({ required: true }) readonly course!: course.Course;
 
-  getSubjectsQueryState = this.$api.newQueryState<PaginatedRecords<Subject>>();
-  tableColumns = [
-    { name: 'id', cell: { type: RecordLink, noLink: true }, size: 60 },
-    { name: 'name', cell: { type: Name }, headerText: () => 'Name' },
-  ];
+  searchParams = {
+    course_id: this.course.id,
+  };
 
-  @Watch('course')
-  onPageChanged () {
-    this.reloadSubjects();
-  }
-
-  mounted () {
-    this.reloadSubjects();
-  }
-
-  reloadSubjects () {
-    this.getSubjectsQueryState.reset();
-    this.fetchSubjects();
-  }
-
-  async fetchSubjects () {
-    const query = this.$api.queries.subjects.index;
-    await this.$api.request(query({
-      course_id: this.course.id,
-      country_id: this.$store.getters['session/countryId'],
-      per_page: 50,
-    }), this.getSubjectsQueryState);
-  }
+  initialColumns = []
 }
 </script>
+
+<template>
+  <div class="mt-3">
+    <records-listing
+      class="mt-2"
+      :initial-columns="initialColumns"
+      :params="searchParams"
+    />
+  </div>
+</template>

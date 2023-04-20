@@ -30,13 +30,10 @@
           {{ record.grade }}
         </show-page-table-row>
         <show-page-table-row label="db.record.schools.meta.s">
-          <show-record-link
-            entity="schools"
-            :record="{ id: record.school.id, caption: record.school.caption }"
-          />
+          <b-record-link entity="schools" :record="record.school" />
         </show-page-table-row>
         <show-page-table-row label="db.record.courses.label.education_level">
-          {{ record.education_level.caption }}
+          <b-record-link entity="education_levels" :record="record.education_level" />
         </show-page-table-row>
       </table>
     </template>
@@ -71,6 +68,7 @@ import SubjectsListing from '~/components/database/records/courses/SubjectsListi
 import GroupsListing from '~/components/database/records/courses/GroupsListing.vue';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 enum Tabs {
   subjects,
@@ -79,6 +77,7 @@ enum Tabs {
 
 @Component({
   components: {
+    BRecordLink,
     Show2Page,
     ShowPage,
     ShowPageAction,
