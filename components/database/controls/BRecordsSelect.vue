@@ -45,7 +45,7 @@ export default class BRecordsSelect extends Vue {
         class="mr-3 d-flex align-items-center"
       >
         <b-record-link class="mr-2" :entity="entity" :record="record" />
-        <btn-mini v-if="!singleRecord" variant="secondary" icon="x" @click="onRemoveRecord(record)" />
+        <btn-mini variant="secondary" icon="x" @click="onRemoveRecord(record)" />
       </div>
     </div>
     <b-button variant="secondary" size="sm" @click="modalShown = true">

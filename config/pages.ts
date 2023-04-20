@@ -30,5 +30,6 @@ export const entitiesWithShowPage = [
   'people',
   'projects',
   'schools',
+  'standardized_courses',
   'users',
 ];

@@ -62,7 +62,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { StandardizedCourseSubject, Subject } from '~/lib/records';
+import { course, subject } from '~/lib/records';
 import { AssociatedRecord } from '~/lib/api/mappers';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import SearchModal from '~/components/database/SearchModal.vue';
@@ -79,7 +79,7 @@ export default class SubjectsField extends Vue {
     fillParams ({ name }: FormField, values: FormValues, record: any): any {
       let value = values[name];
       if (value) {
-        value = value.map(({ subject, ...item }: StandardizedCourseSubject) => {
+        value = value.map(({ subject, ...item }: course.CourseSubject) => {
           if (!item.exam) delete item.exam;
           return ({
             ...item,
@@ -95,7 +95,7 @@ export default class SubjectsField extends Vue {
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;
 
-  get subjects (): StandardizedCourseSubject[] {
+  get subjects (): course.CourseSubject[] {
     return this.formValues[this.field.name] ?? [];
   }
 
@@ -113,7 +113,7 @@ export default class SubjectsField extends Vue {
     };
   }
 
-  onAddSubject (subject: AssociatedRecord<Subject>) {
+  onAddSubject (subject: AssociatedRecord<subject.Subject>) {
     this.selectSubjectModalShown = false;
     const newSubjects = [ ...this.subjects ];
     newSubjects.push(
@@ -129,7 +129,7 @@ export default class SubjectsField extends Vue {
 
   onUpdateItem (
     index: number,
-    item: StandardizedCourseSubject,
+    item: course.CourseSubject,
     field: string,
     value: any,
   ) {

@@ -1,4 +1,4 @@
-import { application_record, StandardizedCourseSubject2 } from '~/lib/records';
+import { application_record } from '~/lib/records';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/courses/SubjectsField.vue';
@@ -25,8 +25,11 @@ export interface Course extends application_record.SharedAttributes {
   subjects?: CourseSubject[];
 }
 
-export interface CourseSubject extends StandardizedCourseSubject2 {
-  // teacher?: BRecord;
+export interface CourseSubject {
+  subject: BRecord;
+  grading?: [string, string, undefined | string];
+  exam?: boolean;
+  teacher?: BRecord;
 }
 
 export function parseRecord (
@@ -52,12 +55,12 @@ export function parseRecord (
       })),
     )),
     subjects: wai.prop('subjects', value, wai.nullable(wai.listOf(
-      value => mapCourseSubject(value, associations),
+      value => mapSubject(value, associations),
     ))),
   }))(value);
 }
 
-function mapAccreditationAuthority (
+export function mapAccreditationAuthority (
   value: unknown,
 ): [string, undefined | string] {
   if (!Array.isArray(value)) {
@@ -69,18 +72,18 @@ function mapAccreditationAuthority (
   return Object.freeze(array);
 }
 
-function mapCourseSubject (
+export function mapSubject (
   value: unknown,
   associations?: RecordAssociations,
 ): CourseSubject {
   return wai.object(value => ({
     subject: wai.prop('subject_id', value, mapAssociation('subjects', associations)),
-    grading: wai.prop('grading', value, wai.nullable(mapCourseSubjectGrading)),
+    grading: wai.prop('grading', value, wai.nullable(mapGrading)),
     exam: wai.prop('exam', value, wai.nullable(wai.boolean)),
   }))(value);
 }
 
-function mapCourseSubjectGrading (
+export function mapGrading (
   value: unknown,
 ): [string, string, undefined | string] {
   if (!Array.isArray(value)) {
@@ -113,7 +116,6 @@ export function recordControls (): FormFieldDefinition[] {
     [ 'lesson_duration', controls.integer, { rightLabel: 'app.time.minutes.p' } ],
     [ 'attendance_limit', controls.integer, { requireable: true, rightLabel: { text: '%' } } ],
     [ 'preferred_grading', asFieldType(GradingTypeField) ],
-    [ 'description', controls.textMultiline ],
     [ 'time_ranges', asFieldType(SchoolYearTerms) ],
     [ 'subjects', asFieldType(SubjectsField) ],
   ];

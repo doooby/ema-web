@@ -12,6 +12,7 @@ import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/compon
 export default class SelectBRecord extends Vue {
   static fieldType: FormFieldType = {
     fillParams ({ name, options }, values, params) {
+      // TODO t80
       params[options.paramsName || `${name}_id`] = values[name]?.id ?? '';
     },
   };

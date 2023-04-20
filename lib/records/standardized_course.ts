@@ -1,97 +1,66 @@
-import * as mappers from '~/lib/api/mappers';
-import { course, Subject } from '~/lib/records';
+import { application_record, course } from '~/lib/records';
+import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
+import { wai } from '~/vendor/wai';
+import { mapAssociation, mapName } from '~/lib/api2/mappers';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
+import { dbFields } from '~/components/database/fields';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
-import SubjectsField from '~/components/database/records/standardized_courses/SubjectsField.vue';
-import AbbreviatedRecordField from '~/components/database/records/AbbreviatedRecordField.vue';
-import { BRecord } from '~/lib/api2';
+import SubjectsField from '~/components/database/records/courses/SubjectsField.vue';
 
-const { object, recordId, prop, maybeProp, assoc, val } = mappers;
+export const entity = 'standardized_courses';
 
-export interface StandardizedCourse {
-  id: number;
-  name: [string, string];
-  education_level: mappers.AssociatedRecord;
+export interface StandardizedCourse extends application_record.SharedAttributes {
+  name: string[];
+  education_level: BRecord;
   grade: number;
-  is_formal: boolean;
+  is_formal?: boolean;
   accreditation_authority?: [string, undefined | string];
   lesson_duration?: number;
   attendance_limit?: number;
   preferred_grading?: [string, string, undefined | string];
   description?: string;
-  subjects?: StandardizedCourseSubject[];
+  subjects?: course.CourseSubject[];
 }
 
-export interface StandardizedCourseAssociations {
-  education_level: mappers.AssociatedRecordsIndex,
-  subject: mappers.AssociatedRecordsIndex,
+export function parseRecord (
+  value: unknown,
+  associations?: RecordAssociations,
+): StandardizedCourse {
+  return wai.object(value => ({
+    ...application_record.parseSharedAttributes(value),
+    education_level: wai.prop('education_level_id', value, mapAssociation('education_levels', associations)),
+    name: wai.prop('name', value, mapName),
+    grade: wai.prop('grade', value, wai.integer),
+    is_formal: wai.prop('is_formal', value, wai.nullable(wai.boolean)),
+    accreditation_authority: wai.prop('accreditation_authority', value, wai.nullable(course.mapAccreditationAuthority)),
+    lesson_duration: wai.prop('lesson_duration', value, wai.nullable(wai.integer)),
+    attendance_limit: wai.prop('attendance_limit', value, wai.nullable(wai.integer)),
+    preferred_grading: wai.prop('preferred_grading', value, wai.nullable(course.mapGrading)),
+    description: wai.prop('description', value, wai.nullable(wai.string)),
+    subjects: wai.prop('subjects', value, wai.nullable(wai.listOf(
+      value => course.mapSubject(value, associations),
+    ))),
+  }))(value);
 }
 
-export interface StandardizedCourseSubject {
-  subject: mappers.AssociatedRecord<Subject>;
-  grading?: [string, string, undefined | string];
-  exam?: boolean;
-}
-
-export interface StandardizedCourseSubject2 {
-  subject: BRecord;
-  grading?: [string, string, undefined | string];
-  exam?: boolean;
-}
-
-export const standardizedCourse = {
-  mapRecord (value: any, associations?: StandardizedCourseAssociations): StandardizedCourse {
-    return object(value, root => ({
-      id: recordId(root),
-      name: prop('name', root, val.nameTuple),
-      education_level: assoc('education_level', root, associations?.education_level),
-      grade: prop('grade', root, val.integer),
-      is_formal: prop('is_formal', root, val.boolean),
-      accreditation_authority: maybeProp('accreditation_authority', root, val.factories.tuple2_1(
-        val.string,
-        val.string,
-      )),
-      lesson_duration: maybeProp('lesson_duration', root, val.integer),
-      attendance_limit: maybeProp('attendance_limit', root, val.integer),
-      preferred_grading: maybeProp('preferred_grading', root, course.mapGrading),
-      description: prop('description', root, val.string),
-      subjects: maybeProp('subjects', root, standardizedCourse.mapSubjectsFactory(associations)),
-    }));
-  },
-  mapSubjectsFactory: (associations?: {
-    subject: mappers.AssociatedRecordsIndex,
-  }): (value: any) => StandardizedCourseSubject[] => val.factories.listOfObjects((item) => {
-    return {
-      subject: assoc('subject', item, associations?.subject),
-      grading: maybeProp('grading', item, course.mapGrading),
-      exam: maybeProp('exam', item, val.boolean),
-    };
-  }),
-  mapAssociations: mappers.createAssociationsMapper<StandardizedCourseAssociations>(
-    'education_level', 'subject',
-  ),
-  recordControls (countryId: null | number): FormFieldDefinition[] {
-    return [
-      [ 'name', controls.name ],
-      [ 'education_level', asFieldType(AbbreviatedRecordField), {
-        entity: 'education_levels',
-        params: {
-          country_id: countryId,
-        },
-      } ],
-      [ 'grade', 'integer', { maxLength: 2 } ],
-      [ 'is_formal', 'boolean' ],
-      [ 'accreditation_authority', 'selectOrFill', {
-        options: course.accreditationAuthorityOptions(),
-      } ],
-      [ 'lesson_duration', 'integer', { rightLabel: 'app.time.minutes.p' } ],
-      [ 'attendance_limit', 'integer', {
-        requireable: true,
-        rightLabel: { text: '%' },
-      } ],
-      [ 'preferred_grading', asFieldType(GradingTypeField) ],
-      [ 'description', 'textMultiline' ],
-      [ 'subjects', asFieldType(SubjectsField) ],
-    ];
-  },
+export const queries = {
+  search: recordsQueries.search(entity, parseRecord),
+  searchB: recordsQueries.searchB(entity),
+  create: recordsQueries.create(entity),
+  update: recordsQueries.update(entity),
 };
+
+export function recordControls (): FormFieldDefinition[] {
+  return [
+    [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
+    [ 'name', controls.name ],
+    [ 'grade', controls.integer, { maxLength: 2 } ],
+    [ 'is_formal', controls.boolean ],
+    [ 'accreditation_authority', controls.selectOrFill ],
+    [ 'lesson_duration', controls.integer, { rightLabel: 'app.time.minutes.p' } ],
+    [ 'attendance_limit', controls.integer, { requireable: true, rightLabel: { text: '%' } } ],
+    [ 'preferred_grading', asFieldType(GradingTypeField) ],
+    [ 'description', controls.textMultiline ],
+    [ 'subjects', asFieldType(SubjectsField) ],
+  ];
+}
