@@ -21,6 +21,10 @@ import New2Page from '~/components/database/pages/new/New2Page.vue';
   components: { RecordForm, New2Page },
 })
 export default class extends DatabasePage {
-    fields = course.recordControls();
+  get fields () {
+    return course.recordControls({
+      countryData: this.$store.getters['session/countryStaticData'],
+    });
+  }
 }
 </script>

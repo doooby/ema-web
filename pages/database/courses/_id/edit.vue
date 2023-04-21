@@ -21,6 +21,10 @@ import RecordForm from '~/components/database/records/courses/RecordForm.vue';
   components: { RecordForm, Edit2Page },
 })
 export default class extends DatabasePage {
-  fields = course.recordControls();
+  get fields () {
+    return course.recordControls({
+      countryData: this.$store.getters['session/countryStaticData'],
+    });
+  }
 }
 </script>

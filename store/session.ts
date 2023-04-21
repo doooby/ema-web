@@ -3,6 +3,7 @@ import { user2, loadCountryData } from '~/lib/records';
 import * as mappers from '~/lib/api/mappers';
 import * as localStorage from '~/lib/localStorage';
 import { CountryData } from '~/store/session/country';
+import app from '~/lib/app';
 
 @Module({
   stateFactory: true,
@@ -89,5 +90,9 @@ export default class SessionModule extends VuexModule {
 
   get countryId (): null | number {
     return this.countryData?.country?.id ?? null;
+  }
+
+  get countryStaticData (): null | app.country.Data {
+    return this.countryData?.staticData ?? null;
   }
 }

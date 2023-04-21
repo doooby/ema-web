@@ -1,5 +1,6 @@
 import * as mappers from '~/lib/api/mappers';
 import { CountryData } from '~/store/session/country';
+import app from '~/lib/app';
 
 const { object, recordId, prop, val } = mappers;
 
@@ -35,5 +36,6 @@ export async function loadCountryData (
   return {
     country,
     addressSystem,
+    staticData: app.country.defaultCountryData(),
   };
 }

@@ -7,6 +7,7 @@ import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapDate, mapName } from '~/lib/api2/mappers';
 import { dbFields } from '~/components/database/fields';
+import app from '~/lib/app';
 
 export const entity = 'courses';
 
@@ -103,7 +104,11 @@ export const queries = {
   update: recordsQueries.update(entity),
 };
 
-export function recordControls (): FormFieldDefinition[] {
+export function recordControls ({
+  countryData,
+}: {
+  countryData?: app.country.Data;
+}): FormFieldDefinition[] {
   return [
     [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
     [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
@@ -112,7 +117,7 @@ export function recordControls (): FormFieldDefinition[] {
     [ 'name', controls.name ],
     [ 'grade', controls.integer, { maxLength: 2 } ],
     [ 'is_formal', controls.boolean ],
-    [ 'accreditation_authority', controls.selectOrFill ],
+    [ 'accreditation_authority', controls.selectOrFill, { options: countryData?.options.records.courses.accreditation_authority() } ],
     [ 'lesson_duration', controls.integer, { rightLabel: 'app.time.minutes.p' } ],
     [ 'attendance_limit', controls.integer, { requireable: true, rightLabel: { text: '%' } } ],
     [ 'preferred_grading', asFieldType(GradingTypeField) ],

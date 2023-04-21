@@ -18,8 +18,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { Option } from '~/lib/types';
 import SelectMultipleInput from '~/components/Form/primitives/SelectMultipleInput.vue';
+import app from '~/lib/app';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -39,22 +39,19 @@ export default class SelectMultiple extends Vue {
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;
 
-  get selected (): Option[] {
+  get selected (): app.Option[] {
     return this.filterOptions(this.formValues[this.field.name]);
   }
 
-  get options (): Option[] {
-    return (this.field.options.options ?? []).map(option => ({
-      value: option.value,
-      text: option.translated ? option.text : this.$t(option.text),
-    }));
+  get options (): app.Option[] {
+    return (this.field.options.options ?? []);
   }
 
   onChange (value: any): void {
     this.context.onChange({ [this.field.name]: this.filterOptions(value) });
   }
 
-  filterOptions (value: any): Option[] {
+  filterOptions (value: any): app.Option[] {
     if (!Array.isArray(value)) return [];
     return value.filter(item => this.options.find(option => option.value === item));
   }

@@ -6,9 +6,10 @@ import ARecordsListing from '~/components/database/components/listing/ARecordsLi
 import { Params } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 @Component({
-  components: { ARecordsListing, ARecordLink, TextNames },
+  components: { BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
 export default class extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -16,9 +17,10 @@ export default class extends Vue {
 
   columns = [
     { name: 'id', size: 80 },
-    ...application_record.fillDataTableColumns('donors', [
-      { name: 'code' },
-      { name: 'name' },
+    ...application_record.fillDataTableColumns('schools', [
+      { name: 'external_id' },
+      { name: 'name', size: 300 },
+      { name: 'director' },
     ]),
   ];
 }
@@ -27,7 +29,7 @@ export default class extends Vue {
 <template>
   <a-records-listing
     :class="$attrs.class"
-    entity="donors"
+    entity="schools"
     :initial-columns="initialColumns"
     :columns="columns"
     :params="params"
@@ -35,13 +37,16 @@ export default class extends Vue {
   >
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="donors" />
+        <a-record-link :id="record.id" entity="schools" />
       </td>
       <td>
-        {{ record.code }}
+        {{ record.external_id }}
       </td>
       <td>
         <text-names class-name="single-row-cell" :value="record.name" />
+      </td>
+      <td>
+        <b-record-link v-if="record.director" entity="people" :record="record.director" />
       </td>
       <td />
     </template>

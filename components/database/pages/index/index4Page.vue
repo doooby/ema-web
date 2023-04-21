@@ -14,6 +14,7 @@ import GroupsListing from '~/components/database/records/groups/RecordsListing.v
 import MaterialKitsListing from '~/components/database/records/material_kits/RecordsListing.vue';
 import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
 import ProjectsListing from '~/components/database/records/projects/RecordsListing.vue';
+import SchoolsListing from '~/components/database/records/schools/RecordsListing.vue';
 import SchoolYearsListing from '~/components/database/records/school_years/RecordsListing.vue';
 import StandardizedCoursesListing from '~/components/database/records/standardized_courses/RecordsListing.vue';
 import SubjectCategoriesListing from '~/components/database/records/subject_categories/RecordsListing.vue';
@@ -96,6 +97,7 @@ export default class Index4Page extends Vue {
       case 'material_kits': return MaterialKitsListing;
       case 'people': return PeopleListing;
       case 'projects': return ProjectsListing;
+      case 'schools': return SchoolsListing;
       case 'school_years': return SchoolYearsListing;
       case 'standardized_courses': return StandardizedCoursesListing;
       case 'subject_categories': return SubjectCategoriesListing;

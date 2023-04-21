@@ -1,3 +1,2 @@
-import * as country from './country';
-export * from './types';
-export { country };
+import * as app from './module';
+export default app;
