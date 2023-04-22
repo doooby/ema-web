@@ -1,5 +1,5 @@
-import { RecordAssociations, recordsQueries } from '~/lib/api2';
-import { application_record, project } from '~/lib/records';
+import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
+import { application_record, project } from '~/lib/records/index';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations, mapDate, mapName } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
@@ -7,10 +7,21 @@ import { dbFields } from '~/components/database/fields';
 
 export const entity = 'projects';
 
+export interface Project extends application_record.SharedAttributes {
+  country: BRecord;
+  name: string[];
+  code?: string;
+  short_name_en?: string;
+  starts_on?: Date;
+  ends_on?: Date;
+  donors?: BRecord[];
+  schools?: BRecord[];
+}
+
 export function parseRecord (
   value: unknown,
   associations?: RecordAssociations,
-): project.Project {
+): Project {
   return wai.object(value => ({
     ...application_record.parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),

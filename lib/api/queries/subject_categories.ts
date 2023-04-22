@@ -1,6 +1,6 @@
 import { Params } from '..';
 import * as mappers from '../mappers';
-import { SubjectCategory, subjectCategory } from '~/lib/records';
+import { SubjectCategorySubjectCategory, subjectCategory } from '~/lib/records';
 
 export function index (params: Params) {
   return {

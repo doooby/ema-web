@@ -59,7 +59,6 @@
 </template>
 
 <script lang="ts">
-import ShowPage from '~/components/database/ShowPage.vue';
 import { DatabasePage } from '~/components';
 import { Component } from 'vue-property-decorator';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
@@ -79,7 +78,6 @@ enum Tabs {
   components: {
     BRecordLink,
     Show2Page,
-    ShowPage,
     ShowPageAction,
     ShowPageTableRow,
     SubjectsListing,
