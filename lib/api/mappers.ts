@@ -291,7 +291,7 @@ export function safeRecord<R extends RecordBase> (
 ): InvalidRecord | R {
   try {
     return object(value, mapper);
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof MappingError) error.finalize();
     utils.warnOfError(error);
     return object(value, record => ({

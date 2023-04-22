@@ -10,7 +10,7 @@ export function warn (message: string, ...context: any) {
   if (context) console.log(...context);
 }
 
-export function warnOfError (error: Error, ...context: any) {
+export function warnOfError (error, ...context: any) {
   console.error(error);
   if (context) console.log(...context);
 }

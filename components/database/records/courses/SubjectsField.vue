@@ -27,12 +27,12 @@
           :record="{ id: item.subject.id, caption: item.subject.caption }"
         />
       </template>
-<!--      <template #cell-teacher="{ item }">-->
-<!--        <AbbreviatedRecordSelect-->
-<!--          entity="people"-->
-<!--          :record="item.teacher"-->
-<!--        />-->
-<!--      </template>-->
+      <!--      <template #cell-teacher="{ item }">-->
+      <!--        <AbbreviatedRecordSelect-->
+      <!--          entity="people"-->
+      <!--          :record="item.teacher"-->
+      <!--        />-->
+      <!--      </template>-->
       <template #cell-grading="{ item, index }">
         <course-grading
           :value="item.grading"
@@ -78,6 +78,7 @@ import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 import CourseGrading from '~/components/database/controls/primitives/CourseGrading.vue';
 import * as mappers from '~/lib/api/mappers';
 import AbbreviatedRecordSelect from '~/components/database/controls/AbbreviatedRecordSelect.vue';
+import { BRecord } from '~/lib/api2';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -104,11 +105,11 @@ export default class SubjectsField extends Vue {
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;
 
-  get items (): CourseSubject[] {
+  get items (): course.CourseSubject[] {
     return (this as any).rawValue ?? [];
   }
 
-  get subjects (): mappers.AbbreviatedRecord[] {
+  get subjects (): BRecord[] {
     return this.items.map(item => item.subject);
   }
 
@@ -127,7 +128,7 @@ export default class SubjectsField extends Vue {
     };
   }
 
-  onAddSubject (subject: AssociatedRecord<Subject>) {
+  onAddSubject (subject: BRecord) {
     this.selectSubjectModalShown = false;
     const newItems = [ ...this.items ];
     newItems.push(
@@ -143,7 +144,7 @@ export default class SubjectsField extends Vue {
 
   onUpdateItem (
     index: number,
-    item: CourseSubject,
+    item: any,
     field: string,
     value: any,
   ) {
