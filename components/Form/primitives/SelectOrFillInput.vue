@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Option } from '~/lib/types';
+import app from '~/lib/app';
 
 const OTHER_OPTION = '_other';
 
@@ -28,7 +28,7 @@ const OTHER_OPTION = '_other';
 export default class SelectOrFillInput extends Vue {
   @Prop({ default: () => undefined }) readonly domId?: string;
   @Prop({ required: true }) readonly value!: any;
-  @Prop({ required: true }) readonly options!: Option[];
+  @Prop({ required: true }) readonly options!: app.Option[];
 
   otherOption = OTHER_OPTION;
 
@@ -43,11 +43,11 @@ export default class SelectOrFillInput extends Vue {
     }
   }
 
-  get optionsWithOther (): Option[] {
+  get optionsWithOther () {
     return [
       ...this.options.map(option => ({
         value: option.value,
-        text: option.translated ? option.text : this.$t(option.text) as string,
+        text: this.$t(option.textKey),
       })),
       { value: OTHER_OPTION, text: this.$t('app.common.label.other') as string },
     ];

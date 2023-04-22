@@ -5,7 +5,7 @@ import SubjectsField from '~/components/database/records/courses/SubjectsField.v
 import SchoolYearTerms from '~/components/database/records/schoolYears/SchoolYearTerms/index.vue';
 import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
-import { mapAssociation, mapDate, mapName } from '~/lib/api2/mappers';
+import { mapAssociation, mapDate, mapName, mapSelectOrFillTuple } from '~/lib/api2/mappers';
 import { dbFields } from '~/components/database/fields';
 import app from '~/lib/app';
 
@@ -46,7 +46,7 @@ export function parseRecord (
     name: wai.prop('name', value, mapName),
     grade: wai.prop('grade', value, wai.integer),
     is_formal: wai.prop('is_formal', value, wai.nullable(wai.boolean)),
-    accreditation_authority: wai.prop('accreditation_authority', value, wai.nullable(mapAccreditationAuthority)),
+    accreditation_authority: wai.prop('accreditation_authority', value, wai.nullable(mapSelectOrFillTuple)),
     lesson_duration: wai.prop('lesson_duration', value, wai.nullable(wai.integer)),
     attendance_limit: wai.prop('attendance_limit', value, wai.nullable(wai.integer)),
     time_ranges: wai.prop('time_ranges', value, wai.listOf(
@@ -59,18 +59,6 @@ export function parseRecord (
       value => mapSubject(value, associations),
     ))),
   }))(value);
-}
-
-export function mapAccreditationAuthority (
-  value: unknown,
-): [string, undefined | string] {
-  if (!Array.isArray(value)) {
-    throw new wai.MappingError('not array');
-  }
-  const array: any = [];
-  array[0] = wai.prop(0, value, wai.string);
-  array[2] = wai.prop(2, value, wai.nullable(wai.string));
-  return Object.freeze(array);
 }
 
 export function mapSubject (
@@ -117,7 +105,7 @@ export function recordControls ({
     [ 'name', controls.name ],
     [ 'grade', controls.integer, { maxLength: 2 } ],
     [ 'is_formal', controls.boolean ],
-    [ 'accreditation_authority', controls.selectOrFill, { options: countryData?.options.records.courses.accreditation_authority() } ],
+    [ 'accreditation_authority', controls.selectOrFill, { options: countryData?.options.records.courses.accreditationAuthorities() } ],
     [ 'lesson_duration', controls.integer, { rightLabel: 'app.time.minutes.p' } ],
     [ 'attendance_limit', controls.integer, { requireable: true, rightLabel: { text: '%' } } ],
     [ 'preferred_grading', asFieldType(GradingTypeField) ],

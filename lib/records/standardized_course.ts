@@ -1,7 +1,7 @@
 import { application_record, course } from '~/lib/records';
 import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
-import { mapAssociation, mapName } from '~/lib/api2/mappers';
+import { mapAssociation, mapName, mapSelectOrFillTuple } from '~/lib/api2/mappers';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
@@ -32,7 +32,7 @@ export function parseRecord (
     name: wai.prop('name', value, mapName),
     grade: wai.prop('grade', value, wai.integer),
     is_formal: wai.prop('is_formal', value, wai.nullable(wai.boolean)),
-    accreditation_authority: wai.prop('accreditation_authority', value, wai.nullable(course.mapAccreditationAuthority)),
+    accreditation_authority: wai.prop('accreditation_authority', value, wai.nullable(mapSelectOrFillTuple)),
     lesson_duration: wai.prop('lesson_duration', value, wai.nullable(wai.integer)),
     attendance_limit: wai.prop('attendance_limit', value, wai.nullable(wai.integer)),
     preferred_grading: wai.prop('preferred_grading', value, wai.nullable(course.mapGrading)),

@@ -1,5 +1,5 @@
 <template>
-  <show-page
+  <show2-page
     entity="people"
   >
     <template #title="{ record }">
@@ -24,12 +24,12 @@
         <show-page-table-row label="db.record.people.label.student_kobo_no">
           {{ record.student_kobo_no }}
         </show-page-table-row>
-        <show-page-table-row label="db.record.people.label.family_name">
+        <show-page-table-row label="db.record.people.label.last_name">
           {{ record.last_name[1] }}
           <br>
           <small>{{ record.last_name[0] }}</small>
         </show-page-table-row>
-        <show-page-table-row label="db.record.people.label.given_name">
+        <show-page-table-row label="db.record.people.label.first_name">
           {{ record.first_name[1] }}
           <br>
           <small>{{ record.first_name[0] }}</small>
@@ -39,19 +39,19 @@
         </show-page-table-row>
       </table>
     </template>
-  </show-page>
+  </show2-page>
 </template>
 
 <script lang="ts">
-import ShowPage from '~/components/database/ShowPage.vue';
 import { Component } from 'vue-property-decorator';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
+import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 
 @Component({
   components: {
-    ShowPage,
+    Show2Page,
     ShowPageAction,
     ShowPageTableRow,
   },

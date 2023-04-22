@@ -39,7 +39,6 @@ export function mapName (value): string[] {
 }
 
 export function mapSelectOrFillTuple (value: any): [string, undefined | string] {
-  if (!Array.isArray(value)) return [ '', undefined ];
   return wai.tuple(
     wai.string,
     wai.nullable(wai.string),

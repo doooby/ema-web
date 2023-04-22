@@ -18,8 +18,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { Option } from '~/lib/types';
 import SelectOrFillInput from '~/components/Form/primitives/SelectOrFillInput.vue';
+import app from '~/lib/app';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -50,11 +50,8 @@ export default class SelectOrFill extends Vue {
     }
   }
 
-  get options (): Array<Option> {
-    return (this.field.options.options ?? []).map(option => ({
-      value: option.value,
-      text: option.translated ? option.text : this.$t(option.text),
-    }));
+  get options (): app.Option[] {
+    return this.field.options.options ?? [];
   }
 }
 </script>

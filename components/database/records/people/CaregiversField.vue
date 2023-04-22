@@ -110,6 +110,7 @@ import SelectInput from '~/components/Form/primitives/SelectInput.vue';
 import NameInput from '~/components/Form/primitives/NameInput.vue';
 import TextInput from '~/components/Form/primitives/TextInput.vue';
 import SelectOrFillInput from '~/components/Form/primitives/SelectOrFillInput.vue';
+import app from '~/lib/app';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -133,18 +134,19 @@ export default class CaregiversField extends Vue {
     return (this as any).rawValue ?? [];
   }
 
-  get relationOptions () {
-    return person.caregiverRelationOptions();
+  get relationOptions (): app.Option[] {
+    return this.field.options.relationOptions ?? [];
   }
 
   get genderOptions () {
     return common.options.formalGenders();
   }
 
+  // TODO the default should be defined in the field
   onAddItem () {
     const newItems = [ ...this.items ];
     newItems.push(
-      Object.freeze({ relation: [ person.caregiverRelationOptions.defaultValue, undefined ] }),
+      Object.freeze({ relation: [ 'mother', undefined ] }) as any,
     );
     Object.freeze(newItems);
     (this as any).onChangeValue(newItems);

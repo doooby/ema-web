@@ -1,3 +1,6 @@
+// TODO t81 __supplement
+// move to country Data
+
 export function eysNo () {
   return Object.freeze([
     { value: 'y', text: 'lexicon.yes' },
