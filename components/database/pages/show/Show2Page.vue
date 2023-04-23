@@ -1,58 +1,12 @@
-<template>
-  <loaded-page class="page-content">
-    <div class="container pt-4 pb-5">
-      <h4 class="mb-3">
-        <nuxt-link
-          :to="`/database/${entity}`"
-        >
-          <t :value="`db.record.${entity}.meta.p`" />
-        </nuxt-link>
-      </h4>
-
-      <b-alert v-if="!record && getQueryState.processing" show variant="info" class="m-2">
-        <t value="app.loading" />
-      </b-alert>
-      <div v-if="recordLoadFailed">
-        <b-alert show variant="warning" class="m-2">
-          <t value="app.record_not_found" />
-          <div class="mt-2" />
-          <nuxt-link :to="pathToIndex">
-            <t value="db.pages.show.goto_index" />
-          </nuxt-link>
-        </b-alert>
-      </div>
-
-      <div v-if="record" class="container">
-        <div class="emt-6 emb-6">
-          <h2 class="text-center text-secondary">
-            <t :value="`db.record.${entity}.meta.s`" />
-          </h2>
-          <h3 class="d-flex align-items-center">
-            <slot name="title" :record="record" />
-          </h3>
-        </div>
-        <div class="row">
-          <div class="col-md-4 col-lg-3 overflow-hidden">
-            <slot name="actions" :record="record" :reload-record="reloadRecord" />
-          </div>
-          <div class="col emb-6">
-            <slot name="details" :record="record" :reload-record="reloadRecord" />
-          </div>
-        </div>
-        <slot name="container" :record="record" :reload-record="reloadRecord" />
-      </div>
-    </div>
-  </loaded-page>
-</template>
-
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { SearchRecordsResponsePayload } from '~/lib/api2';
 import { resourcePath } from '~/config/pages';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
+import ARecordLink from '~/components/database/components/ARecordLink.vue';
 
 @Component({
-  components: { LoadedPage },
+  components: { ARecordLink, LoadedPage },
 })
 export default class Show2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;
@@ -106,3 +60,47 @@ export default class Show2Page extends Vue {
   }
 }
 </script>
+
+<template>
+  <loaded-page class="page-content">
+    <div class="container pt-4 pb-5">
+      <h4 class="mb-3">
+        <nuxt-link
+          :to="`/database/${entity}`"
+        >
+          <t :value="`db.record.${entity}.meta.p`" />
+        </nuxt-link>
+      </h4>
+
+      <div>
+        <div class="d-flex align-items-center">
+          <div v-if="record">
+            <h2 class="m-0">
+              <slot name="title" :record="record" />
+            </h2>
+            <h5 class="mt-2">
+              <t :value="`db.record.${entity}.meta.s`" />
+            </h5>
+          </div>
+          <div v-else>
+            <div class="spinner-border" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="record" class="row mt-3">
+        <div class="col-md-4 col-lg-3 overflow-hidden">
+          <slot name="actions" :record="record" :reload-record="reloadRecord" />
+        </div>
+        <div class="col emb-6">
+          <slot name="details" :record="record" :reload-record="reloadRecord" />
+        </div>
+      </div>
+      <div v-if="record">
+        <slot name="container" :record="record" :reload-record="reloadRecord" />
+      </div>
+    </div>
+  </loaded-page>
+</template>
