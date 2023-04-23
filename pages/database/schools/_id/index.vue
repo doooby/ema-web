@@ -1,3 +1,33 @@
+<script lang="ts">
+import { Component } from 'vue-property-decorator';
+import ShowPageAction from '~/components/database/ShowPageAction.vue';
+import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
+import { DatabasePage } from '~/components';
+import AddressText from '~/components/database/records/location_systems/AddressText.vue';
+import Show2Page from '~/components/database/pages/show/Show2Page.vue';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
+
+enum Tabs {
+  courses,
+  teachers,
+  staff,
+}
+
+@Component({
+  components: {
+    BRecordLink,
+    Show2Page,
+    ShowPageAction,
+    ShowPageTableRow,
+    AddressText,
+  },
+})
+export default class extends DatabasePage {
+  Tabs = Tabs;
+  currenTab: Tabs = Tabs.courses;
+}
+</script>
+
 <template>
   <show2-page
     entity="schools"
@@ -6,7 +36,7 @@
       {{ record.name_en }}
     </template>
 
-    <template #actions="{ record, reloadRecord }">
+    <template #actions="{ record }">
       <ul>
         <li>
           <show-page-action
@@ -39,7 +69,6 @@
       <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
         <b-tab title="Courses">
           <div v-if="currenTab === Tabs.courses">
-            <!--            <courses-listing :school="record" />-->
           </div>
         </b-tab>
         <b-tab title="Teachers">
@@ -52,35 +81,3 @@
     </template>
   </show2-page>
 </template>
-
-<script lang="ts">
-import { Component } from 'vue-property-decorator';
-import ShowPageAction from '~/components/database/ShowPageAction.vue';
-import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
-import { DatabasePage } from '~/components';
-import CoursesListing from '~/components/database/records/schools/CoursesListing.vue';
-import AddressText from '~/components/database/records/location_systems/AddressText.vue';
-import Show2Page from '~/components/database/pages/show/Show2Page.vue';
-import BRecordLink from '~/components/database/components/BRecordLink.vue';
-
-enum Tabs {
-  courses,
-  teachers,
-  staff,
-}
-
-@Component({
-  components: {
-    BRecordLink,
-    Show2Page,
-    ShowPageAction,
-    ShowPageTableRow,
-    CoursesListing,
-    AddressText,
-  },
-})
-export default class extends DatabasePage {
-  Tabs = Tabs;
-  currenTab: Tabs = Tabs.courses;
-}
-</script>
