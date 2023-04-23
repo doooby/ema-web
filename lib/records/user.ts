@@ -1,11 +1,33 @@
 import { application_record, user } from '~/lib/records';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import Privileges from '~/components/database/records/users/controls/Privileges.vue';
-import { parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
+import { BRecord, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import { mapName, mapOptionalAssociation } from '~/lib/api2/mappers';
+import * as mappers from '~/lib/api/mappers';
 
 export const entity = 'users';
+
+export interface User extends application_record.SharedAttributes {
+  country?: BRecord;
+  login: string;
+  full_name: string[];
+  lock?: string;
+  privileges: UserPrivilege[];
+  is_root: boolean;
+}
+
+export interface UserPrivilege {
+  type: null | 'country_admin' | 'collector' | 'data_officer';
+  [ opt: string ]: any;
+}
+
+export interface SessionUser {
+  id: number;
+  login: string;
+  name: [string, string];
+  countries: mappers.AssociatedRecord[];
+}
 
 export function parseRecord (
   value: unknown,
@@ -66,3 +88,12 @@ export function mapUserPrivilege (value: any): user.UserPrivilege {
   // }
   return Object.freeze(privilege);
 }
+
+export const helpers = {
+
+  mapPrivilegeNames (record: User): string[] {
+    if (record.is_root) return [ 'is_root' ];
+    return record.privileges.map(privilege => privilege.type ?? 'null');
+  },
+
+};

@@ -111,9 +111,8 @@ export default class extends DatabasePage {
   lockModalShown = false;
   archiveModalShown = false;
 
-  privilegesList (record: user.User): string[] {
-    if (record.is_root) return [ 'is_root' ];
-    return record.privileges.map(privilege => privilege.type ?? 'null');
+  privilegesList (record: user.User) {
+    return user.helpers.mapPrivilegeNames(record);
   }
 }
 </script>

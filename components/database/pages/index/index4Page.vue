@@ -135,17 +135,17 @@ export default class Index4Page extends Vue {
 <template>
   <loaded-page class="page-content">
     <div class="container pt-4 pb-5">
-      <h4><t :value="`db.menu.resource.${entity}`" /></h4>
-      <div>
-        <nuxt-link
-          :to="`/database/${entity}/new`"
-          tag="button"
-          class="btn btn-outline-secondary"
-        >
-          <b-icon icon="clipboard-plus" class="mr-1" />
-          <t value="db.page.new.action" />
-        </nuxt-link>
-      </div>
+      <h4 class="mb-3">
+        <t :value="`db.menu.resource.${entity}`" />
+      </h4>
+      <nuxt-link
+        :to="`/database/${entity}/new`"
+        tag="button"
+        class="btn btn-outline-secondary"
+      >
+        <b-icon icon="clipboard-plus" class="mr-1" />
+        <t value="db.page.new.action" />
+      </nuxt-link>
       <search-form
         class="mt-3"
         :entity="entity"

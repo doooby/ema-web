@@ -2,7 +2,6 @@
   <new2-page
     entity="standardized_courses"
     :fields="fields"
-    card-class="col-md-12 col-lg-8"
   >
     <template #layout="{ context, values }">
       <record-form :context="context" :values="values" />

@@ -32,7 +32,7 @@ export default class DataTable extends Vue {
 @import "assets/css/variables";
 .ema--data-table {
   overflow-x: scroll;
-  background-color: $input-bg;
+  background-color: $EMA-table-head;
 
   > table {
     table-layout: fixed;

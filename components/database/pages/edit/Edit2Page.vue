@@ -1,7 +1,7 @@
 <template>
   <loaded-page class="page-content">
-    <div class="container mt-4 mb-5">
-      <h4>
+    <div class="container pt-4 pb-5">
+      <h4 class="mb-3">
         <nuxt-link
           :to="`/database/${entity}`"
         >
@@ -9,7 +9,7 @@
         </nuxt-link>
       </h4>
 
-      <div class="row mt-3">
+      <div class="row">
         <div class="col justify-content-md-center">
           <div :class="['card', cardClass]">
 

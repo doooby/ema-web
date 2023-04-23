@@ -71,12 +71,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import { course } from '~/lib/records';
-import { AssociatedRecord } from '~/lib/api/mappers';
+import * as mappers from '~/lib/api/mappers';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import SearchModal from '~/components/database/SearchModal.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 import CourseGrading from '~/components/database/controls/primitives/CourseGrading.vue';
-import * as mappers from '~/lib/api/mappers';
 import AbbreviatedRecordSelect from '~/components/database/controls/AbbreviatedRecordSelect.vue';
 import { BRecord } from '~/lib/api2';
 

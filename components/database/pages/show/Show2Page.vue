@@ -1,7 +1,7 @@
 <template>
   <loaded-page class="page-content">
     <div class="container pt-4 pb-5">
-      <h4>
+      <h4 class="mb-3">
         <nuxt-link
           :to="`/database/${entity}`"
         >

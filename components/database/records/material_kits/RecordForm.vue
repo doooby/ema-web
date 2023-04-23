@@ -1,8 +1,10 @@
 <template>
-  <div>
-    <form-field name="name" :context="context" :values="values" />
-    <form-field name="code" :context="context" :values="values" />
-    <form-field name="contents" :context="context" :values="values" />
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form-field name="name" :context="context" :values="values" />
+      <form-field name="code" :context="context" :values="values" />
+      <form-field name="contents" :context="context" :values="values" />
+    </div>
   </div>
 </template>
 
