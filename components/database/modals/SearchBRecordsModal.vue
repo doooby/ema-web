@@ -5,6 +5,7 @@ import { BRecord, SearchRecordsResponsePayload } from '~/lib/api2';
 import Pagination from '~/components/database/RecordsBrowsing/Pagination.vue';
 import LoaderStrip from '~/components/database/LoaderStrip.vue';
 import { RequestState } from '~/lib/api';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 interface Item {
   selected: boolean;
@@ -16,6 +17,7 @@ interface Item {
   components: {
     BrowsingPagination: Pagination,
     LoaderStrip,
+    BRecordLink,
   },
 })
 export default class SearchBRecordsModal extends Vue {
@@ -59,6 +61,7 @@ export default class SearchBRecordsModal extends Vue {
       query = this.$api2.getQuery(this.entity, 'searchB')({
         country_id: this.$store.getters['session/countryId'],
         page,
+        per_page: 10,
         search: this.searchValue,
       });
     } catch (error) {
@@ -74,7 +77,7 @@ export default class SearchBRecordsModal extends Vue {
   }
 }
 
-function bRecordLabels ({ caption: _, ...labels }: BRecord) {
+function bRecordLabels ({ caption: _caption, id: _id, ...labels }: BRecord) {
   return Object.entries(labels)
     .filter(([ , value ]) => !!value) as [string, string][];
 }
@@ -133,9 +136,15 @@ function bRecordLabels ({ caption: _, ...labels }: BRecord) {
           button
           @click="$emit('select', record)"
         >
-          {{ record.caption }}
+          <div class="d-flex align-items-center mb-2">
+            <b-record-link :entity="entity" :record="record" :show-id="true" :new-tab="true" />
+            <h5 class="m-0 ml-2">
+              {{ record.caption }}
+            </h5>
+          </div>
           <div v-for="[name, value] in labels" :key="name">
-            <small>{{ name }}: {{ value }}</small>
+            <small class="text-black-50">{{ name }}: </small>
+            <small>{{ value }}</small>
           </div>
         </b-list-group-item>
       </b-list-group>

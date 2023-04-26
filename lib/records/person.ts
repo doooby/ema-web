@@ -142,6 +142,7 @@ export function recordControls ({
     [ 'assistance_provided', controls.boolean ],
     [ 'disability_note', controls.textMultiline ],
     [ 'residency_status', controls.selectOrFill, {
+      prependEmptyValue: true,
       options: countryData?.options.records.people.residencyStatuses(),
     } ],
     [ 'school_distance_km', controls.integer ],

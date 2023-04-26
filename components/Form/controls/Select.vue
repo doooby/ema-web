@@ -45,7 +45,15 @@ export default class Select extends Vue {
   }
 
   get options (): Option[] {
-    return (this.field.options.options ?? []).map(option => ({
+    const options = [ ...this.field.options.options ];
+    if (this.field.options.prependEmptyValue) {
+      const text = this.field.options.prependEmptyText ?? '';
+      options.splice(0, 0, {
+        value: undefined,
+        text,
+      });
+    }
+    return (options).map(option => ({
       value: option.value,
       text: option.translated ? option.text : this.$t(option.text),
     }));

@@ -44,7 +44,7 @@ export default class BRecordsSelect extends Vue {
         :key="record.id"
         class="mr-3 d-flex align-items-center"
       >
-        <b-record-link class="mr-2" :entity="entity" :record="record" />
+        <b-record-link class="mr-2" :entity="entity" :record="record" :new-tab="true" />
         <btn-mini variant="secondary" icon="x" @click="onRemoveRecord(record)" />
       </div>
     </div>
