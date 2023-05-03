@@ -26,9 +26,9 @@ function mapOptions (textKeyPrefix: string, values: string[]): app.Option[] {
 // TODO t81
 // 1. validate & complete these lists
 // 2. unify & change keys to `app.internal_lists.<courses.accreditationAuthorities>`
-// 3. flatten the structure - `options: { accreditationAuthorities, educationTypes, [...etc] }` - `TODO DONE`
 // 4. instead `lexicon.unknown` option create a form field config option
 // 5. remove old listings (search for `TODO t81 __supplement`
+// 6. create
 export function defaultCountryData (): Data {
   return {
     options: {
