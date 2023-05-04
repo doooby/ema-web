@@ -33,7 +33,7 @@ export interface Person extends application_record.SharedAttributes {
   disability_note?: string;
   residency_status?: [string, undefined | string];
   school_transport?: [string, undefined | string];
-  school_distance_km?: number;
+  school_distance_km?: [string, undefined | string];
   school_distance_min?: number;
 }
 
@@ -60,7 +60,7 @@ export function parseRecord (
     disability_diagnosis: wai.prop('disability_diagnosis', value, wai.nullable(wai.boolean)),
     assistance_needed: wai.prop('assistance_needed', value, wai.nullable(wai.boolean)),
     assistance_provided: wai.prop('assistance_provided', value, wai.nullable(wai.boolean)),
-    school_distance_km: wai.prop('school_distance_km', value, wai.nullable(wai.integer)),
+    school_distance_km: wai.prop('school_distance_km', value, wai.nullable(mapSelectOrFillTuple)),
     school_distance_min: wai.prop('school_distance_min', value, wai.nullable(wai.integer)),
     student_kobo_no: wai.prop('student_kobo_no', value, wai.nullable(wai.string)),
     gender: wai.prop('gender', value, wai.nullable(wai.string)),
@@ -145,7 +145,9 @@ export function recordControls ({
       prependEmptyValue: true,
       options: countryData?.options.records.people.residencyStatuses(),
     } ],
-    [ 'school_distance_km', controls.integer ],
+    [ 'school_distance_km', controls.selectOrFill, {
+      options: [],
+    } ],
     [ 'school_distance_min', controls.integer ],
     [ 'school_transport', controls.selectOrFill, {
       options: countryData?.options.records.people.schoolTransports(),
