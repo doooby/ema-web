@@ -122,7 +122,7 @@ export function recordControls ({
       options: [],
     } ],
     [ 'outside_school', controls.select, {
-      options: countryData?.options.records.people.outsideSchoolTerms(),
+      options: countryData?.options.outsideSchoolTerms(),
     } ],
     [ 'nationality', controls.select, {
       options: [],
@@ -132,10 +132,10 @@ export function recordControls ({
     } ],
     [ 'registered_on', controls.date ],
     [ 'enrollment_reasons', controls.listMultiple, {
-      options: countryData?.options.records.people.enrollmentReasons(),
+      options: countryData?.options.enrollmentReasons(),
     } ],
     [ 'disabilities', controls.listMultiple, {
-      options: countryData?.options.records.people.disabilities(),
+      options: countryData?.options.disabilities(),
     } ],
     [ 'disability_diagnosis', controls.boolean ],
     [ 'assistance_needed', controls.boolean ],
@@ -143,17 +143,17 @@ export function recordControls ({
     [ 'disability_note', controls.textMultiline ],
     [ 'residency_status', controls.selectOrFill, {
       prependEmptyValue: true,
-      options: countryData?.options.records.people.residencyStatuses(),
+      options: countryData?.options.residencyStatuses(),
     } ],
     [ 'school_distance_km', controls.selectOrFill, {
       options: [],
     } ],
     [ 'school_distance_min', controls.integer ],
     [ 'school_transport', controls.selectOrFill, {
-      options: countryData?.options.records.people.schoolTransports(),
+      options: countryData?.options.schoolTransports(),
     } ],
     [ 'caregivers', asFieldType(CaregiversField), {
-      relationOptions: countryData?.options.records.people.caregiverRelations(),
+      relationOptions: countryData?.options.caregiverRelations(),
     } ],
   ];
 }
