@@ -33,25 +33,25 @@ export function defaultCountryData (): Data {
   return {
     options: {
       accreditationAuthorities () {
-        return mapOptions('db.common.accreditation_authority', [
+        return mapOptions('app.internal_lists.accreditation_authority', [
           'gov',
           'ngo',
         ]);
       },
       educationTypes () {
-        return mapOptions('db.common.education_type', [
+        return mapOptions('app.internal_lists.education_type', [
           'formal',
           'informal',
         ]);
       },
       genders () {
         return [
-          { value: 'm', textKey: 'db.common.genders.boys.p' },
-          { value: 'f', textKey: 'db.common.genders.girls.p' },
+          { value: 'm', textKey: 'app.internal_lists.genders.boys.p' },
+          { value: 'f', textKey: 'app.internal_lists.genders.girls.p' },
         ];
       },
       disabilities () {
-        return mapOptions('db.record.people.disabilities', [
+        return mapOptions('app.internal_lists.disabilities', [
           'hearing',
           'visual',
           'physical',
@@ -63,7 +63,7 @@ export function defaultCountryData (): Data {
         ]);
       },
       enrollmentReasons () {
-        return mapOptions('db.record.people.enrolment_reasons', [
+        return mapOptions('app.internal_lists.enrolment_reasons', [
           'education',
           'closest_school',
           'sole_school',
@@ -78,7 +78,7 @@ export function defaultCountryData (): Data {
         ]);
       },
       outsideSchoolTerms () {
-        return mapOptions('db.record.people.outside_school_terms', [
+        return mapOptions('app.internal_lists..outside_school_terms', [
           'less than one month',
           '1-2 months',
           '1-2 years',
@@ -90,7 +90,7 @@ export function defaultCountryData (): Data {
       residencyStatuses () {
         return [
           { value: '', textKey: 'lexicon.unknown' },
-          ...mapOptions('db.record.people.residency_status', [
+          ...mapOptions('app.internal_lists.residency_status', [
             'resident_host',
             'idp',
             'returnee',
@@ -101,7 +101,7 @@ export function defaultCountryData (): Data {
       schoolTransports () {
         return [
           { value: '', textKey: 'lexicon.unknown' },
-          ...mapOptions('db.record.people.school_transport', [
+          ...mapOptions('app.internal_lists.school_transport', [
             'walk',
             'bike',
             'car',
@@ -112,7 +112,7 @@ export function defaultCountryData (): Data {
         ];
       },
       caregiverRelations () {
-        return mapOptions('db.record.people.caregivers.relation', [
+        return mapOptions('app.internal_lists.caregivers.relation', [
           'mother',
           'father',
           'stepmother',
