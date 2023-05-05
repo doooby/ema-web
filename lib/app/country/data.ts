@@ -4,6 +4,7 @@ type OptionsBuilder = () => app.Option[];
 
 export interface Data {
   options: {
+    // TODO t81 eslint ??
         accreditationAuthorities: OptionsBuilder;
         educationTypes: OptionsBuilder;
         genders: OptionsBuilder;
@@ -25,10 +26,8 @@ function mapOptions (textKeyPrefix: string, values: string[]): app.Option[] {
 
 // TODO t81
 // 1. validate & complete these lists
-// 2. unify & change keys to `app.internal_lists.<courses.accreditationAuthorities>`
 // 4. instead `lexicon.unknown` option create a form field config option
 // 5. remove old listings (search for `TODO t81 __supplement`
-// 6. create
 export function defaultCountryData (): Data {
   return {
     options: {
@@ -89,7 +88,6 @@ export function defaultCountryData (): Data {
       },
       residencyStatuses () {
         return [
-          { value: '', textKey: 'lexicon.unknown' },
           ...mapOptions('app.internal_lists.residency_status', [
             'resident_host',
             'idp',
@@ -100,7 +98,6 @@ export function defaultCountryData (): Data {
       },
       schoolTransports () {
         return [
-          { value: '', textKey: 'lexicon.unknown' },
           ...mapOptions('app.internal_lists.school_transport', [
             'walk',
             'bike',

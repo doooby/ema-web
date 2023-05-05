@@ -1,5 +1,5 @@
 // TODO t81 __supplement
-// move to country Data
+// remove all
 
 export function eysNo () {
   return Object.freeze([
@@ -16,6 +16,7 @@ export function eysNoOptional () {
   ]);
 }
 
+//
 export function formalGenders () {
   return Object.freeze([
     { value: 'f', text: 'db.common.genders.females.s' },

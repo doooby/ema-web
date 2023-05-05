@@ -138,10 +138,6 @@ export default class CaregiversField extends Vue {
     return this.field.options.relationOptions ?? [];
   }
 
-  get genderOptions () {
-    return common.options.formalGenders();
-  }
-
   // TODO the default should be defined in the field
   onAddItem () {
     const newItems = [ ...this.items ];

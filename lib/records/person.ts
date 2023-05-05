@@ -112,7 +112,7 @@ export function recordControls ({
     [ 'last_name', controls.name ],
     [ 'born_on', controls.date ],
     [ 'gender', controls.select, {
-      options: common.options.formalGenders(),
+      options: common.options.formalGenders(), // TODO t81 from countryData.options.genders
     } ],
     [ 'citizen_id', controls.text ],
     [ 'student_kobo_no', controls.text ],
@@ -142,7 +142,7 @@ export function recordControls ({
     [ 'assistance_provided', controls.boolean ],
     [ 'disability_note', controls.textMultiline ],
     [ 'residency_status', controls.selectOrFill, {
-      prependEmptyValue: true,
+      prependEmptyValue: true, // TODO t81 implement in SelectOrFill, see Select
       options: countryData?.options.residencyStatuses(),
     } ],
     [ 'school_distance_km', controls.selectOrFill, {
@@ -150,6 +150,7 @@ export function recordControls ({
     } ],
     [ 'school_distance_min', controls.integer ],
     [ 'school_transport', controls.selectOrFill, {
+      prependEmptyValue: true,
       options: countryData?.options.schoolTransports(),
     } ],
     [ 'caregivers', asFieldType(CaregiversField), {
