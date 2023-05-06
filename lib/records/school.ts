@@ -58,8 +58,16 @@ export function recordControls ({
     [ 'education_levels', dbFields.selectManyBRecords, { entity: 'education_levels' } ],
     [ 'name', controls.name ],
     [ 'external_id', controls.text ],
-    [ 'education_types', controls.selectMultiple, { options: countryData?.options.educationTypes() } ],
-    [ 'gender_dedications', controls.selectMultiple, { options: countryData?.options.genders() } ],
+    [ 'education_types', controls.selectMultiple,
+      {
+        options: countryData?.internal_lists.education_type(),
+      },
+    ],
+    [ 'gender_dedications', controls.selectMultiple,
+      {
+        options: countryData?.internal_lists.gender(),
+      },
+    ],
     [ 'classrooms_count', controls.integer ],
     [ 'female_latrines_count', controls.integer ],
     [ 'male_latrines_count', controls.integer ],

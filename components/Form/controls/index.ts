@@ -59,5 +59,4 @@ export const controlsIndex2 = {
   imageFile: asFieldType(ImageFile),
   integer: { ...IntegerControlType, control: IntegerControl },
   text: { ...TextControlType, control: TextControl },
-  listMultiple: asFieldType(ListMultiple),
 };

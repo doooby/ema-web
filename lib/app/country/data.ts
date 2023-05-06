@@ -15,7 +15,8 @@ export interface Data {
         schoolTransports: OptionsBuilder;
         caregiverRelations: OptionsBuilder;
     distancesToSchool: OptionsBuilder;
-  }
+  },
+  internal_lists: Record<string, OptionsBuilder>;
 }
 
 function mapOptions (textKeyPrefix: string, values: string[]): app.Option[] {
@@ -25,12 +26,41 @@ function mapOptions (textKeyPrefix: string, values: string[]): app.Option[] {
   }));
 }
 
+function buildInternalList (name: string, values: string[]): app.Option[] {
+  return values.map(value => ({
+    value,
+    textKey: `app.internal_lists.${name}.${value}`,
+  }));
+}
+
 // TODO t81
 // 1. validate & complete these lists
 // 4. instead `lexicon.unknown` option create a form field config option
 // 5. remove old listings (search for `TODO t81 __supplement`
 export function defaultCountryData (): Data {
   return {
+    internal_lists: [
+
+      [ 'accreditation_authority', [
+        'gov',
+        'ngo',
+      ] ],
+
+      [ 'education_type', [
+        'formal',
+        'informal',
+      ] ],
+
+      [ 'gender', [
+        'f',
+        'm',
+      ] ],
+
+    ].reduce((index, list) => {
+      const [ name, values ] = list as [string, string[]];
+      index[name] = () => buildInternalList(name, values);
+      return index;
+    }, {}),
     options: {
       accreditationAuthorities () {
         return mapOptions('app.internal_lists.accreditation_authority', [

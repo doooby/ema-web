@@ -78,7 +78,7 @@ export const user = {
       [ 'login', 'text' ],
       [ 'full_name', controls.name ],
       [ 'privileges', asFieldType(Privileges) ],
-      [ 'is_root', 'boolean' ],
+      [ 'is_root', controls.boolean ],
     ];
   },
 };
