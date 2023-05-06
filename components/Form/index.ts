@@ -1,4 +1,4 @@
-import { controlsIndex, controlsIndex2, asFieldType } from './controls';
+import { controlsIndex2, asFieldType } from './controls';
 import Group from './Group.vue';
 
 export {
@@ -46,10 +46,6 @@ function getControlType (type: string | FormFieldType): FormFieldType {
       utils.warn('Form controls - custom type is missing control component', customType);
     }
     return customType;
-  }
-  if (typeOfType === 'string') {
-    const knownType = controlsIndex2[type as string] ?? controlsIndex[type as string];
-    if (knownType) return knownType;
   }
 
   utils.warn('Form controls - unknown type', type);

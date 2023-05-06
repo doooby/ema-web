@@ -34,31 +34,31 @@ import { buildFormFields, controls, prefillFormValues } from '~/components/Form'
 @Component
 export default class BasicForm extends Vue {
   fields = buildFormFields([
-    [ 'text', 'text' ],
-    [ 'integer', 'integer' ],
-    [ 'list', 'list', {
+    [ 'text', controls.text ],
+    [ 'integer', controls.integer ],
+    [ 'list', controls.select, {
       options: [
-        { value: 'opt1', text: 'Option 1' },
-        { value: 'opt2', text: 'Option 2' },
+        { value: 'opt1', textKey: 'Option 1' },
+        { value: 'opt2', textKey: 'Option 2' },
       ],
     } ],
-    [ 'select', 'select', {
+    [ 'select', controls.select, {
       options: [
-        { value: 'opt1', text: 'Option 1' },
-        { value: 'opt2', text: 'Option 2' },
+        { value: 'opt1', textKey: 'Option 1' },
+        { value: 'opt2', textKey: 'Option 2' },
       ],
     } ],
-    [ 'select_or_fill', 'selectOrFill', {
+    [ 'select_or_fill', controls.selectOrFill, {
       options: [
-        { value: 'opt1', text: 'Option 1' },
-        { value: 'opt2', text: 'Option 2' },
+        { value: 'opt1', textKey: 'Option 1' },
+        { value: 'opt2', textKey: 'Option 2' },
       ],
     } ],
-    [ 'date', 'date' ],
-    [ 'calendar', 'calendar' ],
+    [ 'date', controls.date ],
+    [ 'calendar', controls.calendar ],
     [ 'name', controls.name ],
-    [ 'text_interactive', 'text', { interactive: true } ],
-    [ 'text_multiline', 'textMultiline' ],
+    [ 'text_interactive', controls.text, { interactive: true } ],
+    [ 'text_multiline', controls.textMultiline ],
   ]);
 
   defaultValues = {

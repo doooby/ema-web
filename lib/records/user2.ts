@@ -75,7 +75,7 @@ export function mapSessionUser (value: any): SessionUser {
 export const user = {
   entityControls (): FormFieldDefinition[] {
     return [
-      [ 'login', 'text' ],
+      [ 'login', controls.text ],
       [ 'full_name', controls.name ],
       [ 'privileges', asFieldType(Privileges) ],
       [ 'is_root', controls.boolean ],

@@ -14,14 +14,14 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { buildFormFields, prefillFormValues } from '~/components/Form';
+import { buildFormFields, controls, prefillFormValues } from '~/components/Form';
 import { Location } from '~/lib/records';
 import { MaybeData } from '~/lib/types';
 
 @Component
 export default class SpecialsForm extends Vue {
   fields = buildFormFields([
-    [ 'address', 'location', {
+    [ 'address', controls.location, {
       system: {
         id: -1,
         name: [ 'Address' ],

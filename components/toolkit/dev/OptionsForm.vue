@@ -15,15 +15,15 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import { buildFormFields, prefillFormValues } from '~/components/Form';
+import { buildFormFields, controls, prefillFormValues } from '~/components/Form';
 
 @Component
 export default class OptionsForm extends Vue {
   fields = buildFormFields([
-    [ 'text_with_left_side', 'text', { leftLabel: () => this.$t('misc.language.en') } ],
-    [ 'text_with_right_side', 'text', { rightLabel: 'right' } ],
-    [ 'integer_with_left_side', 'integer', { leftLabel: '$' } ],
-    [ 'integer_with_right_side', 'integer', { rightLabel: 'Kč' } ],
+    [ 'text_with_left_side', controls.text, { leftLabel: () => this.$t('misc.language.en') } ],
+    [ 'text_with_right_side', controls.text, { rightLabel: 'right' } ],
+    [ 'integer_with_left_side', controls.integer, { leftLabel: '$' } ],
+    [ 'integer_with_right_side', controls.integer, { rightLabel: 'Kč' } ],
   ])
 
   values = {

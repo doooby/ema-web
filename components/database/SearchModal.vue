@@ -39,7 +39,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Params, QueryDefinition } from '~/lib/api';
-import { buildFormFields } from '~/components/Form';
+import { buildFormFields, controls } from '~/components/Form';
 import debounce from 'lodash/debounce';
 import * as mappers from '~/lib/api/mappers';
 import Pagination from '~/components/database/RecordsBrowsing/Pagination.vue';
@@ -68,7 +68,7 @@ export default class SearchModal extends Vue {
   cachedQueryState = this.$api.newQueryState<SearchResult>();
 
   searchFields = buildFormFields([
-    [ 'search', 'text', {
+    [ 'search', controls.text, {
       leftLabel: { text: '🔍' },
       interactive: true,
       label: 'app.action.search',
