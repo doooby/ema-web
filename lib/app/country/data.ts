@@ -61,6 +61,7 @@ export function defaultCountryData (): Data {
       index[name] = () => buildInternalList(name, values);
       return index;
     }, {}),
+
     options: {
       accreditationAuthorities () {
         return mapOptions('app.internal_lists.accreditation_authority', [
