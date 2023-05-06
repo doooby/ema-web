@@ -14,6 +14,7 @@ export interface Data {
         residencyStatuses: OptionsBuilder;
         schoolTransports: OptionsBuilder;
         caregiverRelations: OptionsBuilder;
+    distancesToSchool: OptionsBuilder;
   }
 }
 
@@ -58,7 +59,6 @@ export function defaultCountryData (): Data {
           'mental',
           'communication',
           'autism',
-          'other',
         ]);
       },
       enrollmentReasons () {
@@ -77,13 +77,13 @@ export function defaultCountryData (): Data {
         ]);
       },
       outsideSchoolTerms () {
-        return mapOptions('app.internal_lists..outside_school_terms', [
-          'less than one month',
-          '1-2 months',
-          '1-2 years',
-          'More than 2 years',
-          '7-12 months',
-          '3-6 months',
+        return mapOptions('app.internal_lists.outside_school_terms', [
+          '<1m',
+          '1-2m',
+          '1-2r',
+          '>2y',
+          '7-12m',
+          '3-6m',
         ]);
       },
       residencyStatuses () {
@@ -95,6 +95,18 @@ export function defaultCountryData (): Data {
             'refugee',
           ]),
         ];
+      },
+      distancesToSchool () {
+        return mapOptions('app.internal_lists.distance_to_school', [
+          '<1km',
+          '1-2km',
+          '3-5km',
+          '5-10km',
+          '<15km',
+          '<20km',
+          '2km',
+          '<10km',
+        ]);
       },
       schoolTransports () {
         return [

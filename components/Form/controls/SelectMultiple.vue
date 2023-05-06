@@ -20,6 +20,7 @@ import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import SelectMultipleInput from '~/components/Form/primitives/SelectMultipleInput.vue';
 import app from '~/lib/app';
+import { OTHER_OPTION } from '../primitives/SelectOrFillInput.vue';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -44,7 +45,15 @@ export default class SelectMultiple extends Vue {
   }
 
   get options (): app.Option[] {
-    return (this.field.options.options ?? []);
+    const options = [ ...(this.field.options.options ?? []) ];
+    if (this.field.options.appendOtherValue) {
+      const text = this.field.options.appendOthertext ?? 'internal.other_option';
+      options.push({
+        value: OTHER_OPTION,
+        textKey: text,
+      });
+    }
+    return options;
   }
 
   onChange (value: any): void {

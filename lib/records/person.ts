@@ -33,7 +33,7 @@ export interface Person extends application_record.SharedAttributes {
   disability_note?: string;
   residency_status?: [string, undefined | string];
   school_transport?: [string, undefined | string];
-  school_distance_km?: [string, undefined | string];
+  school_distance_km?: string;
   school_distance_min?: number;
 }
 
@@ -60,7 +60,7 @@ export function parseRecord (
     disability_diagnosis: wai.prop('disability_diagnosis', value, wai.nullable(wai.boolean)),
     assistance_needed: wai.prop('assistance_needed', value, wai.nullable(wai.boolean)),
     assistance_provided: wai.prop('assistance_provided', value, wai.nullable(wai.boolean)),
-    school_distance_km: wai.prop('school_distance_km', value, wai.nullable(mapSelectOrFillTuple)),
+    school_distance_km: wai.prop('school_distance_km', value, wai.nullable(wai.string)),
     school_distance_min: wai.prop('school_distance_min', value, wai.nullable(wai.integer)),
     student_kobo_no: wai.prop('student_kobo_no', value, wai.nullable(wai.string)),
     gender: wai.prop('gender', value, wai.nullable(wai.string)),
@@ -127,14 +127,15 @@ export function recordControls ({
     [ 'nationality', controls.select, {
       options: [],
     } ],
-    [ 'spoken_languages', controls.listMultiple, {
+    [ 'spoken_languages', controls.selectMultiple, {
       options: [],
     } ],
     [ 'registered_on', controls.date ],
-    [ 'enrollment_reasons', controls.listMultiple, {
+    [ 'enrollment_reasons', controls.selectMultiple, {
       options: countryData?.options.enrollmentReasons(),
     } ],
-    [ 'disabilities', controls.listMultiple, {
+    [ 'disabilities', controls.selectMultiple, {
+      appendOtherValue: true,
       options: countryData?.options.disabilities(),
     } ],
     [ 'disability_diagnosis', controls.boolean ],
@@ -145,8 +146,8 @@ export function recordControls ({
       prependEmptyValue: true, // TODO t81 implement in SelectOrFill, see Select
       options: countryData?.options.residencyStatuses(),
     } ],
-    [ 'school_distance_km', controls.selectOrFill, {
-      options: [],
+    [ 'school_distance_km', controls.select, {
+      options: countryData?.options.distancesToSchool(),
     } ],
     [ 'school_distance_min', controls.integer ],
     [ 'school_transport', controls.selectOrFill, {

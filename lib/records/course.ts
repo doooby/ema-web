@@ -105,7 +105,7 @@ export function recordControls ({
     [ 'name', controls.name ],
     [ 'grade', controls.integer, { maxLength: 2 } ],
     [ 'is_formal', controls.boolean ],
-    [ 'accreditation_authority', controls.selectOrFill, { options: countryData?.options.records.courses.accreditationAuthorities() } ],
+    [ 'accreditation_authority', controls.selectOrFill, { options: countryData?.options.accreditationAuthorities() } ],
     [ 'lesson_duration', controls.integer, { rightLabel: 'app.time.minutes.p' } ],
     [ 'attendance_limit', controls.integer, { requireable: true, rightLabel: { text: '%' } } ],
     [ 'preferred_grading', asFieldType(GradingTypeField) ],

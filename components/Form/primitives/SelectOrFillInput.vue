@@ -3,7 +3,7 @@
     <b-form-select
       :id="domId"
       :value="sanitizedValue[0]"
-      :options="optionsWithOther"
+      :options="optionsList"
       @change="onSelect"
     />
     <input
@@ -22,7 +22,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 
-const OTHER_OPTION = '_other';
+export const OTHER_OPTION = '_other';
 
 @Component
 export default class SelectOrFillInput extends Vue {
@@ -43,13 +43,14 @@ export default class SelectOrFillInput extends Vue {
     }
   }
 
-  get optionsWithOther () {
+  get optionsList () {
     return [
-      ...this.options.map(option => ({
-        value: option.value,
-        text: this.$t(option.textKey),
+      ...this.options.map(({ value, textKey }) => ({
+        value,
+        text: this.$t(textKey),
       })),
-      { value: OTHER_OPTION, text: this.$t('app.common.label.other') as string },
+      // TODO t81 the translation key
+      { value: OTHER_OPTION, text: this.$t('internal.other_option') as string },
     ];
   }
 

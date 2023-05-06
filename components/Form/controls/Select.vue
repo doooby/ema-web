@@ -18,8 +18,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { Option } from '~/lib/types';
 import SelectInput from '~/components/Form/primitives/SelectInput.vue';
+import app from '~/lib/app';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -39,24 +39,21 @@ export default class Select extends Vue {
   @Prop({ required: true }) context!: FormGroupContext;
   @Prop({ required: true }) formValues!: FormValues;
 
-  get selected (): undefined | Option {
+  get selected (): undefined | app.Option {
     const value = this.formValues[this.field.name];
     return this.options.find(option => option.value === value);
   }
 
-  get options (): Option[] {
-    const options = [ ...this.field.options.options ];
+  get options (): app.Option[] {
+    const options = [ ...(this.field.options.options ?? []) ];
     if (this.field.options.prependEmptyValue) {
-      const text = this.field.options.prependEmptyText ?? '';
+      const text = this.field.options.prependEmptyText ?? 'internal.empty_option';
       options.splice(0, 0, {
         value: undefined,
-        text,
+        textKey: text,
       });
     }
-    return (options).map(option => ({
-      value: option.value,
-      text: option.translated ? option.text : this.$t(option.text),
-    }));
+    return options;
   }
 
   onChange (value: any): void {

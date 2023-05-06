@@ -52,7 +52,7 @@ export default class SelectOrFill extends Vue {
 
   get options (): app.Option[] {
     // TODO t81 prependEmptyValue
-    // { value: undefined, textKey: 'lexicon.unknown' }
+    // { value: undefined, textKey: 'internal.empty_option' }
     return this.field.options.options ?? [];
   }
 }
