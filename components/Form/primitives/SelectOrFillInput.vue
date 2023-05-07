@@ -22,15 +22,13 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 
-export const OTHER_OPTION = '_other';
-
 @Component
 export default class SelectOrFillInput extends Vue {
   @Prop({ default: () => undefined }) readonly domId?: string;
   @Prop({ required: true }) readonly value!: any;
   @Prop({ required: true }) readonly options!: app.Option[];
 
-  otherOption = OTHER_OPTION;
+  otherOption = app.OTHER_OPTION;
 
   get sanitizedValue (): [string, undefined | string] {
     if (Array.isArray(this.value)) {
@@ -44,14 +42,17 @@ export default class SelectOrFillInput extends Vue {
   }
 
   get optionsList () {
-    return [
-      ...this.options.map(({ value, textKey }) => ({
-        value,
-        text: this.$t(textKey),
-      })),
-      // TODO t81 the translation key
-      { value: OTHER_OPTION, text: this.$t('internal.other_option') as string },
-    ];
+    const list = this.options.map((option: any) => ({
+      value: option.value,
+      text: option.text ?? this.$t(option.textKey),
+    }));
+    if (list.length && list[list.length - 1].value !== app.OTHER_OPTION) {
+      list.push({
+        value: app.OTHER_OPTION,
+        text: this.$t('internal.other_option'),
+      });
+    }
+    return list;
   }
 
   onSelect (value: string) {
@@ -59,7 +60,7 @@ export default class SelectOrFillInput extends Vue {
   }
 
   onFill (event: any) {
-    this.$emit('input', [ OTHER_OPTION, event.target.value ]);
+    this.$emit('input', [ app.OTHER_OPTION, event.target.value ]);
   }
 }
 </script>

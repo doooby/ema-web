@@ -138,7 +138,6 @@ export default class CaregiversField extends Vue {
     return this.field.options.relationOptions ?? [];
   }
 
-  // TODO the default should be defined in the field
   onAddItem () {
     const newItems = [ ...this.items ];
     newItems.push(

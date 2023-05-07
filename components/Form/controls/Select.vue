@@ -45,15 +45,7 @@ export default class Select extends Vue {
   }
 
   get options (): app.Option[] {
-    const options = [ ...(this.field.options.options ?? []) ];
-    if (this.field.options.prependEmptyValue) {
-      const text = this.field.options.prependEmptyText ?? 'internal.empty_option';
-      options.splice(0, 0, {
-        value: undefined,
-        textKey: text,
-      });
-    }
-    return options;
+    return this.field.options.options ?? [];
   }
 
   onChange (value: any): void {

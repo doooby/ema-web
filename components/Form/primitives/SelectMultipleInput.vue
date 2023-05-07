@@ -19,10 +19,9 @@ export default class SelectMultipleInput extends Vue {
   @Prop({ required: true }) readonly options!: app.Option[];
 
   get translatedOptions () {
-    if (!this.options) return [];
-    return this.options.map(({ value, textKey }) => ({
-      value,
-      text: this.$t(textKey),
+    return this.options.map((option: any) => ({
+      value: option.value,
+      text: option.text ?? this.$t(option.textKey),
     }));
   }
 }

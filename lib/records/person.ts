@@ -147,24 +147,30 @@ export function recordControls ({
       options: countryData?.options.enrollmentReasons(),
     } ],
     [ 'disabilities', controls.selectMultiple, {
-      appendOtherValue: true,
-      options: countryData?.options.disabilities(),
+      options: app.extendOptionsList(
+        countryData?.options.disabilities(),
+        { other: true },
+      ),
     } ],
     [ 'disability_diagnosis', controls.boolean ],
     [ 'assistance_needed', controls.boolean ],
     [ 'assistance_provided', controls.boolean ],
     [ 'disability_note', controls.textMultiline ],
     [ 'residency_status', controls.selectOrFill, {
-      prependEmptyValue: true, // TODO t81 implement in SelectOrFill, see Select
-      options: countryData?.options.residencyStatuses(),
+      options: app.extendOptionsList(
+        countryData?.options.residencyStatuses(),
+        { empty: true },
+      ),
     } ],
     [ 'school_distance_km', controls.select, {
       options: countryData?.options.distancesToSchool(),
     } ],
     [ 'school_distance_min', controls.integer ],
     [ 'school_transport', controls.selectOrFill, {
-      prependEmptyValue: true,
-      options: countryData?.options.schoolTransports(),
+      options: app.extendOptionsList(
+        countryData?.options.schoolTransports(),
+        { empty: true },
+      ),
     } ],
     [ 'caregivers', asFieldType(CaregiversField), {
       relationOptions: countryData?.options.caregiverRelations(),
