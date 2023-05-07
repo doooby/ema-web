@@ -14,6 +14,10 @@ export interface Person extends application_record.SharedAttributes {
   student_kobo_no?: string;
   first_name: string[];
   last_name: string[];
+  mother_first_name?: string[];
+  mother_last_name?: string[];
+  father_first_name?: string[];
+  father_last_name?: string[];
   caregivers?: PersonCaregiver[];
   born_on?: Date;
   gender?: string;
@@ -57,6 +61,10 @@ export function parseRecord (
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
     first_name: wai.prop('first_name', value, mapName),
     last_name: wai.prop('last_name', value, mapName),
+    mother_first_name: wai.prop('mother_first_name', value, wai.nullable(mapName)),
+    mother_last_name: wai.prop('mother_last_name', value, wai.nullable(mapName)),
+    father_first_name: wai.prop('father_first_name', value, wai.nullable(mapName)),
+    father_last_name: wai.prop('father_last_name', value, wai.nullable(mapName)),
     disability_diagnosis: wai.prop('disability_diagnosis', value, wai.nullable(wai.boolean)),
     assistance_needed: wai.prop('assistance_needed', value, wai.nullable(wai.boolean)),
     assistance_provided: wai.prop('assistance_provided', value, wai.nullable(wai.boolean)),
@@ -110,6 +118,10 @@ export function recordControls ({
   return [
     [ 'first_name', controls.name ],
     [ 'last_name', controls.name ],
+    [ 'mother_first_name', controls.name ],
+    [ 'mother_last_name', controls.name ],
+    [ 'father_first_name', controls.name ],
+    [ 'father_last_name', controls.name ],
     [ 'born_on', controls.date ],
     [ 'gender', controls.select, {
       options: common.options.formalGenders(), // TODO t81 from countryData.options.genders

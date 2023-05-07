@@ -5,6 +5,14 @@
       <form-field name="last_name" :context="context" :values="values" />
       <form-field name="gender" :context="context" :values="values" />
       <form-field name="born_on" :context="context" :values="values" />
+    </div>
+    <div class="col-md-6">
+      <form-field name="mother_first_name" :context="context" :values="values" />
+      <form-field name="mother_last_name" :context="context" :values="values" />
+      <form-field name="father_first_name" :context="context" :values="values" />
+      <form-field name="father_last_name" :context="context" :values="values" />
+    </div>
+    <div class="col-md-6">
       <form-field name="nationality" :context="context" :values="values" />
       <form-field name="mother_tongue" :context="context" :values="values" />
     </div>
