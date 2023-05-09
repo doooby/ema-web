@@ -19,14 +19,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import CountrySwitch from '~/components/database/ResourcesMenuCountrySwitch.vue';
-import CurrentResource from '~/components/database/ResourcesMenuCurrent.vue';
 import ResourcesListing from '~/components/database/ResourcesMenuResourcesListing.vue';
-import { dbPages, Resource } from '~/config/pages';
 
 @Component({
-  components: { CountrySwitch, CurrentResource, ResourcesListing },
+  components: { CountrySwitch, ResourcesListing },
 })
 export default class ResourcesMenu extends Vue {
   get user () {
@@ -35,12 +33,6 @@ export default class ResourcesMenu extends Vue {
 
   get countryData () {
     return this.$store.state.session.countryData;
-  }
-
-  get currentResource (): undefined | Resource {
-    const name = this.$route.path.match(/^\/database\/(\w+)\/?.*/)?.[1];
-    const resource = name && dbPages.find(item => item.name === name);
-    return resource || undefined;
   }
 }
 </script>

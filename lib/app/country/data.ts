@@ -100,9 +100,7 @@ export function defaultCountryData (): Data {
           'best_school',
           'is_behind',
           'needs_pss',
-          'center_help',
           'community_integration',
-          'social_net',
           'safest_place',
           'needs_social',
         ]);
