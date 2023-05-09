@@ -2,6 +2,7 @@
   <div class="row">
     <div class="col-md-6">
       <form-field name="school" :context="context" :values="values" />
+      <form-field name="project" :context="context" :values="values" />
     </div>
     <div class="col-md-6">
       <form-field name="school_year" :context="context" :values="values" />

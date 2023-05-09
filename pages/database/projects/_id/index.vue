@@ -1,3 +1,32 @@
+<script lang="ts">
+import { Component } from 'vue-property-decorator';
+import ShowPageAction from '~/components/database/ShowPageAction.vue';
+import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
+import { DatabasePage } from '~/components';
+import Show2Page from '~/components/database/pages/show/Show2Page.vue';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
+import SchoolsListing from '~/components/database/records/projects/SchoolsListing.vue';
+
+enum Tabs {
+  schools,
+  courses,
+}
+
+@Component({
+  components: {
+    SchoolsListing,
+    Show2Page,
+    ShowPageAction,
+    ShowPageTableRow,
+    BRecordLink,
+  },
+})
+export default class extends DatabasePage {
+  Tabs = Tabs;
+  currenTab: Tabs = Tabs.schools;
+}
+</script>
+
 <template>
   <show2-page
     entity="projects"
@@ -46,39 +75,19 @@
     </template>
 
     <template #container="{ record }">
-      <h3>
-        <t value="db.record.projects.label.targets" />
-      </h3>
-      <h5>
-        <t value="db.record.schools.meta.p" />
-      </h5>
-      <ul>
-        <li
-          v-for="school in (record.schools || [])"
-          :key="school.id"
-        >
-          <b-record-link entity="schools" :record="school" />
-        </li>
-      </ul>
+      <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
+        <b-tab>
+          <template #title>
+            <t value="db.record.schools.meta.p" />
+          </template>
+          <div v-if="currenTab === Tabs.schools">
+            <schools-listing :project="record" />
+          </div>
+        </b-tab>
+        <!--        <b-tab title="Staff">-->
+        <!--          <div v-if="currenTab === Tabs.staff" />-->
+        <!--        </b-tab>-->
+      </b-tabs>
     </template>
   </show2-page>
 </template>
-
-<script lang="ts">
-import { Component } from 'vue-property-decorator';
-import ShowPageAction from '~/components/database/ShowPageAction.vue';
-import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
-import { DatabasePage } from '~/components';
-import Show2Page from '~/components/database/pages/show/Show2Page.vue';
-import BRecordLink from '~/components/database/components/BRecordLink.vue';
-
-@Component({
-  components: {
-    Show2Page,
-    ShowPageAction,
-    ShowPageTableRow,
-    BRecordLink,
-  },
-})
-export default class extends DatabasePage {}
-</script>

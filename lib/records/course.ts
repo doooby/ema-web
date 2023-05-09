@@ -14,6 +14,7 @@ export const entity = 'courses';
 export interface Course extends application_record.SharedAttributes {
   school: BRecord;
   education_level: BRecord;
+  project?: BRecord;
   school_year?: BRecord;
   standardized_course?: BRecord;
   name: string[];
@@ -40,6 +41,7 @@ export function parseRecord (
   return wai.object(value => ({
     ...application_record.parseSharedAttributes(value),
     school: wai.prop('school_id', value, mapAssociation('schools', associations)),
+    project: wai.prop('project_id', value, wai.nullable(mapAssociation('projects', associations))),
     education_level: wai.prop('education_level_id', value, mapAssociation('education_levels', associations)),
     school_year: wai.prop('school_year_id', value, wai.nullable(mapAssociation('school_years', associations))),
     standardized_course: wai.prop('standardized_course_id', value, wai.nullable(mapAssociation('standardized_courses', associations))),
@@ -100,6 +102,7 @@ export function recordControls ({
   return [
     [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
     [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
+    [ 'project', dbFields.selectBRecord, { entity: 'projects' } ],
     [ 'school_year', dbFields.selectBRecord, { entity: 'school_years' } ],
     [ 'standardized_course', dbFields.selectBRecord, { entity: 'standardized_courses' } ],
     [ 'name', controls.name ],

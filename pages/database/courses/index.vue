@@ -20,6 +20,7 @@ export default class extends DatabasePage {
   searchFields = [
     [ 'search', controls.text ],
     [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
+    [ 'project', dbFields.selectBRecord, { entity: 'projects' } ],
     [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
   ]
 
