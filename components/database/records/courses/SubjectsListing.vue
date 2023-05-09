@@ -25,6 +25,7 @@ export default class SubjectsListing extends Vue {
       class="mt-2"
       :initial-columns="initialColumns"
       :params="searchParams"
+      :hide-education-level="true"
     />
   </div>
 </template>

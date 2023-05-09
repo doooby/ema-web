@@ -42,7 +42,7 @@
                   <slot name="layout" :context="context" :values="values" />
                 </template>
               </form-group>
-              <record-errors class="mb-3" :errors="errors" />
+              <record-errors class="mb-3" :entity="entity" :errors="errors" />
             </div>
             <div class="card-footer d-flex justify-content-between">
               <div>

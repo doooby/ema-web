@@ -2,7 +2,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
 @Component
-export default class StudentsListingSelectCell extends Vue {
+export default class RecordSelectionCell extends Vue {
   @Prop({ required: true }) readonly selected!: boolean;
   @Prop({ required: true }) readonly record!: any;
 }

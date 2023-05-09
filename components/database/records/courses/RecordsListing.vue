@@ -14,13 +14,14 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
 export default class extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
+  @Prop({ default: undefined }) readonly hideSchool!: boolean;
 
   columns = [
     { name: 'id', size: 80 },
     ...application_record.fillDataTableColumns('courses', [
       { name: 'grade', size: 80 },
       { name: 'name' },
-      { name: 'school', size: 300 },
+      (this.hideSchool ? undefined : { name: 'school', size: 300 }),
       { name: 'education_level' },
     ]),
   ];
@@ -46,7 +47,7 @@ export default class extends Vue {
       <td>
         <text-names class-name="single-row-cell" :value="record.name" />
       </td>
-      <td>
+      <td v-if="!hideSchool">
         <b-record-link entity="schools" :record="record.school" />
       </td>
       <td>

@@ -3,8 +3,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { group } from '~/lib/records';
 import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
 import { h } from 'vue';
-import StudentsListingSelectCell
-  from '~/components/database/records/groups/StudentsListing/StudentsListingSelectCell.vue';
+import RecordSelectionCell from '~/components/database/components/listing/RecordSelectionCell.vue';
 import { xor } from 'lodash';
 import RemoveStudents from '~/components/database/records/groups/StudentsListing/actions/RemoveStudents.vue';
 
@@ -35,7 +34,7 @@ export default class StudentsListing extends Vue {
       size: 30,
       fixedSize: true,
       renderCell: record => h(
-        StudentsListingSelectCell,
+        RecordSelectionCell,
         {
           props: {
             record,

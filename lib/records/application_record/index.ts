@@ -20,13 +20,15 @@ export function parseSharedAttributes (value): SharedAttributes {
   };
 }
 
-export function fillDataTableColumns (entity: string, columns: (Partial<Column>)[]): Column[] {
+export function fillDataTableColumns (entity: string, columnsExternal: (Partial<Column> | undefined)[]): Column[] {
   function renderHeader (column) {
     return h(Translation, {
       props: { value: `db.record.${entity}.label.${column.name}` },
       class: 'text-break',
     });
   }
+
+  const columns = columnsExternal.filter(a => a) as (Partial<Column>)[];
 
   for (const column of columns) {
     if (!column.size) column.size = 180;

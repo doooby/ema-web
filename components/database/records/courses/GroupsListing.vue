@@ -25,6 +25,8 @@ export default class GroupsListing extends Vue {
       class="mt-2"
       :initial-columns="initialColumns"
       :params="searchParams"
+      :hide-school="true"
+      :hide-course="true"
     />
   </div>
 </template>

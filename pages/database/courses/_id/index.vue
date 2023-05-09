@@ -40,17 +40,20 @@
 
     <template #container="{ record }">
       <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
-        <b-tab title="Subjects">
-          <div v-if="currenTab === Tabs.subjects">
-            <subjects-listing :course="record" />
-          </div>
-        </b-tab>
         <b-tab>
           <template #title>
             <t value="db.record.groups.meta.p" />
           </template>
           <div v-if="currenTab === Tabs.groups">
             <groups-listing :course="record" />
+          </div>
+        </b-tab>
+        <b-tab>
+          <template #title>
+            <t value="db.record.subjects.meta.p" />
+          </template>
+          <div v-if="currenTab === Tabs.subjects">
+            <subjects-listing :course="record" />
           </div>
         </b-tab>
       </b-tabs>
@@ -70,8 +73,8 @@ import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 enum Tabs {
-  subjects,
   groups,
+  subjects,
 }
 
 @Component({
@@ -87,6 +90,6 @@ enum Tabs {
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.subjects;
+  currenTab: Tabs = Tabs.groups;
 }
 </script>

@@ -8,7 +8,9 @@
       :key="index"
       variant="danger"
     >
-      <strong>{{ attribute }}</strong>: {{ message }}
+      <strong>
+        <t :value="`db.record.${entity}.label.${attribute}`" />
+      </strong>: {{ message }}
     </b-list-group-item>
   </b-list-group>
 </template>
@@ -20,6 +22,7 @@ import classNames from 'classnames';
 
 export default Vue.extend({
   props: {
+    entity: { type: String, required: true },
     errors: { type: Array as PropType<RecordChangeError[]>, default: null },
   },
   computed: {

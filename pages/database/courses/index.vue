@@ -19,8 +19,8 @@ import { dbFields } from '~/components/database/fields';
 export default class extends DatabasePage {
   searchFields = [
     [ 'search', controls.text ],
-    [ 'school_id', dbFields.selectBRecord, { entity: 'schools' } ],
-    [ 'education_level_id', dbFields.selectBRecord, { entity: 'education_levels' } ],
+    [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
+    [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
   ]
 
   actions = [

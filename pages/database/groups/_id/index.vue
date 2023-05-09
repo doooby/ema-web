@@ -58,7 +58,10 @@
 
     <template #container="{ record }">
       <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
-        <b-tab title="Students">
+        <b-tab>
+          <template #title>
+            <t value="db.record.groups.label.students" />
+          </template>
           <div v-if="currenTab === Tabs.students">
             <students-listing :group="record" />
           </div>
