@@ -6,6 +6,7 @@ import { DatabasePage } from '~/components';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import SchoolsListing from '~/components/database/records/projects/SchoolsListing.vue';
+import CoursesListing from '~/components/database/records/projects/CoursesListing.vue';
 
 enum Tabs {
   schools,
@@ -19,6 +20,7 @@ enum Tabs {
     ShowPageAction,
     ShowPageTableRow,
     BRecordLink,
+    CoursesListing,
   },
 })
 export default class extends DatabasePage {
@@ -84,9 +86,14 @@ export default class extends DatabasePage {
             <schools-listing :project="record" />
           </div>
         </b-tab>
-        <!--        <b-tab title="Staff">-->
-        <!--          <div v-if="currenTab === Tabs.staff" />-->
-        <!--        </b-tab>-->
+        <b-tab>
+          <template #title>
+            <t value="db.record.courses.meta.p" />
+          </template>
+          <div v-if="currenTab === Tabs.courses">
+            <courses-listing :project="record" />
+          </div>
+        </b-tab>
       </b-tabs>
     </template>
   </show2-page>
