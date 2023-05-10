@@ -92,7 +92,7 @@ export function parseRecord (
 
 function mapCaregiver (value): person.PersonCaregiver {
   return wai.object(value => ({
-    relation: wai.prop('relation', value, mapSelectOrFillTuple),
+    relation: wai.prop('relation', value, wai.nullable(mapSelectOrFillTuple)),
     first_name: wai.prop('first_name', value, wai.nullable(mapName)),
     last_name: wai.prop('last_name', value, wai.nullable(mapName)),
     citizen_id: wai.prop('citizen_id', value, wai.nullable(wai.string)),
