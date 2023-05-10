@@ -142,7 +142,7 @@ export default class New2Page extends Vue {
   onInput (newValues: any) {
     const previousValues = this.formValues;
     this.formValues = { ...previousValues, ...newValues };
-    this.$emit('change', this.formValues, previousValues);
+    this.$emit('change', this.formValues);
   }
 
   async onSubmit () {

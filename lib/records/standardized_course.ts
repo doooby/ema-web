@@ -6,6 +6,7 @@ import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/courses/SubjectsField.vue';
+import app from '~/lib/app';
 
 export const entity = 'standardized_courses';
 
@@ -50,13 +51,19 @@ export const queries = {
   update: recordsQueries.update(entity),
 };
 
-export function recordControls (): FormFieldDefinition[] {
+export function recordControls ({
+  countryData,
+}: {
+  countryData?: app.country.Data;
+}): FormFieldDefinition[] {
   return [
     [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
     [ 'name', controls.name ],
     [ 'grade', controls.integer, { maxLength: 2 } ],
     [ 'is_formal', controls.boolean ],
-    [ 'accreditation_authority', controls.selectOrFill ],
+    [ 'accreditation_authority', controls.selectOrFill, {
+      options: countryData?.options.accreditationAuthorities(),
+    } ],
     [ 'lesson_duration', controls.integer, { rightLabel: 'app.time.minutes.p' } ],
     [ 'attendance_limit', controls.integer, { requireable: true, rightLabel: { text: '%' } } ],
     [ 'preferred_grading', asFieldType(GradingTypeField) ],

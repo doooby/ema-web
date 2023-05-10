@@ -124,7 +124,7 @@ export function recordControls ({
     [ 'father_last_name', controls.name ],
     [ 'born_on', controls.date ],
     [ 'gender', controls.select, {
-      options: countryData?.options.genders(),
+      options: countryData?.internal_lists.gender(),
     } ],
     [ 'citizen_id', controls.text ],
     [ 'student_kobo_no', controls.text ],

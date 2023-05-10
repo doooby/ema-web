@@ -1,4 +1,4 @@
-import { application_record } from '~/lib/records';
+import { application_record, course } from '~/lib/records';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import GradingTypeField from '~/components/database/records/courses/GradingTypeField.vue';
 import SubjectsField from '~/components/database/records/courses/SubjectsField.vue';
@@ -24,6 +24,7 @@ export interface Course extends application_record.SharedAttributes {
   lesson_duration?: number;
   attendance_limit?: number;
   time_ranges: { from: Date, to: Date }[];
+  preferred_grading?: [string, string, undefined | string];
   subjects?: CourseSubject[];
 }
 
@@ -57,6 +58,7 @@ export function parseRecord (
         to: wai.prop('to', value, mapDate),
       })),
     )),
+    preferred_grading: wai.prop('preferred_grading', value, wai.nullable(course.mapGrading)),
     subjects: wai.prop('subjects', value, wai.nullable(wai.listOf(
       value => mapSubject(value, associations),
     ))),
