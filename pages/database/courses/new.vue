@@ -18,7 +18,6 @@ import { DatabasePage } from '~/components';
 import { course, standardized_course } from '~/lib/records';
 import RecordForm from '~/components/database/records/courses/RecordForm.vue';
 import New2Page from '~/components/database/pages/new/New2Page.vue';
-import { difference } from 'lodash';
 import { SearchRecordsResponsePayload } from '~/lib/api2';
 
 @Component({
@@ -31,7 +30,7 @@ export default class extends DatabasePage {
     });
   }
 
-  formValues = {}
+  formValues: any = {}
 
   get standardizedCourse () {
     return this.formValues.standardized_course;
