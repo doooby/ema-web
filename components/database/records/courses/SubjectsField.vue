@@ -22,9 +22,9 @@
         <t value="db.record.courses.subjects.label.exam" />
       </template>
       <template #cell-subject="{ item }">
-        <show-record-link
+        <b-record-link
           entity="subjects"
-          :record="{ id: item.subject.id, caption: item.subject.caption }"
+          :record="item.subject"
         />
       </template>
       <!--      <template #cell-teacher="{ item }">-->
@@ -49,20 +49,12 @@
         </checkbox-input>
       </template>
     </items-listing>
-    <b-modal
+    <search-b-records-modal
       v-model="selectSubjectModalShown"
-      hide-footer
-    >
-      <template #modal-title>
-        <t value="db.record.courses.subjects.add.title" />
-      </template>
-      <search-modal
-        v-if="selectSubjectModalShown"
-        :selected-records="subjects"
-        :build-query="onBuildSearchQuery"
-        @select="onAddSubject"
-      />
-    </b-modal>
+      entity="subjects"
+      :selected="subjects"
+      @select="onAddSubject"
+    />
   </b-form-group>
 </template>
 
@@ -72,16 +64,24 @@ import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import { course } from '~/lib/records';
 import * as mappers from '~/lib/api/mappers';
-import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import SearchModal from '~/components/database/SearchModal.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 import CourseGrading from '~/components/database/controls/primitives/CourseGrading.vue';
 import AbbreviatedRecordSelect from '~/components/database/controls/AbbreviatedRecordSelect.vue';
 import { BRecord } from '~/lib/api2';
+import SearchBRecordsModal from '~/components/database/modals/SearchBRecordsModal.vue';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 @Component({
   mixins: [ ControlMixin ],
-  components: { ShowRecordLink, SearchModal, CheckboxInput, CourseGrading, AbbreviatedRecordSelect },
+  components: {
+    BRecordLink,
+    SearchBRecordsModal,
+    SearchModal,
+    CheckboxInput,
+    CourseGrading,
+    AbbreviatedRecordSelect,
+  },
 })
 export default class SubjectsField extends Vue {
   static fieldType: FormFieldType = {
