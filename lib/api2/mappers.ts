@@ -40,7 +40,10 @@ export function mapName (value): string[] {
 
 export function mapSelectOrFillTuple (value: any): [string, undefined | string] {
   return wai.tuple(
-    wai.string,
+    function string (value): string {
+      if (typeof value !== 'string') return '';
+      return value;
+    },
     wai.nullable(wai.string),
   )(value);
 }
