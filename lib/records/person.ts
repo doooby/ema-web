@@ -1,5 +1,5 @@
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
-import { application_record, common, person } from '~/lib/records/index';
+import { application_record, person } from '~/lib/records/index';
 import CaregiversField from '~/components/database/records/people/CaregiversField.vue';
 import { BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
@@ -42,7 +42,7 @@ export interface Person extends application_record.SharedAttributes {
 }
 
 export interface PersonCaregiver {
-  relation: [string, undefined | string];
+  relation?: [string, undefined | string];
   first_name?: string[];
   last_name?: string[];
   citizen_id?: string;
