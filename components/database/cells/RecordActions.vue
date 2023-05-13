@@ -8,7 +8,7 @@
       toggle-class="p-0"
     >
       <template #button-content>
-        <b-icon icon="three-dots-vertical" />
+        <b-icon class="text-muted" icon="list" />
       </template>
       <b-dropdown-item
         v-for="{ action, icon, t } in actions"

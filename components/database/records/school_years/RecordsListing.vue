@@ -40,7 +40,7 @@ export default class RecordsListing extends Vue {
         <a-record-link :id="record.id" entity="school_years" />
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
+        <text-names class="single-row-cell" :value="record.name" />
       </td>
       <td>
         {{ record.year_label }}

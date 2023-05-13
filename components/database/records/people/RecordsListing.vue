@@ -45,10 +45,10 @@ export default class RecordsListing extends Vue {
         {{ record.student_kobo_no }}
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.first_name" />
+        <text-names class="single-row-cell" :value="record.first_name" />
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.last_name" />
+        <text-names class="single-row-cell" :value="record.last_name" />
       </td>
       <td>
         <span v-if="record.born_on">{{ $d(record.born_on) }}</span>

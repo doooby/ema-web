@@ -69,7 +69,7 @@ export default class Index4Page extends Vue {
   initialColumns = [
     {
       name: 'actions',
-      size: 65,
+      size: 40,
       fixedSize: true,
       renderCell: record => h(
         ActionsCell,

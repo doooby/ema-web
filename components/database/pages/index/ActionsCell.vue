@@ -16,16 +16,29 @@ export default class ActionsCell extends Vue {
 </script>
 
 <template>
-  <div class="d-flex align-items-center">
-    <b-form-checkbox
-      class="ml-2"
-      :checked="selected"
-      @change="$emit('change')"
-    />
+  <div class="d-flex flex-column h-100">
+    <div>
+      <b-button
+        variant="outline-secondary"
+        size="xs"
+        @click="$emit('change')"
+      >
+        <b-icon v-if="selected" icon="check" />
+        <div v-else class="--empty" />
+      </b-button>
+    </div>
     <record-actions
+      class="mt-2"
       :entity="entity"
       :record="record"
       :actions="actions"
     />
   </div>
 </template>
+
+<style>
+.--empty {
+  width: 1rem;
+  height: 1rem;
+}
+</style>

@@ -40,7 +40,7 @@ export default class extends Vue {
         <a-record-link :id="record.id" entity="subjects" />
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
+        <text-names class="single-row-cell" :value="record.name" />
       </td>
       <td v-if="!hideEducationLevel">
         <div v-for="education_level of record.education_levels" :key="education_level.id">

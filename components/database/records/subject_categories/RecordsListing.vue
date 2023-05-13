@@ -37,7 +37,7 @@ export default class RecordsListing extends Vue {
         <a-record-link :id="record.id" entity="subject_categories" />
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
+        <text-names class="single-row-cell" :value="record.name" />
       </td>
       <td />
     </template>

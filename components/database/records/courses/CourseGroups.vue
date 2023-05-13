@@ -8,7 +8,7 @@ import RecordsListing from '~/components/database/records/groups/RecordsListing.
     RecordsListing,
   },
 })
-export default class GroupsListing extends Vue {
+export default class CourseGroups extends Vue {
   @Prop({ required: true }) readonly course!: course.Course;
 
   searchParams = {

@@ -1,5 +1,5 @@
 <template>
-  <text-names :value="sanitizedValue" class-name="single-row-cell" />
+  <text-names :value="sanitizedValue" class="single-row-cell" />
 </template>
 
 <script lang="ts">
