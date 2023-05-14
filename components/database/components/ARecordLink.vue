@@ -27,7 +27,7 @@ export default class ARecordLink extends Vue {
 </script>
 
 <template>
-  <div :class="[$attrs.class, 'd-inline-block db--b-record-link']">
+  <div class="d-inline-block db--b-record-link">
     <code v-if="!hasShowPage">
       [{{ id }}]
     </code>

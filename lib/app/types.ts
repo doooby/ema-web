@@ -5,3 +5,5 @@ export type Option = {
   value?: string;
   text: string;
 }
+
+export type FilterableList<I> = (undefined | false | I)[]

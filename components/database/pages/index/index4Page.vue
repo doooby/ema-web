@@ -2,11 +2,11 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { FormFieldDefinition } from '~/components/Form';
 import SearchForm from '~/components/database/components/listing/SearchForm.vue';
-import RecordActions, { Action } from '~/components/database/cells/RecordActions.vue';
 import { h } from 'vue';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
+// TODO t93
 import CoursesListing from '~/components/database/records/courses/RecordsListing.vue';
 import DonorsListing from '~/components/database/records/donors/RecordsListing.vue';
 import EducationLevelsListing from '~/components/database/records/education_levels/RecordsListing.vue';
@@ -21,6 +21,7 @@ import SubjectCategoriesListing from '~/components/database/records/subject_cate
 import SubjectsListing from '~/components/database/records/subjects/RecordsListing.vue';
 import UsersListing from '~/components/database/records/users/RecordsListing.vue';
 import WorkAgreementsListing from '~/components/database/records/work_agreements/RecordsListing.vue';
+import { Action } from '~/components/database/components/listing/RecordActionsMenu.vue';
 
 const RecordsListing = Vue.extend({
   functional: true,
@@ -48,7 +49,6 @@ const RecordsListing = Vue.extend({
     LoadedPage,
     SearchForm,
     RecordsListing,
-    RecordActions,
   },
 })
 export default class Index4Page extends Vue {
@@ -69,7 +69,7 @@ export default class Index4Page extends Vue {
   initialColumns = [
     {
       name: 'actions',
-      size: 40,
+      size: 50,
       fixedSize: true,
       renderCell: record => h(
         ActionsCell,
@@ -140,7 +140,6 @@ export default class Index4Page extends Vue {
       </h4>
       <nuxt-link
         :to="`/database/${entity}/new`"
-        tag="button"
         class="btn btn-outline-secondary"
       >
         <b-icon icon="clipboard-plus" class="mr-1" />

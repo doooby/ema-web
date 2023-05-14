@@ -1,28 +1,41 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import ARecordLink from '~/components/database/components/ARecordLink.vue';
-import TextNames from '~/components/database/components/TextNames.vue';
 import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
 import { Params } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';
-import BRecordLink from '~/components/database/components/BRecordLink.vue';
-import HeaderCell from '~/components/database/records/courses/HeaderCell.vue';
+import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
+import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 
 @Component({
-  components: { HeaderCell, BRecordLink, ARecordsListing, ARecordLink, TextNames },
+  components: {
+    RecordAssociations,
+    RecordHeader,
+    ARecordsListing,
+  },
 })
 export default class RecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
-  @Prop({ default: undefined }) readonly hideSchool!: boolean;
 
   columns = [
-    { name: 'course', size: 240 },
+    { name: 'record', size: 240 },
+    { name: 'associations1', size: 240 },
+    { name: 'associations2', size: 240 },
     ...application_record.fillDataTableColumns('courses', [
       { name: 'grade', size: 120 },
     ]),
   ];
+
+  associations1 = [
+    { entity: 'schools', attr: 'school' },
+    { entity: 'projects', attr: 'project' },
+  ]
+
+  associations2 = [
+    { entity: 'school_years', attr: 'school_year' },
+    { entity: 'standardized_courses', attr: 'standardized_course' },
+  ]
 }
 </script>
 
@@ -37,7 +50,22 @@ export default class RecordsListing extends Vue {
   >
     <template #row="{ record }">
       <td>
-        <header-cell :record="record" :hide-school="hideSchool" />
+        <RecordHeader
+          entity="courses"
+          :record="record"
+        />
+      </td>
+      <td>
+        <RecordAssociations
+          :record="record"
+          :associations="associations1"
+        />
+      </td>
+      <td>
+        <RecordAssociations
+          :record="record"
+          :associations="associations2"
+        />
       </td>
       <td class="text-center">
         {{ record.grade }}

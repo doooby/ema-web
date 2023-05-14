@@ -1,5 +1,22 @@
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator';
+
+export interface Action {
+  action: string;
+  icon: string;
+  t: string;
+}
+
+@Component
+export default class RecordActionsMenu extends Vue {
+  @Prop({ required: true }) readonly entity!: string;
+  @Prop({ required: true }) readonly record!: any;
+  @Prop({ required: true }) readonly actions!: Action[];
+}
+</script>
+
 <template>
-  <div class="d-flex align-items-center">
+  <div class="mx-1">
     <b-dropdown
       no-caret
       variant="link"
@@ -21,20 +38,3 @@
     </b-dropdown>
   </div>
 </template>
-
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-
-export interface Action {
-  action: string;
-  icon: string;
-  t: string;
-}
-
-@Component
-export default class RecordActions extends Vue {
-  @Prop({ required: true }) readonly entity!: string;
-  @Prop({ required: true }) readonly record!: any;
-  @Prop({ required: true }) readonly actions!: Action[];
-}
-</script>

@@ -29,7 +29,7 @@ export default class BRecordLink extends Vue {
 </script>
 
 <template>
-  <div :class="[$attrs.class, 'd-inline-block db--b-record-link']">
+  <div class="d-inline-block db--b-record-link">
     <code v-if="!hasShowPage">
       [{{ record.id }}]&nbsp;{{ record.caption }}
     </code>
