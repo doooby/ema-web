@@ -42,7 +42,9 @@ export default class RecordsListing extends Vue {
         </div>
       </td>
       <td>
-        {{ record.student_kobo_no }}
+        {{ record.external_id || record.student_kobo_no }}
+        <br>
+        {{ record.navision_id }}
       </td>
       <td>
         <text-names class="single-row-cell" :value="record.first_name" />

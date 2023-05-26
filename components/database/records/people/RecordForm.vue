@@ -18,6 +18,8 @@
     </div>
     <div class="col-md-6">
       <form-field name="student_kobo_no" :context="context" :values="values" />
+      <form-field name="external_id" :context="context" :values="values" />
+      <form-field name="navision_id" :context="context" :values="values" />
       <form-field name="citizen_id" :context="context" :values="values" />
       <form-field name="passport_no" :context="context" :values="values" />
       <form-field name="telephone_no" :context="context" :values="values" />

@@ -12,8 +12,10 @@ export const entity = 'people';
 export interface Person extends application_record.SharedAttributes {
   country: BRecord;
   student_kobo_no?: string;
+  external_id?: string;
+  navision_id?: string;
   first_name: string[];
-  last_name: string[];
+  last_name?: string[];
   mother_first_name?: string[];
   mother_last_name?: string[];
   father_first_name?: string[];
@@ -60,7 +62,7 @@ export function parseRecord (
     ...parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
     first_name: wai.prop('first_name', value, mapName),
-    last_name: wai.prop('last_name', value, mapName),
+    last_name: wai.prop('last_name', value, wai.nullable(mapName)),
     mother_first_name: wai.prop('mother_first_name', value, wai.nullable(mapName)),
     mother_last_name: wai.prop('mother_last_name', value, wai.nullable(mapName)),
     father_first_name: wai.prop('father_first_name', value, wai.nullable(mapName)),
@@ -71,6 +73,8 @@ export function parseRecord (
     school_distance_km: wai.prop('school_distance_km', value, wai.nullable(wai.string)),
     school_distance_min: wai.prop('school_distance_min', value, wai.nullable(wai.integer)),
     student_kobo_no: wai.prop('student_kobo_no', value, wai.nullable(wai.string)),
+    external_id: wai.prop('external_id', value, wai.nullable(wai.string)),
+    navision_id: wai.prop('navision_id', value, wai.nullable(wai.string)),
     gender: wai.prop('gender', value, wai.nullable(wai.string)),
     citizen_id: wai.prop('citizen_id', value, wai.nullable(wai.string)),
     passport_no: wai.prop('passport_no', value, wai.nullable(wai.string)),
@@ -128,6 +132,8 @@ export function recordControls ({
     } ],
     [ 'citizen_id', controls.text ],
     [ 'student_kobo_no', controls.text ],
+    [ 'external_id', controls.text ],
+    [ 'navision_id', controls.text ],
     [ 'passport_no', controls.text ],
     [ 'telephone_no', controls.text ],
     [ 'mother_tongue', controls.select, {

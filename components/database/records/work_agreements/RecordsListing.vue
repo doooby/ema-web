@@ -44,7 +44,7 @@ export default class extends Vue {
         <a-record-link :id="record.id" entity="work_agreements" />
       </td>
       <td>
-        {{ record.position }}
+        <t v-if="record.position" :value="`app.internal_lists.contract_positions.${record.position}`" />
       </td>
       <td>
         <b-record-link entity="people" :record="record.person" />
