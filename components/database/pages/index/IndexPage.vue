@@ -20,7 +20,6 @@ import StandardizedCoursesListing from '~/components/database/records/standardiz
 import SubjectCategoriesListing from '~/components/database/records/subject_categories/RecordsListing.vue';
 import SubjectsListing from '~/components/database/records/subjects/RecordsListing.vue';
 import UsersListing from '~/components/database/records/users/RecordsListing.vue';
-import WorkAgreementsListing from '~/components/database/records/work_agreements/RecordsListing.vue';
 
 const RecordsListing = Vue.extend({
   functional: true,
@@ -51,10 +50,11 @@ const RecordsListing = Vue.extend({
     RecordActions,
   },
 })
-export default class Index4Page extends Vue {
+export default class IndexPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly searchFields!: FormFieldDefinition[];
   @Prop({ required: true }) readonly actions!: Action[];
+  @Prop({ deafult: undefined }) readonly component!: any;
 
   searchParams = {};
 
@@ -89,6 +89,9 @@ export default class Index4Page extends Vue {
   ];
 
   get listingComponent () {
+    if (this.component) {
+      return this.component;
+    }
     switch (this.entity) {
       case 'courses': return CoursesListing;
       case 'donors': return DonorsListing;
@@ -103,7 +106,6 @@ export default class Index4Page extends Vue {
       case 'subject_categories': return SubjectCategoriesListing;
       case 'subjects': return SubjectsListing;
       case 'users': return UsersListing;
-      case 'work_agreements': return WorkAgreementsListing;
       default: return null;
     }
   }
