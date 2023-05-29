@@ -7,6 +7,9 @@ import AddressText from '~/components/database/records/location_systems/AddressT
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import CoursesListing from '~/components/database/records/schools/CoursesListing/CoursesListing.vue';
+import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
+import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
+import ArchiveAction from '~/components/database/components/detail/actions/ArchiveAction.vue';
 
 enum Tabs {
   courses,
@@ -15,12 +18,15 @@ enum Tabs {
 
 @Component({
   components: {
+    ArchiveAction,
+    EditAction,
     BRecordLink,
     Show2Page,
     ShowPageAction,
     ShowPageTableRow,
     AddressText,
     CoursesListing,
+    ConfirmArchiveModal,
   },
 })
 export default class extends DatabasePage {
@@ -37,16 +43,10 @@ export default class extends DatabasePage {
       {{ record.name_en }}
     </template>
 
-    <template #actions="{ record }">
+    <template #actions="{ record, reloadRecord }">
       <ul>
-        <li>
-          <show-page-action
-            icon="pencil"
-            :path="`/database/schools/${record.id}/edit`"
-          >
-            <t value="db.page.edit.action" />
-          </show-page-action>
-        </li>
+        <EditAction entity="schools" :record="record" />
+        <ArchiveAction entity="schools" :record="record" @archived="reloadRecord" />
       </ul>
     </template>
 

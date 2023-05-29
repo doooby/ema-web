@@ -1,3 +1,47 @@
+<script lang="ts">
+import { Component } from 'vue-property-decorator';
+import ShowPageAction from '~/components/database/ShowPageAction.vue';
+import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
+import { DatabasePage } from '~/components';
+import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
+import StudentsListing from '~/components/database/records/groups/StudentsListing/StudentsListing.vue';
+import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
+import TextNames from '~/components/database/components/TextNames.vue';
+import Show2Page from '~/components/database/pages/show/Show2Page.vue';
+import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
+import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
+import ArchiveAction from '~/components/database/components/detail/actions/ArchiveAction.vue';
+
+enum Tabs {
+  students,
+  attendance,
+}
+
+@Component({
+  components: {
+    ArchiveAction,
+    EditAction,
+    Show2Page,
+    ShowPageAction,
+    ShowPageTableRow,
+    ShowRecordLink,
+    StudentsListing,
+    GroupAttendance,
+    TextNames,
+    ConfirmArchiveModal,
+  },
+})
+export default class extends DatabasePage {
+  Tabs = Tabs;
+  currenTab: Tabs = Tabs.students;
+
+  termSpan = [
+    new Date(2022, 1, 1),
+    new Date(2022, 5, 30),
+  ]
+}
+</script>
+
 <template>
   <show2-page
     entity="groups"
@@ -8,28 +52,8 @@
 
     <template #actions="{ record, reloadRecord }">
       <ul>
-        <li>
-          <show-page-action
-            icon="pencil"
-            :path="`/database/groups/${record.id}/edit`"
-          >
-            <t value="db.page.edit.action" />
-          </show-page-action>
-        </li>
-        <li>
-          <show-page-action
-            icon="lock"
-            @click="archiveModalShown = true"
-          >
-            <t value="db.components.modals.ConfirmArchiveModal.action" />
-          </show-page-action>
-          <confirm-archive-modal
-            v-model="archiveModalShown"
-            entity="groups"
-            :record-id="record.id"
-            @recordChanged="reloadRecord"
-          />
-        </li>
+        <EditAction entity="groups" :record="record" />
+        <ArchiveAction entity="groups" :record="record" @archived="reloadRecord" />
       </ul>
     </template>
 
@@ -75,44 +99,3 @@
     </template>
   </show2-page>
 </template>
-
-<script lang="ts">
-import { Component } from 'vue-property-decorator';
-import ShowPageAction from '~/components/database/ShowPageAction.vue';
-import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
-import { DatabasePage } from '~/components';
-import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
-import StudentsListing from '~/components/database/records/groups/StudentsListing/StudentsListing.vue';
-import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
-import TextNames from '~/components/database/components/TextNames.vue';
-import Show2Page from '~/components/database/pages/show/Show2Page.vue';
-import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
-
-enum Tabs {
-  students,
-  attendance,
-}
-
-@Component({
-  components: {
-    Show2Page,
-    ShowPageAction,
-    ShowPageTableRow,
-    ShowRecordLink,
-    StudentsListing,
-    GroupAttendance,
-    TextNames,
-    ConfirmArchiveModal,
-  },
-})
-export default class extends DatabasePage {
-  Tabs = Tabs;
-  currenTab: Tabs = Tabs.students;
-  archiveModalShown = false;
-
-  termSpan = [
-    new Date(2022, 1, 1),
-    new Date(2022, 5, 30),
-  ]
-}
-</script>

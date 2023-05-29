@@ -33,14 +33,17 @@ export default class Show2Page extends Vue {
     return route.params.id;
   }
 
-  get recordLoadFailed (): boolean {
-    const response = this.getQueryState.response;
-    return !!(response && (!response.ok || !response.payload.total));
-  }
-
   get record (): null | any {
     if (!this.getQueryState.response?.ok) return null;
     return this.getQueryState.response.payload.records[0] ?? null;
+  }
+
+  get recordLoadFailMessage (): undefined | string {
+    const response = this.getQueryState.response;
+    if (response) {
+      if (!response.ok) return 'app.processing.server_fail';
+      if (!response.payload.records.length) return 'app.processing.not_found';
+    }
   }
 
   updatePage () {
@@ -81,10 +84,10 @@ export default class Show2Page extends Vue {
             <t :value="`db.record.${entity}.meta.s`" />
           </h5>
         </div>
-        <div v-else-if="recordLoadFailed">
+        <div v-else-if="recordLoadFailMessage">
           <b-alert show variant="warning">
             <b-icon icon="exclamation-triangle-fill" class="mr-3" />
-            <t value="app.request_fail" />
+            <t :value="recordLoadFailMessage" />
           </b-alert>
         </div>
         <div v-else>
