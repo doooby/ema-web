@@ -12,6 +12,7 @@ import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import Index4Page from '~/components/database/pages/index/index4Page.vue';
 import app from '~/lib/app';
+import { dbFields } from '~/components/database/fields';
 
 @Component({
   components: { Index4Page },
@@ -20,6 +21,7 @@ export default class extends DatabasePage {
   get searchFields () {
     return [
       [ 'search', controls.text ],
+      [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
       [ 'position', controls.select, {
         options: app.extendOptionsList(
           this.$store.getters['session/countryStaticData']?.options.contract_position(),
