@@ -3,6 +3,7 @@
     entity="standardized_courses"
     :search-fields="searchFields"
     :actions="actions"
+    :component="StandardizedCourses"
   />
 </template>
 
@@ -12,6 +13,7 @@ import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { dbFields } from '~/components/database/fields';
+import StandardizedCourses from '~/components/database/records/standardized_courses/RecordsListing.vue';
 
 @Component({
   components: { IndexPage },
@@ -22,6 +24,7 @@ export default class extends DatabasePage {
     [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
   ]
 
+  StandardizedCourses = StandardizedCourses;
   actions = [
     { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
   ];

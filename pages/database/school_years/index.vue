@@ -3,6 +3,7 @@
     entity="school_years"
     :search-fields="searchFields"
     :actions="actions"
+    :component="SchoolYears"
   />
 </template>
 
@@ -11,6 +12,7 @@ import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
+import SchoolYears from '~/components/database/records/school_years/RecordsListing.vue';
 
 @Component({
   components: { IndexPage },
@@ -20,6 +22,7 @@ export default class extends DatabasePage {
     [ 'search', controls.text ],
   ];
 
+  SchoolYears = SchoolYears;
   actions = [
     { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
   ];
