@@ -1,30 +1,41 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import ARecordLink from '~/components/database/components/ARecordLink.vue';
-import TextNames from '~/components/database/components/TextNames.vue';
 import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
 import { Params } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';
-import BRecordLink from '~/components/database/components/BRecordLink.vue';
+import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
+import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 
 @Component({
-  components: { BRecordLink, ARecordsListing, ARecordLink, TextNames },
+  components: {
+    RecordAssociations,
+    RecordHeader,
+    ARecordsListing,
+  },
 })
-export default class extends Vue {
+export default class RecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
-  @Prop({ default: undefined }) readonly hideSchool!: boolean;
 
   columns = [
-    { name: 'id', size: 80 },
+    { name: 'record', size: 240 },
+    { name: 'associations1', size: 240 },
+    { name: 'associations2', size: 240 },
     ...application_record.fillDataTableColumns('courses', [
-      { name: 'grade', size: 80 },
-      { name: 'name' },
-      (this.hideSchool ? undefined : { name: 'school', size: 300 }),
-      { name: 'education_level' },
+      { name: 'grade', size: 120 },
     ]),
   ];
+
+  associations1 = [
+    { entity: 'schools', attr: 'school' },
+    { entity: 'projects', attr: 'project' },
+  ]
+
+  associations2 = [
+    { entity: 'school_years', attr: 'school_year' },
+    { entity: 'standardized_courses', attr: 'standardized_course' },
+  ]
 }
 </script>
 
@@ -39,19 +50,25 @@ export default class extends Vue {
   >
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="courses" />
+        <RecordHeader
+          entity="courses"
+          :record="record"
+        />
       </td>
       <td>
+        <RecordAssociations
+          :record="record"
+          :associations="associations1"
+        />
+      </td>
+      <td>
+        <RecordAssociations
+          :record="record"
+          :associations="associations2"
+        />
+      </td>
+      <td class="text-center">
         {{ record.grade }}
-      </td>
-      <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
-      </td>
-      <td v-if="!hideSchool">
-        <b-record-link entity="schools" :record="record.school" />
-      </td>
-      <td>
-        <b-record-link entity="education_levels" :record="record.education_level" />
       </td>
       <td />
     </template>

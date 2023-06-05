@@ -45,7 +45,7 @@
             <t value="db.record.groups.meta.p" />
           </template>
           <div v-if="currenTab === Tabs.groups">
-            <groups-listing :course="record" />
+            <course-groups :course="record" />
           </div>
         </b-tab>
         <b-tab>
@@ -67,7 +67,7 @@ import { Component } from 'vue-property-decorator';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import SubjectsListing from '~/components/database/records/courses/SubjectsListing.vue';
-import GroupsListing from '~/components/database/records/courses/GroupsListing.vue';
+import CourseGroups from '~/components/database/records/courses/CourseGroups.vue';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
@@ -84,7 +84,7 @@ enum Tabs {
     ShowPageAction,
     ShowPageTableRow,
     SubjectsListing,
-    GroupsListing,
+    CourseGroups,
     ShowRecordLink,
   },
 })

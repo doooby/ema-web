@@ -42,7 +42,7 @@ export default class RecordsListing extends Vue {
         {{ record.code }}
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
+        <text-names class="single-row-cell" :value="record.name" />
       </td>
       <td>
         {{ record.short_name_en }}

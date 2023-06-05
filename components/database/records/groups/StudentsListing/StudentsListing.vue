@@ -3,9 +3,9 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { group } from '~/lib/records';
 import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
 import { h } from 'vue';
-import RecordSelectionCell from '~/components/database/components/listing/RecordSelectionCell.vue';
 import { xor } from 'lodash';
 import RemoveStudents from '~/components/database/records/groups/StudentsListing/actions/RemoveStudents.vue';
+import SelectRecordBox from '~/components/database/components/listing/SelectRecordBox.vue';
 
 @Component({
   components: {
@@ -34,14 +34,14 @@ export default class StudentsListing extends Vue {
       size: 30,
       fixedSize: true,
       renderCell: record => h(
-        RecordSelectionCell,
+        SelectRecordBox,
         {
           props: {
             record,
             selected: this.selectedIds.includes(record.id),
           },
           on: {
-            change: () => this.toggleSelect(record),
+            change: this.toggleSelect,
           },
         },
       ),
@@ -53,7 +53,7 @@ export default class StudentsListing extends Vue {
     return xor(this.records.map(r => r.id), this.selectedIds).length === 0;
   }
 
-  toggleSelect (record) {
+  toggleSelect ({ record, selected }) {
     const index = this.selectedIds.indexOf(record.id);
     if (index === -1) {
       this.selectedIds.push(record.id);

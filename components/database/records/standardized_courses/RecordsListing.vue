@@ -45,7 +45,7 @@ export default class extends Vue {
         {{ record.grade }}
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
+        <text-names class="single-row-cell" :value="record.name" />
       </td>
       <td>
         <b-record-link entity="education_levels" :record="record.education_level" />

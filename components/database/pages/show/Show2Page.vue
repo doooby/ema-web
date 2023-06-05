@@ -33,14 +33,17 @@ export default class Show2Page extends Vue {
     return route.params.id;
   }
 
-  get recordLoadFailed (): boolean {
-    const response = this.getQueryState.response;
-    return !!(response && (!response.ok || response.payload.total < 1));
-  }
-
   get record (): null | any {
     if (!this.getQueryState.response?.ok) return null;
     return this.getQueryState.response.payload.records[0] ?? null;
+  }
+
+  get recordLoadFailMessage (): undefined | string {
+    const response = this.getQueryState.response;
+    if (response) {
+      if (!response.ok) return 'app.processing.server_fail';
+      if (!response.payload.records.length) return 'app.processing.not_found';
+    }
   }
 
   updatePage () {
@@ -72,20 +75,24 @@ export default class Show2Page extends Vue {
         </nuxt-link>
       </h4>
 
-      <div>
-        <div class="d-flex align-items-center">
-          <div v-if="record">
-            <h2 class="m-0">
-              <slot name="title" :record="record" />
-            </h2>
-            <h5 class="mt-2">
-              <t :value="`db.record.${entity}.meta.s`" />
-            </h5>
-          </div>
-          <div v-else>
-            <div class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
-            </div>
+      <div class="d-flex align-items-center">
+        <div v-if="record">
+          <h2 class="m-0">
+            <slot name="title" :record="record" />
+          </h2>
+          <h5 class="mt-2">
+            <t :value="`db.record.${entity}.meta.s`" />
+          </h5>
+        </div>
+        <div v-else-if="recordLoadFailMessage">
+          <b-alert show variant="warning">
+            <b-icon icon="exclamation-triangle-fill" class="mr-3" />
+            <t :value="recordLoadFailMessage" />
+          </b-alert>
+        </div>
+        <div v-else>
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
           </div>
         </div>
       </div>

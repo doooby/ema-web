@@ -1,5 +1,5 @@
 <template>
-  <text-names :value="sanitizedValue" class-name="single-row-cell" />
+  <text-names :value="sanitizedValue" class="single-row-cell" />
 </template>
 
 <script lang="ts">
@@ -14,7 +14,7 @@ export default class Name extends Vue {
   @Prop({ required: true }) readonly column!: DataTable.Column;
   @Prop({ required: true }) readonly dataItem!: any;
 
-  get sanitizedValue (): [string, string] {
+  get sanitizedValue (): string[] {
     return this.dataItem[this.column.name] ?? [];
   }
 }

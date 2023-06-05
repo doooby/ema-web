@@ -29,17 +29,15 @@ export default class BRecordLink extends Vue {
 </script>
 
 <template>
-  <div class="d-inline db--b-record-link text-truncate">
+  <div class="d-inline-block db--b-record-link">
     <code v-if="!hasShowPage">
-      [{{ record.id }}] {{ record.caption }}
+      [{{ record.id }}]&nbsp;{{ record.caption }}
     </code>
     <nuxt-link v-else-if="!newTab" :to="path" class="icon-link">
-      <b-icon icon="card-heading" />
-      {{ showId ? record.id : record.caption }}
+      <b-icon icon="card-heading" />&nbsp;{{ showId ? record.id : record.caption }}
     </nuxt-link>
     <a v-else :href="fullPath" target="_blank" class="icon-link" @click.stop>
-      <b-icon icon="card-heading" />
-      {{ showId ? record.id : record.caption }}
+      <b-icon icon="card-heading" />&nbsp;{{ showId ? record.id : record.caption }}
     </a>
   </div>
 </template>

@@ -1,10 +1,12 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import RecordActions, { Action } from '~/components/database/cells/RecordActions.vue';
+import SelectRecordBox from '~/components/database/components/listing/SelectRecordBox.vue';
+import RecordActionsMenu, { Action } from '~/components/database/components/listing/RecordActionsMenu.vue';
 
 @Component({
   components: {
-    RecordActions,
+    RecordActionsMenu,
+    SelectRecordBox,
   },
 })
 export default class ActionsCell extends Vue {
@@ -16,13 +18,13 @@ export default class ActionsCell extends Vue {
 </script>
 
 <template>
-  <div class="d-flex align-items-center">
-    <b-form-checkbox
-      class="ml-2"
-      :checked="selected"
-      @change="$emit('change')"
+  <div class="my-2">
+    <SelectRecordBox
+      :record="record"
+      :selected="false"
     />
-    <record-actions
+    <RecordActionsMenu
+      class="mt-2"
       :entity="entity"
       :record="record"
       :actions="actions"

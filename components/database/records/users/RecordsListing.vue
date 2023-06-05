@@ -58,7 +58,7 @@ export default class RecordsListing extends Vue {
         {{ record.login}}
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.full_name" />
+        <text-names class="single-row-cell" :value="record.full_name" />
       </td>
       <td>
         <ul>

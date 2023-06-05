@@ -41,7 +41,7 @@ export default class RecordsListing extends Vue {
         {{ record.level }}
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
+        <text-names class="single-row-cell" :value="record.name" />
       </td>
       <td />
     </template>

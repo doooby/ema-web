@@ -7,10 +7,20 @@
       <form-field name="donors" :context="context" :values="values" />
     </div>
     <div class="col-md-6">
+      <form-field name="external_id" :context="context" :values="values" />
+      <form-field name="navision_id" :context="context" :values="values" />
+    </div>
+    <div class="col-12">
+      <div class="border-bottom my-2" />
+    </div>
+    <div class="col-md-6">
       <form-field name="position" :context="context" :values="values" />
       <form-field name="starts_on" :context="context" :values="values" />
       <form-field name="ends_on" :context="context" :values="values" />
+    </div>
+    <div class="col-md-6">
       <form-field name="resigned_on" :context="context" :values="values" />
+      <form-field name="resignation_reason" :context="context" :values="values" />
     </div>
     <div class="col-12">
       <div class="border-bottom my-2" />

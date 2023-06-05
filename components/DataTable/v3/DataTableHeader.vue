@@ -32,7 +32,7 @@ export default class DataTableHeader extends Vue {
     class="ema--data-table-header"
     scope="col"
   >
-    <div class="mx-2 d-flex align-items-center">
+    <div class="ml-4 d-flex align-items-center">
       <div class="flex-fill">
         <header-content v-if="column.renderHeader" :column="column" />
         <slot v-else />
@@ -50,10 +50,6 @@ export default class DataTableHeader extends Vue {
 .ema--data-table {
   th.ema--data-table-header {
     padding: 0;
-
-    > div {
-      min-height: 2.5em;
-    }
   }
 }
 </style>

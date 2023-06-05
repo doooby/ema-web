@@ -21,7 +21,9 @@ import { work_agreement } from '~/lib/records';
 })
 export default class extends DatabasePage {
   get fields () {
-    return work_agreement.recordControls();
+    return work_agreement.recordControls({
+      countryData: this.$store.getters['session/countryStaticData'],
+    });
   }
 }
 </script>

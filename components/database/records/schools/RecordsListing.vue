@@ -43,7 +43,7 @@ export default class extends Vue {
         {{ record.external_id }}
       </td>
       <td>
-        <text-names class-name="single-row-cell" :value="record.name" />
+        <text-names class="single-row-cell" :value="record.name" />
       </td>
       <td>
         <b-record-link v-if="record.director" entity="people" :record="record.director" />

@@ -53,10 +53,16 @@ export default class extends DatabasePage {
         <show-page-table-row label="db.record.people.label.student_kobo_no">
           {{ record.student_kobo_no }}
         </show-page-table-row>
+        <show-page-table-row label="db.record.people.label.external_id">
+          {{ record.external_id }}
+        </show-page-table-row>
+        <show-page-table-row label="db.record.people.label.navision_id">
+          {{ record.navision_id }}
+        </show-page-table-row>
         <show-page-table-row label="db.record.people.label.last_name">
-          {{ record.last_name[1] }}
+          {{ record.last_name?.[1] }}
           <br>
-          <small>{{ record.last_name[0] }}</small>
+          <small>{{ record.last_name?.[0] }}</small>
         </show-page-table-row>
         <show-page-table-row label="db.record.people.label.first_name">
           {{ record.first_name[1] }}

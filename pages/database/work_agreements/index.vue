@@ -13,14 +13,25 @@ import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import WorkAgreementsListing from '~/components/database/records/work_agreements/RecordsListing.vue';
+import app from '~/lib/app';
+import { dbFields } from '~/components/database/fields';
 
 @Component({
   components: { IndexPage },
 })
 export default class extends DatabasePage {
-   searchFields = [
-     [ 'search', controls.text ],
-   ];
+  get searchFields () {
+    return [
+      [ 'search', controls.text ],
+      [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
+      [ 'position', controls.select, {
+        options: app.extendOptionsList(
+          this.$store.getters['session/countryStaticData']?.options.contract_position(),
+          { empty: true },
+        ),
+      } ],
+    ];
+  }
 
   WorkAgreementsListing = WorkAgreementsListing;
 

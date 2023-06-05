@@ -15,6 +15,8 @@ export interface Data {
         schoolTransports: OptionsBuilder;
         caregiverRelations: OptionsBuilder;
     distancesToSchool: OptionsBuilder;
+    contract_position: OptionsBuilder;
+    resignationReasons: OptionsBuilder;
   },
   internal_lists: Record<string, OptionsBuilder>;
 }
@@ -161,6 +163,23 @@ export function defaultCountryData (): Data {
           'uncle',
           'sister',
           'brother',
+        ]);
+      },
+      contract_position () {
+        return mapOptions('app.internal_lists.contract_positions', [
+          'th_as',
+          'cl',
+          'gu',
+          'th',
+          'pss',
+          'sup',
+          't',
+          'tr',
+        ]);
+      },
+      resignationReasons () {
+        return mapOptions('app.internal_lists.resignation_reasons', [
+          'moved',
         ]);
       },
     },
