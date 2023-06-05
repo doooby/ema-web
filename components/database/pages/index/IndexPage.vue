@@ -6,23 +6,6 @@ import { h } from 'vue';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
 
-// TODO t93
-import CoursesListing from '~/components/database/records/courses/RecordsListing.vue';
-import DonorsListing from '~/components/database/records/donors/RecordsListing.vue';
-import EducationLevelsListing from '~/components/database/records/education_levels/RecordsListing.vue';
-import GroupsListing from '~/components/database/records/groups/RecordsListing.vue';
-import MaterialKitsListing from '~/components/database/records/material_kits/RecordsListing.vue';
-import PeopleListing from '~/components/database/records/people/RecordsListing.vue';
-import ProjectsListing from '~/components/database/records/projects/RecordsListing.vue';
-import SchoolsListing from '~/components/database/records/schools/RecordsListing.vue';
-import SchoolYearsListing from '~/components/database/records/school_years/RecordsListing.vue';
-import StandardizedCoursesListing from '~/components/database/records/standardized_courses/RecordsListing.vue';
-import SubjectCategoriesListing from '~/components/database/records/subject_categories/RecordsListing.vue';
-import SubjectsListing from '~/components/database/records/subjects/RecordsListing.vue';
-import UsersListing from '~/components/database/records/users/RecordsListing.vue';
-import WorkAgreementsListing from '~/components/database/records/work_agreements/RecordsListing.vue';
-import { Action } from '~/components/database/components/listing/RecordActionsMenu.vue';
-
 const RecordsListing = Vue.extend({
   functional: true,
   props: [ 'component', 'initialColumns', 'params' ],
@@ -51,10 +34,11 @@ const RecordsListing = Vue.extend({
     RecordsListing,
   },
 })
-export default class Index4Page extends Vue {
+export default class IndexPage extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly searchFields!: FormFieldDefinition[];
   @Prop({ required: true }) readonly actions!: Action[];
+  @Prop({ default: undefined }) readonly component!: any;
 
   searchParams = {};
 
@@ -89,22 +73,10 @@ export default class Index4Page extends Vue {
   ];
 
   get listingComponent () {
-    switch (this.entity) {
-      case 'courses': return CoursesListing;
-      case 'donors': return DonorsListing;
-      case 'education_levels': return EducationLevelsListing;
-      case 'groups': return GroupsListing;
-      case 'material_kits': return MaterialKitsListing;
-      case 'people': return PeopleListing;
-      case 'projects': return ProjectsListing;
-      case 'schools': return SchoolsListing;
-      case 'school_years': return SchoolYearsListing;
-      case 'standardized_courses': return StandardizedCoursesListing;
-      case 'subject_categories': return SubjectCategoriesListing;
-      case 'subjects': return SubjectsListing;
-      case 'users': return UsersListing;
-      case 'work_agreements': return WorkAgreementsListing;
-      default: return null;
+    if (this.component) {
+      return this.component;
+    } else {
+      throw new Error('listing component is needed');
     }
   }
 

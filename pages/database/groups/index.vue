@@ -1,8 +1,9 @@
 <template>
-  <index4-page
+  <IndexPage
     entity="groups"
     :search-fields="searchFields"
     :actions="actions"
+    :component="GroupsListing"
   />
 </template>
 
@@ -11,10 +12,11 @@ import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
-import Index4Page from '~/components/database/pages/index/index4Page.vue';
+import IndexPage from '~/components/database/pages/index/IndexPage.vue';
+import GroupsListing from '~/components/database/records/people/GroupsListing.vue';
 
 @Component({
-  components: { Index4Page },
+  components: { IndexPage },
 })
 export default class extends DatabasePage {
   searchFields= [
@@ -22,6 +24,8 @@ export default class extends DatabasePage {
     [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
     [ 'course', dbFields.selectBRecord, { entity: 'courses' } ],
   ];
+
+GroupsListing = GroupsListing;
 
   actions = [
     { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
