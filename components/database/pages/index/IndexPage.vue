@@ -76,7 +76,7 @@ export default class IndexPage extends Vue {
     if (this.component) {
       return this.component;
     } else {
-      return null;
+      throw new Error('listing component is needed');
     }
   }
 
