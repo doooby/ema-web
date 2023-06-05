@@ -25,6 +25,7 @@ export default class extends DatabasePage {
       [ 'position', controls.select, {
         options: app.extendOptionsList(
           this.$store.getters['session/countryStaticData']?.options.contract_position(),
+          { empty: true },
         ),
       } ],
     ];
