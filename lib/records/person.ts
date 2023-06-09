@@ -11,6 +11,9 @@ export const entity = 'people';
 
 export interface Person extends application_record.SharedAttributes {
   country: BRecord;
+  school: BRecord;
+  course: BRecord;
+  group: BRecord;
   student_kobo_no?: string;
   external_id?: string;
   navision_id?: string;
@@ -61,6 +64,15 @@ export function parseRecord (
   return wai.object(value => ({
     ...parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
+    school: wai.prop('school_id', value, () => {
+      return { id: '1', caption: 'kalahari' };
+    }),
+    course: wai.prop('course_id', value, () => {
+      return { id: '1', caption: 'math_course' };
+    }),
+    group: wai.prop('group_id', value, () => {
+      return { id: '1', caption: 'group 1' };
+    }),
     first_name: wai.prop('first_name', value, mapName),
     last_name: wai.prop('last_name', value, wai.nullable(mapName)),
     mother_first_name: wai.prop('mother_first_name', value, wai.nullable(mapName)),
