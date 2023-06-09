@@ -6,9 +6,10 @@ import ARecordsListing from '~/components/database/components/listing/ARecordsLi
 import { Params } from '~/lib/api2';
 import { Column } from '~/components/DataTable/v3';
 import { application_record } from '~/lib/records';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 @Component({
-  components: { ARecordsListing, ARecordLink, TextNames },
+  components: { BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
 export default class RecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -19,8 +20,8 @@ export default class RecordsListing extends Vue {
     ...application_record.fillDataTableColumns('people', [
       { name: 'student_kobo_no' },
       { name: 'first_name' },
-      { name: 'last_name' },
-      { name: 'born_on' },
+      { name: 'school' },
+      { name: 'school' },
     ]),
   ];
 }
@@ -47,15 +48,38 @@ export default class RecordsListing extends Vue {
         {{ record.navision_id }}
       </td>
       <td>
-        <text-names class="single-row-cell" :value="record.first_name" />
-      </td>
-      <td>
-        <text-names class="single-row-cell" :value="record.last_name" />
-      </td>
-      <td>
+        {{ record.first_name[1] }} {{ record.last_name[1] }}
+        <br>
+        {{ record.last_name[2] }} {{ record.first_name[2] }}
         <span v-if="record.born_on">{{ $d(record.born_on) }}</span>
       </td>
-      <td />
+      <td>
+        <b-record-link
+          entity="schools"
+          :record="record.school"
+        />
+        <br>
+        <b-record-link
+          entity="courses"
+          :record="record.course"
+        />
+        <br>
+        <b-record-link
+          entity="groups"
+          :record="record.group"
+        />
+      </td>
+      <td>
+        <b-record-link
+          entity="schools"
+          :record="record.school"
+        />
+        <br>
+        <b-record-link
+          entity="donors"
+          :record="record.donor"
+        />
+      </td>
     </template>
     <template #footer>
       <slot name="footer" />
