@@ -21,7 +21,7 @@ export default class RecordsListing extends Vue {
       { name: 'student_kobo_no' },
       { name: 'first_name' },
       { name: 'school' },
-      { name: 'donor' },
+      { name: 'school' },
     ]),
   ];
 }
