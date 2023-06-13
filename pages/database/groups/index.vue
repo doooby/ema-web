@@ -13,7 +13,7 @@ import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
-import GroupsListing from '~/components/database/records/people/GroupsListing.vue';
+import GroupsListing from '~/components/database/records/groups/RecordsListing.vue';
 
 @Component({
   components: { IndexPage },
