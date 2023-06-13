@@ -18,7 +18,7 @@ export interface Person extends application_record.SharedAttributes {
   };
   main_contract?: {
     work_agreement: BRecord;
-    donor?: BRecord;
+    position?: string;
     school: BRecord;
   };
   student_kobo_no?: string;
@@ -72,20 +72,14 @@ export function parseRecord (
     ...parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
     main_group: wai.prop('main_group', value, wai.nullable(wai.object(value => ({
-      // group: wai.prop('group_id', value, mapAssociation('groups', associations)),
-      group: wai.prop('-', value, () => ({ id: '1', caption: 'name' })),
-      // course: wai.prop('course_id', value, wai.nullable(mapAssociation('courses', associations))),
-      course: wai.prop('-', value, () => ({ id: '1', caption: 'name' })),
-      // school: wai.prop('school_id', value, mapAssociation('schools', associations)),
-      school: wai.prop('-', value, () => ({ id: '1', caption: 'name' })),
+      group: wai.prop('group_id', value, mapAssociation('groups', associations)),
+      course: wai.prop('course_id', value, mapAssociation('courses', associations)),
+      school: wai.prop('school_id', value, mapAssociation('schools', associations)),
     })))),
     main_contract: wai.prop('main_contract', value, wai.nullable(wai.object(value => ({
-      // work_agreement: wai.prop('work_agreement_id', value, mapAssociation('work_agreements', associations)),
-      work_agreement: wai.prop('-', value, () => ({ id: '1', caption: 'name' })),
-      // donor: wai.prop('donor_id', value, wai.nullable(mapAssociation('donors', associations))),
-      donor: wai.prop('-', value, () => ({ id: '1', caption: 'name' })),
-      // school: wai.prop('school_id', value, mapAssociation('schools', associations)),
-      school: wai.prop('-', value, () => ({ id: '1', caption: 'name' })),
+      work_agreement: wai.prop('work_agreement_id', value, mapAssociation('work_agreements', associations)),
+      position: wai.prop('position', value, wai.nullable(wai.string)),
+      school: wai.prop('school_id', value, mapAssociation('schools', associations)),
     })))),
     first_name: wai.prop('first_name', value, mapName),
     last_name: wai.prop('last_name', value, wai.nullable(mapName)),

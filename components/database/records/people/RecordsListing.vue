@@ -19,23 +19,23 @@ export default class RecordsListing extends Vue {
   columns = [
     { name: 'id', size: 80 },
     ...application_record.fillDataTableColumns('people', [
-      { name: 'student_kobo_no' },
+      { name: 'ids' },
       { name: 'first_name' },
-      { name: 'course' },
-      { name: 'contract' },
+      { name: 'main_group' },
+      { name: 'main_contract' },
     ]),
   ];
 
-  associations1 = [
-    { entity: 'groups', attr: 'main_group' },
-    { entity: 'courses', attr: 'main_group' },
-    { entity: 'schools', attr: 'main_group' },
+  mainGroupAssociations = [
+    { entity: 'groups', attr: 'main_group.group' },
+    { entity: 'courses', attr: 'main_group.course' },
+    { entity: 'schools', attr: 'main_group.school' },
   ]
 
-  associations2 = [
-    { entity: 'work_agreements', attr: 'main_group' },
-    { entity: 'donors', attr: 'main_group' },
-    { entity: 'schools', attr: 'main_group' },
+  mainContractAssociations = [
+    { entity: 'work_agreements', attr: 'main_contract.work_agreement' },
+    { entity: 'donors', attr: 'main_contract.donor' },
+    { entity: 'schools', attr: 'main_contract.school' },
   ]
 }
 </script>
@@ -61,26 +61,41 @@ export default class RecordsListing extends Vue {
         {{ record.navision_id }}
       </td>
       <td>
-        {{ record.first_name[0] }}
-        <span v-if="record.last_name[0]">{{ record.last_name[0] }} </span>
-        <br>
-        <span v-if="record.last_name[1]">{{ record.last_name[1] }}</span>
-        {{ record.first_name[1] }}
-        <br>
-        <span v-if="record.born_on">{{ $d(record.born_on) }}</span>
+        <div>
+          <span>{{ record.first_name[0] }}</span>
+          <span v-if="record.last_name[0]"> {{ record.last_name[0] }}</span>
+        </div>
+        <div>
+          {{ record.first_name[1] }}
+          <span v-if="record.last_name[1]"> {{ record.last_name[1] }}</span>
+        </div>
+        <div v-if="record.born_on">
+          {{ $d(record.born_on) }}
+        </div>
       </td>
       <td>
         <RecordAssociations
           :record="record"
-          :associations="associations1"
+          :associations="mainGroupAssociations"
         />
       </td>
       <td>
         <RecordAssociations
           :record="record"
-          :associations="associations2"
+          :associations="mainContractAssociations"
         />
+        <div
+          v-if="record.main_contract && record.main_contract.position"
+          class="font-12"
+        >
+          <small class="text-muted">
+            <t value="db.record.work_agreements.label.position" />
+          </small>
+          <br>
+          <t :value="`app.internal_lists.contract_positions.${record.main_contract.position}`" />
+        </div>
       </td>
+      <td />
     </template>
     <template #footer>
       <slot name="footer" />
