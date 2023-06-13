@@ -6,9 +6,11 @@ import ARecordsListing from '~/components/database/components/listing/ARecordsLi
 import { Params } from '~/lib/api2';
 import { Column } from '~/components/DataTable/v3';
 import { application_record } from '~/lib/records';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
+import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 
 @Component({
-  components: { ARecordsListing, ARecordLink, TextNames },
+  components: { RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
 export default class RecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -17,12 +19,24 @@ export default class RecordsListing extends Vue {
   columns = [
     { name: 'id', size: 80 },
     ...application_record.fillDataTableColumns('people', [
-      { name: 'student_kobo_no' },
+      { name: 'ids' },
       { name: 'first_name' },
-      { name: 'last_name' },
-      { name: 'born_on' },
+      { name: 'main_group' },
+      { name: 'main_contract' },
     ]),
   ];
+
+  mainGroupAssociations = [
+    { entity: 'groups', attr: 'main_group.group' },
+    { entity: 'courses', attr: 'main_group.course' },
+    { entity: 'schools', attr: 'main_group.school' },
+  ]
+
+  mainContractAssociations = [
+    { entity: 'work_agreements', attr: 'main_contract.work_agreement' },
+    { entity: 'donors', attr: 'main_contract.donor' },
+    { entity: 'schools', attr: 'main_contract.school' },
+  ]
 }
 </script>
 
@@ -47,13 +61,39 @@ export default class RecordsListing extends Vue {
         {{ record.navision_id }}
       </td>
       <td>
-        <text-names class="single-row-cell" :value="record.first_name" />
+        <div>
+          <span>{{ record.first_name[0] }}</span>
+          <span v-if="record.last_name[0]"> {{ record.last_name[0] }}</span>
+        </div>
+        <div>
+          {{ record.first_name[1] }}
+          <span v-if="record.last_name[1]"> {{ record.last_name[1] }}</span>
+        </div>
+        <div v-if="record.born_on">
+          {{ $d(record.born_on) }}
+        </div>
       </td>
       <td>
-        <text-names class="single-row-cell" :value="record.last_name" />
+        <RecordAssociations
+          :record="record"
+          :associations="mainGroupAssociations"
+        />
       </td>
       <td>
-        <span v-if="record.born_on">{{ $d(record.born_on) }}</span>
+        <RecordAssociations
+          :record="record"
+          :associations="mainContractAssociations"
+        />
+        <div
+          v-if="record.main_contract && record.main_contract.position"
+          class="font-12"
+        >
+          <small class="text-muted">
+            <t value="db.record.work_agreements.label.position" />
+          </small>
+          <br>
+          <t :value="`app.internal_lists.contract_positions.${record.main_contract.position}`" />
+        </div>
       </td>
       <td />
     </template>

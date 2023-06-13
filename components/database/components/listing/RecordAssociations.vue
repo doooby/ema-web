@@ -3,6 +3,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import app from '~/lib/app';
 import { BRecord } from '~/lib/api2';
+import { get } from 'lodash';
 
 export interface Association {
   entity: string;
@@ -29,7 +30,7 @@ export default class RecordAssociations extends Vue {
 function filterAssociations (record, list): Item[] {
   return list
     .map((item) => {
-      const bRecord = item && record[item.attr];
+      const bRecord = item && get(record, item.attr);
       return bRecord ? { entity: item.entity, bRecord } : undefined;
     })
     .filter(i => i) as Item[];
@@ -41,7 +42,7 @@ function filterAssociations (record, list): Item[] {
     <div
       v-for="{ entity, bRecord } in filteredList"
       :key="entity"
-      class="text-truncate item"
+      class="text-truncate font-12"
     >
       <small class="text-muted">
         <t :value="`db.record.${entity}.meta.s`" />
@@ -51,9 +52,3 @@ function filterAssociations (record, list): Item[] {
     </div>
   </div>
 </template>
-
-<style lang="css" scoped>
-.item {
-  font-size: 12px;
-}
-</style>

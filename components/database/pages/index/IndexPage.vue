@@ -5,6 +5,7 @@ import SearchForm from '~/components/database/components/listing/SearchForm.vue'
 import { h } from 'vue';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ActionsCell from '~/components/database/pages/index/ActionsCell.vue';
+import { Action } from '~/components/database/components/listing/RecordActionsMenu.vue';
 
 const RecordsListing = Vue.extend({
   functional: true,

@@ -11,6 +11,16 @@ export const entity = 'people';
 
 export interface Person extends application_record.SharedAttributes {
   country: BRecord;
+  main_group?: {
+    group: BRecord;
+    course: BRecord;
+    school: BRecord;
+  };
+  main_contract?: {
+    work_agreement: BRecord;
+    position?: string;
+    school: BRecord;
+  };
   student_kobo_no?: string;
   external_id?: string;
   navision_id?: string;
@@ -61,6 +71,16 @@ export function parseRecord (
   return wai.object(value => ({
     ...parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
+    main_group: wai.prop('main_group', value, wai.nullable(wai.object(value => ({
+      group: wai.prop('group_id', value, mapAssociation('groups', associations)),
+      course: wai.prop('course_id', value, mapAssociation('courses', associations)),
+      school: wai.prop('school_id', value, mapAssociation('schools', associations)),
+    })))),
+    main_contract: wai.prop('main_contract', value, wai.nullable(wai.object(value => ({
+      work_agreement: wai.prop('work_agreement_id', value, mapAssociation('work_agreements', associations)),
+      position: wai.prop('position', value, wai.nullable(wai.string)),
+      school: wai.prop('school_id', value, mapAssociation('schools', associations)),
+    })))),
     first_name: wai.prop('first_name', value, mapName),
     last_name: wai.prop('last_name', value, wai.nullable(mapName)),
     mother_first_name: wai.prop('mother_first_name', value, wai.nullable(mapName)),
