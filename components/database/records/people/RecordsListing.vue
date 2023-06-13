@@ -61,9 +61,12 @@ export default class RecordsListing extends Vue {
         {{ record.navision_id }}
       </td>
       <td>
-        {{ record.first_name[0] }} {{ record.last_name[0] }}
+        {{ record.first_name[0] }}
+        <span v-if="record.last_name[0]">{{ record.last_name[0] }} </span>
         <br>
-        {{ record.last_name[1] }} {{ record.first_name[1] }}
+        <span v-if="record.last_name[1]">{{ record.last_name[1] }}</span>
+        {{ record.first_name[1] }}
+        <br>
         <span v-if="record.born_on">{{ $d(record.born_on) }}</span>
       </td>
       <td>
