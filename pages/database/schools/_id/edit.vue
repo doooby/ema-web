@@ -24,6 +24,8 @@ export default class extends DatabasePage {
   get fields () {
     return school.recordControls({
       countryData: this.$store.getters['session/countryStaticData'],
+      addressSystem: this.$store.state.session.countryData?.addressSystem,
+      api: this.$api,
     });
   }
 }
