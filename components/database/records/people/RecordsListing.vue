@@ -20,7 +20,7 @@ export default class RecordsListing extends Vue {
     { name: 'id', size: 80 },
     ...application_record.fillDataTableColumns('people', [
       { name: 'ids' },
-      { name: 'first_name' },
+      { name: 'person' },
       { name: 'main_group' },
       { name: 'main_contract' },
     ]),
