@@ -2,10 +2,10 @@
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import Vue from 'vue';
 import { BRecord, SearchRecordsResponsePayload } from '~/lib/api2';
-import Pagination from '~/components/database/RecordsBrowsing/Pagination.vue';
 import LoaderStrip from '~/components/database/LoaderStrip.vue';
 import { RequestState } from '~/lib/api';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
+import SearchRecordsPagination from '~/components/database/components/SearchRecordsPagination.vue';
 
 interface Item {
   selected: boolean;
@@ -15,7 +15,7 @@ interface Item {
 
 @Component({
   components: {
-    BrowsingPagination: Pagination,
+    SearchRecordsPagination,
     LoaderStrip,
     BRecordLink,
   },
@@ -123,10 +123,7 @@ function bRecordLabels ({ caption: _caption, id: _id, ...labels }: BRecord) {
           <span>: </span>
           <span>{{ searchQueryStateV1.value?.total ?? 0 }}</span>
         </div>
-        <browsing-pagination
-          :request-state="searchQueryStateV1"
-          @select="onSearch($event)"
-        />
+        <search-records-pagination :request="searchQueryState" @select="onSearch($event)" />
       </div>
       <b-list-group>
         <b-list-group-item

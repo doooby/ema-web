@@ -14,10 +14,6 @@
         <span>: </span>
         <span>{{ cachedQueryState.value?.total ?? 0 }}</span>
       </div>
-      <browsing-pagination
-        :request-state="cachedQueryState"
-        @select="search({ page: $event })"
-      />
     </div>
     <b-list-group>
       <b-list-group-item
@@ -42,7 +38,6 @@ import { Params, QueryDefinition } from '~/lib/api';
 import { buildFormFields, controls } from '~/components/Form';
 import debounce from 'lodash/debounce';
 import * as mappers from '~/lib/api/mappers';
-import Pagination from '~/components/database/RecordsBrowsing/Pagination.vue';
 import LoaderStrip from '~/components/database/LoaderStrip.vue';
 
 type SearchResult = mappers.PaginatedRecords<mappers.AbbreviatedRecord>;
@@ -55,7 +50,6 @@ interface Item {
 
 @Component({
   components: {
-    BrowsingPagination: Pagination,
     LoaderStrip,
   },
 })
