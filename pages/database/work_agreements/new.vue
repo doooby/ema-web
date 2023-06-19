@@ -23,7 +23,7 @@ import RecordForm from '~/components/database/records/work_agreements/RecordForm
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return work_agreement.recordControls({
-      countryData: this.$store.getters['session/countryStaticData'],
+      countryData: this.$store.state.session.country,
     });
   }
 }

@@ -23,7 +23,7 @@ import New2Page from '~/components/database/pages/new/New2Page.vue';
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {
     return standardized_course.recordControls({
-      countryData: this.$store.getters['session/countryStaticData'],
+      countryData: this.$store.state.session.country,
     });
   }
 }

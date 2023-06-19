@@ -105,7 +105,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
-import { common, person } from '~/lib/records';
+import { person } from '~/lib/records';
 import SelectInput from '~/components/Form/primitives/SelectInput.vue';
 import NameInput from '~/components/Form/primitives/NameInput.vue';
 import TextInput from '~/components/Form/primitives/TextInput.vue';

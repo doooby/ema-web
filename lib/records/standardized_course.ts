@@ -54,18 +54,27 @@ export const queries = {
 export function recordControls ({
   countryData,
 }: {
-  countryData?: app.country.Data;
+  countryData?: app.session.CountryData;
 }): FormFieldDefinition[] {
   return [
-    [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
+    [ 'education_level', dbFields.selectBRecord, {
+      entity: 'education_levels',
+    } ],
     [ 'name', controls.name ],
-    [ 'grade', controls.integer, { maxLength: 2 } ],
+    [ 'grade', controls.integer, {
+      maxLength: 2,
+    } ],
     [ 'is_formal', controls.boolean ],
     [ 'accreditation_authority', controls.selectOrFill, {
-      options: countryData?.options.accreditationAuthorities(),
+      options: app.internalOptionsList(countryData, 'accreditation_authority'),
     } ],
-    [ 'lesson_duration', controls.integer, { rightLabel: 'app.time.minutes.p' } ],
-    [ 'attendance_limit', controls.integer, { requireable: true, rightLabel: { text: '%' } } ],
+    [ 'lesson_duration', controls.integer, {
+      rightLabel: 'app.time.minutes.p',
+    } ],
+    [ 'attendance_limit', controls.integer, {
+      requireable: true,
+      rightLabel: { text: '%' },
+    } ],
     [ 'preferred_grading', asFieldType(GradingTypeField) ],
     [ 'description', controls.textMultiline ],
     [ 'subjects', asFieldType(SubjectsField) ],

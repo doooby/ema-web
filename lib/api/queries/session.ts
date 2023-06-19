@@ -1,16 +1,14 @@
 import { Params } from '~/lib/api';
-import { user2 } from '~/lib/records';
 import * as mappers from '~/lib/api/mappers';
+import app from '~/lib/app';
 
 interface Session {
-  user: user2.SessionUser;
-  pageAllowed?: boolean;
+  user: app.session.User;
 }
 
 function mapSession (value: any): Session {
   return mappers.object(value, root => ({
-    user: mappers.prop('user', root, user2.mapSessionUser),
-    pageAllowed: mappers.maybeProp('page_allowed', root, mappers.val.boolean),
+    user: mappers.prop('user', root, value => value),
   }));
 }
 

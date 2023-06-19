@@ -99,20 +99,39 @@ export const queries = {
 export function recordControls ({
   countryData,
 }: {
-  countryData?: app.country.Data;
+  countryData?: app.session.CountryData;
 }): FormFieldDefinition[] {
   return [
-    [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
-    [ 'education_level', dbFields.selectBRecord, { entity: 'education_levels' } ],
-    [ 'project', dbFields.selectBRecord, { entity: 'projects' } ],
-    [ 'school_year', dbFields.selectBRecord, { entity: 'school_years' } ],
-    [ 'standardized_course', dbFields.selectBRecord, { entity: 'standardized_courses' } ],
+    [ 'school', dbFields.selectBRecord, {
+      entity: 'schools',
+    } ],
+    [ 'education_level', dbFields.selectBRecord, {
+      entity: 'education_levels',
+    } ],
+    [ 'project', dbFields.selectBRecord, {
+      entity: 'projects',
+    } ],
+    [ 'school_year', dbFields.selectBRecord, {
+      entity: 'school_years',
+    } ],
+    [ 'standardized_course', dbFields.selectBRecord, {
+      entity: 'standardized_courses',
+    } ],
     [ 'name', controls.name ],
-    [ 'grade', controls.integer, { maxLength: 2 } ],
+    [ 'grade', controls.integer, {
+      maxLength: 2,
+    } ],
     [ 'is_formal', controls.boolean ],
-    [ 'accreditation_authority', controls.selectOrFill, { options: countryData?.options.accreditationAuthorities() } ],
-    [ 'lesson_duration', controls.integer, { rightLabel: 'app.time.minutes.p' } ],
-    [ 'attendance_limit', controls.integer, { requireable: true, rightLabel: { text: '%' } } ],
+    [ 'accreditation_authority', controls.selectOrFill, {
+      options: app.internalOptionsList(countryData, 'accreditation_authority'),
+    } ],
+    [ 'lesson_duration', controls.integer, {
+      rightLabel: 'app.time.minutes.p',
+    } ],
+    [ 'attendance_limit', controls.integer, {
+      requireable: true,
+      rightLabel: { text: '%' },
+    } ],
     [ 'preferred_grading', asFieldType(GradingTypeField) ],
     [ 'time_ranges', asFieldType(SchoolYearTerms) ],
     [ 'subjects', asFieldType(SubjectsField) ],

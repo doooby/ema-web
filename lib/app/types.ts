@@ -7,3 +7,8 @@ export type Option = {
 }
 
 export type FilterableList<I> = (undefined | false | I)[]
+
+export interface InternalOptionsList {
+  id: string;
+  options: string[];
+}

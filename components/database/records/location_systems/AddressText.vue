@@ -48,11 +48,12 @@ export default class AddressText extends Vue {
 
     if (!this.address) return;
 
-    this.locations = await location_system.loadAddress(
-      this.system, this.address, this.$api,
-    );
+    // this.locations = await location_system.loadAddress(
+    //   this.system, this.address, this.$api,
+    // );
 
-    if (!this.locations) this.failed = true;
+    // if (!this.locations)
+    this.failed = true;
   }
 }
 </script>

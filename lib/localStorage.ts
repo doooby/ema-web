@@ -1,13 +1,9 @@
-import * as mappers from '~/lib/api/mappers';
-
 const store = globalThis.localStorage;
 
 export const values = {
-  currentCountry: {
-    key: 'EMA--currentCountry',
-    mapper (value: string): mappers.AssociatedRecord {
-      return mappers.object(value, mappers.val.assoc);
-    },
+  currentCountryId: {
+    key: 'EMA--currentCountryId',
+    mapper: value => value,
   },
 };
 
@@ -25,16 +21,17 @@ export function get<V> ({ key, mapper }: StoredValue<V>): null | V {
     value = null;
   }
   if (!value) return null;
-  let result;
-  try {
-    result = mapper(value);
-  } catch (error) {
-    if (error instanceof mappers.MappingError) error.finalize();
-    else throw error;
-    console.error(error);
-    return null;
-  }
-  return result;
+  return mapper(value);
+  // let result;
+  // try {
+  //   result = mapper(value);
+  // } catch (error) {
+  //   if (error instanceof mappers.MappingError) error.finalize();
+  //   else throw error;
+  //   console.error(error);
+  //   return null;
+  // }
+  // return result;
 }
 
 export function set ({ key }: StoredValue<any>, value: any): void {

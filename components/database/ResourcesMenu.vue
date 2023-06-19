@@ -4,8 +4,8 @@
       <t value="db.menu.index_page" />
     </nuxt-link>
     <div v-if="countryData" class="mt-2">
-      <h4>{{ countryData.country.labels.caption }}</h4>
-      <h6>{{ countryData.country.labels.name }}</h6>
+      <h4>{{ countryData.record.caption }}</h4>
+      <h6>{{ countryData.record.name }}</h6>
       <country-switch />
     </div>
     <div v-else class="mt-2">
@@ -32,7 +32,7 @@ export default class ResourcesMenu extends Vue {
   }
 
   get countryData () {
-    return this.$store.state.session.countryData;
+    return this.$store.state.session.country;
   }
 }
 </script>

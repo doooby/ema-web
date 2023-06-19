@@ -30,7 +30,7 @@ import ResourcesMenu from '~/components/database/ResourcesMenu.vue';
 })
 export default class LayoutDatabase extends Vue {
   get userPresent (): boolean {
-    return !!this.$store.state.session.currentUser;
+    return !!this.$store.state.session.user;
   }
 }
 </script>

@@ -4,7 +4,6 @@ import Privileges from '~/components/database/records/users/controls/Privileges.
 import { BRecord, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import { mapName, mapOptionalAssociation } from '~/lib/api2/mappers';
-import * as mappers from '~/lib/api/mappers';
 
 export const entity = 'users';
 
@@ -20,13 +19,6 @@ export interface User extends application_record.SharedAttributes {
 export interface UserPrivilege {
   type: null | 'country_admin' | 'collector' | 'data_officer';
   [ opt: string ]: any;
-}
-
-export interface SessionUser {
-  id: number;
-  login: string;
-  name: [string, string];
-  countries: mappers.AssociatedRecord[];
 }
 
 export function parseRecord (

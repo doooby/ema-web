@@ -54,17 +54,23 @@ export const queries = {
 export function recordControls ({
   countryData,
 }: {
-  countryData?: app.country.Data;
+  countryData?: app.session.CountryData;
 }): FormFieldDefinition[] {
   return [
-    [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
-    [ 'person', dbFields.selectBRecord, { entity: 'people' } ],
-    [ 'projects', dbFields.selectManyBRecords, { entity: 'projects' } ],
-    [ 'donors', dbFields.selectManyBRecords, { entity: 'donors' } ],
+    [ 'school', dbFields.selectBRecord, {
+      entity: 'schools',
+    } ],
+    [ 'person', dbFields.selectBRecord, {
+      entity: 'people',
+    } ],
+    [ 'projects', dbFields.selectManyBRecords, {
+      entity: 'projects',
+    } ],
+    [ 'donors', dbFields.selectManyBRecords, {
+      entity: 'donors',
+    } ],
     [ 'position', controls.select, {
-      options: app.extendOptionsList(
-        countryData?.options.contract_position(),
-      ),
+      options: app.internalOptionsList(countryData, 'contract_position'),
     } ],
     [ 'external_id', controls.text ],
     [ 'navision_id', controls.text ],
@@ -73,7 +79,7 @@ export function recordControls ({
     [ 'resigned_on', controls.calendar ],
     [ 'resignation_reason', controls.selectOrFill, {
       options: app.extendOptionsList(
-        countryData?.options.resignationReasons(),
+        app.internalOptionsList(countryData, 'resignation_reasons'),
         { empty: true },
       ),
     } ],

@@ -1,8 +1,6 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators';
-import { user2, loadCountryData } from '~/lib/records';
-import * as mappers from '~/lib/api/mappers';
+import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import * as localStorage from '~/lib/localStorage';
-import { CountryData } from '~/store/session/country';
+import { Api2Plugin, BRecord } from '~/lib/api2';
 import app from '~/lib/app';
 
 @Module({
@@ -10,18 +8,17 @@ import app from '~/lib/app';
   namespaced: true,
 })
 export default class SessionModule extends VuexModule {
-  currentUser: null | user2.SessionUser = null;
-  user: null | user2.SessionUser = null;
-  countryData: null | CountryData = null;
+  user: null | app.session.User = null;
+  country: null | app.session.CountryData = null;
 
   loginModalShown = false;
   languageModalShown: boolean = false;
   debugTranslations: boolean = false;
 
   @Mutation
-  setCurrentUser (user: null | user2.SessionUser) {
-    this.currentUser = user;
+  setUser (user: null | app.session.User) {
     this.user = user;
+    this.country = null;
     if (user === null) {
       this.debugTranslations = false;
     }
@@ -29,14 +26,13 @@ export default class SessionModule extends VuexModule {
 
   @Mutation
   requestAuthnFailed () {
-    this.currentUser = null;
-    this.user = null;
+    this.setUser(null);
   }
 
   @Mutation
-  setCountryData (countryData: null | CountryData) {
-    localStorage.set(localStorage.values.currentCountry, countryData?.country);
-    this.countryData = countryData;
+  setCountry (data: null | app.session.CountryData) {
+    localStorage.set(localStorage.values.currentCountryId, data?.record.id);
+    this.country = data;
   }
 
   @Mutation
@@ -70,29 +66,24 @@ export default class SessionModule extends VuexModule {
       api.queries.session.show(),
       api.newQueryState(),
     );
-    this.context.commit('setCurrentUser', session?.user ?? null);
+    this.context.commit('setUser', session?.user ?? null);
   }
 
   @Action
   async switchCountry ({
     country,
-    api,
+    $api2,
   }: {
-    country: null | mappers.AssociatedRecord
-    api: any
+    country: null | BRecord;
+    $api2: Api2Plugin;
   }) {
-    this.context.commit('setCountryData', null);
+    this.context.commit('setCountry', null);
     if (!country) return;
-
-    const data = await loadCountryData(country, api);
-    this.context.commit('setCountryData', data);
+    const data = await app.session.loadCountryData(country, $api2);
+    this.context.commit('setCountry', data);
   }
 
-  get countryId (): null | number {
-    return this.countryData?.country?.id ?? null;
-  }
-
-  get countryStaticData (): null | app.country.Data {
-    return this.countryData?.staticData ?? null;
+  get countryId (): null | string {
+    return this.country?.record.id ?? null;
   }
 }

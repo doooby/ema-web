@@ -23,9 +23,8 @@ import RecordForm from '~/components/database/records/schools/RecordForm.vue';
 export default class extends DatabasePage {
   get fields () {
     return school.recordControls({
-      countryData: this.$store.getters['session/countryStaticData'],
-      addressSystem: this.$store.state.session.countryData?.addressSystem,
-      api: this.$api,
+      countryData: this.$store.state.session.country,
+      $api2: this.$api2,
     });
   }
 }

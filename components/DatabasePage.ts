@@ -12,10 +12,10 @@ import * as localStorage from '~/lib/localStorage';
 })
 export default class DatabasePage extends Vue {
   beforeMount () {
-    const user = this.$store.state.session.currentUser;
+    const user = this.$store.state.session.user;
     if (!user) return;
 
-    const savedId = localStorage.get(localStorage.values.currentCountry)?.id;
+    const savedId = localStorage.get(localStorage.values.currentCountryId);
     const country = user.countries.find(country => country.id === savedId) ?? user.countries[0];
     if (country && country.id === this.$store.getters['session/countryId']) {
       return;
@@ -23,7 +23,7 @@ export default class DatabasePage extends Vue {
 
     this.$store.dispatch('session/switchCountry', {
       country: country ?? null,
-      api: this.$api,
+      $api2: this.$api2,
     });
   }
 }

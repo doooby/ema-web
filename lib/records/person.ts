@@ -137,7 +137,7 @@ export const queries = {
 export function recordControls ({
   countryData,
 }: {
-  countryData?: app.country.Data;
+  countryData?: app.session.CountryData;
 }): FormFieldDefinition[] {
   return [
     [ 'first_name', controls.name ],
@@ -148,7 +148,7 @@ export function recordControls ({
     [ 'father_last_name', controls.name ],
     [ 'born_on', controls.date ],
     [ 'gender', controls.select, {
-      options: countryData?.internal_lists.gender(),
+      options: app.internalOptionsList(countryData, 'gender'),
     } ],
     [ 'citizen_id', controls.text ],
     [ 'student_kobo_no', controls.text ],
@@ -160,7 +160,7 @@ export function recordControls ({
       options: [],
     } ],
     [ 'outside_school', controls.select, {
-      options: countryData?.options.outsideSchoolTerms(),
+      options: app.internalOptionsList(countryData, 'outside_school_terms'),
     } ],
     [ 'nationality', controls.select, {
       options: [],
@@ -170,11 +170,11 @@ export function recordControls ({
     } ],
     [ 'registered_on', controls.date ],
     [ 'enrollment_reasons', controls.selectMultiple, {
-      options: countryData?.options.enrollmentReasons(),
+      options: app.internalOptionsList(countryData, 'enrolment_reasons'),
     } ],
     [ 'disabilities', controls.selectMultiple, {
       options: app.extendOptionsList(
-        countryData?.options.disabilities(),
+        app.internalOptionsList(countryData, 'disabilities'),
         { other: true },
       ),
     } ],
@@ -184,22 +184,22 @@ export function recordControls ({
     [ 'disability_note', controls.textMultiline ],
     [ 'residency_status', controls.selectOrFill, {
       options: app.extendOptionsList(
-        countryData?.options.residencyStatuses(),
+        app.internalOptionsList(countryData, 'residency_status'),
         { empty: true },
       ),
     } ],
     [ 'school_distance_km', controls.select, {
-      options: countryData?.options.distancesToSchool(),
+      options: app.internalOptionsList(countryData, 'distance_to_school'),
     } ],
     [ 'school_distance_min', controls.integer ],
     [ 'school_transport', controls.selectOrFill, {
       options: app.extendOptionsList(
-        countryData?.options.schoolTransports(),
+        app.internalOptionsList(countryData, 'school_transport'),
         { empty: true },
       ),
     } ],
     [ 'caregivers', asFieldType(CaregiversField), {
-      relationOptions: countryData?.options.caregiverRelations(),
+      relationOptions: app.internalOptionsList(countryData, 'caregivers.relation'),
     } ],
   ];
 }

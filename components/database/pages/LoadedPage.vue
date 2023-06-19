@@ -4,7 +4,7 @@ import { Vue, Component } from 'vue-property-decorator';
 @Component
 export default class LoadedPage extends Vue {
   get isLoaded (): boolean {
-    return !!this.$store.state.session.countryData;
+    return !!this.$store.state.session.country;
   }
 }
 </script>

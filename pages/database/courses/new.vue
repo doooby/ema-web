@@ -26,7 +26,7 @@ import { SearchRecordsResponsePayload } from '~/lib/api2';
 export default class extends DatabasePage {
   get fields () {
     return course.recordControls({
-      countryData: this.$store.getters['session/countryStaticData'],
+      countryData: this.$store.state.session.country,
     });
   }
 

@@ -10,7 +10,7 @@
     </template>
     <div v-if="shown">
       <div v-if="currentUser">
-        <b-alert :show="currentUser !== null" variant="primary">
+        <b-alert :show="!!currentUser" variant="primary">
           You are logged-in.
         </b-alert>
         <p>
@@ -78,9 +78,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState } from 'vuex';
-import { user } from '~/lib/records';
 import { RequestResponse } from '~/lib/api';
 import { AssociatedRecord } from '~/lib/api/mappers';
+import app from '~/lib/app';
 
 export default Vue.extend({
   data () {
@@ -96,7 +96,7 @@ export default Vue.extend({
   },
   computed: {
     ...mapState({
-      currentUser: (state: any): null | user.SessionUser => state.session.currentUser,
+      currentUser: (state: any): null | app.session.User => state.session.user,
       shown: (state: any) => state.session.loginModalShown,
     }),
     countriesOptions (): { value: string; text: string }[] {

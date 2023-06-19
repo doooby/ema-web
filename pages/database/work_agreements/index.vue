@@ -23,10 +23,12 @@ export default class extends DatabasePage {
   get searchFields () {
     return [
       [ 'search', controls.text ],
-      [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
+      [ 'school', dbFields.selectBRecord, {
+        entity: 'schools',
+      } ],
       [ 'position', controls.select, {
         options: app.extendOptionsList(
-          this.$store.getters['session/countryStaticData']?.options.contract_position(),
+          app.internalOptionsList(this.$store.state.session.country, 'contract_position'),
           { empty: true },
         ),
       } ],
