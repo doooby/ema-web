@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import SearchRecordsPagination from '~/components/database/components/SearchRecordsPagination.vue';
+import SelectPage from '~/components/database/components/listing/SelectPage.vue';
 import { Params, SearchRecordsResponsePayload } from '~/lib/api2';
 import { Column, DataTable, DataTableHeadersRow } from '~/components/DataTable/v3';
 
@@ -13,7 +13,7 @@ const CellContent = Vue.extend({
 
 @Component({
   components: {
-    SearchRecordsPagination,
+    SelectPage,
     DataTable,
     DataTableHeadersRow,
     CellContent,
@@ -86,7 +86,7 @@ export default class ARecordsListing extends Vue {
           <span class="sr-only" />
         </div>
       </div>
-      <search-records-pagination :request="currentQuery" @select="fetchRecords" />
+      <select-page :request="currentQuery" @select="fetchRecords" />
     </div>
     <data-table
       class="mt-2"

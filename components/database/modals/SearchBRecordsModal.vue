@@ -2,10 +2,9 @@
 import { Component, Prop, Watch } from 'vue-property-decorator';
 import Vue from 'vue';
 import { BRecord, SearchRecordsResponsePayload } from '~/lib/api2';
-import LoaderStrip from '~/components/database/LoaderStrip.vue';
-import { RequestState } from '~/lib/api';
+import LoaderStrip from '~/components/database/components/LoaderStrip.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
-import SearchRecordsPagination from '~/components/database/components/SearchRecordsPagination.vue';
+import SelectPage from '~/components/database/components/listing/SelectPage.vue';
 
 interface Item {
   selected: boolean;
@@ -15,7 +14,7 @@ interface Item {
 
 @Component({
   components: {
-    SearchRecordsPagination,
+    SelectPage,
     LoaderStrip,
     BRecordLink,
   },
@@ -34,19 +33,21 @@ export default class SearchBRecordsModal extends Vue {
     if (value) this.onSearch();
   }
 
-  get searchQueryStateV1 (): RequestState {
-    return this.$api2.mapResponseToV1RequestState(this.searchQueryState);
+  get payload () {
+    if (this.searchQueryState.response?.ok) {
+      return this.searchQueryState.response.payload;
+    }
   }
 
   get items (): Item[] {
-    const { response } = this.searchQueryState;
+    const payload = this.payload;
 
-    if (!response || !response.ok) {
+    if (!payload) {
       return [];
     }
 
     const selectedIds = this.selected.map(record => record.id);
-    return response.payload.records.map(record => ({
+    return payload.records.map(record => ({
       record,
       selected: selectedIds.includes(record.id),
       labels: bRecordLabels(record),
@@ -116,14 +117,14 @@ function bRecordLabels ({ caption: _caption, id: _id, ...labels }: BRecord) {
           </div>
         </b-form-group>
       </div>
-      <loader-strip :request-state="searchQueryStateV1" />
+      <loader-strip :request-state="searchQueryState" />
       <div class="emb-2 d-flex justify-content-between">
         <div>
           <t value="db.record.shared.label.records_count" />
           <span>: </span>
-          <span>{{ searchQueryStateV1.value?.total ?? 0 }}</span>
+          <span>{{ payload?.total ?? 0 }}</span>
         </div>
-        <search-records-pagination :request="searchQueryState" @select="onSearch($event)" />
+        <select-page :request="searchQueryState" @select="onSearch($event)" />
       </div>
       <b-list-group>
         <b-list-group-item

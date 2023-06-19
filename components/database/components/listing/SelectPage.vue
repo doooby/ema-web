@@ -7,9 +7,9 @@ const DESIRED_PAGES = [ -15, -5, -2, -1, 0, 1, 2, 5, 15 ];
 
 @Component
 export default class SearchRecordsPagination extends Vue {
-  @Prop({ required: true }) readonly request!: RequestState<SearchRecordsResponsePayload>;
+  @Prop({ required: true }) readonly request!: RequestState<SearchRecordsResponsePayload<unknown>>;
 
-  get payload () : undefined | SearchRecordsResponsePayload {
+  get payload () : undefined | SearchRecordsResponsePayload<unknown> {
     return this.request.response?.ok ? this.request.response.payload : undefined;
   }
 

@@ -7,7 +7,6 @@
         @input="onInputDebounced"
       />
     </div>
-    <loader-strip :request-state="queryState" />
     <div class="emb-2 d-flex justify-content-between">
       <div>
         <t value="db.record.shared.label.records_count" />
@@ -38,7 +37,6 @@ import { Params, QueryDefinition } from '~/lib/api';
 import { buildFormFields, controls } from '~/components/Form';
 import debounce from 'lodash/debounce';
 import * as mappers from '~/lib/api/mappers';
-import LoaderStrip from '~/components/database/LoaderStrip.vue';
 
 type SearchResult = mappers.PaginatedRecords<mappers.AbbreviatedRecord>;
 
@@ -48,11 +46,7 @@ interface Item {
   labels: [string, string][];
 }
 
-@Component({
-  components: {
-    LoaderStrip,
-  },
-})
+@Component
 export default class SearchModal extends Vue {
   @Prop({ required: true }) readonly selectedRecords!: mappers.AbbreviatedRecord[];
   @Prop({ required: true }) readonly buildQuery!: () => QueryDefinition<SearchResult>;
