@@ -22,7 +22,6 @@ export default class GroupsListing extends Vue {
     <records-listing
       class="mt-2"
       :params="searchParams"
-      :hide-school="true"
     />
   </div>
 </template>

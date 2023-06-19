@@ -6,6 +6,8 @@ import { DatabasePage } from '~/components';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import GroupsListing from '~/components/database/records/people/GroupsListing.vue';
 import WorkAgreementsListing from '~/components/database/records/people/WorkAgreementsListing.vue';
+import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
+import { person } from '~/lib/records';
 
 enum Tabs {
   groups,
@@ -14,6 +16,7 @@ enum Tabs {
 
 @Component({
   components: {
+    RecordAssociations,
     WorkAgreementsListing,
     GroupsListing,
     Show2Page,
@@ -24,6 +27,9 @@ enum Tabs {
 export default class extends DatabasePage {
   Tabs = Tabs;
   currenTab: Tabs = Tabs.groups;
+
+  mainGroupAssociations = person.mainGroupAssociations();
+  mainContractAssociations = person.mainContractAssociations();
 }
 </script>
 
@@ -71,6 +77,18 @@ export default class extends DatabasePage {
         </show-page-table-row>
         <show-page-table-row label="db.record.people.label.born_on">
           {{ $d(record.born_on) }}
+        </show-page-table-row>
+        <show-page-table-row v-if="record.main_group" label="db.record.people.label.main_group">
+          <RecordAssociations
+            :record="record"
+            :associations="mainGroupAssociations"
+          />
+        </show-page-table-row>
+        <show-page-table-row v-if="record.main_contract" label="db.record.people.label.main_contract">
+          <RecordAssociations
+            :record="record"
+            :associations="mainContractAssociations"
+          />
         </show-page-table-row>
       </table>
     </template>

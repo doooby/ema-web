@@ -203,3 +203,37 @@ export function recordControls ({
     } ],
   ];
 }
+
+export function mainGroupAssociations () {
+  return [
+    {
+      entity: 'groups',
+      attr: 'main_group.group',
+    },
+    {
+      entity: 'courses',
+      attr: 'main_group.course',
+    },
+    {
+      entity: 'schools',
+      attr: 'main_group.school',
+    },
+  ];
+}
+
+export function mainContractAssociations () {
+  return [
+    {
+      entity: 'work_agreements',
+      attr: 'main_contract.work_agreement',
+    },
+    {
+      entity: 'donors',
+      attr: 'main_contract.donor',
+    },
+    {
+      entity: 'schools',
+      attr: 'main_contract.school',
+    },
+  ];
+}

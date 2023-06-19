@@ -5,7 +5,7 @@ import TextNames from '~/components/database/components/TextNames.vue';
 import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
 import { Params } from '~/lib/api2';
 import { Column } from '~/components/DataTable/v3';
-import { application_record } from '~/lib/records';
+import { application_record, person } from '~/lib/records';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 
@@ -26,17 +26,8 @@ export default class RecordsListing extends Vue {
     ]),
   ];
 
-  mainGroupAssociations = [
-    { entity: 'groups', attr: 'main_group.group' },
-    { entity: 'courses', attr: 'main_group.course' },
-    { entity: 'schools', attr: 'main_group.school' },
-  ]
-
-  mainContractAssociations = [
-    { entity: 'work_agreements', attr: 'main_contract.work_agreement' },
-    { entity: 'donors', attr: 'main_contract.donor' },
-    { entity: 'schools', attr: 'main_contract.school' },
-  ]
+  mainGroupAssociations = person.mainGroupAssociations();
+  mainContractAssociations = person.mainContractAssociations();
 }
 </script>
 
