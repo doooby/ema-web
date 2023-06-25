@@ -18,7 +18,6 @@ export default class SessionModule extends VuexModule {
   @Mutation
   setUser (user: null | app.session.User) {
     this.user = user;
-    this.country = null;
     if (user === null) {
       this.debugTranslations = false;
     }
