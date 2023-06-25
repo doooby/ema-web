@@ -56,11 +56,11 @@ export default class Location extends Vue {
   get levelDefinitions (): location_system.LocationSystemLevel[] {
     const list: location_system.LocationSystemLevel[] = [];
     if (!this.system) return list;
-    for (let i = 0; i < this.system.levels; i += 1) {
-      const level = this.system.settings?.[i + 1];
-      if (!level) break;
-      list.push(level);
-    }
+    // for (let i = 0; i < this.system.levels; i += 1) {
+    //   const level = this.system.settings?.[i + 1];
+    //   if (!level) break;
+    //   list.push(level);
+    // }
     return list;
   }
 
