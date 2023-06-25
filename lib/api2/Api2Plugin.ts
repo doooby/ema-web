@@ -78,6 +78,7 @@ export default class Api2Plugin {
         };
       } catch (error: any) {
         if (error instanceof wai.MappingError) error.seal(response.payload);
+        utils.warn('api2 request failed', query);
         utils.warnOfError(error, { payload: response.payload });
 
         state.response = {

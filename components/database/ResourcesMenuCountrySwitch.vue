@@ -45,7 +45,7 @@ export default class ResourcesMenuCountrySwitch extends Vue {
     const country = this.viableCountries.find(item => item.id === countryId);
     this.$store.dispatch('session/switchCountry', {
       country: country ?? null,
-      $api: this.$api2,
+      $api2: this.$api2,
     });
   }
 }

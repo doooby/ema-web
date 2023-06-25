@@ -2,24 +2,24 @@ import { recordsQueries } from '~/lib/api2';
 import { Location } from '~/lib/records/location';
 import { wai } from '~/vendor/wai';
 import { mapName } from '~/lib/api2/mappers';
+import { times } from 'lodash';
 
 export const entity = 'location_systems';
 
 export interface LocationSystem {
   id: string;
   name?: string[];
-  levels: number;
-  settings?: Record<string, undefined | LocationSystemLevel>;
+  levels: LocationSystemLevel[];
 }
 
 export interface LocationSystemLevel {
-  type: 's' | 't';
+  type: 'l' | 't';
   name: string[];
 }
 
 export type LocationItem =
   | {
-  type: 's';
+  type: 'l';
   location: Location;
 }
   | {
@@ -35,19 +35,32 @@ export function parseRecord (
     return {
       id: wai.prop('id', value, wai.string),
       name: wai.prop('name', value, wai.nullable(mapName)),
-      levels,
-      settings: wai.prop('settings', value, wai.nullable(
-        wai.object(value => parseSettings(levels, value)),
-      )),
+      levels: wai.prop('settings', value, value => parseSettings(value, levels)),
     };
   })(value);
 }
 
 function parseSettings (
+  value,
   levels: number,
-  value: unknown,
-): Record<string, undefined | LocationSystemLevel> {
-  return { 1: { type: 's', name: [ 'fds' ] } };
+): LocationSystemLevel[] {
+  if (!wai.isObject(value)) {
+    throw new wai.MappingError('not object');
+  }
+  const list: LocationSystemLevel[] = [];
+  times(levels, (index) => {
+    list[index] = wai.prop(index + 1, value, (value) => {
+      const item = wai.object(value => ({
+        type: wai.prop('type', value, wai.string),
+        name: wai.prop('name', value, mapName),
+      }))(value);
+      if (!item.type.match(/^[lt]$/)) {
+        throw new wai.MappingError(`invalid level type: ${item.type}`);
+      }
+      return item as LocationSystemLevel;
+    });
+  });
+  return list;
 }
 
 export const queries = {
