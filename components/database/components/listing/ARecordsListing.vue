@@ -82,13 +82,14 @@ export default class ARecordsListing extends Vue {
   get allColumns () {
     return [
       {
-        name: '_actions2', // TODO rename
+        name: 'actions',
         size: 36,
         fixedSize: true,
         renderCell: (record: unknown) => h(
           ActionsCell,
           {
             props: {
+              selectable: this.$scopedSlots['group-actions'],
               selected: this.model.selected.includes(record),
             },
             on: {
@@ -142,10 +143,39 @@ export default class ARecordsListing extends Vue {
 
 <template>
   <div :class="$attrs.class">
-    <div class="d-flex justify-content-between">
-      <div class="ml-1">
-        <div v-if="liveQuery.processing" class="spinner-border spinner-border-sm" role="status">
+    <div class="d-flex justify-content-between position-relative">
+      <div
+        v-if="liveQuery.processing"
+        class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center"
+      >
+        <div class="spinner-border spinner-border-sm" role="status">
           <span class="sr-only" />
+        </div>
+      </div>
+      <div class="d-flex align-items-center pl-2">
+        <b-button
+          v-if="$scopedSlots['group-actions']"
+          variant="outline-secondary"
+          size="xs"
+          @click="model.toggleSelectAll()"
+        >
+          <b-icon :icon="model.isAllSelected ? 'x' : 'check-all'" />
+        </b-button>
+        <div
+          v-if="$scopedSlots['group-actions']"
+          class="ml-2"
+        >
+          <b-dropdown
+            :disabled="!model.selected.length"
+            size="sm"
+            toggle-class="py-0"
+          >
+            <template #button-content>
+              <t value="db.listing.selection.count" />
+              ({{ model.selected.length }})
+            </template>
+            <slot name="group-actions" :records="model.selected" />
+          </b-dropdown>
         </div>
       </div>
       <select-page :request="stableQuery" @select="fetchRecords" />

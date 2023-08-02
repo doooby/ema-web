@@ -43,6 +43,9 @@ export default class PeopleListing extends Vue {
         <t value="db.page.edit.action" />
       </b-dropdown-item>
     </template>
+    <template v-if="$scopedSlots['group-actions']" #group-actions="{ records }">
+      <slot name="group-actions" :records="records" />
+    </template>
     <template #row="{ record }">
       <td>
         <div class="text-center">

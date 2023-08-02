@@ -57,7 +57,7 @@ export default class IndexPage extends Vue {
         <t value="db.page.new.action" />
       </nuxt-link>
       <search-form
-        class="mt-3"
+        class="my-3"
         :entity="entity"
         :fields="searchFields"
         @search="searchParams=$event"

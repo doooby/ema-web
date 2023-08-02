@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { group } from '~/lib/records';
+import { group, person } from '~/lib/records';
 import ConfirmModal, { ActionState } from '~/components/database/modals/ConfirmActionModal.vue';
 import { SearchRecordsResponsePayload } from '~/lib/api2';
 import { difference } from 'lodash';
@@ -10,7 +10,7 @@ import { difference } from 'lodash';
 })
 export default class RemoveStudents extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
-  @Prop({ required: true }) readonly ids!: string[];
+  @Prop({ required: true }) readonly records!: person.Person[];
 
   modalShown = false;
   modalState = ActionState.idle;
@@ -19,11 +19,12 @@ export default class RemoveStudents extends Vue {
   async onSubmit () {
     this.modalState = ActionState.processing;
 
+    const ids = this.records.map(({ id }) => id);
     await this.$api2.request(
       this.query,
       this.$api2.getQuery('groups', 'change_students')({
         id: this.group.id,
-        students_ids: difference(this.group.students?.map(r => r.id), this.ids),
+        students_ids: difference(this.group.students?.map(r => r.id), ids),
       }),
     );
 
@@ -55,7 +56,9 @@ export default class RemoveStudents extends Vue {
       :state="modalState"
       @confirm="onSubmit"
     >
-      <t value="db.record.groups.students.actions.RemoveStudents.confirm" />
+      <div class="alert alert-warning" role="alert">
+        <t value="db.record.groups.students.actions.RemoveStudents.confirm" />
+      </div>
     </confirm-modal>
   </b-dropdown-item>
 </template>

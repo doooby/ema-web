@@ -26,7 +26,6 @@ export default class ConfirmModal extends Vue {
 <template>
   <b-modal
     :visible="value"
-    centered
     hide-header
     :busy="isBusy"
     :ok-disabled="isOkDisabled"
