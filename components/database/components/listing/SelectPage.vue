@@ -14,11 +14,15 @@ export default class SearchRecordsPagination extends Vue {
   }
 
   get currentPage (): number {
-    return this.payload?.page || 1;
+    return this.payload?.page || 0;
   }
 
   get lastPage (): number {
     return this.payload?.pages_count || 0;
+  }
+
+  get total (): number {
+    return this.payload?.total || 0;
   }
 
   get availablePages (): number[] {
@@ -38,10 +42,19 @@ export default class SearchRecordsPagination extends Vue {
     else return String(page);
   }
 
+  onPageInput (event) {
+    let page = Number(event.target.value);
+    if (!isNaN(page)) {
+      if (page < 1) page = 1;
+      if (page > this.lastPage) page = this.lastPage;
+      if (this.currentPage !== page) this.$emit('select', page);
+    }
+  }
+
   onPageSelect (event) {
     const page = Number(event.target.dataset.page);
     if (!isNaN(page) && page !== this.currentPage) {
-      this.$emit('select', page);
+      if (this.currentPage !== page) this.$emit('select', page);
     }
   }
 }
@@ -52,10 +65,27 @@ export default class SearchRecordsPagination extends Vue {
     class="pagination"
     @click="onPageSelect"
   >
+    <div class="px-1">
+      <t value="db.listing.SearchPagination.count" />
+      <span>:</span>
+      <span>{{ total }}</span>
+    </div>
+    <div class="pagination-input d-flex px-1">
+      <input
+        type="text"
+        class="form-control-plaintext p-0"
+        :value="currentPage"
+        @blur="onPageInput"
+        @keydown.enter="onPageInput"
+      >
+      <div class="flex-fill">
+        &nbsp;/&nbsp;{{ lastPage }}
+      </div>
+    </div>
     <div
       v-for="page of availablePages"
       :key="page"
-      :class="{ current: currentPage === page }"
+      :class="{ 'pagination-item': true, 'current-page': currentPage === page }"
     >
       <div :data-page="page">
         {{ renderContent(page) }}
@@ -71,24 +101,29 @@ export default class SearchRecordsPagination extends Vue {
   height: 28px;
   border: 2px solid $input-bg;
   padding: 2px;
+  font-size: 14px;
 
   margin-right: 4px;
   &:last-child { margin-right: 0; }
 
-  &.current {
+  &.current-page {
     border-color: $body-color;
     > div {
       background-color: $body-color;
       color: $body-bg;
     }
   }
-
-  > div {
-    text-align: center;
+}
+.pagination-input {
+  > input {
     font-size: 14px;
-    line-height: 20px;
-    user-select: none;
-    cursor: pointer;
+    width: 25px;
   }
+}
+.pagination-item > div {
+  text-align: center;
+  line-height: 20px;
+  user-select: none;
+  cursor: pointer;
 }
 </style>
