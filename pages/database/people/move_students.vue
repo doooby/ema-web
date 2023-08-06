@@ -1,18 +1,15 @@
 <script lang="ts">
-import { Component, Watch } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import ActionPage from '~/components/database/pages/ActionPage.vue';
 import { MoveStudentsParams } from '~/components/database/records/groups/students/actions/MoveStudents.vue';
-import { BRecord } from '~/lib/api2';
+import { BRecord, GenericUpdateResponsePayload } from '~/lib/api2';
 import BRecordsSelect from '~/components/database/controls/BRecordsSelect.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
-
-interface Action {
-
-}
+import RecordErrors from '~/components/database/RecordErrors.vue';
 
 @Component({
-  components: { TextNames, BRecordsSelect, ActionPage },
+  components: { RecordErrors, TextNames, BRecordsSelect, ActionPage },
 })
 export default class MoveStudents extends DatabasePage {
   params: null | MoveStudentsParams = null;
@@ -21,12 +18,19 @@ export default class MoveStudents extends DatabasePage {
   course: null | BRecord = null;
   group: null | BRecord = null;
 
-  get action (): null | Action {
-    if (!this.params) return null;
+  saveQueryState = this.$api2.newQueryState<GenericUpdateResponsePayload>();
 
-    return {
+  get errors (): undefined | [string, string][] {
+    const response = this.saveQueryState.response;
+    if (response?.ok === false) {
+      return [ [ 'server', response.message ] ];
+    }
 
-    };
+    if (response?.ok && response.payload?.errors) {
+      if (response.payload.errors.length) {
+        return response.payload.errors;
+      }
+    }
   }
 
   onConnect (data: MoveStudentsParams): void {
@@ -45,6 +49,23 @@ export default class MoveStudents extends DatabasePage {
     this.course = courses[0] ?? null;
     this.group = null;
   }
+
+  async onSubmit () {
+    if (this.saveQueryState.processing) return;
+    const params = {
+      from_group_id: this.params!.fromGroup?.id,
+      to_course_id: this.course!.id,
+      to_group_id: this.group?.id,
+      students_ids: this.params?.students.map(student => student.id),
+    };
+    await this.$api2.request(
+      this.saveQueryState,
+      this.$api2.getQuery('groups', 'move_students')(params),
+    );
+    if (this.saveQueryState.response?.ok && !this.saveQueryState.response.payload?.errors) {
+      this.$router.push(`/database/groups/${this.params!.fromGroup.id}`);
+    }
+  }
 }
 </script>
 
@@ -54,7 +75,7 @@ export default class MoveStudents extends DatabasePage {
     @connect="onConnect"
   >
     <div
-      v-if="params && action"
+      v-if="params"
       class="container pt-4 mb-5"
     >
 
@@ -150,12 +171,16 @@ export default class MoveStudents extends DatabasePage {
 
               </div>
 
+              <record-errors class="mb-3" entity="groups" :errors="errors" />
+
             </div>
 
             <div class="card-footer d-flex justify-content-between">
               <div>
                 <b-button
                   variant="outline-success"
+                  :disabled="!params || !course"
+                  @click="onSubmit"
                 >
                   <t value="app.action.save" />
                 </b-button>
@@ -164,6 +189,7 @@ export default class MoveStudents extends DatabasePage {
                 <b-button
                   variant="outline-secondary"
                   :to="`/database/groups/${params.fromGroup.id}`"
+                  :disabled="saveQueryState.processing"
                 >
                   <t value="app.action.cancel" />
                 </b-button>

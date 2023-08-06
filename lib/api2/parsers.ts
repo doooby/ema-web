@@ -4,7 +4,7 @@ import {
   RecordAssociations,
   SearchRecordsResponsePayload,
   UpdatedRecordResponsePayload,
-  mappers, BRecord,
+  mappers, BRecord, GenericUpdateResponsePayload,
 } from '~/lib/api2';
 
 export function searchResponsePayload<R> (
@@ -42,6 +42,18 @@ export function updatedRecordResponsePayload (
       }
     },
   );
+}
+
+export function genericUpdatedResponsePayload (
+): (value: unknown) => GenericUpdateResponsePayload {
+  return wai.nullable(wai.object(
+    (value) => {
+      const errors = wai.prop('errors', value, wai.nullable(errorMessages));
+      if (errors) {
+        return { errors };
+      }
+    },
+  ));
 }
 
 export function errorMessage (value: unknown): [string, string] {
