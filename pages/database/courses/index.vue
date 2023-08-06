@@ -2,7 +2,6 @@
   <IndexPage
     entity="courses"
     :search-fields="searchFields"
-    :actions="actions"
     :component="CoursesListing"
   />
 </template>
@@ -13,7 +12,7 @@ import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import { dbFields } from '~/components/database/fields';
-import CoursesListing from '~/components/database/records/courses/RecordsListing.vue';
+import CoursesListing from '~/components/database/records/courses/CoursesListing.vue';
 
 @Component({
   components: { IndexPage },
@@ -28,9 +27,5 @@ export default class extends DatabasePage {
   ]
 
   CoursesListing = CoursesListing;
-
-  actions = [
-    { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
-  ];
 }
 </script>

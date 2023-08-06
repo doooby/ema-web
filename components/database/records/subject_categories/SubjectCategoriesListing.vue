@@ -16,8 +16,7 @@ export default class RecordsListing extends Vue {
 
   columns = [
     { name: 'id', size: 80 },
-    ...application_record.fillDataTableColumns('education_levels', [
-      { name: 'level', size: 80 },
+    ...application_record.fillDataTableColumns('subject_categories', [
       { name: 'name' },
     ]),
   ];
@@ -27,18 +26,24 @@ export default class RecordsListing extends Vue {
 <template>
   <a-records-listing
     :class="$attrs.class"
-    entity="education_levels"
+    entity="subject_categories"
     :initial-columns="initialColumns"
     :columns="columns"
     :params="params"
     @change="$emit('change', $event)"
   >
+    <template #record-actions="{ record }">
+      <b-dropdown-item :to="`/database/subject_categories/${record.id}/edit`">
+        <b-icon icon="pencil" />
+        <t value="db.page.edit.action" />
+      </b-dropdown-item>
+    </template>
+    <template v-if="$scopedSlots['group-actions']" #group-actions="{ records }">
+      <slot name="group-actions" :records="records" />
+    </template>
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="education_levels" />
-      </td>
-      <td>
-        {{ record.level }}
+        <a-record-link :id="record.id" entity="subject_categories" />
       </td>
       <td>
         <text-names class="single-row-cell" :value="record.name" />

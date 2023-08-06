@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { course } from '~/lib/records';
-import RecordsListing from '~/components/database/records/groups/RecordsListing.vue';
+import RecordsListing from '~/components/database/records/groups/GroupsListing.vue';
 
 @Component({
   components: {

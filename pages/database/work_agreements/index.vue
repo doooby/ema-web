@@ -12,7 +12,7 @@ import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
-import WorkAgreementsListing from '~/components/database/records/work_agreements/RecordsListing.vue';
+import WorkAgreementsListing from '~/components/database/records/work_agreements/WorkAgreementsListing.vue';
 import app from '~/lib/app';
 import { dbFields } from '~/components/database/fields';
 
