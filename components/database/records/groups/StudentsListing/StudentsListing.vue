@@ -2,12 +2,14 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { group } from '~/lib/records';
 import PeopleListing from '~/components/database/records/people/PeopleListing.vue';
-import RemoveStudents from '~/components/database/records/groups/StudentsListing/actions/RemoveStudents.vue';
+import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
+import RemoveStudents from '~/components/database/records/groups/students/actions/RemoveStudents.vue';
 
 @Component({
   components: {
     PeopleListing,
     RemoveStudents,
+    MoveStudents,
   },
 })
 export default class StudentsListing extends Vue {
@@ -30,9 +32,14 @@ export default class StudentsListing extends Vue {
       :params="searchParams"
     >
       <template #group-actions="{ records }">
+        <move-students
+          :from-group="group"
+          :students="records"
+          @done="onRefresh"
+        />
         <remove-students
           :group="group"
-          :records="records"
+          :students="records"
           @done="onRefresh"
         />
       </template>

@@ -10,7 +10,7 @@ import { difference } from 'lodash';
 })
 export default class RemoveStudents extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
-  @Prop({ required: true }) readonly records!: person.Person[];
+  @Prop({ required: true }) readonly students!: person.Person[];
 
   modalShown = false;
   modalState = ActionState.idle;
@@ -19,7 +19,7 @@ export default class RemoveStudents extends Vue {
   async onSubmit () {
     this.modalState = ActionState.processing;
 
-    const ids = this.records.map(({ id }) => id);
+    const ids = this.students.map(({ id }) => id);
     await this.$api2.request(
       this.query,
       this.$api2.getQuery('groups', 'change_students')({
@@ -48,7 +48,6 @@ export default class RemoveStudents extends Vue {
 <template>
   <b-dropdown-item @click="onShow">
     <div class="d-flex align-items-center">
-      <b-icon icon="back" class="font-12 mr-2" />
       <t value="db.record.groups.students.actions.RemoveStudents.button" />
     </div>
     <confirm-modal
