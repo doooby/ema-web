@@ -69,7 +69,6 @@ export default class ARecordsListing extends Vue {
   mounted () {
     this.$emit('connect', this.model);
     this.fetchRecords();
-    console.log(Object.keys(this.$scopedSlots));
   }
 
   get showError (): null | string {
