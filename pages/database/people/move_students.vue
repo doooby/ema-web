@@ -35,8 +35,8 @@ export default class MoveStudents extends DatabasePage {
 
   onConnect (data: MoveStudentsParams): void {
     this.params = data;
-    this.school = data.fromGroup.school;
-    this.course = data.fromGroup.course;
+    this.school = data.fromGroup?.school ?? null;
+    this.course = data.fromGroup?.course ?? null;
   }
 
   onChangeSchool (schools: BRecord[]): void {
@@ -63,7 +63,15 @@ export default class MoveStudents extends DatabasePage {
       this.$api2.getQuery('groups', 'move_students')(params),
     );
     if (this.saveQueryState.response?.ok && !this.saveQueryState.response.payload?.errors) {
-      this.$router.push(`/database/groups/${this.params!.fromGroup.id}`);
+      this.$router.push(this.returnPah);
+    }
+  }
+
+  get returnPah (): string {
+    if (this.params?.fromGroup) {
+      return `/database/groups/${this.params.fromGroup.id}`;
+    } else {
+      return '/database/people';
     }
   }
 }
@@ -94,10 +102,13 @@ export default class MoveStudents extends DatabasePage {
               <div class="row">
 
                 <div class="col">
-                  <h4>
+                  <h4 v-if="params.fromGroup">
                     <t value="db.pages.people.move_students.from" />
                   </h4>
-                  <div class="d-flex align-items-center">
+                  <div
+                    v-if="params.fromGroup"
+                    class="d-flex align-items-center"
+                  >
                     <code>[{{ params.fromGroup.id }}]</code>
                   </div>
                   <h4 class="mt-3">
@@ -188,7 +199,7 @@ export default class MoveStudents extends DatabasePage {
               <div>
                 <b-button
                   variant="outline-secondary"
-                  :to="`/database/groups/${params.fromGroup.id}`"
+                  :to="returnPah"
                   :disabled="saveQueryState.processing"
                 >
                   <t value="app.action.cancel" />

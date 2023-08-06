@@ -35,7 +35,6 @@ export default class StudentsListing extends Vue {
         <move-students
           :from-group="group"
           :students="records"
-          @done="onRefresh"
         />
         <remove-students
           :group="group"

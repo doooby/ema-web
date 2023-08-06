@@ -15,6 +15,9 @@ const RecordsListing = Vue.extend({
         params: context.props.params,
       },
       class: 'mt-2',
+      scopedSlots: {
+        'group-actions': context.scopedSlots['group-actions'],
+      },
     });
   },
 });
@@ -65,7 +68,11 @@ export default class IndexPage extends Vue {
       <records-listing
         :params="searchParams"
         :component="listingComponent"
-      />
+      >
+        <template v-if="$scopedSlots['group-actions']" #group-actions="{ records }">
+          <slot name="group-actions" :records="records" />
+        </template>
+      </records-listing>
     </div>
   </loaded-page>
 </template>
