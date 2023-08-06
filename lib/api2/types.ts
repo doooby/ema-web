@@ -36,6 +36,10 @@ export type UpdatedRecordResponsePayload =
   | { record_id: undefined; errors: [string, string][] }
   | { record_id: string }
 
+export type GenericUpdateResponsePayload =
+  | undefined
+  | { errors: [string, string][] }
+
 export interface BRecord {
   id: string;
   caption: string;

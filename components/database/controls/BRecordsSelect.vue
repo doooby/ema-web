@@ -14,6 +14,8 @@ export default class BRecordsSelect extends Vue {
   @Prop({ default: false }) readonly singleRecord!: boolean;
   @Prop({ default: undefined }) readonly title!: string;
   @Prop({ default: undefined }) readonly domId!: string;
+  @Prop({ default: undefined }) params!: any;
+  @Prop({ default: false }) disabled!: boolean;
 
   modalShown = false;
 
@@ -48,12 +50,18 @@ export default class BRecordsSelect extends Vue {
         <btn-mini variant="secondary" icon="x" @click="onRemoveRecord(record)" />
       </div>
     </div>
-    <b-button variant="secondary" size="sm" @click="modalShown = true">
+    <b-button
+      variant="secondary"
+      size="sm"
+      :disabled="disabled"
+      @click="modalShown = true"
+    >
       <b-icon :icon="singleRecord ? 'chevron-down' : 'plus'" />
     </b-button>
     <search-b-records-modal
       v-model="modalShown"
       :entity="entity"
+      :params="params"
       :selected="records"
       @select="onSelect"
     />

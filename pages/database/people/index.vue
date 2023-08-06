@@ -2,9 +2,12 @@
   <IndexPage
     entity="people"
     :search-fields="searchFields"
-    :actions="actions"
-    :component="People"
-  />
+    :component="PeopleListing"
+  >
+    <template #group-actions="{ records }">
+      <MoveStudents :students="records" />
+    </template>
+  </IndexPage>
 </template>
 
 <script lang="ts">
@@ -13,10 +16,14 @@ import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
-import People from '~/components/database/records/people/RecordsListing.vue';
+import PeopleListing from '~/components/database/records/people/PeopleListing.vue';
+import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
 
 @Component({
-  components: { IndexPage },
+  components: {
+    MoveStudents,
+    IndexPage,
+  },
 })
 export default class extends DatabasePage {
   searchFields = [
@@ -27,10 +34,6 @@ export default class extends DatabasePage {
     [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
   ]
 
-  People = People;
-
-  actions = [
-    { action: 'edit', icon: 'pencil', t: 'db.page.edit.action' },
-  ];
+  PeopleListing = PeopleListing;
 }
 </script>

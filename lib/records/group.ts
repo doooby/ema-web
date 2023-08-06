@@ -4,6 +4,7 @@ import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations, mapName } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
+import { genericUpdatedResponsePayload } from '~/lib/api2/parsers';
 
 export const entity = 'groups';
 
@@ -39,6 +40,13 @@ export const queries = {
       path: `/${entity}/${params.id}/change_students`,
       params: { students_ids: params.students_ids },
       reducer: parsers.updatedRecordResponsePayload(),
+    };
+  },
+  move_students (params: Params) {
+    return {
+      path: `/${entity}/move_students`,
+      params,
+      reducer: parsers.genericUpdatedResponsePayload(),
     };
   },
 };

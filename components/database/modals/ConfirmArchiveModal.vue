@@ -1,14 +1,12 @@
 <template>
   <b-modal
     :visible="value"
+    hide-header
     @hidden="onHidden"
     @ok="onSubmit"
   >
-    <template #modal-title>
-      <t value="db.modals.ConfirmArchiveModal.title" />
-    </template>
     <div v-if="value">
-      <div class="alert alert-warning" role="alert">
+      <div class="alert alert-danger" role="alert">
         <t value="db.modals.ConfirmArchiveModal.confirm" />
       </div>
     </div>

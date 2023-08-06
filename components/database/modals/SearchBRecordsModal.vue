@@ -24,6 +24,7 @@ export default class SearchBRecordsModal extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly selected!: BRecord[];
   @Prop({ default: undefined }) readonly title!: string;
+  @Prop({ default: undefined }) params!: any;
 
   searchValue = '';
   searchQueryState = this.$api2.newQueryState<SearchRecordsResponsePayload<BRecord>>();
@@ -60,6 +61,7 @@ export default class SearchBRecordsModal extends Vue {
     let query;
     try {
       query = this.$api2.getQuery(this.entity, 'searchB')({
+        ...this.params,
         country_id: this.$store.getters['session/countryId'],
         page,
         per_page: 10,

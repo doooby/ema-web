@@ -127,7 +127,7 @@ export default class Edit2Page extends Vue {
     return !this.record || this.saveQueryState2.processing;
   }
 
-  get errors (): null | [string, string][] {
+  get errors (): undefined | [string, string][] {
     const response = this.saveQueryState2.response;
     if (response?.ok === false) {
       return [ [ 'server', response.message ] ];
@@ -138,8 +138,6 @@ export default class Edit2Page extends Vue {
         return response.payload.errors;
       }
     }
-
-    return null;
   }
 
   onInput (newValues: any) {

@@ -14,15 +14,13 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
 export default class extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
+  @Prop({ default: undefined }) readonly hideEducationLevel!: boolean;
 
   columns = [
     { name: 'id', size: 80 },
-    ...application_record.fillDataTableColumns('standardized_courses', [
-      { name: 'grade', size: 80 },
+    ...application_record.fillDataTableColumns('subjects', [
       { name: 'name' },
-      { name: 'education_level' },
-      { name: 'accreditation_authority' },
-      { name: 'description' },
+      (this.hideEducationLevel ? undefined : { name: 'education_levels', size: 400 }),
     ]),
   ];
 }
@@ -31,30 +29,32 @@ export default class extends Vue {
 <template>
   <a-records-listing
     :class="$attrs.class"
-    entity="standardized_courses"
+    entity="subjects"
     :initial-columns="initialColumns"
     :columns="columns"
     :params="params"
     @change="$emit('change', $event)"
   >
+    <template #record-actions="{ record }">
+      <b-dropdown-item :to="`/database/subjects/${record.id}/edit`">
+        <b-icon icon="pencil" />
+        <t value="db.page.edit.action" />
+      </b-dropdown-item>
+    </template>
+    <template v-if="$scopedSlots['group-actions']" #group-actions="{ records }">
+      <slot name="group-actions" :records="records" />
+    </template>
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="standardized_courses" />
-      </td>
-      <td>
-        {{ record.grade }}
+        <a-record-link :id="record.id" entity="subjects" />
       </td>
       <td>
         <text-names class="single-row-cell" :value="record.name" />
       </td>
-      <td>
-        <b-record-link entity="education_levels" :record="record.education_level" />
-      </td>
-      <td>
-        {{ record.accreditation_authority }}
-      </td>
-      <td>
-        {{ record.description }}
+      <td v-if="!hideEducationLevel">
+        <div v-for="education_level of record.education_levels" :key="education_level.id">
+          <b-record-link entity="education_levels" :record="education_level" />
+        </div>
       </td>
       <td />
     </template>

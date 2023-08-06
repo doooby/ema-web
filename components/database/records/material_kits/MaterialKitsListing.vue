@@ -33,6 +33,15 @@ export default class RecordsListing extends Vue {
     :params="params"
     @change="$emit('change', $event)"
   >
+    <template #record-actions="{ record }">
+      <b-dropdown-item :to="`/database/material_kits/${record.id}/edit`">
+        <b-icon icon="pencil" />
+        <t value="db.page.edit.action" />
+      </b-dropdown-item>
+    </template>
+    <template v-if="$scopedSlots['group-actions']" #group-actions="{ records }">
+      <slot name="group-actions" :records="records" />
+    </template>
     <template #row="{ record }">
       <td>
         <a-record-link :id="record.id" entity="material_kits" />
