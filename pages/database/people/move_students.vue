@@ -3,20 +3,28 @@ import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import ActionPage from '~/components/database/pages/ActionPage.vue';
 import { MoveStudentsParams } from '~/components/database/records/groups/students/actions/MoveStudents.vue';
-import { BRecord, GenericUpdateResponsePayload } from '~/lib/api2';
+import { GenericUpdateResponsePayload } from '~/lib/api2';
 import BRecordsSelect from '~/components/database/controls/BRecordsSelect.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
+import SelectCourseGroup, { CourseGroup } from '~/components/database/records/courses/controls/SelectCourseGroup.vue';
 
 @Component({
-  components: { RecordErrors, TextNames, BRecordsSelect, ActionPage },
+  components: {
+    SelectCourseGroup,
+    RecordErrors,
+    TextNames,
+    BRecordsSelect,
+    ActionPage,
+  },
 })
 export default class MoveStudents extends DatabasePage {
   params: null | MoveStudentsParams = null;
-
-  school: null | BRecord = null;
-  course: null | BRecord = null;
-  group: null | BRecord = null;
+  courseGroup: CourseGroup = {
+    school: null,
+    course: null,
+    group: null,
+  }
 
   saveQueryState = this.$api2.newQueryState<GenericUpdateResponsePayload>();
 
@@ -35,27 +43,16 @@ export default class MoveStudents extends DatabasePage {
 
   onConnect (data: MoveStudentsParams): void {
     this.params = data;
-    this.school = data.fromGroup?.school ?? null;
-    this.course = data.fromGroup?.course ?? null;
-  }
-
-  onChangeSchool (schools: BRecord[]): void {
-    this.school = schools[0] ?? null;
-    this.course = null;
-    this.group = null;
-  }
-
-  onChangeCourse (courses: BRecord[]): void {
-    this.course = courses[0] ?? null;
-    this.group = null;
+    this.courseGroup.school = data.fromGroup?.school ?? null;
+    this.courseGroup.course = data.fromGroup?.course ?? null;
   }
 
   async onSubmit () {
     if (this.saveQueryState.processing) return;
     const params = {
       from_group_id: this.params!.fromGroup?.id,
-      to_course_id: this.course!.id,
-      to_group_id: this.group?.id,
+      to_course_id: this.courseGroup.course!.id,
+      to_group_id: this.courseGroup.group?.id,
       students_ids: this.params?.students.map(student => student.id),
     };
     await this.$api2.request(
@@ -129,55 +126,7 @@ export default class MoveStudents extends DatabasePage {
                   <h4>
                     <t value="db.pages.people.move_students.to" />
                   </h4>
-                  <b-form-group label-for="move_to_school">
-                    <template #label>
-                      <t value="db.record.schools.meta.s" />
-                    </template>
-                    <b-records-select
-                      dom-id="move_to_school"
-                      entity="schools"
-                      :single-record="true"
-                      title="db.record.schools.meta.s"
-                      :records="school ? [school] : []"
-                      @change="onChangeSchool"
-                    />
-                  </b-form-group>
-                  <b-form-group label-for="move_to_course">
-                    <template #label>
-                      <t value="db.record.courses.meta.s" />
-                    </template>
-                    <b-records-select
-                      dom-id="move_to_course"
-                      entity="courses"
-                      :single-record="true"
-                      title="db.record.courses.meta.s"
-                      :records="course ? [course] : []"
-                      :params="school ? { school_id: school.id } : undefined"
-                      :disabled="school === null"
-                      @change="onChangeCourse"
-                    />
-                  </b-form-group>
-                  <b-form-group label-for="move_to_group">
-                    <template #label>
-                      <t value="db.record.groups.meta.s" />
-                    </template>
-                    <b-records-select
-                      dom-id="move_to_group"
-                      entity="groups"
-                      :single-record="true"
-                      title="db.record.groups.meta.s"
-                      :records="group ? [group] : []"
-                      :params="course ? { course_id: course.id } : undefined"
-                      :disabled="course === null"
-                      @change="group = $event[0] ?? null"
-                    />
-                  </b-form-group>
-                  <b-alert
-                    show
-                    variant="info"
-                  >
-                    <t value="db.pages.people.move_students.empty_group" />
-                  </b-alert>
+                  <SelectCourseGroup :value="courseGroup" />
                 </div>
 
               </div>
@@ -190,7 +139,7 @@ export default class MoveStudents extends DatabasePage {
               <div>
                 <b-button
                   variant="outline-success"
-                  :disabled="!params || !course"
+                  :disabled="!params || !courseGroup.course"
                   @click="onSubmit"
                 >
                   <t value="app.action.save" />

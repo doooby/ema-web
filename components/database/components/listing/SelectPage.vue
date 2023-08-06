@@ -6,7 +6,7 @@ import { RequestState, SearchRecordsResponsePayload } from '~/lib/api2';
 const DESIRED_PAGES = [ -15, -5, -2, -1, 0, 1, 2, 5, 15 ];
 
 @Component
-export default class SearchRecordsPagination extends Vue {
+export default class SelectPage extends Vue {
   @Prop({ required: true }) readonly request!: RequestState<SearchRecordsResponsePayload<unknown>>;
 
   get payload () : undefined | SearchRecordsResponsePayload<unknown> {
@@ -19,6 +19,10 @@ export default class SearchRecordsPagination extends Vue {
 
   get lastPage (): number {
     return this.payload?.pages_count || 0;
+  }
+
+  get countOnPage (): number {
+    return this.payload?.records?.length || 0;
   }
 
   get total (): number {
@@ -65,12 +69,18 @@ export default class SearchRecordsPagination extends Vue {
     class="pagination"
     @click="onPageSelect"
   >
-    <div class="px-1">
+    <div class="px-1 d-flex">
       <t value="db.listing.SearchPagination.count" />
-      <span>:</span>
+      <span>&nbsp;:&nbsp;</span>
+      <span>{{ countOnPage }}</span>
+      <span>&nbsp;/&nbsp;</span>
       <span>{{ total }}</span>
     </div>
     <div class="pagination-input d-flex px-1">
+      <span>
+        <t value="db.listing.SearchPagination.pages" />
+      </span>
+      <span>&nbsp;:&nbsp;</span>
       <input
         type="text"
         class="form-control-plaintext p-0"
@@ -78,9 +88,9 @@ export default class SearchRecordsPagination extends Vue {
         @blur="onPageInput"
         @keydown.enter="onPageInput"
       >
-      <div class="flex-fill">
+      <span class="flex-fill">
         &nbsp;/&nbsp;{{ lastPage }}
-      </div>
+      </span>
     </div>
     <div
       v-for="page of availablePages"
