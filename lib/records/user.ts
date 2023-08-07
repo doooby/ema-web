@@ -17,7 +17,7 @@ export interface User extends application_record.SharedAttributes {
 }
 
 export interface UserPrivilege {
-  type: null | 'country_admin' | 'collector' | 'data_officer';
+  type: null | 'country_admin' | 'collector' | 'data_officer' | 'school_manager';
   [ opt: string ]: any;
 }
 
