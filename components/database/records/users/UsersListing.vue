@@ -4,12 +4,13 @@ import ARecordLink from '~/components/database/components/ARecordLink.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
 import { Params } from '~/lib/api2';
-import { application_record, user } from '~/lib/records';
+import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
+import UserPrivileges from '~/components/database/records/users/views/UserPrivileges.vue';
 
 @Component({
-  components: { ARecordsListing, ARecordLink, TextNames, BRecordLink },
+  components: { UserPrivileges, ARecordsListing, ARecordLink, TextNames, BRecordLink },
 })
 export default class RecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -30,10 +31,6 @@ export default class RecordsListing extends Vue {
         { name: 'privileges' },
       ]),
     ].filter(id => id);
-  }
-
-  recordPrivilegesList (record: user.User) {
-    return user.helpers.mapPrivilegeNames(record);
   }
 }
 </script>
@@ -64,20 +61,13 @@ export default class RecordsListing extends Vue {
         <b-record-link entity="countries" :record="record.country" />
       </td>
       <td>
-        {{ record.login}}
+        {{ record.login }}
       </td>
       <td>
         <text-names class="single-row-cell" :value="record.full_name" />
       </td>
       <td>
-        <ul>
-          <li
-            v-for="name of recordPrivilegesList(record)"
-            :key="name"
-          >
-            <t :value="`db.record.users.privileges.${name}`" />
-          </li>
-        </ul>
+        <UserPrivileges :user="record" />
       </td>
       <td />
     </template>

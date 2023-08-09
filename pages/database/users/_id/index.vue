@@ -70,14 +70,7 @@
           {{ record.country && record.country.caption }}
         </show-page-table-row>
         <show-page-table-row label="db.record.users.label.privileges">
-          <ul>
-            <li
-              v-for="name of privilegesList(record)"
-              :key="name"
-            >
-              <t :value="`db.record.users.privileges.${name}`" />
-            </li>
-          </ul>
+          <UserPrivileges :user="record" />
         </show-page-table-row>
       </table>
     </template>
@@ -93,11 +86,12 @@ import ChangePasswordModal from '~/components/database/records/users/ChangePassw
 import LockModal from '~/components/database/records/users/LockModal.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
-import { user } from '~/lib/records';
 import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
+import UserPrivileges from '~/components/database/records/users/views/UserPrivileges.vue';
 
 @Component({
   components: {
+    UserPrivileges,
     Show2Page,
     ShowPageAction,
     ShowPageTableRow,
@@ -110,9 +104,5 @@ export default class extends DatabasePage {
   changePassModalShown = false;
   lockModalShown = false;
   archiveModalShown = false;
-
-  privilegesList (record: user.User) {
-    return user.helpers.mapPrivilegeNames(record);
-  }
 }
 </script>

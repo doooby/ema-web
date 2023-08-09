@@ -3,7 +3,7 @@ import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import Privileges from '~/components/database/records/users/controls/Privileges.vue';
 import { BRecord, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
-import { mapName, mapOptionalAssociation } from '~/lib/api2/mappers';
+import { mapAssociation, mapName, mapOptionalAssociation } from '~/lib/api2/mappers';
 
 export const entity = 'users';
 
@@ -32,7 +32,7 @@ export function parseRecord (
     full_name: wai.prop('full_name', value, mapName),
     lock: wai.prop('lock', value, wai.nullable(wai.string)),
     is_root: wai.prop('is_root', value, wai.boolean),
-    privileges: wai.prop('privileges', value, wai.listOf(mapUserPrivilege)),
+    privileges: wai.prop('privileges', value, wai.listOf(value => mapUserPrivilege(value, associations))),
   }))(value);
 }
 
@@ -69,23 +69,15 @@ export function entityControls (): FormFieldDefinition[] {
   ];
 }
 
-// TODO for now it registers only type of the privilege
-export function mapUserPrivilege (value: any): user.UserPrivilege {
+export function mapUserPrivilege (value: any, associations?: RecordAssociations): user.UserPrivilege {
   // noinspection UnnecessaryLocalVariableJS
   const privilege = {
     type: value?.type ?? null,
   } as any;
-  // switch (value?.type) {
-  //   case 'country_admin':
-  // }
+  switch (value?.type) {
+    case 'school_manager':
+      privilege.school = mapAssociation('schools', associations)(value.school_id);
+      break;
+  }
   return Object.freeze(privilege);
 }
-
-export const helpers = {
-
-  mapPrivilegeNames (record: User): string[] {
-    if (record.is_root) return [ 'is_root' ];
-    return record.privileges.map(privilege => privilege.type ?? 'null');
-  },
-
-};
