@@ -25,7 +25,7 @@ export default class SessionModule extends VuexModule {
 
   @Mutation
   requestAuthnFailed () {
-    this.setUser(null);
+    this.context.commit('setUser', null);
   }
 
   @Mutation
