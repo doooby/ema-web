@@ -120,14 +120,8 @@ function bRecordLabels ({ caption: _caption, id: _id, ...labels }: BRecord) {
         </b-form-group>
       </div>
       <loader-strip :request-state="searchQueryState" />
-      <div class="emb-2 d-flex justify-content-between">
-        <div>
-          <t value="db.record.shared.label.records_count" />
-          <span>: </span>
-          <span>{{ payload?.total ?? 0 }}</span>
-        </div>
-        <select-page :request="searchQueryState" @select="onSearch($event)" />
-      </div>
+      <select-page :request="searchQueryState" @select="onSearch($event)" />
+      <div class="mt-2" />
       <b-list-group>
         <b-list-group-item
           v-for="({ selected, record, labels }) in items"

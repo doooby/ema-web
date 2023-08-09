@@ -71,21 +71,18 @@ export default class Api2Plugin {
     }
 
     if (response.ok) {
-      try {
-        state.response = {
-          ok: true,
-          payload: query.reducer(response.payload),
-        };
-      } catch (error: any) {
-        if (error instanceof wai.MappingError) error.seal(response.payload);
+      const [ error, payload ] = wai.tryParse(response.payload, query.reducer);
+      if (error || !payload) {
         utils.warn('api2 request failed', query);
         utils.warnOfError(error, { payload: response.payload });
 
         state.response = {
           ok: false,
           message: 'request_failed',
-          error,
+          error: error ?? undefined,
         };
+      } else {
+        state.response = { ok: true, payload };
       }
     } else {
       utils.warn('api2 request failed', response);
@@ -93,6 +90,12 @@ export default class Api2Plugin {
     }
 
     state.processing = false;
+  }
+
+  async transientRequest<V> (query: QueryDefinition<V>): Promise<RequestState<V>> {
+    const state = this.newQueryState<V>();
+    await this.request(state, query);
+    return state;
   }
 
   // TODO postData must be FormData to allow file uploading

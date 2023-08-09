@@ -69,7 +69,6 @@ export default class ARecordsListing extends Vue {
   mounted () {
     this.$emit('connect', this.model);
     this.fetchRecords();
-    console.log(Object.keys(this.$scopedSlots));
   }
 
   get showError (): null | string {
@@ -144,7 +143,7 @@ export default class ARecordsListing extends Vue {
 
 <template>
   <div :class="$attrs.class">
-    <div class="d-flex justify-content-between position-relative">
+    <div class="actions-row d-flex flex-wrap justify-content-between position-relative">
       <div
         v-if="liveQuery.processing"
         class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center"
@@ -218,3 +217,9 @@ export default class ARecordsListing extends Vue {
     </data-table>
   </div>
 </template>
+
+<style scoped>
+.actions-row {
+  gap: 4px;
+}
+</style>

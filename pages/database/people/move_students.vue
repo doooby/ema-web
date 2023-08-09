@@ -1,16 +1,18 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import ActionPage from '~/components/database/pages/ActionPage.vue';
+import ActionPage, { ActionParams } from '~/components/database/pages/ActionPage.vue';
 import { MoveStudentsParams } from '~/components/database/records/groups/students/actions/MoveStudents.vue';
-import { GenericUpdateResponsePayload } from '~/lib/api2';
+import { BRecord, SearchRecordsResponsePayload, UpdatedRecordResponsePayload } from '~/lib/api2';
 import BRecordsSelect from '~/components/database/controls/BRecordsSelect.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import SelectCourseGroup, { CourseGroup } from '~/components/database/records/courses/controls/SelectCourseGroup.vue';
+import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
 @Component({
   components: {
+    BRecordLink,
     SelectCourseGroup,
     RecordErrors,
     TextNames,
@@ -19,14 +21,17 @@ import SelectCourseGroup, { CourseGroup } from '~/components/database/records/co
   },
 })
 export default class MoveStudents extends DatabasePage {
-  params: null | MoveStudentsParams = null;
+  loaded = false;
+  fromGroup?: undefined | BRecord = undefined;
+  students: BRecord[] = [];
   courseGroup: CourseGroup = {
     school: null,
     course: null,
     group: null,
   }
 
-  saveQueryState = this.$api2.newQueryState<GenericUpdateResponsePayload>();
+  saveQueryState = this.$api2.newQueryState<UpdatedRecordResponsePayload>();
+  onCleanAction?: () => void;
 
   get errors (): undefined | [string, string][] {
     const response = this.saveQueryState.response;
@@ -34,39 +39,76 @@ export default class MoveStudents extends DatabasePage {
       return [ [ 'server', response.message ] ];
     }
 
-    if (response?.ok && response.payload?.errors) {
+    if (response?.ok && response.payload.record_id === undefined) {
       if (response.payload.errors.length) {
         return response.payload.errors;
       }
     }
   }
 
-  onConnect (data: MoveStudentsParams): void {
-    this.params = data;
-    this.courseGroup.school = data.fromGroup?.school ?? null;
-    this.courseGroup.course = data.fromGroup?.course ?? null;
+  async onConnect ({
+    params,
+    onClean,
+  }: ActionParams<MoveStudentsParams>): Promise<void> {
+    this.onCleanAction = onClean;
+
+    if (params.fromGroup) {
+      const groupsResult = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
+        this.$api2.getQuery('groups', 'searchB')({ id: params.fromGroup.groupId }),
+      );
+      if (groupsResult.response?.ok) {
+        this.fromGroup = groupsResult.response.payload.records[0] ?? null;
+      }
+
+      const schoolResult = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
+        this.$api2.getQuery('schools', 'searchB')({ id: params.fromGroup.schoolId }),
+      );
+      if (schoolResult.response?.ok) {
+        this.courseGroup.school = schoolResult.response.payload.records[0] ?? null;
+      }
+      if (this.courseGroup.school) {
+        const courseResult = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
+          this.$api2.getQuery('courses', 'searchB')({ id: params.fromGroup.courseId }),
+        );
+        if (courseResult.response?.ok) {
+          this.courseGroup.course = courseResult.response.payload.records[0] ?? null;
+        }
+      }
+    }
+
+    const studentsResult = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
+      this.$api2.getQuery('people', 'searchB')({ id: params.studentsIds }),
+    );
+    if (studentsResult.response?.ok) {
+      this.students = studentsResult.response.payload.records;
+    }
+
+    this.loaded = true;
   }
 
   async onSubmit () {
     if (this.saveQueryState.processing) return;
     const params = {
-      from_group_id: this.params!.fromGroup?.id,
+      from_group_id: this.fromGroup?.id,
       to_course_id: this.courseGroup.course!.id,
       to_group_id: this.courseGroup.group?.id,
-      students_ids: this.params?.students.map(student => student.id),
+      students_ids: this.students.map(person => person.id),
     };
     await this.$api2.request(
       this.saveQueryState,
       this.$api2.getQuery('groups', 'move_students')(params),
     );
-    if (this.saveQueryState.response?.ok && !this.saveQueryState.response.payload?.errors) {
+    if (this.saveQueryState.response?.ok && this.saveQueryState.response.payload?.record_id) {
+      this.onCleanAction?.();
       this.$router.push(this.returnPah);
     }
   }
 
   get returnPah (): string {
-    if (this.params?.fromGroup) {
-      return `/database/groups/${this.params.fromGroup.id}`;
+    const response = this.saveQueryState.response;
+    const groupId = (response?.ok && response.payload.record_id) || this.fromGroup?.id;
+    if (groupId) {
+      return `/database/groups/${groupId}`;
     } else {
       return '/database/people';
     }
@@ -80,7 +122,7 @@ export default class MoveStudents extends DatabasePage {
     @connect="onConnect"
   >
     <div
-      v-if="params"
+      v-if="loaded"
       class="container pt-4 mb-5"
     >
 
@@ -99,25 +141,33 @@ export default class MoveStudents extends DatabasePage {
               <div class="row">
 
                 <div class="col">
-                  <h4 v-if="params.fromGroup">
+                  <h4 v-if="fromGroup">
                     <t value="db.pages.people.move_students.from" />
                   </h4>
                   <div
-                    v-if="params.fromGroup"
+                    v-if="fromGroup"
                     class="d-flex align-items-center"
                   >
-                    <code>[{{ params.fromGroup.id }}]</code>
+                    <BRecordLink
+                      entity="groups"
+                      :record="fromGroup"
+                      :new-tab="true"
+                    />
                   </div>
-                  <h4 class="mt-3">
+                  <h4 :class="{ 'mt-3': fromGroup }">
                     <t value="db.pages.people.move_students.students" />
                   </h4>
-                  <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center flex-wrap">
                     <div
-                      v-for="(student, index) in params.students"
+                      v-for="(student, index) in students"
                       :key="student.id"
                     >
                       <span v-if="index !== 0">, </span>
-                      <code>[{{ student.id }}]</code>
+                      <BRecordLink
+                        entity="people"
+                        :record="student"
+                        :new-tab="true"
+                      />
                     </div>
                   </div>
                 </div>
@@ -139,7 +189,7 @@ export default class MoveStudents extends DatabasePage {
               <div>
                 <b-button
                   variant="outline-success"
-                  :disabled="!params || !courseGroup.course"
+                  :disabled="!courseGroup.course"
                   @click="onSubmit"
                 >
                   <t value="app.action.save" />
@@ -150,6 +200,7 @@ export default class MoveStudents extends DatabasePage {
                   variant="outline-secondary"
                   :to="returnPah"
                   :disabled="saveQueryState.processing"
+                  @click="onCleanAction"
                 >
                   <t value="app.action.cancel" />
                 </b-button>

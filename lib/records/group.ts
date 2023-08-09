@@ -46,7 +46,7 @@ export const queries = {
     return {
       path: `/${entity}/move_students`,
       params,
-      reducer: parsers.genericUpdatedResponsePayload(),
+      reducer: parsers.updatedRecordResponsePayload(),
     };
   },
 };

@@ -1,6 +1,12 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
+import * as localStorage from '~/lib/localStorage';
+
+export interface ActionParams<P> {
+  params: P;
+  onClean(): void;
+}
 
 @Component({
   components: { LoadedPage },
@@ -8,17 +14,34 @@ import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 export default class ActionPage extends Vue {
   @Prop({ default: true }) readonly isLoaded!: boolean;
 
+  params?: unknown;
   isConnected = false;
 
   mounted () {
     if (this.actionData) {
-      this.$emit('connect', this.actionData);
+      localStorage.set(localStorage.values.actionPageData, this.actionData);
+      this.params = this.actionData;
+    } else {
+      const data = localStorage.get(localStorage.values.actionPageData);
+      if (data) this.params = data;
+    }
+
+    if (this.params) {
+      this.$emit('connect', {
+        params: this.params,
+        onClean: this.onCleanAction,
+      });
     }
     this.isConnected = true;
   }
 
   get actionData (): unknown {
     return this.$store.state.action.data;
+  }
+
+  onCleanAction = () => {
+    localStorage.set(localStorage.values.actionPageData);
+    this.$store.commit('setActionData');
   }
 }
 </script>
@@ -40,7 +63,7 @@ export default class ActionPage extends Vue {
         </div>
       </div>
     </div>
-    <div v-else-if="!actionData">
+    <div v-else-if="!params">
       <div class="container pt-4 pb-5">
         <b-alert show variant="warning">
           <b-icon icon="exclamation-triangle-fill" class="mr-3" />

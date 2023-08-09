@@ -66,7 +66,7 @@ export default class SelectPage extends Vue {
 
 <template>
   <div
-    class="pagination"
+    class="pagination d-flex flex-wrap"
     @click="onPageSelect"
   >
     <div class="px-1 d-flex">
@@ -106,15 +106,15 @@ export default class SelectPage extends Vue {
 
 <style lang="scss" scoped>
 @import "assets/css/variables";
+.pagination {
+  gap: 4px;
+}
 .pagination > div {
   min-width: 28px;
   height: 28px;
   border: 2px solid $input-bg;
   padding: 2px;
   font-size: 14px;
-
-  margin-right: 4px;
-  &:last-child { margin-right: 0; }
 
   &.current-page {
     border-color: $body-color;
