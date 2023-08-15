@@ -25,5 +25,5 @@ sudo docker build \\
 CMD
 end
 
-Console.log :yellow, '===== restarting container'
+Compote.log :yellow, '===== restarting container'
 Compote.run $jar.compose_cmd('up -d')
