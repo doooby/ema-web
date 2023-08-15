@@ -1,7 +1,7 @@
 services:
 
   app:
-    image: ${JAR_NAME}:release
+    image: jar--${JAR_NAME}:release
     environment:
       HOST: 0.0.0.0
       PORT: 3000
