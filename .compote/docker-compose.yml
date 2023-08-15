@@ -6,7 +6,7 @@ services:
       HOST: 0.0.0.0
       PORT: 3000
     env_file:
-      - ./.env
+      - ${JAR_PATH}/.env
     command: yarn start
     restart: unless-stopped
     ports:
