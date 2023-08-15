@@ -1,6 +1,6 @@
 set -e
 
-yarn install --silent
+yarn install
 
 echo "packing the build ..."
 # $1 - dir path
