@@ -28,6 +28,7 @@ $jar.with_dockerignore dockerignore do
 sudo docker build \\
   -f src/.compote/images/release/Dockerfile \\
   -t jar--#{$jar.name}:release \\
+  --build-arg JAR_NAME=#{$jar.name} \\
   .
 CMD
 end
