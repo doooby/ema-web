@@ -1,5 +1,5 @@
-ARG STACK_NAME
-FROM ${STACK_NAME}--app:base
+ARG JAR_NAME
+FROM jar_${JAR_NAME}:base
 
 COPY src .
 COPY var/build tmp/build
