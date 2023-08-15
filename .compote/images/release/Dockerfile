@@ -1,5 +1,5 @@
 ARG JAR_NAME
-FROM jar_${JAR_NAME}:base
+FROM jar--${JAR_NAME}:base
 
 COPY src .
 COPY var/build tmp/build

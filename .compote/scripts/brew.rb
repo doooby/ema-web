@@ -1,7 +1,7 @@
 
 Compote.log :yellow, '===== building nuxt app'
 Compote.run <<-CMD
-sudo docker run --rm jar_#{$jar.name}:base \\
+sudo docker run --rm jar--#{$jar.name}:base \\
   -v src:/app \\
   -v var/dev_node_modules:/app/node_modules \\
   -v var/nuxt:/app/.nuxt \\
@@ -10,7 +10,7 @@ CMD
 
 Compote.log :yellow, '===== packing the app'
 Compote.run <<-CMD
-sudo docker run --rm jar_#{$jar.name}:base \\
+sudo docker run --rm jar--#{$jar.name}:base \\
   -v src:/app \\
   -v var/dev_node_modules:/app/node_modules \\
   -v var/nuxt:/app/.nuxt \\
@@ -27,7 +27,7 @@ $jar.with_dockerignore dockerignore do
   Compote.run <<-CMD
 sudo docker build \\
   -f src/.compote/images/release/Dockerfile \\
-  -t jar_#{$jar.name}:release \\
+  -t jar--#{$jar.name}:release \\
   .
 CMD
 end
