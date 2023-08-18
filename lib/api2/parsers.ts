@@ -83,7 +83,7 @@ export function bRecordMapper (): (value: unknown) => BRecord {
   return wai.object((value) => {
     // TODO this is inefficient
     const id = wai.prop('id', value, wai.string);
-    const caption = wai.prop('caption', value, wai.string);
+    const caption = wai.prop('caption', value, wai.nullable(wai.string)) ?? '';
     return {
       ...mappers.mapIndex(wai.nullable(wai.string))(value),
       id,
