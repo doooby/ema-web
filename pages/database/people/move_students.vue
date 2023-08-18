@@ -22,7 +22,7 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
 })
 export default class MoveStudents extends DatabasePage {
   loaded = false;
-  fromGroup?: undefined | BRecord = undefined;
+  fromGroup: null | BRecord = null;
   students: BRecord[] = [];
   courseGroup: CourseGroup = {
     school: null,

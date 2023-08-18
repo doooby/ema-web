@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-md-6">
           <h4 class="d-flex align-items-center">
-            <t value="db.pages.people.new.move_to_course" />
+            <t value="db.pages.people.new.move_to_course.title" />
             <b-button
               v-b-toggle="'collapse__move_to_course'"
               class="ml-3"
