@@ -7,3 +7,11 @@
   @include border-radius($input-border-radius, 0);
   overflow-x: scroll;
 }
+
+.controls--nested-group {
+  padding: $input-padding-y $input-padding-x;
+  @include font-size($input-font-size);
+  border: $input-border-width solid $input-border-color;
+  @include border-radius($input-border-radius, 0);
+  overflow-x: scroll;
+}

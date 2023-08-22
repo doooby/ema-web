@@ -176,7 +176,10 @@ export default class MoveStudents extends DatabasePage {
                   <h4>
                     <t value="db.pages.people.move_students.to" />
                   </h4>
-                  <SelectCourseGroup :value="courseGroup" />
+                  <SelectCourseGroup
+                    dom-id="move_to"
+                    :value="courseGroup"
+                  />
                 </div>
 
               </div>

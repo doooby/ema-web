@@ -207,16 +207,16 @@ export function recordControls ({
 export function mainGroupAssociations () {
   return [
     {
-      entity: 'groups',
-      attr: 'main_group.group',
+      entity: 'schools',
+      attr: 'main_group.school',
     },
     {
       entity: 'courses',
       attr: 'main_group.course',
     },
     {
-      entity: 'schools',
-      attr: 'main_group.school',
+      entity: 'groups',
+      attr: 'main_group.group',
     },
   ];
 }

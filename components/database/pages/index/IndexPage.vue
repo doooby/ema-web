@@ -1,8 +1,13 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { FormFieldDefinition } from '~/components/Form';
-import SearchForm from '~/components/database/components/listing/SearchForm.vue';
+import SearchForm from '~/components/database/components/listing/SearchForm/SearchForm.vue';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
+
+export interface IndexPageFilter {
+  name: string;
+
+}
 
 const RecordsListing = Vue.extend({
   functional: true,

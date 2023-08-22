@@ -2,7 +2,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ARecordLink from '~/components/database/components/ARecordLink.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
-import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
+import ARecordsListing from '~/components/database/components/listing/ARecordsListing/ARecordsListing.vue';
 import { Params } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';

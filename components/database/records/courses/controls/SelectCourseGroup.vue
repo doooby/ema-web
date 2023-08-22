@@ -14,6 +14,7 @@ export interface CourseGroup {
 })
 export default class SelectCourseGroup extends Vue {
   @Prop({ required: true }) readonly value!: CourseGroup;
+  @Prop({ default: undefined }) readonly domId!: string;
 
   onChangeSchool (schools: BRecord[]): void {
     this.value.school = schools[0] ?? null;
@@ -29,13 +30,13 @@ export default class SelectCourseGroup extends Vue {
 </script>
 
 <template>
-  <div>
-    <b-form-group label-for="move_to_school">
+  <div :class="[ $attrs.class ]">
+    <b-form-group :label-for="`${domId}_school`">
       <template #label>
         <t value="db.record.schools.meta.s" />
       </template>
       <b-records-select
-        dom-id="move_to_school"
+        :dom-id="`${domId}_school`"
         entity="schools"
         :single-record="true"
         title="db.record.schools.meta.s"
@@ -43,12 +44,12 @@ export default class SelectCourseGroup extends Vue {
         @change="onChangeSchool"
       />
     </b-form-group>
-    <b-form-group label-for="move_to_course">
+    <b-form-group :label-for="`${domId}_course`">
       <template #label>
         <t value="db.record.courses.meta.s" />
       </template>
       <b-records-select
-        dom-id="move_to_course"
+        :dom-id="`${domId}_course`"
         entity="courses"
         :single-record="true"
         title="db.record.courses.meta.s"
@@ -58,12 +59,12 @@ export default class SelectCourseGroup extends Vue {
         @change="onChangeCourse"
       />
     </b-form-group>
-    <b-form-group label-for="move_to_group">
+    <b-form-group :label-for="`${domId}_group`">
       <template #label>
         <t value="db.record.groups.meta.s" />
       </template>
       <b-records-select
-        dom-id="move_to_group"
+        :dom-id="`${domId}_group`"
         entity="groups"
         :single-record="true"
         title="db.record.groups.meta.s"

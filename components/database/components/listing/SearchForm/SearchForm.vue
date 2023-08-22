@@ -1,17 +1,15 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { buildFormFields, FormFieldDefinition, formToRecordParams } from '~/components/Form';
+import { buildFormFields, FormFieldDefinition, formToRecordParams, prefillFormValues } from '~/components/Form';
 
 @Component
 export default class SearchForm extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly fields!: FormFieldDefinition[];
 
-  value = {};
+  formFields = buildFormFields(this.fields)
 
-  get formFields () {
-    return buildFormFields(this.fields);
-  }
+  value = prefillFormValues(this.formFields);
 
   onValuesChange (values) {
     this.value = values;

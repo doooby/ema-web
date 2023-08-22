@@ -28,7 +28,10 @@
             class="mt-2"
             @input="moveToCourseShown = $event"
           >
-            <SelectCourseGroup :value="moveToCourse" />
+            <SelectCourseGroup
+              dom-id="move_to"
+              :value="moveToCourse"
+            />
           </b-collapse>
         </div>
       </div>

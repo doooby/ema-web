@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import ARecordsListing from '~/components/database/components/listing/ARecordsListing.vue';
+import ARecordsListing from '~/components/database/components/listing/ARecordsListing/ARecordsListing.vue';
 import { Params } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';

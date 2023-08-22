@@ -4,7 +4,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import SelectPage from '~/components/database/components/listing/SelectPage.vue';
 import { Params, SearchRecordsResponsePayload } from '~/lib/api2';
 import { Column, DataTable, DataTableHeadersRow } from '~/components/DataTable/v3';
-import ActionsCell from './ARecordsListing/ActionsCell.vue';
+import ActionsCell from './ActionsCell.vue';
 
 export interface Model {
   records: unknown[];
