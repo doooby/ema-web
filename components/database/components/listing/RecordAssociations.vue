@@ -21,6 +21,7 @@ interface Item {
 export default class RecordAssociations extends Vue {
   @Prop({ required: true }) readonly record!: any;
   @Prop({ required: true }) readonly associations!: app.FilterableList<Association>;
+  @Prop({ default: false }) readonly newTab!: boolean;
 
   get filteredList () {
     return filterAssociations(this.record, this.associations);
@@ -48,7 +49,11 @@ function filterAssociations (record, list): Item[] {
         <t :value="`db.record.${entity}.meta.s`" />
       </small>
       <br>
-      <BRecordLink :entity="entity" :record="bRecord" />
+      <BRecordLink
+        :entity="entity"
+        :record="bRecord"
+        :new-tab="newTab"
+      />
     </div>
   </div>
 </template>

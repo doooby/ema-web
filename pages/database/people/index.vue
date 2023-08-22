@@ -30,9 +30,6 @@ export default class extends DatabasePage {
   searchFields = [
     [ 'search', controls.text ],
     [ 'school_year', dbFields.selectBRecord, { entity: 'school_years' } ],
-    [ 'group', dbFields.selectBRecord, { entity: 'groups' } ],
-    [ 'course', dbFields.selectBRecord, { entity: 'courses' } ],
-    [ 'school', dbFields.selectBRecord, { entity: 'schools' } ],
     [ 'attended_course', asFieldType(AttendedCourse) ],
   ]
 

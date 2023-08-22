@@ -40,21 +40,13 @@ export default class AttendedCourse extends Vue {
     { entity: 'courses', attr: 'course' },
     { entity: 'groups', attr: 'group' },
   ]
-
-  onClear () {
-    (this as any).onChangeValue({
-      school: null,
-      course: null,
-      group: null,
-    });
-  }
 }
 </script>
 
 <template>
   <b-form-group :label-for="domIdBase">
     <template #label>
-      <span>fdjshfjksdh</span>
+      <t :value="labelTranslation" />
     </template>
     <div
       :id="domIdBase"
@@ -64,36 +56,27 @@ export default class AttendedCourse extends Vue {
         <RecordAssociations
           :record="rawValue"
           :associations="associations"
+          :new-tab="true"
         />
       </div>
-      <div class="d-flex flex-column">
-        <b-button
-          v-if="rawValue.school"
-          variant="outline-secondary"
-          size="sm"
-          @click="onClear"
-        >
-          <b-icon icon="x" />
-        </b-button>
-        <b-dropdown
-          toggle-class="flex-fill"
-          size="sm"
-          no-caret
-          right
-        >
-          <template #button-content>
-            <b-icon icon="chevron-down" />
-          </template>
-          <template>
-            <li>
-              <SelectCourseGroup
-                :value="rawValue"
-                :dom-id="`${domIdBase}_attended_course`"
-              />
-            </li>
-          </template>
-        </b-dropdown>
-      </div>
+      <b-dropdown
+        size="sm"
+        right
+        offset="0"
+        no-caret
+        no-flip
+      >
+        <template #button-content>
+          <b-icon icon="chevron-down" />
+        </template>
+        <b-dropdown-form>
+          <SelectCourseGroup
+            :value="rawValue"
+            :dom-id="`${domIdBase}_attended_course`"
+            :hide-message="true"
+          />
+        </b-dropdown-form>
+      </b-dropdown>
     </div>
   </b-form-group>
 </template>

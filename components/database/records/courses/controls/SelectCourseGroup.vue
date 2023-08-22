@@ -15,6 +15,7 @@ export interface CourseGroup {
 export default class SelectCourseGroup extends Vue {
   @Prop({ required: true }) readonly value!: CourseGroup;
   @Prop({ default: undefined }) readonly domId!: string;
+  @Prop({ default: false }) readonly hideMessage!: boolean;
 
   onChangeSchool (schools: BRecord[]): void {
     this.value.school = schools[0] ?? null;
@@ -75,6 +76,7 @@ export default class SelectCourseGroup extends Vue {
       />
     </b-form-group>
     <b-alert
+      v-if="!hideMessage"
       show
       variant="info"
     >
