@@ -1,12 +1,12 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { SearchRecordsResponsePayload } from '~/lib/api2';
-import { resourcePath } from '~/config/pages';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ARecordLink from '~/components/database/components/ARecordLink.vue';
+import LoadRecordFail from '~/components/database/components/LoadRecordFail.vue';
 
 @Component({
-  components: { ARecordLink, LoadedPage },
+  components: { LoadRecordFail, ARecordLink, LoadedPage },
 })
 export default class Show2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;
@@ -24,10 +24,6 @@ export default class Show2Page extends Vue {
     this.updatePage();
   }
 
-  get pathToIndex () {
-    return resourcePath(this.entity, '');
-  }
-
   get recordId () {
     const route = this.$route as any;
     return route.params.id;
@@ -36,14 +32,6 @@ export default class Show2Page extends Vue {
   get record (): null | any {
     if (!this.getQueryState.response?.ok) return null;
     return this.getQueryState.response.payload.records[0] ?? null;
-  }
-
-  get recordLoadFailMessage (): undefined | string {
-    const response = this.getQueryState.response;
-    if (response) {
-      if (!response.ok) return 'app.processing.server_fail';
-      if (!response.payload.records.length) return 'app.processing.not_found';
-    }
   }
 
   updatePage () {
@@ -75,27 +63,21 @@ export default class Show2Page extends Vue {
         </nuxt-link>
       </h4>
 
-      <div class="d-flex align-items-center">
-        <div v-if="record">
-          <h2 class="m-0">
-            <slot name="title" :record="record" />
-          </h2>
-          <h5 class="mt-2">
-            <t :value="`db.record.${entity}.meta.s`" />
-          </h5>
-        </div>
-        <div v-else-if="recordLoadFailMessage">
-          <b-alert show variant="warning">
-            <b-icon icon="exclamation-triangle-fill" class="mr-3" />
-            <t :value="recordLoadFailMessage" />
-          </b-alert>
-        </div>
-        <div v-else>
-          <div class="spinner-border" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
+      <div v-if="getQueryState.processing">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
         </div>
       </div>
+
+      <h2 v-if="record && $scopedSlots.title" class="m-0">
+        <slot name="title" :record="record" />
+      </h2>
+
+      <h5 v-if="!getQueryState.processing && !$scopedSlots.title" class="mt-2">
+        <t :value="`db.record.${entity}.meta.s`" />
+      </h5>
+
+      <LoadRecordFail :query="getQueryState" />
 
       <div v-if="record" class="row mt-3">
         <div class="col-md-4 col-lg-3 overflow-hidden">

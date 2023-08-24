@@ -1,3 +1,15 @@
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import app from '~/lib/app';
+
+@Component
+export default class ResourcesMenuResourcesListing extends Vue {
+  get currentUser (): null | app.session.User {
+    return this.$store.state.session.user;
+  }
+}
+</script>
+
 <template>
   <ul class="list-unstyled">
 

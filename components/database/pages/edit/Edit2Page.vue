@@ -1,69 +1,3 @@
-<template>
-  <loaded-page class="page-content">
-    <div class="container pt-4 pb-5">
-      <h4 class="mb-3">
-        <nuxt-link
-          :to="`/database/${entity}`"
-        >
-          <t :value="`db.record.${entity}.meta.p`" />
-        </nuxt-link>
-      </h4>
-
-      <div class="row">
-        <div class="col justify-content-md-center">
-          <div :class="['card', cardClass]">
-
-            <div class="card-header">
-              <div class="d-flex align-items-center">
-                <div class="mr-3 d-flex align-items-center" style="min-width: 60px;">
-                  <div v-if="!record" class="spinner-border" role="status">
-                    <span class="sr-only">Loading...</span>
-                  </div>
-                  <a-record-link v-else :id="record.id" :entity="entity" />
-                </div>
-                <h2 class="m-0">
-                  <t value="db.page.edit.title" />
-                  &#32;
-                  <t :value="`db.record.${entity}.meta.s`" />
-                </h2>
-              </div>
-            </div>
-
-            <div class="card-body pt-3 pb-0">
-              <form-group
-                :value="formValues"
-                :fields="formFields"
-                :label-prefix="formFieldsLabelPrefix"
-                @input="onInput"
-              >
-                <template #layout="{ context, values }">
-                  <slot name="layout" :context="context" :values="values" />
-                </template>
-              </form-group>
-              <record-errors class="mb-3" :entity="entity" :errors="errors" />
-            </div>
-
-            <div class="card-footer d-flex justify-content-between">
-              <div>
-                <b-button variant="outline-success" :disabled="isControlsDisabled" @click="onSubmit">
-                  <t value="app.action.save" />
-                </b-button>
-              </div>
-              <div>
-                <b-button variant="outline-secondary" :disabled="isControlsDisabled" @click="onCancel">
-                  <t value="app.action.cancel" />
-                </b-button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </loaded-page>
-</template>
-
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import RecordErrors from '~/components/database/RecordErrors.vue';
@@ -71,9 +5,10 @@ import { buildFormFields, FormFieldDefinition, formToRecordParams, FormValues, p
 import { SearchRecordsResponsePayload, UpdatedRecordResponsePayload } from '~/lib/api2';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ARecordLink from '~/components/database/components/ARecordLink.vue';
+import LoadRecordFail from '~/components/database/components/LoadRecordFail.vue';
 
 @Component({
-  components: { ARecordLink, LoadedPage, RecordErrors },
+  components: { LoadRecordFail, ARecordLink, LoadedPage, RecordErrors },
 })
 export default class Edit2Page extends Vue {
   @Prop({ required: true }) readonly entity!: string;
@@ -97,6 +32,7 @@ export default class Edit2Page extends Vue {
   @Watch('record')
   onRecordChanged (newValue: any) {
     if (newValue) this.formValues = prefillFormValues(this.formFields, newValue);
+    else this.formValues = {};
   }
 
   @Watch('value')
@@ -121,10 +57,6 @@ export default class Edit2Page extends Vue {
 
   get formFieldsLabelPrefix (): string {
     return `db.record.${this.entity}.label`;
-  }
-
-  get isControlsDisabled (): boolean {
-    return !this.record || this.saveQueryState2.processing;
   }
 
   get errors (): undefined | [string, string][] {
@@ -195,3 +127,83 @@ export default class Edit2Page extends Vue {
   }
 }
 </script>
+
+<template>
+  <LoadedPage class="page-content">
+    <div class="container pt-4 pb-5">
+      <h4 class="mb-3">
+        <nuxt-link
+          :to="`/database/${entity}`"
+        >
+          <t :value="`db.record.${entity}.meta.p`" />
+        </nuxt-link>
+      </h4>
+
+      <div :class="['card', cardClass]">
+
+        <div class="card-header d-flex align-items-center">
+          <h2 class="m-0">
+            <t value="db.page.edit.title" />
+              &#32;
+            <t :value="`db.record.${entity}.meta.s`" />
+          </h2>
+          <div class="ml-3">
+            <a-record-link :id="recordId" :entity="entity" />
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div
+            v-if="getQueryState2.processing"
+            class="spinner-border"
+            role="status"
+          >
+            <span class="sr-only">Loading...</span>
+          </div>
+
+          <div v-if="record">
+            <form-group
+              :value="formValues"
+              :fields="formFields"
+              :label-prefix="formFieldsLabelPrefix"
+              @input="onInput"
+            >
+              <template #layout="{ context, values }">
+                <slot name="layout" :context="context" :values="values" />
+              </template>
+            </form-group>
+            <RecordErrors :entity="entity" :errors="errors" />
+          </div>
+
+          <LoadRecordFail
+            v-else
+            :query="getQueryState2"
+          />
+        </div>
+
+        <div class="card-footer d-flex justify-content-between">
+          <div>
+            <b-button
+              variant="outline-success"
+              :disabled="!record || saveQueryState2.processing"
+              @click="onSubmit"
+            >
+              <t value="app.action.save" />
+            </b-button>
+          </div>
+          <div>
+            <b-button
+              variant="outline-secondary"
+              :disabled="saveQueryState2.processing"
+              @click="onCancel"
+            >
+              <t value="app.action.cancel" />
+            </b-button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </LoadedPage>
+</template>

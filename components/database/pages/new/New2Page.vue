@@ -31,7 +31,7 @@
                 />
               </div>
             </div>
-            <div class="card-body pt-3 pb-0">
+            <div class="card-body">
               <form-group
                 :value="formValues"
                 :fields="formFields"
@@ -42,7 +42,7 @@
                   <slot name="layout" :context="context" :values="values" />
                 </template>
               </form-group>
-              <record-errors class="mb-3" :entity="entity" :errors="errors" />
+              <RecordErrors :entity="entity" :errors="errors" />
             </div>
             <div class="card-footer d-flex justify-content-between">
               <div>

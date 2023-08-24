@@ -39,7 +39,7 @@ import BRecordsSelect from '~/components/database/controls/BRecordsSelect.vue';
 export default class Privileges extends Vue {
   static fieldType: FormFieldType = {
     fillParams ({ name }, values, record) {
-      const privileges = values[name].map((value) => {
+      record[name] = values[name]?.map((value) => {
         switch (value.type) {
           case 'country_admin':
           case 'collector':
@@ -51,8 +51,6 @@ export default class Privileges extends Vue {
             return {};
         }
       });
-      record[name] = privileges;
-      return record;
     },
   };
 

@@ -64,7 +64,6 @@ export default class Api2Plugin {
     } catch (error) {
       response = {
         ok: false,
-        message: 'request_fail',
         error,
       };
     }
@@ -77,13 +76,14 @@ export default class Api2Plugin {
 
         state.response = {
           ok: false,
-          message: 'request_failed',
+          message: 'request_bad_data',
           error: error ?? undefined,
         };
       } else {
         state.response = { ok: true, payload };
       }
     } else {
+      if (!response.message) response.message = 'request_fail';
       utils.warn('api2 request failed', response);
       state.response = response;
     }

@@ -76,7 +76,6 @@ export default class extends DatabasePage {
       [ 'move_to_course', {
         control: true,
         fillParams: ({ name }, _, record) => {
-          console.log(this.moveToCourse);
           if (this.moveToCourse.course) {
             record[name] = {
               id: this.moveToCourse.course.id,

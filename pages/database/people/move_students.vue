@@ -184,7 +184,7 @@ export default class MoveStudents extends DatabasePage {
 
               </div>
 
-              <record-errors class="mb-3" entity="groups" :errors="errors" />
+              <RecordErrors entity="groups" :errors="errors" />
 
             </div>
 

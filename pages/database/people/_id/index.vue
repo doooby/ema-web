@@ -37,10 +37,6 @@ export default class extends DatabasePage {
   <show2-page
     entity="people"
   >
-    <template #title="{ record }">
-      {{ record.name_en }}
-    </template>
-
     <template #actions="{ record }">
       <ul>
         <li>
