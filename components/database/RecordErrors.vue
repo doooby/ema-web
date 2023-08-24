@@ -8,9 +8,14 @@
       :key="index"
       variant="danger"
     >
-      <strong>
-        <t :value="`db.record.${entity}.label.${attribute}`" />
-      </strong>: {{ message }}
+      <span v-if="attribute">
+        <strong>
+          <t :value="`db.record.${entity}.label.${attribute}`" />
+        </strong>: {{ message }}
+      </span>
+      <span v-else>
+        <t :value="`app.processing.${message}`" />
+      </span>
     </b-list-group-item>
   </b-list-group>
 </template>

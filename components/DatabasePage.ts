@@ -6,7 +6,7 @@ import * as localStorage from '~/lib/localStorage';
   layout: 'database',
   async asyncData (context: Context) {
     await context.store.dispatch('session/fetchSession', {
-      api: context.app.$api,
+      api2: context.app.$api2,
     });
   },
 })

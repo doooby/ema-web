@@ -6,7 +6,7 @@ const store = globalThis.localStorage;
 export const values = {
   currentCountryId: {
     key: 'EMA--currentCountryId',
-    mapper: value => value,
+    mapper: wai.string,
   },
   actionPageData: {
     key: 'EMA--actionPageData',

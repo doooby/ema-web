@@ -4,7 +4,6 @@ import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations, mapName } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
-import { genericUpdatedResponsePayload } from '~/lib/api2/parsers';
 
 export const entity = 'groups';
 

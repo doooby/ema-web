@@ -1,5 +1,4 @@
 import { Context } from '@nuxt/types';
-import { RequestState as V1RequestState } from '~/lib/api';
 import { RequestResponse, QueryDefinition, RequestState } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import {
@@ -92,10 +91,10 @@ export default class Api2Plugin {
     state.processing = false;
   }
 
-  async transientRequest<V> (query: QueryDefinition<V>): Promise<RequestState<V>> {
+  async transientRequest<V> (query: QueryDefinition<V>): Promise<RequestResponse<V>> {
     const state = this.newQueryState<V>();
     await this.request(state, query);
-    return state;
+    return state.response ?? { ok: false, message: 'api2.transientRequest.fatal' };
   }
 
   // TODO postData must be FormData to allow file uploading
@@ -123,7 +122,7 @@ export default class Api2Plugin {
     const response = await rawResponse.json();
     if (!response.ok) {
       if (!isOnServer && rawResponse.status === 401) {
-        this.context.store.commit('session/requestAuthnFailed');
+        this.context.store.commit('session/setUser', null);
       }
       response.message = response.message || 'unknown_error';
     }
@@ -145,36 +144,5 @@ export default class Api2Plugin {
 
   mapPayload<V = never> (request: RequestState<V>) {
     return (request.response?.ok && request.response.payload) || undefined;
-  }
-
-  mapResponseToV1RequestState<V = never> (request: RequestState<V>): V1RequestState {
-    const { processing, response } = request;
-    if (processing || !response) {
-      return {
-        running: true,
-        value: null,
-        fail: null,
-        error: null,
-        reset () {},
-      };
-    }
-
-    if (response.ok) {
-      return {
-        running: false,
-        value: response.payload,
-        fail: null,
-        error: null,
-        reset () {},
-      };
-    } else {
-      return {
-        running: false,
-        value: null,
-        fail: response.message,
-        error: null,
-        reset () {},
-      };
-    }
   }
 }

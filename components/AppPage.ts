@@ -5,7 +5,7 @@ import { Component, Vue } from 'vue-property-decorator';
   layout: 'app',
   async asyncData (context: Context) {
     await context.store.dispatch('session/fetchSession', {
-      api: context.app.$api,
+      api2: context.app.$api2,
     });
   },
 })

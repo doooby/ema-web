@@ -36,7 +36,7 @@ export default class MoveStudents extends DatabasePage {
   get errors (): undefined | [string, string][] {
     const response = this.saveQueryState.response;
     if (response?.ok === false) {
-      return [ [ 'server', response.message ] ];
+      return [ [ '', response.message ] ];
     }
 
     if (response?.ok && response.payload.record_id === undefined) {
@@ -53,34 +53,34 @@ export default class MoveStudents extends DatabasePage {
     this.onCleanAction = onClean;
 
     if (params.fromGroup) {
-      const groupsResult = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
+      const groupsResponse = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
         this.$api2.getQuery('groups', 'searchB')({ id: params.fromGroup.groupId }),
       );
-      if (groupsResult.response?.ok) {
-        this.fromGroup = groupsResult.response.payload.records[0] ?? null;
+      if (groupsResponse.ok) {
+        this.fromGroup = groupsResponse.payload.records[0] ?? null;
       }
 
-      const schoolResult = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
+      const schoolResponse = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
         this.$api2.getQuery('schools', 'searchB')({ id: params.fromGroup.schoolId }),
       );
-      if (schoolResult.response?.ok) {
-        this.courseGroup.school = schoolResult.response.payload.records[0] ?? null;
+      if (schoolResponse.ok) {
+        this.courseGroup.school = schoolResponse.payload.records[0] ?? null;
       }
       if (this.courseGroup.school) {
-        const courseResult = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
+        const courseResponse = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
           this.$api2.getQuery('courses', 'searchB')({ id: params.fromGroup.courseId }),
         );
-        if (courseResult.response?.ok) {
-          this.courseGroup.course = courseResult.response.payload.records[0] ?? null;
+        if (courseResponse.ok) {
+          this.courseGroup.course = courseResponse.payload.records[0] ?? null;
         }
       }
     }
 
-    const studentsResult = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
+    const studentsResponse = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
       this.$api2.getQuery('people', 'searchB')({ id: params.studentsIds }),
     );
-    if (studentsResult.response?.ok) {
-      this.students = studentsResult.response.payload.records;
+    if (studentsResponse.ok) {
+      this.students = studentsResponse.payload.records;
     }
 
     this.loaded = true;

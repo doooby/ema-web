@@ -132,7 +132,7 @@ export default Vue.extend({
         this.$api.newQueryState(),
       );
       await this.$store.dispatch('session/fetchSession', {
-        api: this.$api,
+        api2: this.$api2,
       });
       if (result) {
         this.$store.commit('session/hideLoginModal');
@@ -146,7 +146,7 @@ export default Vue.extend({
         this.$api.newQueryState(),
       );
       await this.$store.dispatch('session/fetchSession', {
-        api: this.$api,
+        api2: this.$api2,
       });
     },
   },

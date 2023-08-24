@@ -1,10 +1,13 @@
 import { location_system } from '~/lib/records';
 import app from '~/lib/app/index';
-import { BRecord, Api2Plugin, SearchRecordsResponsePayload } from '~/lib/api2';
+import { Api2Plugin, BRecord, SearchRecordsResponsePayload } from '~/lib/api2';
 import { staticLists } from '~/lib/app/country/internalLists';
+import { wai } from '~/vendor/wai';
+import { mapName } from '~/lib/api2/mappers';
+import { bRecordMapper } from '~/lib/api2/parsers';
 
 export interface User {
-  id: number;
+  id: string;
   login: string;
   name: string[];
   countries: BRecord[];
@@ -47,3 +50,19 @@ async function fetchAddressSystem (
     ? state.response.payload.records[0]
     : undefined;
 }
+
+export const queries = {
+  getSession () {
+    return {
+      path: '/session',
+      reducer: data => wai.object(value => ({
+        user: wai.prop('user', value, wai.object(value => ({
+          id: wai.prop('id', value, wai.string),
+          login: wai.prop('login', value, wai.string),
+          name: wai.prop('name', value, mapName),
+          countries: wai.prop('countries', value, wai.listOf(bRecordMapper())),
+        }))),
+      }))(data),
+    };
+  },
+};

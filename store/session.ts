@@ -24,11 +24,6 @@ export default class SessionModule extends VuexModule {
   }
 
   @Mutation
-  requestAuthnFailed () {
-    this.context.commit('setUser', null);
-  }
-
-  @Mutation
   setCountry (data: null | app.session.CountryData) {
     localStorage.set(localStorage.values.currentCountryId, data?.record.id);
     this.country = data;
@@ -60,12 +55,9 @@ export default class SessionModule extends VuexModule {
   }
 
   @Action
-  async fetchSession ({ api }: { api: any }) {
-    const session = await api.request(
-      api.queries.session.show(),
-      api.newQueryState(),
-    );
-    this.context.commit('setUser', session?.user ?? null);
+  async fetchSession ({ api2 }: { api2: Api2Plugin }) {
+    const session = await api2.transientRequest(app.session.queries.getSession());
+    this.context.commit('setUser', session.ok ? session.payload.user : null);
   }
 
   @Action

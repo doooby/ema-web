@@ -4,8 +4,10 @@ import {
   RecordAssociations,
   SearchRecordsResponsePayload,
   UpdatedRecordResponsePayload,
-  mappers, BRecord, GenericUpdateResponsePayload,
-} from '~/lib/api2';
+  BRecord,
+  GenericUpdateResponsePayload,
+} from '~/lib/api2/types';
+import * as mappers from '~/lib/api2/mappers';
 
 export function searchResponsePayload<R> (
   parseRecord: (value: unknown, associations?: RecordAssociations) => R,
