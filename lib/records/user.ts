@@ -76,7 +76,9 @@ export function mapUserPrivilege (value: any, associations?: RecordAssociations)
   } as any;
   switch (value?.type) {
     case 'school_manager':
-      privilege.school = mapAssociation('schools', associations)(value.school_id);
+      if (value.school_id) {
+        privilege.school = mapAssociation('schools', associations)(value.school_id);
+      }
       break;
   }
   return Object.freeze(privilege);

@@ -23,7 +23,7 @@ export default class UserPrivileges extends Vue {
       :key="index"
     >
       <t :value="`db.record.users.privileges.${privilege.type}`" />
-      <div v-if="privilege.type === 'school_manager'">
+      <div v-if="privilege.type === 'school_manager' && privilege.school">
         <BRecordLink entity="schools" :record="privilege.school" />
       </div>
     </li>
