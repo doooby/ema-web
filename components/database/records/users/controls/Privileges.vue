@@ -42,8 +42,7 @@ export default class Privileges extends Vue {
       record[name] = values[name]?.map((value) => {
         switch (value.type) {
           case 'country_admin':
-          case 'collector':
-          case 'data_officer':
+          case 'view_only':
             return { type: value.type };
           case 'school_manager':
             return { type: value.type, school_id: value.school?.id };
@@ -70,13 +69,13 @@ export default class Privileges extends Vue {
   get privilegesTypesOptions () {
     return [
       { value: 'country_admin', text: this.$t('db.record.users.privileges.country_admin') },
-      { value: 'data_officer', text: this.$t('db.record.users.privileges.data_officer') },
-      { value: 'collector', text: this.$t('db.record.users.privileges.collector') },
+      { value: 'view_only', text: this.$t('db.record.users.privileges.view_only') },
       { value: 'school_manager', text: this.$t('db.record.users.privileges.school_manager') },
     ];
   }
 
   onAdd () {
+    if (this.items.length >= 1) return;
     const newItems = [ ...this.items ];
     newItems.push(user.mapUserPrivilege(null));
     this.context.onChange({ [this.field.name]: newItems });
