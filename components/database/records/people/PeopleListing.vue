@@ -37,7 +37,10 @@ export default class PeopleListing extends Vue {
     :params="params"
     @connect="$emit('connect', $event)"
   >
-    <template #record-actions="{ record }">
+    <template
+      v-if="$admission.can('people.update')"
+      #record-actions="{ record }"
+    >
       <b-dropdown-item :to="`/database/people/${record.id}/edit`">
         <b-icon icon="pencil" />
         <t value="db.page.edit.action" />

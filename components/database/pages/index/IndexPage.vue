@@ -4,11 +4,6 @@ import { FormFieldDefinition } from '~/components/Form';
 import SearchForm from '~/components/database/components/listing/SearchForm/SearchForm.vue';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 
-export interface IndexPageFilter {
-  name: string;
-
-}
-
 const RecordsListing = Vue.extend({
   functional: true,
   props: [ 'component', 'params' ],
@@ -54,12 +49,13 @@ export default class IndexPage extends Vue {
 <template>
   <loaded-page class="page-content">
     <div class="container pt-4 pb-5">
-      <h4 class="mb-3">
+      <h4 class="m-0">
         <t :value="`db.menu.resource.${entity}`" />
       </h4>
       <nuxt-link
+        v-if="$admission.can(`${entity}.create`)"
         :to="`/database/${entity}/new`"
-        class="btn btn-outline-secondary"
+        class="btn btn-outline-secondary mt-3"
       >
         <b-icon icon="clipboard-plus" class="mr-1" />
         <t value="db.page.new.action" />

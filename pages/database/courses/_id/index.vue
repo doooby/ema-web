@@ -8,7 +8,7 @@
 
     <template #actions="{ record }">
       <ul>
-        <li>
+        <li v-if="$admission.can('courses.update')">
           <show-page-action
             icon="pencil"
             :path="`/database/courses/${record.id}/edit`"

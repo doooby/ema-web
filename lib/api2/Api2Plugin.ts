@@ -20,8 +20,6 @@ import {
 } from '~/lib/records';
 
 export default class Api2Plugin {
-  context: Context;
-
   queries = {
     [course.entity]: course.queries,
     [donor.entity]: donor.queries,
@@ -40,9 +38,8 @@ export default class Api2Plugin {
     [work_agreement.entity]: work_agreement.queries,
   };
 
-  constructor (context: Context) {
-    this.context = context;
-  }
+  // eslint-disable-next-line no-useless-constructor
+  constructor (readonly context: Context) {}
 
   newQueryState<V> (): RequestState<V> {
     return {

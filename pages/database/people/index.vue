@@ -4,7 +4,10 @@
     :search-fields="searchFields"
     :component="PeopleListing"
   >
-    <template #group-actions="{ records }">
+    <template
+      v-if="$admission.can('groups.move_students')"
+      #group-actions="{ records }"
+    >
       <MoveStudents :students="records" />
     </template>
   </IndexPage>

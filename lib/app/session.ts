@@ -3,7 +3,7 @@ import app from '~/lib/app/index';
 import { Api2Plugin, BRecord, SearchRecordsResponsePayload } from '~/lib/api2';
 import { staticLists } from '~/lib/app/country/internalLists';
 import { wai } from '~/vendor/wai';
-import { mapName } from '~/lib/api2/mappers';
+import { mapIndex, mapName } from '~/lib/api2/mappers';
 import { bRecordMapper } from '~/lib/api2/parsers';
 
 export interface User {
@@ -11,6 +11,7 @@ export interface User {
   login: string;
   name: string[];
   countries: BRecord[];
+  admissible_actions?: Record<string, string[]>;
 }
 
 export interface CountryData {
@@ -61,6 +62,11 @@ export const queries = {
           login: wai.prop('login', value, wai.string),
           name: wai.prop('name', value, mapName),
           countries: wai.prop('countries', value, wai.listOf(bRecordMapper())),
+          admissible_actions: wai.prop(
+            'admissible_actions',
+            value,
+            wai.nullable(mapIndex(wai.listOf(wai.string))),
+          ),
         }))),
       }))(data),
     };

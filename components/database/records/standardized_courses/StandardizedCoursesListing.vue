@@ -37,7 +37,10 @@ export default class extends Vue {
     :params="params"
     @change="$emit('change', $event)"
   >
-    <template #record-actions="{ record }">
+    <template
+      v-if="$admission.can('standardized_courses.update')"
+      #record-actions="{ record }"
+    >
       <b-dropdown-item :to="`/database/standardized_courses/${record.id}/edit`">
         <b-icon icon="pencil" />
         <t value="db.page.edit.action" />

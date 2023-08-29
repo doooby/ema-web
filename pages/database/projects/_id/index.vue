@@ -39,7 +39,7 @@ export default class extends DatabasePage {
 
     <template #actions="{ record }">
       <ul>
-        <li>
+        <li v-if="$admission.can('projects.update')">
           <show-page-action
             icon="pencil"
             :path="`/database/projects/${record.id}/edit`"

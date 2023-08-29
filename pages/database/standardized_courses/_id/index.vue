@@ -27,7 +27,7 @@ export default class extends DatabasePage {}
 
     <template #actions="{ record }">
       <ul>
-        <li>
+        <li v-if="$admission.can('standardized_courses.update')">
           <show-page-action
             icon="pencil"
             :path="`/database/standardized_courses/${record.id}/edit`"

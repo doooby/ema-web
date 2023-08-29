@@ -19,6 +19,13 @@ export default class StudentsListing extends Vue {
     group_id: this.group.id,
   };
 
+  get admissibleGroup () {
+    return this.$admission.indexCan(
+      'groups.change_students',
+      'groups.move_students',
+    );
+  }
+
   onRefresh () {
     this.searchParams = { ...this.searchParams };
   }
@@ -31,12 +38,17 @@ export default class StudentsListing extends Vue {
       class="mt-2"
       :params="searchParams"
     >
-      <template #group-actions="{ records }">
+      <template
+        v-if="admissibleGroup.canAny"
+        #group-actions="{ records }"
+      >
         <move-students
+          v-if="admissibleGroup['groups.move_students']"
           :from-group="group"
           :students="records"
         />
         <remove-students
+          v-if="admissibleGroup['groups.change_students']"
           :group="group"
           :students="records"
           @done="onRefresh"

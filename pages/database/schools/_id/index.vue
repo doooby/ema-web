@@ -45,8 +45,17 @@ export default class extends DatabasePage {
 
     <template #actions="{ record, reloadRecord }">
       <ul>
-        <EditAction entity="schools" :record="record" />
-        <ArchiveAction entity="schools" :record="record" @archived="reloadRecord" />
+        <EditAction
+          v-if="$admission.can('schools.update')"
+          entity="schools"
+          :record="record"
+        />
+        <ArchiveAction
+          v-if="$admission.can('schools.archive')"
+          entity="schools"
+          :record="record"
+          @archived="reloadRecord"
+        />
       </ul>
     </template>
 

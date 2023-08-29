@@ -8,7 +8,7 @@
 
     <template #actions="{ record, reloadRecord }">
       <ul>
-        <li>
+        <li v-if="$admission.can('users.update')">
           <show-page-action
             icon="pencil"
             :path="`/database/users/${record.id}/edit`"
@@ -16,7 +16,7 @@
             <t value="db.page.edit.action" />
           </show-page-action>
         </li>
-        <li>
+        <li v-if="$admission.can('users.change_password')">
           <show-page-action
             icon="lock"
             @click="changePassModalShown = true"
@@ -25,7 +25,7 @@
           </show-page-action>
           <change-password-modal v-model="changePassModalShown" :record="record" />
         </li>
-        <li>
+        <li v-if="$admission.can('users.lock')">
           <show-page-action
             icon="lock"
             @click="lockModalShown = true"
@@ -38,7 +38,7 @@
             @recordChanged="reloadRecord"
           />
         </li>
-        <li>
+        <li v-if="$admission.can('users.archive')">
           <show-page-action
             icon="lock"
             @click="archiveModalShown = true"

@@ -35,7 +35,10 @@ export default class RecordsListing extends Vue {
     :params="params"
     @change="$emit('change', $event)"
   >
-    <template #record-actions="{ record }">
+    <template
+      v-if="$admission.can('school_years.update')"
+      #record-actions="{ record }"
+    >
       <b-dropdown-item :to="`/database/school_years/${record.id}/edit`">
         <b-icon icon="pencil" />
         <t value="db.page.edit.action" />

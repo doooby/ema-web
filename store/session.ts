@@ -77,4 +77,8 @@ export default class SessionModule extends VuexModule {
   get countryId (): null | string {
     return this.country?.record.id ?? null;
   }
+
+  get admissibleActions (): Record<string, string[]> {
+    return this.user?.admissible_actions ?? {};
+  }
 }
