@@ -14,8 +14,8 @@
       <t value="top_bar.menu.action.language" />
       <language-modal />
     </b-dropdown-item>
-    <b-dropdown-divider />
-    <li>
+    <b-dropdown-divider v-if="$admission.can('translation_values.update')" />
+    <li v-if="$admission.can('translation_values.update')">
       <div class="py-1 px-4">
         <b-form-checkbox
           switch
@@ -42,11 +42,7 @@ import LanguageModal from './LanguageModal.vue';
 })
 export default class DropdownMenu extends Vue {
   get debugTranslations (): boolean {
-    const {
-      currentUser,
-      debugTranslations,
-    } = this.$store.state.session;
-    return !!(currentUser && debugTranslations);
+    return this.$store.state.session.debugTranslations;
   }
 
   onShowLoginModal () {
@@ -58,7 +54,7 @@ export default class DropdownMenu extends Vue {
   }
 
   onToggleDebugTranslations () {
-    this.$store.commit('session/toggleDebugTranslations', !this.debugTranslations);
+    this.$store.commit('session/toggleDebugTranslations');
   }
 }
 </script>

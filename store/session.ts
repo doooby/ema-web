@@ -50,8 +50,8 @@ export default class SessionModule extends VuexModule {
   }
 
   @Mutation
-  toggleDebugTranslations (value: boolean) {
-    this.debugTranslations = value;
+  toggleDebugTranslations () {
+    this.debugTranslations = !this.debugTranslations;
   }
 
   @Action
