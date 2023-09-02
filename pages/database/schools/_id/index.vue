@@ -10,6 +10,7 @@ import CoursesListing from '~/components/database/records/schools/CoursesListing
 import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
 import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
 import ArchiveAction from '~/components/database/components/detail/actions/ArchiveAction.vue';
+import AssociationList from '~/components/database/components/listing/AssociationList.vue';
 
 enum Tabs {
   courses,
@@ -18,6 +19,7 @@ enum Tabs {
 
 @Component({
   components: {
+    AssociationList,
     ArchiveAction,
     EditAction,
     BRecordLink,
@@ -70,7 +72,10 @@ export default class extends DatabasePage {
           {{ record.external_id }}
         </show-page-table-row>
         <show-page-table-row label="db.record.schools.label.director">
-          <b-record-link v-if="record.director" entity="people" :record="record.director" />
+          <BRecordLink v-if="record.director" entity="people" :record="record.director" />
+        </show-page-table-row>
+        <show-page-table-row label="db.record.projects.meta.p">
+          <AssociationList entity="projects" :records="record.projects" />
         </show-page-table-row>
       </table>
     </template>

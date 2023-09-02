@@ -7,19 +7,22 @@ import { Params } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
+import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
+import AssociationList from '~/components/database/components/listing/AssociationList.vue';
 
 @Component({
-  components: { BRecordLink, ARecordsListing, ARecordLink, TextNames },
+  components: { AssociationList, RecordHeader, BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
 export default class extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
+  @Prop({ default: undefined }) readonly hideProjects!: boolean;
 
   columns = [
-    { name: 'id', size: 80 },
+    { name: 'record', size: 220 },
     ...application_record.fillDataTableColumns('schools', [
       { name: 'external_id' },
-      { name: 'name', size: 300 },
+      (this.hideProjects ? undefined : { name: 'projects' }),
       { name: 'director' },
     ]),
   ];
@@ -50,13 +53,16 @@ export default class extends Vue {
 
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="schools" />
+        <RecordHeader
+          entity="schools"
+          :record="record"
+        />
       </td>
       <td>
         {{ record.external_id }}
       </td>
-      <td>
-        <text-names class="single-row-cell" :value="record.name" />
+      <td v-if="!hideProjects">
+        <AssociationList entity="projects" :records="record.projects" />
       </td>
       <td>
         <b-record-link v-if="record.director" entity="people" :record="record.director" />

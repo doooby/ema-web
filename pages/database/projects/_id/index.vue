@@ -5,7 +5,7 @@ import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
-import SchoolsListing from '~/components/database/records/projects/SchoolsListing.vue';
+import ProjectSchoolsListing from '~/components/database/records/projects/ProjectSchoolsListing.vue';
 import CoursesListing from '~/components/database/records/projects/CoursesListing.vue';
 
 enum Tabs {
@@ -15,7 +15,7 @@ enum Tabs {
 
 @Component({
   components: {
-    SchoolsListing,
+    ProjectSchoolsListing,
     Show2Page,
     ShowPageAction,
     ShowPageTableRow,
@@ -83,7 +83,7 @@ export default class extends DatabasePage {
             <t value="db.record.schools.meta.p" />
           </template>
           <div v-if="currenTab === Tabs.schools">
-            <schools-listing :project="record" />
+            <ProjectSchoolsListing :project="record" />
           </div>
         </b-tab>
         <b-tab>

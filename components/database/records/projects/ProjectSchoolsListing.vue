@@ -1,14 +1,14 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { project } from '~/lib/records';
-import RecordsListing from '~/components/database/records/schools/SchoolsListing.vue';
+import SchoolsListing from '~/components/database/records/schools/SchoolsListing.vue';
 
 @Component({
   components: {
-    RecordsListing,
+    SchoolsListing,
   },
 })
-export default class SchoolsListing extends Vue {
+export default class ProjectSchoolsListing extends Vue {
   @Prop({ required: true }) readonly project!: project.Project;
 
   searchParams = {
@@ -19,10 +19,10 @@ export default class SchoolsListing extends Vue {
 
 <template>
   <div class="mt-3">
-    <records-listing
+    <SchoolsListing
       class="mt-2"
       :params="searchParams"
-      :hide-school="true"
+      :hide-projects="true"
     />
   </div>
 </template>

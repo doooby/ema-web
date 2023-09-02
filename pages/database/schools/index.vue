@@ -2,7 +2,7 @@
   <IndexPage
     entity="schools"
     :search-fields="searchFields"
-    :component="Schools"
+    :component="SchoolsListing"
   />
 </template>
 
@@ -11,7 +11,7 @@ import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import { controls } from '~/components/Form';
 import IndexPage from '~/components/database/pages/index/IndexPage.vue';
-import Schools from '~/components/database/records/schools/SchoolsListing.vue';
+import SchoolsListing from '~/components/database/records/schools/SchoolsListing.vue';
 
 @Component({
   components: { IndexPage },
@@ -21,6 +21,6 @@ export default class extends DatabasePage {
     [ 'search', controls.text ],
   ]
 
-  Schools = Schools;
+  SchoolsListing = SchoolsListing;
 }
 </script>

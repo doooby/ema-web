@@ -25,7 +25,7 @@ export function parseRecord (
   return wai.object(value => ({
     ...application_record.parseSharedAttributes(value),
     country: wai.prop('country_id', value, mapAssociation('countries', associations)),
-    schools: wai.prop('schools_ids', value, mapAssociations('schools', associations)),
+    schools: wai.prop('school_ids', value, mapAssociations('schools', associations)),
     donors: wai.prop('donors_ids', value, mapAssociations('donors', associations)),
     name: wai.prop('name', value, mapName),
     code: wai.prop('code', value, wai.nullable(wai.string)),
@@ -44,7 +44,10 @@ export const queries = {
 
 export function recordControls (): FormFieldDefinition[] {
   return [
-    [ 'schools', dbFields.selectManyBRecords, { entity: 'schools' } ],
+    [ 'schools', dbFields.selectManyBRecords, {
+      entity: 'schools',
+      paramsName: 'school_ids',
+    } ],
     [ 'donors', dbFields.selectManyBRecords, { entity: 'donors' } ],
     [ 'name', controls.name ],
     [ 'code', controls.text ],
