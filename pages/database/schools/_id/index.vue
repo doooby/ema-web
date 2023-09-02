@@ -11,6 +11,7 @@ import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModa
 import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
 import ArchiveAction from '~/components/database/components/detail/actions/ArchiveAction.vue';
 import AssociationList from '~/components/database/components/listing/AssociationList.vue';
+import TextNames from '~/components/database/components/TextNames.vue';
 
 enum Tabs {
   courses,
@@ -19,6 +20,7 @@ enum Tabs {
 
 @Component({
   components: {
+    TextNames,
     AssociationList,
     ArchiveAction,
     EditAction,
@@ -64,9 +66,7 @@ export default class extends DatabasePage {
     <template #details="{ record }">
       <table class="table">
         <show-page-table-row label="db.record.schools.label.name">
-          {{ record.name[1] }}
-          <br>
-          <small>{{ record.name[0] }}</small>
+          <TextNames :value="record.name" />
         </show-page-table-row>
         <show-page-table-row label="db.record.schools.label.external_id">
           {{ record.external_id }}

@@ -6,19 +6,21 @@ import ARecordsListing from '~/components/database/components/listing/ARecordsLi
 import { Params } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';
+import AssociationList from '~/components/database/components/listing/AssociationList.vue';
+import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
 
 @Component({
-  components: { ARecordsListing, ARecordLink, TextNames },
+  components: { RecordHeader, AssociationList, ARecordsListing, ARecordLink, TextNames },
 })
 export default class RecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
 
   columns = [
-    { name: 'id', size: 80 },
+    { name: 'record', size: 220 },
     ...application_record.fillDataTableColumns('projects', [
       { name: 'code' },
-      { name: 'name' },
+      { name: 'donors' },
       { name: 'short_name_en' },
     ]),
   ];
@@ -48,13 +50,13 @@ export default class RecordsListing extends Vue {
     </template>
     <template #row="{ record }">
       <td>
-        <a-record-link :id="record.id" entity="projects" />
+        <RecordHeader entity="projects" :record="record" />
       </td>
       <td>
         {{ record.code }}
       </td>
       <td>
-        <text-names class="single-row-cell" :value="record.name" />
+        <AssociationList entity="donors" :records="record.donors" />
       </td>
       <td>
         {{ record.short_name_en }}

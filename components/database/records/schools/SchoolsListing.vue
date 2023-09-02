@@ -53,10 +53,7 @@ export default class extends Vue {
 
     <template #row="{ record }">
       <td>
-        <RecordHeader
-          entity="schools"
-          :record="record"
-        />
+        <RecordHeader entity="schools" :record="record" />
       </td>
       <td>
         {{ record.external_id }}

@@ -7,8 +7,8 @@ import { BRecord } from '~/lib/api2';
   components: { BRecordLink },
 })
 export default class AssociationList extends Vue {
-  @Prop({ default: () => {} }) readonly entity!: string;
-  @Prop({ default: () => {} }) readonly records!: BRecord[];
+  @Prop({ required: true }) readonly entity!: string;
+  @Prop({ default: undefined }) readonly records!: undefined | BRecord[];
 }
 </script>
 

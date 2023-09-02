@@ -7,6 +7,8 @@ import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import ProjectSchoolsListing from '~/components/database/records/projects/ProjectSchoolsListing.vue';
 import CoursesListing from '~/components/database/records/projects/CoursesListing.vue';
+import AssociationList from '~/components/database/components/listing/AssociationList.vue';
+import TextNames from '~/components/database/components/TextNames.vue';
 
 enum Tabs {
   schools,
@@ -15,6 +17,8 @@ enum Tabs {
 
 @Component({
   components: {
+    TextNames,
+    AssociationList,
     ProjectSchoolsListing,
     Show2Page,
     ShowPageAction,
@@ -52,6 +56,9 @@ export default class extends DatabasePage {
 
     <template #details="{ record }">
       <table class="table">
+        <show-page-table-row label="db.record.projects.label.name">
+          <TextNames :value="record.name" />
+        </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.code">
           {{ record.code }}
         </show-page-table-row>
@@ -64,14 +71,7 @@ export default class extends DatabasePage {
           {{ record.ends_on ? $d(record.ends_on) : '' }}
         </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.donors">
-          <div class="d-flex">
-            <div
-              v-for="donor in (record.donors || [])"
-              :key="donor.id"
-            >
-              <b-record-link entity="donors" :record="donor" />
-            </div>
-          </div>
+          <AssociationList entity="donors" :records="record.donors" />
         </show-page-table-row>
       </table>
     </template>
