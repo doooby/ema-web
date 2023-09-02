@@ -22,18 +22,14 @@ export default class RecordsListing extends Vue {
     { name: 'record', size: 240 },
     { name: 'associations1', size: 240 },
     { name: 'associations2', size: 240 },
-    ...application_record.fillDataTableColumns('courses', [
-      { name: 'grade', size: 120 },
-    ]),
   ];
 
   associations1 = [
+    { entity: 'school_years', attr: 'school_year' },
     { entity: 'schools', attr: 'school' },
-    { entity: 'projects', attr: 'project' },
   ]
 
   associations2 = [
-    { entity: 'school_years', attr: 'school_year' },
     { entity: 'standardized_courses', attr: 'standardized_course' },
   ]
 }
@@ -78,9 +74,6 @@ export default class RecordsListing extends Vue {
           :record="record"
           :associations="associations2"
         />
-      </td>
-      <td class="text-center">
-        {{ record.grade }}
       </td>
       <td />
     </template>

@@ -1,14 +1,14 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { person } from '~/lib/records';
-import RecordsListing from '~/components/database/records/groups/GroupsListing.vue';
+import GroupsListing from '~/components/database/records/groups/GroupsListing.vue';
 
 @Component({
   components: {
-    RecordsListing,
+    GroupsListing,
   },
 })
-export default class GroupsListing extends Vue {
+export default class PeopleGroupsListing extends Vue {
   @Prop({ required: true }) readonly person!: person.Person;
 
   searchParams = {
@@ -19,7 +19,7 @@ export default class GroupsListing extends Vue {
 
 <template>
   <div class="mt-3">
-    <records-listing
+    <GroupsListing
       class="mt-2"
       :params="searchParams"
     />

@@ -4,7 +4,7 @@ import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
-import GroupsListing from '~/components/database/records/people/GroupsListing.vue';
+import PeopleGroupsListing from '~/components/database/records/people/GroupsListing.vue';
 import WorkAgreementsListing from '~/components/database/records/people/WorkAgreementsListing.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import { person } from '~/lib/records';
@@ -18,7 +18,7 @@ enum Tabs {
   components: {
     RecordAssociations,
     WorkAgreementsListing,
-    GroupsListing,
+    PeopleGroupsListing,
     Show2Page,
     ShowPageAction,
     ShowPageTableRow,
@@ -96,7 +96,7 @@ export default class extends DatabasePage {
             <t value="db.record.groups.meta.p" />
           </template>
           <div v-if="currenTab === Tabs.groups">
-            <groups-listing :person="record" />
+            <PeopleGroupsListing :person="record" />
           </div>
         </b-tab>
         <b-tab>

@@ -1,11 +1,11 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { course } from '~/lib/records';
-import RecordsListing from '~/components/database/records/groups/GroupsListing.vue';
+import GroupsListing from '~/components/database/records/groups/GroupsListing.vue';
 
 @Component({
   components: {
-    RecordsListing,
+    GroupsListing,
   },
 })
 export default class CourseGroups extends Vue {
@@ -21,11 +21,10 @@ export default class CourseGroups extends Vue {
 
 <template>
   <div class="mt-3">
-    <records-listing
+    <GroupsListing
       class="mt-2"
       :initial-columns="initialColumns"
       :params="searchParams"
-      :hide-school="true"
       :hide-course="true"
     />
   </div>
