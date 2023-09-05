@@ -38,7 +38,7 @@ enum Tabs {
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.grading;
+  currenTab: Tabs = Tabs.students;
 
   group: null | group.Group = null;
 
