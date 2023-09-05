@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { UpdatedRecordResponsePayload } from '~/lib/api2';
+import { ErrorMessage, UpdatedRecordResponsePayload } from '~/lib/api2';
 
 export default Vue.extend({
   props: {
@@ -43,7 +43,7 @@ export default Vue.extend({
     return {
       form: {
         password: '',
-        error: null as null | [ string, string ],
+        error: null as null | ErrorMessage,
       },
       request: this.$api2.newQueryState<UpdatedRecordResponsePayload>(),
     };
@@ -70,7 +70,7 @@ export default Vue.extend({
       if (payload?.record_id) {
         this.onHidden();
       } else {
-        this.form.error = (payload && payload.record_id === undefined && payload.errors[0]) || [ 'base', 'unknown' ];
+        this.form.error = (payload && payload.record_id === undefined && payload.errors[0]) || [ undefined, 'unknown' ];
       }
     },
   },

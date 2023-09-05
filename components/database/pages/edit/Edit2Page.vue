@@ -1,8 +1,8 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import RecordErrors from '~/components/database/RecordErrors.vue';
+import RecordErrors, { mapErrors } from '~/components/database/RecordErrors.vue';
 import { buildFormFields, FormFieldDefinition, formToRecordParams, FormValues, prefillFormValues } from '../../../Form';
-import { SearchRecordsResponsePayload, UpdatedRecordResponsePayload } from '~/lib/api2';
+import { ErrorMessage, SearchRecordsResponsePayload, UpdatedRecordResponsePayload } from '~/lib/api2';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 import ARecordLink from '~/components/database/components/ARecordLink.vue';
 import LoadRecordFail from '~/components/database/components/LoadRecordFail.vue';
@@ -59,17 +59,11 @@ export default class Edit2Page extends Vue {
     return `db.record.${this.entity}.label`;
   }
 
-  get errors (): undefined | [string, string][] {
-    const response = this.saveQueryState2.response;
-    if (response?.ok === false) {
-      return [ [ 'server', response.message ] ];
-    }
-
-    if (response?.ok && response.payload.record_id === undefined) {
-      if (response.payload.errors.length) {
-        return response.payload.errors;
-      }
-    }
+  get errors (): undefined | ErrorMessage[] {
+    return mapErrors(
+      this.saveQueryState2.response,
+      payload => payload.record_id === undefined ? payload.errors : undefined,
+    );
   }
 
   onInput (newValues: any) {

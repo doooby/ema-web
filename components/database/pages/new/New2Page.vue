@@ -72,8 +72,8 @@ import {
   FormValues,
   prefillFormValues,
 } from '~/components/Form';
-import RecordErrors from '../../RecordErrors.vue';
-import { UpdatedRecordResponsePayload } from '~/lib/api2';
+import RecordErrors, { mapErrors } from '../../RecordErrors.vue';
+import { ErrorMessage, UpdatedRecordResponsePayload } from '~/lib/api2';
 import LoadedPage from '~/components/database/pages/LoadedPage.vue';
 
 @Component({
@@ -114,19 +114,11 @@ export default class New2Page extends Vue {
     return this.createQueryState2.processing;
   }
 
-  get errors (): null | [string, string][] {
-    const response = this.createQueryState2.response;
-    if (response?.ok === false) {
-      return [ [ 'server', response.message ] ];
-    }
-
-    if (response?.ok && response.payload.record_id === undefined) {
-      if (response.payload.errors.length) {
-        return response.payload.errors;
-      }
-    }
-
-    return null;
+  get errors (): undefined | ErrorMessage[] {
+    return mapErrors(
+      this.createQueryState2.response,
+      payload => payload.record_id === undefined ? payload.errors : undefined,
+    );
   }
 
   onCreated (recordId: string) {

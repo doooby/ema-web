@@ -3,10 +3,10 @@ import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import ActionPage, { ActionParams } from '~/components/database/pages/ActionPage.vue';
 import { MoveStudentsParams } from '~/components/database/records/groups/students/actions/MoveStudents.vue';
-import { BRecord, SearchRecordsResponsePayload, UpdatedRecordResponsePayload } from '~/lib/api2';
+import { BRecord, ErrorMessage, SearchRecordsResponsePayload, UpdatedRecordResponsePayload } from '~/lib/api2';
 import BRecordsSelect from '~/components/database/controls/BRecordsSelect.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
-import RecordErrors from '~/components/database/RecordErrors.vue';
+import RecordErrors, { mapErrors } from '~/components/database/RecordErrors.vue';
 import SelectCourseGroup, { CourseGroup } from '~/components/database/records/courses/controls/SelectCourseGroup.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 
@@ -33,17 +33,11 @@ export default class MoveStudents extends DatabasePage {
   saveQueryState = this.$api2.newQueryState<UpdatedRecordResponsePayload>();
   onCleanAction?: () => void;
 
-  get errors (): undefined | [string, string][] {
-    const response = this.saveQueryState.response;
-    if (response?.ok === false) {
-      return [ [ '', response.message ] ];
-    }
-
-    if (response?.ok && response.payload.record_id === undefined) {
-      if (response.payload.errors.length) {
-        return response.payload.errors;
-      }
-    }
+  get errors (): undefined | ErrorMessage[] {
+    return mapErrors(
+      this.saveQueryState.response,
+      payload => payload.record_id === undefined ? payload.errors : undefined,
+    );
   }
 
   async onConnect ({
