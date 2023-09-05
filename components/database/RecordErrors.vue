@@ -22,12 +22,24 @@
 
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { RecordChangeError } from '~/lib/api/mappers';
+import { ErrorMessage, RequestResponse } from '~/lib/api2';
+
+export function mapErrors<V> (
+  response: undefined | RequestResponse<V>,
+  map: (payload: V) => undefined | ErrorMessage[],
+): undefined | ErrorMessage[] {
+  if (response?.ok === false) {
+    return [ [ null, response.message ] ];
+  }
+  if (response?.ok) {
+    return map(response.payload);
+  }
+}
 
 export default Vue.extend({
   props: {
     entity: { type: String, required: true },
-    errors: { type: Array as PropType<RecordChangeError[]>, default: null },
+    errors: { type: Array as PropType<ErrorMessage[]>, default: null },
   },
 });
 </script>

@@ -6,4 +6,5 @@ export interface Column {
   fixedSize?: boolean;
   renderHeader?: (column: Column) => Vue.VNode;
   renderCell?: (record) => Vue.VNode;
+  data?: unknown;
 }

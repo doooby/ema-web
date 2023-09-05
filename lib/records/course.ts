@@ -8,6 +8,9 @@ import { wai } from '~/vendor/wai';
 import { mapAssociation, mapDate, mapName, mapSelectOrFillTuple } from '~/lib/api2/mappers';
 import { dbFields } from '~/components/database/fields';
 import app from '~/lib/app';
+import * as grading from './grading';
+
+export { grading };
 
 export const entity = 'courses';
 

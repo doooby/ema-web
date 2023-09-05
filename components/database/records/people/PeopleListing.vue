@@ -7,9 +7,10 @@ import { Params } from '~/lib/api2';
 import { application_record, person } from '~/lib/records';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
+import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
 
 @Component({
-  components: { RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
+  components: { PrintFullName, RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
 export default class PeopleListing extends Vue {
   @Prop({ default: () => {} }) readonly params!: Params;
@@ -61,14 +62,7 @@ export default class PeopleListing extends Vue {
         {{ record.navision_id }}
       </td>
       <td>
-        <div>
-          <span>{{ record.first_name[0] }}</span>
-          <span v-if="record.last_name"> {{ record.last_name[0] }}</span>
-        </div>
-        <div>
-          {{ record.first_name[1] }}
-          <span v-if="record.last_name"> {{ record.last_name[1] }}</span>
-        </div>
+        <PrintFullName :person="record" />
         <div v-if="record.born_on">
           {{ $d(record.born_on) }}
         </div>

@@ -48,6 +48,19 @@ export const queries = {
       reducer: parsers.updatedRecordResponsePayload(),
     };
   },
+  get_grades (params: Params) {
+    return {
+      path: `/${entity}/${params.id}/get_grades`,
+      reducer: value => value,
+    };
+  },
+  update_grades (params: Params) {
+    return {
+      path: `/${entity}/${params.id}/update_grades`,
+      params: { subjects: params.subjects },
+      reducer: parsers.updatedRecordResponsePayload(),
+    };
+  },
 };
 
 export function entityControls (): FormFieldDefinition[] {

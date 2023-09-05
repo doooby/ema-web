@@ -5,7 +5,7 @@ import {
   SearchRecordsResponsePayload,
   UpdatedRecordResponsePayload,
   BRecord,
-  GenericUpdateResponsePayload,
+  GenericUpdateResponsePayload, ErrorMessage,
 } from '~/lib/api2/types';
 import * as mappers from '~/lib/api2/mappers';
 
@@ -58,11 +58,11 @@ export function genericUpdatedResponsePayload (
   ));
 }
 
-export function errorMessage (value: unknown): [string, string] {
-  return wai.tuple(wai.string, wai.string)(value);
+export function errorMessage (value: unknown): ErrorMessage {
+  return wai.tuple(wai.nullable(wai.string), wai.string)(value);
 }
 
-export function errorMessages (value: unknown): [string, string][] {
+export function errorMessages (value: unknown): ErrorMessage[] {
   return wai.nullable(wai.listOf(errorMessage))(value) ?? [];
 }
 

@@ -6,15 +6,19 @@ import { DatabasePage } from '~/components';
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import StudentsListing from '~/components/database/records/groups/StudentsListing/StudentsListing.vue';
 import GroupAttendance from '~/components/database/records/groups/GroupAttendance/index.vue';
+import GroupGrades from '~/components/database/records/groups/GroupGrades/index.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
 import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
 import ArchiveAction from '~/components/database/components/detail/actions/ArchiveAction.vue';
+import { course, group } from '~/lib/records';
+import { RequestResponse, SearchRecordsResponsePayload } from '~/lib/api2';
 
 enum Tabs {
   students,
   attendance,
+  grading
 }
 
 @Component({
@@ -27,27 +31,32 @@ enum Tabs {
     ShowRecordLink,
     StudentsListing,
     GroupAttendance,
+    GroupGrades,
     TextNames,
     ConfirmArchiveModal,
   },
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.students;
+  currenTab: Tabs = Tabs.grading;
 
-  termSpan = [
-    new Date(2022, 1, 1),
-    new Date(2022, 5, 30),
-  ]
+  group: null | group.Group = null;
+
+  courseLoader = this.$api2.createRecordLoader(this.onLoadCourse);
+
+  onLoadCourse (): Promise<RequestResponse<SearchRecordsResponsePayload<course.Course>>> {
+    return this.$api2.fetchRecord('courses', { id: this.group!.course.id });
+  }
 }
 </script>
 
 <template>
   <show2-page
     entity="groups"
+    @load="group = $event"
   >
     <template #title="{ record }">
-      {{ record.name_en }}
+      {{ record.id }}
     </template>
 
     <template #actions="{ record, reloadRecord }">
@@ -102,6 +111,11 @@ export default class extends DatabasePage {
         <b-tab title="Attendance">
           <div v-if="currenTab === Tabs.attendance">
             <group-attendance :group="record" />
+          </div>
+        </b-tab>
+        <b-tab title="Grading">
+          <div v-if="currenTab === Tabs.grading">
+            <GroupGrades :group="record" :course-loader="courseLoader" />
           </div>
         </b-tab>
       </b-tabs>

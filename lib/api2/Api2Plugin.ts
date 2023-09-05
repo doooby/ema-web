@@ -1,5 +1,11 @@
 import { Context } from '@nuxt/types';
-import { RequestResponse, QueryDefinition, RequestState } from '~/lib/api2';
+import {
+  RequestResponse,
+  QueryDefinition,
+  RequestState,
+  SearchRecordsResponsePayload,
+  RecordLoader, Params,
+} from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import {
   course,
@@ -18,6 +24,7 @@ import {
   user,
   work_agreement,
 } from '~/lib/records';
+import { Vue } from 'vue-property-decorator';
 
 export default class Api2Plugin {
   queries = {
@@ -94,6 +101,15 @@ export default class Api2Plugin {
     return state.response ?? { ok: false, message: 'api2.transientRequest.fatal' };
   }
 
+  fetchRecord<R> (entity: string, params?: Params): Promise<RequestResponse<SearchRecordsResponsePayload<R>>> {
+    return this.transientRequest(
+      this.getQuery(entity, 'search')({
+        ...params,
+        per_page: 1,
+      }),
+    );
+  }
+
   // TODO postData must be FormData to allow file uploading
   async processRequest (path: string, postData?: any): Promise<RequestResponse<never>> {
     const headers: any = {
@@ -124,6 +140,54 @@ export default class Api2Plugin {
       response.message = response.message || 'unknown_error';
     }
     return response;
+  }
+
+  createLoader<V> (
+    loader: () => Promise<RequestResponse<V>>,
+  ) {
+    const state = Vue.observable({
+      loading: false,
+      response: null as null | RequestResponse<V>,
+      payload: null as null | V,
+    });
+
+    return Object.freeze({
+      state,
+      async load () {
+        state.loading = true;
+        state.response = null;
+        state.payload = null;
+        state.response = await loader();
+        state.loading = false;
+        if (state.response.ok && state.response.payload) {
+          state.payload = state.response.payload;
+        }
+      },
+    });
+  }
+
+  createRecordLoader<R> (
+    loader: () => Promise<RequestResponse<SearchRecordsResponsePayload<R>>>,
+  ): RecordLoader<R> {
+    const state = Vue.observable({
+      loading: false,
+      response: null as null | RequestResponse<SearchRecordsResponsePayload<R>>,
+      record: null as null | R,
+    });
+
+    return Object.freeze({
+      state,
+      async load () {
+        state.loading = true;
+        state.response = null;
+        state.record = null;
+        state.response = await loader();
+        state.loading = false;
+        if (state.response.ok && state.response.payload) {
+          state.record = state.response.payload.records[0] ?? null;
+        }
+      },
+    });
   }
 
   getQuery (entity: string, action: string): (...args: any[]) => QueryDefinition<any> {

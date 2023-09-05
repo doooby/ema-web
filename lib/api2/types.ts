@@ -24,6 +24,8 @@ export type RequestResponse<V> =
   payload: V;
 }
 
+export type ErrorMessage = [ undefined | string, string ];
+
 export interface SearchRecordsResponsePayload<R = never> {
   page: number;
   pages_count: number;
@@ -33,12 +35,12 @@ export interface SearchRecordsResponsePayload<R = never> {
 }
 
 export type UpdatedRecordResponsePayload =
-  | { record_id: undefined; errors: [string, string][] }
+  | { record_id: undefined; errors: ErrorMessage[] }
   | { record_id: string }
 
 export type GenericUpdateResponsePayload =
   | undefined
-  | { errors: [string, string][] }
+  | { errors: ErrorMessage[] }
 
 export interface BRecord {
   id: string;
@@ -49,3 +51,21 @@ export interface BRecord {
 export type BRecordsIndex = Record<string, undefined | BRecord>;
 
 export type RecordAssociations = Record<string, undefined | BRecordsIndex>;
+
+export interface Loader<V> {
+  state: {
+    loading: boolean;
+    response: null | RequestResponse<V>;
+    payload: null | V;
+  },
+  load(): Promise<void>;
+}
+
+export interface RecordLoader<R> {
+  state: {
+    loading: boolean;
+    response: null | RequestResponse<SearchRecordsResponsePayload<R>>
+    record: null | R;
+  },
+  load(): Promise<void>;
+}

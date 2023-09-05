@@ -20,7 +20,7 @@ export interface AbbreviatedRecord extends RecordBase {
   labels: Labels;
 }
 
-export type RecordChangeError = [ string, string ];
+export type RecordChangeError = [ null | string, string ];
 
 export type RecordGet<R=any> =
   { success: false } | {

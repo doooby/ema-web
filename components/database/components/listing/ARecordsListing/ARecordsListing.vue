@@ -34,6 +34,7 @@ export default class ARecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ required: true }) readonly columns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
+  @Prop({ default: () => 36 }) readonly actionsSize!: number;
 
   liveQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>();
   stableQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>();
@@ -64,6 +65,7 @@ export default class ARecordsListing extends Vue {
     this.model.records = this.records;
     this.model.selected = [];
     this.model.isAllSelected = false;
+    this.$emit('load', this.model.records);
   }
 
   mounted () {
@@ -80,24 +82,27 @@ export default class ARecordsListing extends Vue {
   }
 
   get allColumns () {
+    const groupActions = this.$scopedSlots['group-actions'];
+    const recordActions = this.$scopedSlots['record-actions'];
+
     return [
       {
         name: 'actions',
-        size: 36,
+        size: this.actionsSize,
         fixedSize: true,
         renderCell: (record: unknown) => h(
           ActionsCell,
           {
             props: {
-              selectable: !!this.$scopedSlots['group-actions'],
+              selectable: !!groupActions,
               selected: this.model.selected.includes(record),
             },
             on: {
               select: () => this.changeRecordSelection(record),
             },
             scopedSlots: {
-              actions: this.$scopedSlots['record-actions']
-                ? () => this.$scopedSlots['record-actions']?.({ record })
+              actions: recordActions
+                ? () => recordActions?.({ record })
                 : undefined,
             },
           },
@@ -196,6 +201,9 @@ export default class ARecordsListing extends Vue {
           </td>
         </tr>
       </tbody>
+      <tbody v-if="$slots['prepend-body']">
+        <slot name="prepend-body" />
+      </tbody>
       <tbody>
         <tr v-for="(record, index) of records" :key="`${index}-${record.id}`">
           <td>
@@ -209,7 +217,7 @@ export default class ARecordsListing extends Vue {
       </tbody>
       <tbody v-if="$slots['footer']">
         <tr>
-          <td :colspan="allColumns.length + 1">
+          <td :colspan="allColumns.length + 1" class="p-0">
             <slot name="footer" />
           </td>
         </tr>
