@@ -111,6 +111,15 @@ export const staticLists: Record<string, undefined | InternalOptionsList> = [
     'crs',
   ] ],
 
+  [ 'nationalities', [
+    'syrian',
+  ] ],
+
+  [ 'languages', [
+    'english',
+    'syrian',
+  ] ],
+
 ].reduce(
   (memo, item: any) => {
     const [ name, options ] = item;

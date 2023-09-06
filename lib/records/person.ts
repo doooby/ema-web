@@ -161,16 +161,16 @@ export function recordControls ({
     [ 'passport_no', controls.text ],
     [ 'telephone_no', controls.text ],
     [ 'mother_tongue', controls.select, {
-      options: [],
+      options: app.internalOptionsList(countryData, 'languages'),
     } ],
     [ 'outside_school', controls.select, {
       options: app.internalOptionsList(countryData, 'outside_school_terms'),
     } ],
     [ 'nationality', controls.select, {
-      options: [],
+      options: app.internalOptionsList(countryData, 'nationalities'),
     } ],
     [ 'spoken_languages', controls.selectMultiple, {
-      options: [],
+      options: app.internalOptionsList(countryData, 'languages'),
     } ],
     [ 'registered_on', controls.date ],
     [ 'enrolled_on', controls.date ],
