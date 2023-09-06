@@ -37,6 +37,7 @@ export interface Person extends application_record.SharedAttributes {
   passport_no?: string;
   telephone_no?: string;
   enrollment_reasons?: string[];
+  enrolled_on?: Date;
   registered_on?: Date;
   mother_tongue?: string;
   outside_school?: string;
@@ -51,6 +52,7 @@ export interface Person extends application_record.SharedAttributes {
   school_transport?: [string, undefined | string];
   school_distance_km?: string;
   school_distance_min?: number;
+  teaching_qualification?: string;
 }
 
 export interface PersonCaregiver {
@@ -107,9 +109,11 @@ export function parseRecord (
     spoken_languages: wai.prop('spoken_languages', value, wai.nullable(wai.listOf(wai.string))),
     born_on: wai.prop('born_on', value, wai.nullable(mapDate)),
     registered_on: wai.prop('registered_on', value, wai.nullable(mapDate)),
+    enrolled_on: wai.prop('enrolled_on', value, wai.nullable(mapDate)),
     disabilities: wai.prop('disabilities', value, wai.nullable(mapSelectOrFillTuple)),
     residency_status: wai.prop('residency_status', value, wai.nullable(mapSelectOrFillTuple)),
     school_transport: wai.prop('school_transport', value, wai.nullable(mapSelectOrFillTuple)),
+    teaching_qualification: wai.prop('teaching_qualification', value, wai.nullable(wai.string)),
     caregivers: wai.prop('caregivers', value, wai.nullable(wai.listOf(mapCaregiver))),
   }))(value);
 }
@@ -169,6 +173,7 @@ export function recordControls ({
       options: [],
     } ],
     [ 'registered_on', controls.date ],
+    [ 'enrolled_on', controls.date ],
     [ 'enrollment_reasons', controls.selectMultiple, {
       options: app.internalOptionsList(countryData, 'enrolment_reasons'),
     } ],
@@ -197,6 +202,9 @@ export function recordControls ({
         app.internalOptionsList(countryData, 'school_transport'),
         { empty: true },
       ),
+    } ],
+    [ 'teaching_qualification', controls.select, {
+      options: app.internalOptionsList(countryData, 'teaching_qualifications'),
     } ],
     [ 'caregivers', asFieldType(CaregiversField), {
       relationOptions: app.internalOptionsList(countryData, 'caregivers.relation'),

@@ -15,6 +15,7 @@
     <div class="col-md-6">
       <form-field name="nationality" :context="context" :values="values" />
       <form-field name="mother_tongue" :context="context" :values="values" />
+      <form-field name="teaching_qualification" :context="context" :values="values" />
     </div>
     <div class="col-md-6">
       <form-field name="student_kobo_no" :context="context" :values="values" />
@@ -36,6 +37,7 @@
     </div>
     <div class="col-md-6">
       <form-field name="registered_on" :context="context" :values="values" />
+      <form-field name="enrolled_on" :context="context" :values="values" />
       <form-field name="enrollment_reasons" :context="context" :values="values" />
       <form-field name="outside_school" :context="context" :values="values" />
     </div>
