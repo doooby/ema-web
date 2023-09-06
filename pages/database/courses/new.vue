@@ -37,8 +37,8 @@ export default class extends DatabasePage {
   }
 
   @Watch('standardizedCourse')
-  async onStandardizedCourseChange (standardizedCourse) {
-    if (standardizedCourse) {
+  async onStandardizedCourseChange (standardizedCourse, previous) {
+    if (standardizedCourse && standardizedCourse !== previous) {
       const query = this.$api2.newQueryState<
         SearchRecordsResponsePayload<
           standardized_course.StandardizedCourse
