@@ -5,7 +5,7 @@
     :show-after-update="true"
   >
     <template #layout="{ context, values }">
-      <record-form :context="context" :values="values" />
+      <ProjectForm :context="context" :values="values" />
     </template>
   </edit2-page>
 </template>
@@ -16,10 +16,10 @@ import { DatabasePage } from '~/components';
 import { FormFieldDefinition } from '~/components/Form';
 import { project } from '~/lib/records';
 import Edit2Page from '~/components/database/pages/edit/Edit2Page.vue';
-import RecordForm from '~/components/database/records/projects/RecordForm.vue';
+import ProjectForm from '~/components/database/records/projects/ProjectForm.vue';
 
 @Component({
-  components: { Edit2Page, RecordForm },
+  components: { Edit2Page, ProjectForm },
 })
 export default class extends DatabasePage {
   get fields (): FormFieldDefinition[] {

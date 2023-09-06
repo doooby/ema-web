@@ -12,7 +12,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class TextNames extends Vue {
-  @Prop({ required: true }) readonly value!: string[];
+  @Prop({ default: undefined }) readonly value!: string[];
 
   get sanitizedValue (): string[] {
     return this.value ?? [];

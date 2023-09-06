@@ -20,6 +20,7 @@ export default class RecordsListing extends Vue {
     { name: 'record', size: 220 },
     ...application_record.fillDataTableColumns('projects', [
       { name: 'code' },
+      { name: 'full_name' },
       { name: 'donors' },
       { name: 'short_name_en' },
     ]),
@@ -54,6 +55,9 @@ export default class RecordsListing extends Vue {
       </td>
       <td>
         {{ record.code }}
+      </td>
+      <td>
+        <TextNames :value="record.full_name" />
       </td>
       <td>
         <AssociationList entity="donors" :records="record.donors" />
