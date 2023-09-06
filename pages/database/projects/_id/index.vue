@@ -59,6 +59,9 @@ export default class extends DatabasePage {
         <show-page-table-row label="db.record.projects.label.name">
           <TextNames :value="record.name" />
         </show-page-table-row>
+        <show-page-table-row label="db.record.projects.label.full_name">
+          <TextNames :value="record.full_name" />
+        </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.code">
           {{ record.code }}
         </show-page-table-row>
