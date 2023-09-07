@@ -53,7 +53,7 @@ export default class Show2Page extends Vue {
 </script>
 
 <template>
-  <loaded-page class="page-content">
+  <LoadedPage>
     <div class="container pt-4 pb-5">
       <h4 class="mb-3">
         <nuxt-link
@@ -91,5 +91,5 @@ export default class Show2Page extends Vue {
         <slot name="container" :record="record" :reload-record="reloadRecord" />
       </div>
     </div>
-  </loaded-page>
+  </LoadedPage>
 </template>

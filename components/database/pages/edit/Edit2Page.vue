@@ -123,7 +123,7 @@ export default class Edit2Page extends Vue {
 </script>
 
 <template>
-  <LoadedPage class="page-content">
+  <LoadedPage>
     <div class="container pt-4 pb-5">
       <h4 class="mb-3">
         <nuxt-link

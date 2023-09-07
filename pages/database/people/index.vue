@@ -1,41 +1,70 @@
 <template>
-  <IndexPage
+  <IndexPage2
     entity="people"
-    :search-fields="searchFields"
-    :component="PeopleListing"
+    :search-controls="searchControls"
+    @search="onSearch"
   >
+
     <template
-      v-if="$admission.can('groups.move_students')"
-      #group-actions="{ records }"
+      v-if="$admission.can('people.create')"
+      #resource-actions
     >
-      <MoveStudents :students="records" />
+      <NewRecordButton entity="people" />
     </template>
-  </IndexPage>
+
+    <template #search-form="group" />
+
+    <PeopleListing
+      class="mt-3"
+      :params="searchParams"
+    >
+      <template
+        v-if="$admission.can('groups.move_students')"
+        #group-actions="{ records }"
+      >
+        <MoveStudents :students="records" />
+      </template>
+    </PeopleListing>
+
+  </IndexPage2>
 </template>
 
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
-import { asFieldType, controls } from '~/components/Form';
-import { dbFields } from '~/components/database/fields';
-import IndexPage from '~/components/database/pages/index/IndexPage.vue';
 import PeopleListing from '~/components/database/records/people/PeopleListing.vue';
 import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
-import AttendedCourse from '~/components/database/records/people/filterFields/AttendedCourse.vue';
+import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
+import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
+import SearchForm from '~/components/database/pages/index/SearchForm.vue';
+import { TextInput } from '~/components/controls/inputs';
+import controls from '~/components/controls';
 
 @Component({
   components: {
+    TextInput,
+    SearchForm,
+    PeopleListing,
+    NewRecordButton,
+    IndexPage2,
     MoveStudents,
-    IndexPage,
   },
 })
 export default class extends DatabasePage {
-  searchFields = [
-    [ 'search', controls.text ],
-    [ 'school_year', dbFields.selectBRecord, { entity: 'school_years' } ],
-    [ 'attended_course', asFieldType(AttendedCourse) ],
-  ]
+  searchParams = {};
+  searchControls = controls.Group.compose();
 
-  PeopleListing = PeopleListing;
+  // searchFields = [
+  //   [ 'search', controls.text ],
+  //   [ 'school_year', dbFields.selectBRecord, { entity: 'school_years' } ],
+  //   [ 'attended_course', asFieldType(AttendedCourse) ],
+  // ]
+  //
+  // PeopleListing = PeopleListing;
+
+  onSearch (value) {
+    console.log('onSearc', value);
+    this.searchParams = value;
+  }
 }
 </script>

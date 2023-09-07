@@ -1,5 +1,5 @@
 <template>
-  <loaded-page class="page-content">
+  <LoadedPage>
     <div class="container pt-4 pb-5">
       <h4 class="mb-3">
         <nuxt-link
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-  </loaded-page>
+  </LoadedPage>
 </template>
 
 <script lang="ts">

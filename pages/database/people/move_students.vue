@@ -111,10 +111,7 @@ export default class MoveStudents extends DatabasePage {
 </script>
 
 <template>
-  <ActionPage
-    class="page-content"
-    @connect="onConnect"
-  >
+  <ActionPage @connect="onConnect">
     <div
       v-if="loaded"
       class="container pt-4 mb-5"

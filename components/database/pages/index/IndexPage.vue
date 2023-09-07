@@ -47,7 +47,7 @@ export default class IndexPage extends Vue {
 </script>
 
 <template>
-  <loaded-page class="page-content">
+  <LoadedPage>
     <div class="container pt-4 pb-5">
       <h4 class="m-0">
         <t :value="`db.menu.resource.${entity}`" />
@@ -75,5 +75,5 @@ export default class IndexPage extends Vue {
         </template>
       </records-listing>
     </div>
-  </loaded-page>
+  </LoadedPage>
 </template>

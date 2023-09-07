@@ -10,7 +10,7 @@ export default class LoadedPage extends Vue {
 </script>
 
 <template>
-  <div :class="$attrs.class">
+  <div :class="['page-content', $attrs.class]">
     <div
       v-if="!isLoaded"
       class="d-flex h-100 justify-content-center align-items-center"
