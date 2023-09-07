@@ -23,6 +23,9 @@ export default class extends DatabasePage {
       populateParams: (values, params) => {
         params.project_id = values.project?.map(b => b.id)?.[0];
       },
+      onChange: (values) => {
+        values.school = undefined;
+      },
     },
     {
       name: 'school',

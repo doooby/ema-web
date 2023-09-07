@@ -3,6 +3,7 @@ import { Params } from '~/lib/api2/types';
 export interface FieldDefinition {
   name: string;
   default?: null | boolean | number | (() => unknown);
+  onChange?:(values: GroupValues) => void;
   populateParams?:(values: GroupValues, params: Params) => void;
 }
 

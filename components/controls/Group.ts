@@ -39,6 +39,7 @@ export default class Group {
     const newValues = { ...this.state.values };
     if (field) {
       newValues[field] = value;
+      this.fieldsIndex[field]?.onChange?.(newValues);
     }
     this.state.values = Object.freeze(newValues);
     this.state.params = this.buildParams();
