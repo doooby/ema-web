@@ -3,9 +3,9 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class TextInput extends Vue {
-  @Prop({ required: true }) readonly value!: any;
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
+  @Prop() readonly value?: string;
 
   onChange (event: { target: HTMLInputElement }): void {
     this.$emit('change', event.target.value);

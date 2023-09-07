@@ -1,8 +1,33 @@
+<script lang="ts">
+import { Component } from 'vue-property-decorator';
+import { DatabasePage } from '~/components';
+import PeopleListing from '~/components/database/records/people/PeopleListing.vue';
+import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
+import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
+import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
+import SearchForm from '~/components/database/pages/index/SearchForm.vue';
+import controls from '~/components/controls';
+
+@Component({
+  components: {
+    SearchForm,
+    PeopleListing,
+    NewRecordButton,
+    IndexPage2,
+    MoveStudents,
+  },
+})
+export default class extends DatabasePage {
+  searchParams = {};
+  searchControls = controls.Group.compose();
+}
+</script>
+
 <template>
   <IndexPage2
     entity="people"
     :search-controls="searchControls"
-    @search="onSearch"
+    @search="searchParams = $event"
   >
 
     <template
@@ -12,7 +37,7 @@
       <NewRecordButton entity="people" />
     </template>
 
-    <template #search-form="group" />
+    <template #search-form="{}" />
 
     <PeopleListing
       class="mt-3"
@@ -28,43 +53,3 @@
 
   </IndexPage2>
 </template>
-
-<script lang="ts">
-import { Component } from 'vue-property-decorator';
-import { DatabasePage } from '~/components';
-import PeopleListing from '~/components/database/records/people/PeopleListing.vue';
-import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
-import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
-import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
-import SearchForm from '~/components/database/pages/index/SearchForm.vue';
-import { TextInput } from '~/components/controls/inputs';
-import controls from '~/components/controls';
-
-@Component({
-  components: {
-    TextInput,
-    SearchForm,
-    PeopleListing,
-    NewRecordButton,
-    IndexPage2,
-    MoveStudents,
-  },
-})
-export default class extends DatabasePage {
-  searchParams = {};
-  searchControls = controls.Group.compose();
-
-  // searchFields = [
-  //   [ 'search', controls.text ],
-  //   [ 'school_year', dbFields.selectBRecord, { entity: 'school_years' } ],
-  //   [ 'attended_course', asFieldType(AttendedCourse) ],
-  // ]
-  //
-  // PeopleListing = PeopleListing;
-
-  onSearch (value) {
-    console.log('onSearc', value);
-    this.searchParams = value;
-  }
-}
-</script>
