@@ -12,6 +12,11 @@ export default class SearchForm extends Vue {
   onSearch () {
     this.$emit('search');
   }
+
+  onClear () {
+    this.group.reset();
+    this.onSearch();
+  }
 }
 </script>
 
@@ -35,7 +40,7 @@ export default class SearchForm extends Vue {
 
       <slot />
     </div>
-    <div>
+    <div class="d-flex justify-content-between">
       <b-button
         size="sm"
         variant="primary"
@@ -43,6 +48,14 @@ export default class SearchForm extends Vue {
       >
         <b-icon icon="search" class="mr-1" />
         <t value="db.page.index.filters.search_btn" />
+      </b-button>
+      <b-button
+        size="sm"
+        variant="outline-secondary"
+        @click="onClear"
+      >
+        <b-icon icon="x-lg" class="mr-1" />
+        <t value="db.page.index.filters.clear_btn" />
       </b-button>
     </div>
   </div>

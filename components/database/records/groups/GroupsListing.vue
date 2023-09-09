@@ -13,7 +13,7 @@ import RecordAssociations from '~/components/database/components/listing/RecordA
 @Component({
   components: { RecordAssociations, RecordHeader, ARecordsListing, ARecordLink, BRecordLink, TextNames },
 })
-export default class RecordsListing extends Vue {
+export default class GroupsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
   @Prop({ default: undefined }) readonly hideCourse!: boolean;

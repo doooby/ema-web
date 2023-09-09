@@ -45,6 +45,11 @@ export default class Group {
     this.state.params = this.buildParams();
   }
 
+  reset (): void {
+    this.state.values = this.buildDefaultState();
+    this.state.params = this.buildParams();
+  }
+
   private buildParams (): Params {
     const values = this.state.values;
     const params: Params = { ...values };

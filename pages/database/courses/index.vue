@@ -40,6 +40,12 @@ export default class extends DatabasePage {
           values.standardized_course?.map(b => b.id)?.[0];
       },
     },
+    {
+      name: 'school_year',
+      populateParams: (values, params) => {
+        params.school_year_id = values.school_year?.map(b => b.id)?.[0];
+      },
+    },
   );
 }
 </script>
@@ -98,6 +104,19 @@ export default class extends DatabasePage {
           :value="group.getValue('standardized_course')"
           entity="standardized_courses"
           @change="group.update('standardized_course', $event)"
+        />
+      </b-form-group>
+      <b-form-group
+        v-slot="{ labelId }"
+        class="col-md-4 col-lg-3"
+        :label="$t('db.record.school_years.meta.s')"
+        label-for="courses_filters_school_year"
+      >
+        <BRecordsSelect
+          :dom-id="labelId"
+          :value="group.getValue('school_year')"
+          entity="school_years"
+          @change="group.update('school_year', $event)"
         />
       </b-form-group>
     </template>

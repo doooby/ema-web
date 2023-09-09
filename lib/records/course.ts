@@ -29,6 +29,7 @@ export interface Course extends application_record.SharedAttributes {
   time_ranges: { from: Date, to: Date }[];
   preferred_grading?: [string, string, undefined | string];
   subjects?: CourseSubject[];
+  groups_count: number;
 }
 
 export interface CourseSubject {
@@ -65,6 +66,7 @@ export function parseRecord (
     subjects: wai.prop('subjects', value, wai.nullable(wai.listOf(
       value => mapSubject(value, associations),
     ))),
+    groups_count: wai.prop('groups_count', value, wai.integer),
   }))(value);
 }
 

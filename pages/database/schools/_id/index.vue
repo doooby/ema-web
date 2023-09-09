@@ -6,7 +6,7 @@ import { DatabasePage } from '~/components';
 import AddressText from '~/components/database/records/location_systems/AddressText.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
-import CoursesListing from '~/components/database/records/schools/CoursesListing/CoursesListing.vue';
+import SchoolCoursesListing from '~/components/database/records/schools/SchoolCoursesListing.vue';
 import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
 import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
 import ArchiveAction from '~/components/database/components/detail/actions/ArchiveAction.vue';
@@ -29,7 +29,7 @@ enum Tabs {
     ShowPageAction,
     ShowPageTableRow,
     AddressText,
-    CoursesListing,
+    SchoolCoursesListing,
     ConfirmArchiveModal,
   },
 })
@@ -87,7 +87,7 @@ export default class extends DatabasePage {
             <t value="db.record.courses.meta.p" />
           </template>
           <div v-if="currenTab === Tabs.courses">
-            <courses-listing :school="record" />
+            <SchoolCoursesListing :school="record" />
           </div>
         </b-tab>
         <!--        <b-tab title="Staff">-->
