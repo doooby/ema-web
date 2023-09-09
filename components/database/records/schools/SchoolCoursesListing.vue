@@ -20,14 +20,14 @@ export default class SchoolCoursesListing extends Vue {
   searchControls = controls.Group.compose(
     {
       name: 'standardized_course',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.standardized_course_id =
           values.standardized_course?.map(b => b.id)?.[0];
       },
     },
     {
       name: 'school_year',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.school_year_id = values.school_year?.map(b => b.id)?.[0];
       },
     },

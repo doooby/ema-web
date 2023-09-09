@@ -20,7 +20,7 @@ export default class extends DatabasePage {
   searchControls = controls.Group.compose(
     {
       name: 'project',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.project_id = values.project?.map(b => b.id)?.[0];
       },
     },

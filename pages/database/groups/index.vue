@@ -28,7 +28,7 @@ export default class extends DatabasePage {
   searchControls = controls.Group.compose(
     {
       name: 'school',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.school_id = values.school?.map(b => b.id)?.[0];
       },
       onChange: (values) => {
@@ -37,7 +37,7 @@ export default class extends DatabasePage {
     },
     {
       name: 'courses',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.course_id =
           values.courses?.map(b => b.id);
       },
@@ -45,8 +45,8 @@ export default class extends DatabasePage {
     {
       name: 'non_classified',
       default: () => [ nonAssignedOptions[0] ],
-      options: nonAssignedOptions,
-      populateParams: (values, params) => {
+      options: nonAssignedOptions as any,
+      populateParams: (values: any, params) => {
         params.non_classified =
           values.non_classified?.map(b => b.value)?.[0];
       },

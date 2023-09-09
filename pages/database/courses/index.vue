@@ -20,7 +20,7 @@ export default class extends DatabasePage {
   searchControls = controls.Group.compose(
     {
       name: 'project',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.project_id = values.project?.map(b => b.id)?.[0];
       },
       onChange: (values) => {
@@ -29,20 +29,20 @@ export default class extends DatabasePage {
     },
     {
       name: 'school',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.school_id = values.school?.map(b => b.id)?.[0];
       },
     },
     {
       name: 'standardized_course',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.standardized_course_id =
           values.standardized_course?.map(b => b.id)?.[0];
       },
     },
     {
       name: 'school_year',
-      populateParams: (values, params) => {
+      populateParams: (values: any, params) => {
         params.school_year_id = values.school_year?.map(b => b.id)?.[0];
       },
     },
