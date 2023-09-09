@@ -12,3 +12,8 @@ export interface InternalOptionsList {
   id: string;
   options: string[];
 }
+
+export interface OptionItem<I=unknown> {
+  value: string;
+  item: I;
+}

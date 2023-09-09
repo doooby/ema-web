@@ -17,19 +17,15 @@ export default class GroupsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
   @Prop({ default: undefined }) readonly hideCourse!: boolean;
+  @Prop({ default: undefined }) readonly hideSchoolYear!: boolean;
 
   columns = [
     { name: 'record', size: 180 },
     ...application_record.fillDataTableColumns('groups', [
-      { name: 'term', size: 80 },
       (this.hideCourse ? undefined : { name: 'course', size: 200 }),
+      { name: 'term', size: 200 },
     ]),
   ];
-
-  courseAssociations = [
-    { entity: 'courses', attr: 'course' },
-    { entity: 'schools', attr: 'school' },
-  ]
 }
 </script>
 
@@ -61,14 +57,37 @@ export default class GroupsListing extends Vue {
           :record="record"
         />
       </td>
-      <td>
-        {{ record.term }}
-      </td>
       <td v-if="!hideCourse">
         <RecordAssociations
           :record="record"
-          :associations="courseAssociations"
+          :associations="[
+            { entity: 'courses', attr: 'course' },
+            { entity: 'schools', attr: 'school' },
+          ]"
         />
+      </td>
+      <td class="ml-1">
+        <RecordAssociations
+          v-if="!hideSchoolYear && record.school_year"
+          :record="record"
+          :associations="[
+            { entity: 'school_years', attr: 'school_year' },
+          ]"
+        />
+        <div
+          v-if="record.term_info[0]"
+          class="mt-1"
+        >
+          {{ record.term_info[0] }}
+          /
+          {{ record.term_info[1] }}
+        </div>
+        <div
+          v-else
+          class="mt-1"
+        >
+          <t value="db.record.groups.caption.is_non_classified" />
+        </div>
       </td>
       <td />
     </template>

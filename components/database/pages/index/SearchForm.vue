@@ -31,7 +31,7 @@ export default class SearchForm extends Vue {
         label-for="page_index_filters_search"
       >
         <TextInput
-          :id="labelId"
+          :dom-id="labelId"
           :value="group.getValue('search')"
           @change="group.update('search', $event)"
           @submit="onSearch"

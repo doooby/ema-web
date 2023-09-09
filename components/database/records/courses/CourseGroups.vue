@@ -26,6 +26,7 @@ export default class CourseGroups extends Vue {
       :initial-columns="initialColumns"
       :params="searchParams"
       :hide-course="true"
+      :hide-school-year="true"
     />
   </div>
 </template>

@@ -35,6 +35,10 @@ export default class Group {
     return this.state.params[field];
   }
 
+  getParams () {
+    return { ...this.state.params };
+  }
+
   update (field?: string, value?: unknown): void {
     const newValues = { ...this.state.values };
     if (field) {

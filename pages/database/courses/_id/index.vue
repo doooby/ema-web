@@ -26,14 +26,21 @@
           <br>
           <small>{{ record.name }}</small>
         </show-page-table-row>
-        <show-page-table-row label="db.record.courses.label.grade">
-          {{ record.grade }}
-        </show-page-table-row>
         <show-page-table-row label="db.record.schools.meta.s">
           <b-record-link entity="schools" :record="record.school" />
         </show-page-table-row>
         <show-page-table-row label="db.record.courses.label.education_level">
           <b-record-link entity="education_levels" :record="record.education_level" />
+        </show-page-table-row>
+        <show-page-table-row label="db.record.courses.label.grade">
+          {{ record.grade }}
+        </show-page-table-row>
+        <show-page-table-row label="db.record.courses.label.school_year">
+          <b-record-link
+            v-if="record.school_year"
+            entity="school_years"
+            :record="record.school_year"
+          />
         </show-page-table-row>
       </table>
     </template>

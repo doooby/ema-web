@@ -6,9 +6,17 @@ import controls from '~/components/controls';
 import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
 import BRecordsSelect from '~/components/controls/inputs/BRecordsSelect.vue';
 import GroupsListing from '~/components/database/records/groups/GroupsListing.vue';
+import OptionsSelect from '~/components/controls/inputs/OptionsSelect.vue';
+
+const nonAssignedOptions = Object.freeze([
+  { value: '', item: 'db.record.groups.filters.non_classified.all' },
+  { value: 'only', item: 'db.record.groups.filters.non_classified.only' },
+  { value: 'exclude', item: 'db.record.groups.filters.non_classified.exclude' },
+]);
 
 @Component({
   components: {
+    OptionsSelect,
     GroupsListing,
     NewRecordButton,
     IndexPage2,
@@ -32,6 +40,15 @@ export default class extends DatabasePage {
       populateParams: (values, params) => {
         params.course_id =
           values.courses?.map(b => b.id);
+      },
+    },
+    {
+      name: 'non_classified',
+      default: () => [ nonAssignedOptions[0] ],
+      options: nonAssignedOptions,
+      populateParams: (values, params) => {
+        params.non_classified =
+          values.non_classified?.map(b => b.value)?.[0];
       },
     },
   );
@@ -79,6 +96,31 @@ export default class extends DatabasePage {
           :params="{ school_id: group.getParam('school_id') }"
           @change="group.update('courses', $event)"
         />
+      </b-form-group>
+      <b-form-group
+        class="col-md-4 col-lg-3"
+        :label="$t('db.record.groups.filters.non_classified.label')"
+      >
+        <OptionsSelect
+          :value="group.getValue('non_classified')"
+          :options="group.fieldsIndex.non_classified.options"
+          @change="group.update('non_classified', $event)"
+        >
+          <template #options="{options, isSelected, onToggleOption}">
+            <li
+              v-for="option in options"
+              :key="option.value"
+              class="list-group-item list-group-item-action d-flex"
+              style="cursor: pointer;"
+              @click="onToggleOption(option)"
+            >
+              <input type="radio" :checked="isSelected(option)">
+              <span class="ml-4">
+                <t :value="option.item" />
+              </span>
+            </li>
+          </template>
+        </OptionsSelect>
       </b-form-group>
     </template>
 

@@ -39,7 +39,7 @@ export default class SchoolCoursesListing extends Vue {
   <div class="mt-3">
     <SearchForm
       :group="searchControls"
-      @search="searchParams = searchControls.state.params"
+      @search="searchParams = searchControls.getParams()"
     >
       <b-form-group
         v-slot="{ labelId }"

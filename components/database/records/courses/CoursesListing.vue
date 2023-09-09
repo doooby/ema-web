@@ -24,7 +24,7 @@ export default class CoursesListing extends Vue {
     { name: 'associations1', size: 240 },
     { name: 'associations2', size: 240 },
     ...application_record.fillDataTableColumns('courses', [
-      { name: 'groups' },
+      { name: 'groups_count' },
     ]),
   ];
 

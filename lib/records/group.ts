@@ -10,9 +10,11 @@ export const entity = 'groups';
 export interface Group extends application_record.SharedAttributes {
   course: BRecord;
   school: BRecord;
+  school_year?: BRecord;
   students?: BRecord[];
   name: string[];
   term: number;
+  term_info: [number, number];
 }
 
 export function parseRecord (
@@ -23,9 +25,14 @@ export function parseRecord (
     ...application_record.parseSharedAttributes(value),
     course: wai.prop('course_id', value, mapAssociation('courses', associations)),
     school: wai.prop('school_id', value, mapAssociation('schools', associations)),
+    school_year: wai.prop('school_year_id', value, wai.nullable(mapAssociation('school_years', associations))),
     students: wai.prop('students_ids', value, mapAssociations('students', associations)),
     name: wai.prop('name', value, mapName),
     term: wai.prop('term', value, wai.integer),
+    term_info: wai.prop('term_info', value, wai.tuple(
+      wai.integer,
+      wai.integer,
+    )),
   }))(value);
 }
 
