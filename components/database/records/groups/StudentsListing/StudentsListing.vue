@@ -37,6 +37,8 @@ export default class StudentsListing extends Vue {
     <people-listing
       class="mt-2"
       :params="searchParams"
+      :hide-group="true"
+      :hide-contract="true"
     >
       <template
         v-if="admissibleGroup.canAny"

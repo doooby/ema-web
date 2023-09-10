@@ -36,6 +36,7 @@ export default class MoveStudents extends Vue {
 
 <template>
   <b-dropdown-item @click="onClick">
-    <t value="db.record.groups.students.actions.MoveStudents.button" />
+    <t v-if="fromGroup" value="db.record.groups.students.actions.MoveStudents.button_move" />
+    <t v-else value="db.record.groups.students.actions.MoveStudents.button_add" />
   </b-dropdown-item>
 </template>

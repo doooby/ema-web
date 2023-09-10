@@ -123,7 +123,14 @@ export default class MoveStudents extends DatabasePage {
 
             <div class="card-header">
               <h2 class="m-0">
-                <t value="db.pages.people.move_students.title" />
+                <t
+                  v-if="fromGroup"
+                  value="db.pages.people.move_students.title_move"
+                />
+                <t
+                  v-else
+                  value="db.pages.people.move_students.title_add"
+                />
               </h2>
             </div>
 
@@ -132,20 +139,21 @@ export default class MoveStudents extends DatabasePage {
               <div class="row">
 
                 <div class="col">
-                  <h4 v-if="fromGroup">
-                    <t value="db.pages.people.move_students.from" />
-                  </h4>
-                  <div
-                    v-if="fromGroup"
-                    class="d-flex align-items-center"
-                  >
-                    <BRecordLink
-                      entity="groups"
-                      :record="fromGroup"
-                      :new-tab="true"
-                    />
+
+                  <div v-if="fromGroup">
+                    <h4>
+                      <t value="db.pages.people.move_students.from" />
+                    </h4>
+                    <div class="d-flex align-items-center">
+                      <BRecordLink
+                        entity="groups"
+                        :record="fromGroup"
+                        :new-tab="true"
+                      />
+                    </div>
                   </div>
-                  <h4 :class="{ 'mt-3': fromGroup }">
+
+                  <h4 class="mt-3">
                     <t value="db.pages.people.move_students.students" />
                   </h4>
                   <div class="d-flex align-items-center flex-wrap">

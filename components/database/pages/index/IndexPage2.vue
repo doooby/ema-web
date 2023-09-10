@@ -8,7 +8,7 @@ import SearchForm from '~/components/database/pages/index/SearchForm.vue';
   components: { SearchForm, LoadedPage },
 })
 export default class IndexPage2 extends Vue {
-  @Prop({ required: true }) readonly entity!: string;
+  @Prop() readonly entity?: string;
   @Prop({ required: true }) readonly searchControls!: controls.Group;
 }
 </script>
@@ -16,12 +16,15 @@ export default class IndexPage2 extends Vue {
 <template>
   <LoadedPage>
     <div class="container pt-4 pb-5">
-      <h4 class="m-0">
+      <slot v-if="$slots['header']" name="header"/>
+      <h4 v-else-if="entity" class="m-0">
         <t :value="`db.menu.resource.${entity}`" />
       </h4>
+
       <div v-if="$slots['resource-actions']" class="mt-3">
         <slot name="resource-actions" />
       </div>
+
       <SearchForm
         v-if="$scopedSlots['search-form']"
         class="mt-3"

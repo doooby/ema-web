@@ -97,6 +97,14 @@ export default class ResourcesMenuResourcesListing extends Vue {
       <nuxt-link to="/database/people">
         <t value="db.menu.resource.people" class="text-capitalize" />
       </nuxt-link>
+
+      <ul>
+        <li>
+          <nuxt-link to="/database/students">
+            <t value="db.menu.title.students" class="text-capitalize" />
+          </nuxt-link>
+        </li>
+      </ul>
     </li>
 
     <li v-if="admissible['work_agreements.index']">

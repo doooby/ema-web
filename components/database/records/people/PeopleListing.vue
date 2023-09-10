@@ -14,14 +14,16 @@ import PrintFullName from '~/components/database/records/people/PrintFullName.vu
 })
 export default class PeopleListing extends Vue {
   @Prop({ default: () => {} }) readonly params!: Params;
+  @Prop({ default: undefined }) readonly hideGroup!: boolean;
+  @Prop({ default: undefined }) readonly hideContract!: boolean;
 
   columns = [
     { name: 'id', size: 80 },
     ...application_record.fillDataTableColumns('people', [
       { name: 'ids' },
       { name: 'person' },
-      { name: 'main_group' },
-      { name: 'main_contract' },
+      (this.hideGroup ? undefined : { name: 'main_group' }),
+      (this.hideContract ? undefined : { name: 'main_contract' }),
     ]),
   ];
 
@@ -67,13 +69,13 @@ export default class PeopleListing extends Vue {
           {{ $d(record.born_on) }}
         </div>
       </td>
-      <td>
+      <td v-if="!hideGroup">
         <RecordAssociations
           :record="record"
           :associations="mainGroupAssociations"
         />
       </td>
-      <td>
+      <td v-if="!hideContract">
         <RecordAssociations
           :record="record"
           :associations="mainContractAssociations"

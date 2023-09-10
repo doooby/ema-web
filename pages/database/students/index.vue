@@ -1,0 +1,185 @@
+<script lang="ts">
+import { Component } from 'vue-property-decorator';
+import { DatabasePage } from '~/components';
+import PeopleListing from '~/components/database/records/people/PeopleListing.vue';
+import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
+import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
+import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
+import SearchForm from '~/components/database/pages/index/SearchForm.vue';
+import controls from '~/components/controls';
+import BRecordsSelect from '~/components/controls/inputs/BRecordsSelect.vue';
+
+@Component({
+  components: {
+    BRecordsSelect,
+    SearchForm,
+    PeopleListing,
+    NewRecordButton,
+    IndexPage2,
+    MoveStudents,
+  },
+})
+export default class extends DatabasePage {
+  searchParams = {};
+  searchControls = controls.Group.compose(
+    {
+      name: 'schools',
+      populateParams: (values: any, params) => {
+        params.school_id = values.schools?.map(b => b.id);
+      },
+      onChange: (values) => {
+        values.courses = undefined;
+        values.groups = undefined;
+      },
+    },
+    {
+      name: 'courses',
+      populateParams: (values: any, params) => {
+        params.course_id = values.courses?.map(b => b.id);
+      },
+      onChange: (values) => {
+        values.groups = undefined;
+      },
+    },
+    {
+      name: 'groups',
+      populateParams: (values: any, params) => {
+        params.group_id = values.groups?.map(b => b.id);
+      },
+    },
+    {
+      name: 'school_years',
+      populateParams: (values: any, params) => {
+        params.school_year_id = values.school_years?.map(b => b.id);
+      },
+    },
+    {
+      name: 'standardized_courses',
+      populateParams: (values: any, params) => {
+        params.standardized_course_id =
+          values.standardized_courses?.map(b => b.id);
+      },
+    },
+  );
+
+  get studentsSearchParams () {
+    return { students: this.searchParams };
+  }
+}
+</script>
+
+<template>
+  <IndexPage2
+    :search-controls="searchControls"
+    @search="searchParams = $event"
+  >
+
+    <template #header>
+      <h4 class="m-0">
+        <t value="db.menu.resource.people" />
+      </h4>
+      <b-tabs class="mt-3">
+        <b-tab active>
+          <template #title>
+            <t value="db.menu.title.students" />
+          </template>
+        </b-tab>
+        <b-tab @click="$router.push('/database/people')">
+          <template #title>
+            <t value="db.menu.title.all_people" />
+          </template>
+        </b-tab>
+      </b-tabs>
+    </template>
+
+    <template #search-form="{ group }" >
+      <div class="col-md-4 col-lg-3">
+        <b-form-group
+          v-slot="{ labelId }"
+          :label="$t('db.record.schools.meta.p')"
+          label-for="students_filters_schools"
+        >
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="group.getValue('schools')"
+            entity="schools"
+            :multiple="true"
+            @change="group.update('schools', $event)"
+          />
+        </b-form-group>
+        <b-form-group
+          v-slot="{ labelId }"
+          :label="$t('db.record.courses.meta.p')"
+          label-for="students_filters_courses"
+        >
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="group.getValue('courses')"
+            entity="courses"
+            :multiple="true"
+            :params="{ school_id: group.getParam('school_id') }"
+            @change="group.update('courses', $event)"
+          />
+        </b-form-group>
+        <b-form-group
+          v-slot="{ labelId }"
+          class="mt-2"
+          :label="$t('db.record.groups.meta.p')"
+          label-for="students_filters_groups"
+        >
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="group.getValue('groups')"
+            entity="groups"
+            :multiple="true"
+            :params="{ course_id: group.getParam('course_id') }"
+            @change="group.update('groups', $event)"
+          />
+        </b-form-group>
+      </div>
+      <div class="col-md-4 col-lg-3">
+        <b-form-group
+          v-slot="{ labelId }"
+          :label="$t('db.record.school_years.meta.s')"
+          label-for="students_filters_school_years"
+        >
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="group.getValue('school_years')"
+            entity="school_years"
+            :multiple="true"
+            @change="group.update('school_years', $event)"
+          />
+        </b-form-group>
+        <b-form-group
+          v-slot="{ labelId }"
+          class="mt-2"
+          :label="$t('db.record.standardized_courses.meta.s')"
+          label-for="students_filters_standardized_courses"
+        >
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="group.getValue('standardized_courses')"
+            entity="standardized_courses"
+            :multiple="true"
+            @change="group.update('standardized_courses', $event)"
+          />
+        </b-form-group>
+      </div>
+    </template>
+
+    <PeopleListing
+      class="mt-3"
+      :params="studentsSearchParams"
+      :hide-contract="true"
+    >
+      <template
+        v-if="$admission.can('groups.move_students')"
+        #group-actions="{ records }"
+      >
+        <MoveStudents :students="records" />
+      </template>
+    </PeopleListing>
+
+  </IndexPage2>
+</template>
