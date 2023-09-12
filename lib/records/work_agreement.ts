@@ -70,7 +70,7 @@ export function recordControls ({
       entity: 'donors',
     } ],
     [ 'position', controls.select, {
-      options: app.internalOptionsList(countryData, 'contract_position'),
+      options: app.internalOptionsList(countryData, 'contract_positions'),
     } ],
     [ 'external_id', controls.text ],
     [ 'navision_id', controls.text ],

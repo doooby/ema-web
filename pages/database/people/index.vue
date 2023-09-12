@@ -6,9 +6,11 @@ import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
 import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
 import SearchForm from '~/components/database/pages/index/SearchForm.vue';
 import controls from '~/components/controls';
+import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
 
 @Component({
   components: {
+    MoveStudents,
     SearchForm,
     PeopleListing,
     NewRecordButton,
@@ -58,7 +60,14 @@ export default class extends DatabasePage {
     <PeopleListing
       class="mt-3"
       :params="searchParams"
-    />
+    >
+      <template
+        v-if="$admission.can('groups.move_students')"
+        #group-actions="{ records }"
+      >
+        <MoveStudents :students="records" />
+      </template>
+    </PeopleListing>
 
   </IndexPage2>
 </template>

@@ -87,18 +87,5 @@ export default class extends DatabasePage {
       } ],
     ];
   }
-
-  // onChange (newValues) {
-  //   if (!newValues.disabilities?.length) {
-  //     newValues = {
-  //       ...newValues,
-  //       disability_diagnosis: undefined,
-  //       assistance_needed: undefined,
-  //       assistance_provided: undefined,
-  //       disability_note: undefined,
-  //     };
-  //   }
-  //   this.values = newValues;
-  // }
 }
 </script>

@@ -141,7 +141,7 @@ export default class CaregiversField extends Vue {
   onAddItem () {
     const newItems = [ ...this.items ];
     newItems.push(
-      Object.freeze({ relation: [ 'mother', undefined ] }) as any,
+      Object.freeze({ relation: [ 'father', undefined ] }) as any,
     );
     Object.freeze(newItems);
     (this as any).onChangeValue(newItems);
