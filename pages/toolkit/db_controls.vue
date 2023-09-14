@@ -3,7 +3,6 @@
     v-model="formValues"
     class="container"
     :fields-definitions="formFields"
-    @change="onChange"
   >
     <template #layout="{ context, values }">
       <div class="row">

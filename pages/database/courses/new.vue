@@ -1,10 +1,9 @@
 <template>
   <new2-page
+    v-model="formValues"
     entity="courses"
     :fields="fields"
     :show-after-create="true"
-    :value="formValues"
-    @change="formValues=$event"
   >
     <template #layout="{ context, values }">
       <record-form :context="context" :values="values" />
@@ -18,7 +17,6 @@ import { DatabasePage } from '~/components';
 import { course, standardized_course } from '~/lib/records';
 import RecordForm from '~/components/database/records/courses/RecordForm.vue';
 import New2Page from '~/components/database/pages/new/New2Page.vue';
-import { SearchRecordsResponsePayload } from '~/lib/api2';
 
 @Component({
   components: { RecordForm, New2Page },
@@ -39,30 +37,24 @@ export default class extends DatabasePage {
   @Watch('standardizedCourse')
   async onStandardizedCourseChange (standardizedCourse, previous) {
     if (standardizedCourse && standardizedCourse !== previous) {
-      const query = this.$api2.newQueryState<
-        SearchRecordsResponsePayload<
-          standardized_course.StandardizedCourse
-        >
-      >();
-      await this.$api2.request(
-        query,
-        this.$api2.getQuery('standardized_courses', 'search')({
-          id: this.standardizedCourse.id,
-        }),
+      const courseQuery = await this.$api2.fetchRecord<standardized_course.StandardizedCourse>(
+        'standardized_courses', {
+          id: standardizedCourse.id,
+        },
       );
-      const record = query.response?.ok && query.response.payload.records[0];
-      if (record) {
+      const course = courseQuery.ok && courseQuery.payload.records[0];
+      if (course) {
         this.formValues = {
           ...this.formValues,
-          grade: record.grade,
-          is_formal: record.is_formal,
-          accreditation_authority: record.accreditation_authority,
-          lesson_duration: record.lesson_duration,
-          attendance_limit: record.attendance_limit,
-          subjects: record.subjects,
-          education_level: record.education_level,
-          name: record.name,
-          preferred_grading: record.preferred_grading,
+          grade: course.grade,
+          is_formal: course.is_formal,
+          accreditation_authority: course.accreditation_authority,
+          lesson_duration: course.lesson_duration,
+          attendance_limit: course.attendance_limit,
+          subjects: course.subjects,
+          education_level: course.education_level,
+          name: course.name,
+          preferred_grading: course.preferred_grading,
         };
       }
     }

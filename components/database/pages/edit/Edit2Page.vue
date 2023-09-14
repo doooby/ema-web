@@ -68,6 +68,7 @@ export default class Edit2Page extends Vue {
 
   onInput (newValues: any) {
     this.formValues = { ...this.formValues, ...newValues };
+    this.$emit('input', this.formValues);
   }
 
   onUpdated (recordId: string) {

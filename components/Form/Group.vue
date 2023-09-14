@@ -72,7 +72,6 @@ export default Vue.extend({
 
           if (changed) {
             this.$emit('input', newObject ? { ...values } : values);
-            this.$emit('change');
           }
         },
         onSubmit: () => {

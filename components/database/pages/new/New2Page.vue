@@ -133,6 +133,7 @@ export default class New2Page extends Vue {
 
   onInput (newValues: any) {
     this.formValues = { ...this.formValues, ...newValues };
+    this.$emit('input', this.formValues);
   }
 
   async onSubmit () {
