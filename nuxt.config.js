@@ -81,8 +81,7 @@ export default {
       locales: [
         { code: 'en', file: '_async.js' },
         { code: 'cs', file: '_async.js' },
-        { code: 'pt', file: '_async.js' },
-        { code: 'syr', file: '_async.js' },
+        { code: 'ar', file: '_async.js' },
       ],
       defaultLocale: 'en',
       lazy: true,
