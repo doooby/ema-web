@@ -17,8 +17,8 @@
           :active="language === currentLocale"
           @click="onSelectLocale(language)"
         >
-          <strong>[{{ language }}]</strong>
-          <t :value="`app.locales.${language}.language_name`" />
+          <small>[{{ language }}]</small>
+          <strong><t :value="`app.locales.${language}.language_name`" /></strong>
         </b-list-group-item>
       </b-list-group>
     </div>
