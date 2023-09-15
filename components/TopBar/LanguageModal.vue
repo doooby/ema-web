@@ -17,7 +17,8 @@
           :active="language === currentLocale"
           @click="onSelectLocale(language)"
         >
-          {{ language }}
+          <strong>[{{ language }}]</strong>
+          <t :value="`app.locales.${language}.language_name`" />
         </b-list-group-item>
       </b-list-group>
     </div>
@@ -31,7 +32,7 @@ import { mapState } from 'vuex';
 export default Vue.extend({
   data () {
     return {
-      languages: [ 'en', 'cs', 'pt', 'syr' ],
+      languages: [ 'en', 'cs', 'ar' ],
       loading: false,
     };
   },

@@ -164,7 +164,10 @@ export function recordControls ({
       options: app.internalOptionsList(countryData, 'languages'),
     } ],
     [ 'outside_school', controls.select, {
-      options: app.internalOptionsList(countryData, 'outside_school_terms'),
+      options: app.extendOptionsList(
+        app.internalOptionsList(countryData, 'outside_school_terms'),
+        { empty: true },
+      ),
     } ],
     [ 'nationality', controls.select, {
       options: app.internalOptionsList(countryData, 'nationalities'),
@@ -194,7 +197,10 @@ export function recordControls ({
       ),
     } ],
     [ 'school_distance_km', controls.select, {
-      options: app.internalOptionsList(countryData, 'distance_to_school'),
+      options: app.extendOptionsList(
+        app.internalOptionsList(countryData, 'distance_to_school'),
+        { empty: true },
+      ),
     } ],
     [ 'school_distance_min', controls.integer ],
     [ 'school_transport', controls.selectOrFill, {
@@ -204,7 +210,10 @@ export function recordControls ({
       ),
     } ],
     [ 'teaching_qualification', controls.select, {
-      options: app.internalOptionsList(countryData, 'teaching_qualifications'),
+      options: app.extendOptionsList(
+        app.internalOptionsList(countryData, 'teaching_qualifications'),
+        { empty: true },
+      ),
     } ],
     [ 'caregivers', asFieldType(CaregiversField), {
       relationOptions: app.internalOptionsList(countryData, 'caregivers.relation'),

@@ -42,10 +42,11 @@ export const staticLists: Record<string, undefined | InternalOptionsList> = [
   [ 'outside_school_terms', [
     '<1m',
     '1-2m',
-    '1-2r',
-    '>2y',
-    '7-12m',
     '3-6m',
+    '7-11m',
+    '1y',
+    '2y',
+    '>=3y',
   ] ],
 
   [ 'residency_status', [
@@ -58,12 +59,12 @@ export const staticLists: Record<string, undefined | InternalOptionsList> = [
   [ 'distance_to_school', [
     '<1km',
     '1-2km',
+    '2km',
     '3-5km',
     '5-10km',
+    '<10km',
     '<15km',
     '<20km',
-    '2km',
-    '<10km',
   ] ],
 
   [ 'school_transport', [

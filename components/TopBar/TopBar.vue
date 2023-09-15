@@ -29,7 +29,7 @@
       >
         <h2 class="m-0 h-100 d-flex align-items-center text-light">
           <b-icon icon="columns-gap" variant="light" class="emr-3" />
-          Dashboard
+          <t value="top_bar.action.dashboard" />
         </h2>
       </nuxt-link>
     </div>
