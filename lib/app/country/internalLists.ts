@@ -117,8 +117,8 @@ export const staticLists: Record<string, undefined | InternalOptionsList> = [
   ] ],
 
   [ 'languages', [
-    'english',
-    'syrian',
+    'eng',
+    'ara',
   ] ],
 
 ].reduce(
