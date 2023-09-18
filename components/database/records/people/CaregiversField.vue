@@ -53,7 +53,7 @@
           <template #label>
             <t value="lexicon.citizen_id" />
           </template>
-          <text-input
+          <TextInput
             :value="item.citizen_id"
             @input="onUpdateItem(index, item, 'citizen_id', $event)"
           />
@@ -62,7 +62,7 @@
           <template #label>
             <t value="lexicon.phone_no" />
           </template>
-          <text-input
+          <TextInput
             :value="item.phone_no"
             @input="onUpdateItem(index, item, 'phone_no', $event)"
           />
@@ -71,7 +71,7 @@
           <template #label>
             <t value="lexicon.email" />
           </template>
-          <text-input
+          <TextInput
             :value="item.email"
             @input="onUpdateItem(index, item, 'email', $event)"
           />
@@ -82,16 +82,16 @@
           <template #label>
             <t value="db.record.people.label.cash_for_work" />
           </template>
-          <text-input
+          <CheckboxInput
             :value="item.cash_for_work"
-            @input="onUpdateItem(index, item, 'cash_for_work', $event)"
+            @change="onUpdateItem(index, item, 'cash_for_work', $event)"
           />
         </b-form-group>
         <b-form-group>
           <template #label>
             <t value="db.record.people.label.humansis_cfw_id" />
           </template>
-          <text-input
+          <TextInput
             :value="item.humansis_cfw_id"
             @input="onUpdateItem(index, item, 'humansis_cfw_id', $event)"
           />
@@ -111,10 +111,11 @@ import NameInput from '~/components/Form/primitives/NameInput.vue';
 import TextInput from '~/components/Form/primitives/TextInput.vue';
 import SelectOrFillInput from '~/components/Form/primitives/SelectOrFillInput.vue';
 import app from '~/lib/app';
+import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 
 @Component({
   mixins: [ ControlMixin ],
-  components: { SelectOrFillInput, SelectInput, NameInput, TextInput },
+  components: { CheckboxInput, SelectOrFillInput, SelectInput, NameInput, TextInput },
 })
 export default class CaregiversField extends Vue {
   static fieldType: FormFieldType = {};
