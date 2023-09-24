@@ -43,7 +43,6 @@ export default {
 
   publicRuntimeConfig: {
     apiBaseUrl: `${serverHostName}/api/web`,
-    api2BaseUrl: `${serverHostName}/api/web/v2`,
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css

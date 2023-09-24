@@ -35,6 +35,7 @@ export default class ARecordsListing extends Vue {
   @Prop({ required: true }) readonly columns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
   @Prop({ default: () => 36 }) readonly actionsSize!: number;
+  @Prop() readonly isProcessing?: boolean;
 
   liveQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>();
   stableQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>();
@@ -113,6 +114,10 @@ export default class ARecordsListing extends Vue {
     ];
   }
 
+  get isLoading (): boolean {
+    return this.isProcessing || this.liveQuery.processing;
+  }
+
   get records (): unknown[] {
     return this.stableQuery.response?.ok
       ? this.stableQuery.response.payload.records
@@ -150,26 +155,25 @@ export default class ARecordsListing extends Vue {
   <div :class="$attrs.class">
     <div class="actions-row d-flex flex-wrap justify-content-between position-relative">
       <div
-        v-if="liveQuery.processing"
+        v-if="isLoading"
         class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center"
       >
         <div class="spinner-border spinner-border-sm" role="status">
           <span class="sr-only" />
         </div>
       </div>
-      <div class="d-flex align-items-center pl-2">
+      <div
+        v-if="$scopedSlots['group-actions']"
+        class="d-flex align-items-center pl-2"
+      >
         <b-button
-          v-if="$scopedSlots['group-actions']"
           variant="outline-secondary"
           size="xs"
           @click="model.toggleSelectAll()"
         >
           <b-icon :icon="model.isAllSelected ? 'x' : 'check-all'" />
         </b-button>
-        <div
-          v-if="$scopedSlots['group-actions']"
-          class="ml-2"
-        >
+        <div class="ml-2">
           <b-dropdown
             :disabled="!model.selected.length"
             size="sm"
@@ -183,6 +187,13 @@ export default class ARecordsListing extends Vue {
           </b-dropdown>
         </div>
       </div>
+      <div
+        v-else-if="$scopedSlots['filters-actions']"
+        class="pl-2"
+      >
+        <slot name="filters-actions" />
+      </div>
+      <div v-else />
       <select-page :request="stableQuery" @select="fetchRecords" />
     </div>
     <data-table

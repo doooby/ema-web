@@ -6,6 +6,7 @@ export interface QueryDefinition<D = never> {
   path: string;
   params?: Params;
   reducer: (payload: unknown) => D;
+  pathIsFull?: boolean;
 }
 
 export interface RequestState<V> {
@@ -13,9 +14,16 @@ export interface RequestState<V> {
   response: undefined | RequestResponse<V>;
 }
 
+export interface CachedRequestState<V> extends RequestState<V> {
+  currentPayload: undefined | V;
+}
+
 export type RequestResponse<V> =
   | {
   ok: false;
+  reason: string;
+  payload?: unknown;
+  // TODO v2 remove
   message: string;
   error?: Error;
 }

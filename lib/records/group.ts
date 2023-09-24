@@ -6,6 +6,7 @@ import { controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
 
 export const entity = 'groups';
+export * from './group/index';
 
 export interface Group extends application_record.SharedAttributes {
   course: BRecord;

@@ -25,8 +25,7 @@ export default class Show2Page extends Vue {
   }
 
   get recordId () {
-    const route = this.$route as any;
-    return route.params.id;
+    return this.$route.params.id;
   }
 
   get record (): null | any {

@@ -71,7 +71,8 @@ export default class SearchBRecordsModal extends Vue {
       this.searchQueryState.response = {
         ok: false,
         message: 'invalid_query',
-        error,
+        reason: 'search_failed',
+        error: error as any,
       };
       return;
     }

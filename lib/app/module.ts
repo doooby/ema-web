@@ -1,8 +1,9 @@
+import * as api from './api';
 import * as country from './country';
 import * as session from './session';
 import app from '~/lib/app/index';
 export * from './types';
-export { country, session };
+export { api, country, session };
 
 export const OTHER_OPTION = '_other';
 
@@ -34,5 +35,16 @@ export function internalOptionsList (
   return list.options.map(value => ({
     value,
     textKey: `app.internal_lists.${name}.${value}`,
+  }));
+}
+
+export function internalOptionsList2 (
+  countryData: app.Maybe<app.session.CountryData>,
+  name: string,
+): app.List<app.OptionItem<string>> {
+  const options = countryData?.internalLists?.[name]?.options ?? [];
+  return options.map(value => ({
+    value,
+    item: `app.internal_lists.${name}.${value}`,
   }));
 }

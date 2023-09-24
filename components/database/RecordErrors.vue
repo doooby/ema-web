@@ -29,7 +29,7 @@ export function mapErrors<V> (
   map: (payload: V) => undefined | ErrorMessage[],
 ): undefined | ErrorMessage[] {
   if (response?.ok === false) {
-    return [ [ undefined, response.message ] ];
+    return [ [ undefined, response.reason || response.message ] ];
   }
   if (response?.ok) {
     return map(response.payload);

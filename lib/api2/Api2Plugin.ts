@@ -4,7 +4,7 @@ import {
   QueryDefinition,
   RequestState,
   SearchRecordsResponsePayload,
-  RecordLoader, Params,
+  RecordLoader, Params, CachedRequestState,
 } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import {
@@ -25,6 +25,7 @@ import {
   work_agreement,
 } from '~/lib/records';
 import { Vue } from 'vue-property-decorator';
+import { api } from '~/lib/api2/module';
 
 export default class Api2Plugin {
   queries = {
@@ -55,16 +56,28 @@ export default class Api2Plugin {
     };
   }
 
+  newCachedQueryState<V> (): CachedRequestState<V> {
+    return {
+      processing: false,
+      response: undefined,
+      currentPayload: undefined,
+    };
+  }
+
   async request<V> (
     state: RequestState<V>,
-    query: QueryDefinition<V>,
+    query_or_definition: api.Query<V> | QueryDefinition<V>,
   ): Promise<void> {
+    const query: QueryDefinition<V> = query_or_definition instanceof api.Query
+      ? query_or_definition.toDefinition()
+      : query_or_definition;
+
     state.response = undefined;
     state.processing = true;
 
     let response;
     try {
-      response = await this.processRequest(query.path, query.params);
+      response = await this.processRequest(query as QueryDefinition);
     } catch (error) {
       response = {
         ok: false,
@@ -75,11 +88,11 @@ export default class Api2Plugin {
     if (response.ok) {
       const [ error, payload ] = wai.tryParse(response.payload, query.reducer);
       if (error || !payload) {
-        utils.warn('api2 request failed', query);
-        utils.warnOfError(error, { payload: response.payload });
+        utils.warnOfError(error, { query, payload: response.payload });
 
         state.response = {
           ok: false,
+          reason: 'bad_response',
           message: 'request_bad_data',
           error: error ?? undefined,
         };
@@ -87,6 +100,7 @@ export default class Api2Plugin {
         state.response = { ok: true, payload };
       }
     } else {
+      if (!response.reason) response.reason = 'unknown';
       if (!response.message) response.message = 'request_fail';
       utils.warn('api2 request failed', response);
       state.response = response;
@@ -98,7 +112,15 @@ export default class Api2Plugin {
   async transientRequest<V> (query: QueryDefinition<V>): Promise<RequestResponse<V>> {
     const state = this.newQueryState<V>();
     await this.request(state, query);
-    return state.response ?? { ok: false, message: 'api2.transientRequest.fatal' };
+    return state.response!;
+  }
+
+  async cachedRequest<V> (
+    state: CachedRequestState<V>,
+    query: api.Query<V>,
+  ): Promise<void> {
+    await this.request(state, query.toDefinition());
+    if (state.response?.ok) state.currentPayload = state.response.payload;
   }
 
   fetchRecord<R> (entity: string, params?: Params): Promise<RequestResponse<SearchRecordsResponsePayload<R>>> {
@@ -111,27 +133,35 @@ export default class Api2Plugin {
   }
 
   // TODO postData must be FormData to allow file uploading
-  async processRequest (path: string, postData?: any): Promise<RequestResponse<never>> {
-    const headers: any = {
+  async processRequest (query: QueryDefinition): Promise<RequestResponse<never>> {
+    const url = [
+      this.context.$config.apiBaseUrl,
+      query.pathIsFull ? '' : '/v2',
+      query.path,
+    ].join('');
+
+    const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
-
     const isOnServer = !!this.context.req;
     if (isOnServer) {
-      headers.Cookie = this.context.req.headers.cookie;
+      headers.Cookie = this.context.req.headers.cookie ?? '';
     }
 
-    const options: any = {
+    query.params = {
+      ...query.params,
+      country_id: this.context.store.getters['session/countryId'],
+    };
+
+    const body = query.params ? JSON.stringify(query.params) : undefined;
+
+    const rawResponse = await globalThis.fetch(url, {
       method: 'POST',
       credentials: 'include',
       headers,
-      body: (postData ? JSON.stringify(postData) : undefined),
-    };
+      body,
+    });
 
-    const rawResponse = await globalThis.fetch(
-      this.context.$config.api2BaseUrl + path,
-      options,
-    );
     const response = await rawResponse.json();
     if (!response.ok) {
       if (!isOnServer && rawResponse.status === 401) {

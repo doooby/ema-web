@@ -1,6 +1,8 @@
 import { Params, RecordAssociations } from '~/lib/api2/types';
 import { parsers } from '~/lib/api2/index';
 import { bRecordMapper } from '~/lib/api2/parsers';
+import { wai } from '~/vendor/wai';
+import { api } from '~/lib/api2/module';
 
 export function search<R> (
   path: string,
@@ -47,6 +49,20 @@ export function update (
       path: `/${path}/${id}/update`,
       params: { record },
       reducer: parsers.updatedRecordResponsePayload(),
+    };
+  };
+}
+
+export function v3Show<R = unknown> (
+  path: string,
+  parseRecord: (value: unknown, associations: wai.Associations) => R,
+) {
+  return function show ({ id, slices }: api.Params) {
+    return {
+      pathIsFull: true,
+      path: `/v3/${path}`,
+      params: { id, slices, per_page: 1 },
+      reducer: value => wai.recordShow(value, parseRecord),
     };
   };
 }

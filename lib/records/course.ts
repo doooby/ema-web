@@ -30,6 +30,35 @@ export interface Course extends application_record.SharedAttributes {
   preferred_grading?: [string, string, undefined | string];
   subjects?: CourseSubject[];
   groups_count: number;
+  term_dates: app.List<{ begin: Date, end: Date }>;
+}
+
+export interface V3_Course {
+  id: string;
+  record?: RecordSlice;
+  computed?: ComputedSlice;
+}
+
+interface RecordSlice {
+  education_level: BRecord;
+  project?: BRecord;
+  school: BRecord;
+  school_year?: BRecord;
+  standardized_course?: BRecord;
+
+  accreditation_authority?: [string, undefined | string];
+  attendance_limit?: number;
+  grade: number;
+  groups_count: number;
+  is_formal?: boolean;
+  lesson_duration?: number;
+  name: string[];
+  preferred_grading?: [string, string, undefined | string];
+  time_ranges: { from: Date, to: Date }[];
+}
+
+interface ComputedSlice {
+  term_dates: app.List<{ begin: Date, end: Date }>;
 }
 
 export interface CourseSubject {
@@ -67,6 +96,62 @@ export function parseRecord (
       value => mapSubject(value, associations),
     ))),
     groups_count: wai.prop('groups_count', value, wai.integer),
+    term_dates: wai.prop('term_dates', value, wai.listOf(
+      wai.object(value => ({
+        begin: wai.prop('begin', value, mapDate),
+        end: wai.prop('end', value, mapDate),
+      })),
+    )),
+  }))(value);
+}
+
+function V3_parseRecord (
+  value,
+  associations: wai.Associations,
+): V3_Course {
+  return wai.object(value => ({
+    id: wai.prop('id', value, wai.string),
+    record: wai.property(value, 'record', wai.nullable(value => parseRecordSlice(value, associations))),
+    computed: wai.property(value, 'computed', wai.nullable(value => parseComputedSlice(value))),
+  }))(value);
+}
+
+function parseRecordSlice (
+  value: unknown,
+  wai_associations: wai.Associations,
+): RecordSlice {
+  const associations = wai_associations as any;
+  return wai.object(value => ({
+    school: wai.prop('school_id', value, mapAssociation('schools', associations)),
+    project: wai.prop('project_id', value, wai.nullable(mapAssociation('projects', associations))),
+    education_level: wai.prop('education_level_id', value, mapAssociation('education_levels', associations)),
+    school_year: wai.prop('school_year_id', value, wai.nullable(mapAssociation('school_years', associations))),
+    standardized_course: wai.prop('standardized_course_id', value, wai.nullable(mapAssociation('standardized_courses', associations))),
+    name: wai.prop('name', value, mapName),
+    grade: wai.prop('grade', value, wai.integer),
+    is_formal: wai.prop('is_formal', value, wai.nullable(wai.boolean)),
+    accreditation_authority: wai.prop('accreditation_authority', value, wai.nullable(mapSelectOrFillTuple)),
+    lesson_duration: wai.prop('lesson_duration', value, wai.nullable(wai.integer)),
+    attendance_limit: wai.prop('attendance_limit', value, wai.nullable(wai.integer)),
+    time_ranges: wai.prop('time_ranges', value, wai.listOf(
+      wai.object(value => ({
+        from: wai.prop('from', value, mapDate),
+        to: wai.prop('to', value, mapDate),
+      })),
+    )),
+    preferred_grading: wai.prop('preferred_grading', value, wai.nullable(course.mapGrading)),
+    groups_count: wai.prop('groups_count', value, wai.integer),
+  }))(value);
+}
+
+function parseComputedSlice (value: unknown): ComputedSlice {
+  return wai.object(value => ({
+    term_dates: wai.prop('term_dates', value, wai.listOf(
+      wai.object(value => ({
+        begin: wai.prop('begin', value, mapDate),
+        end: wai.prop('end', value, mapDate),
+      })),
+    )),
   }))(value);
 }
 
@@ -99,6 +184,8 @@ export const queries = {
   searchB: recordsQueries.searchB(entity),
   create: recordsQueries.create(entity),
   update: recordsQueries.update(entity),
+
+  V3_show: recordsQueries.v3Show(entity, V3_parseRecord),
 };
 
 export function recordControls ({

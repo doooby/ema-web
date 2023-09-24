@@ -10,10 +10,12 @@ export default class SubjectColumnHeader extends Vue {
 
 <template>
   <div>
-    <span v-if="subject.name">{{ subject.name }}</span>
+    <span v-if="subject.name">
+      {{ subject.name }}
+    </span>
     <br v-if="subject.name">
-    <span
-      class="text-muted font-12"
-    >{{ subject.caption }}</span>
+    <span class="text-muted font-12">
+      {{ subject.caption }}
+    </span>
   </div>
 </template>
