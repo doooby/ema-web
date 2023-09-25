@@ -1,4 +1,4 @@
-import { formatISO } from 'date-fns';
+import { formatISO, parseISO } from 'date-fns';
 
 export function raise (error: Error) {
   console.error(error);
@@ -18,6 +18,10 @@ export function warnOfError (error, ...context: any) {
 export function formatDate (date?: Date): string {
   if (!date) return '';
   return formatISO(date, { representation: 'date' });
+}
+
+export function parseDate (value?: string) {
+  return value ? parseISO(value) : undefined;
 }
 
 export function sanitizedDate (date: any): undefined | Date {

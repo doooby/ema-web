@@ -25,13 +25,14 @@ export default class SearchForm extends Vue {
     <div class="row">
 
       <b-form-group
-        v-slot="{ labelId }"
         class="col-md-4 col-lg-3"
-        :label="$t('db.page.index.filters.search')"
         label-for="page_index_filters_search"
       >
+        <template #label>
+          <t value="db.page.index.filters.search" />
+        </template>
         <TextInput
-          :dom-id="labelId"
+          dom-id="page_index_filters_search"
           :value="group.getValue('search')"
           @change="group.update('search', $event)"
           @submit="onSearch"

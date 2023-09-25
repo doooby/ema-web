@@ -30,6 +30,7 @@ export default class GroupWeekAttendance extends Vue {
   @Prop({ required: true }) readonly courseLoader!: RecordLoader<course.Course>;
 
   controlsModel: Model = {
+    inputDate: undefined,
     currentDate: undefined,
   };
 

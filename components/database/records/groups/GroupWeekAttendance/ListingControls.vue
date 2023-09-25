@@ -4,12 +4,15 @@ import { group } from '~/lib/records';
 import { formatDate } from '~/lib/global_utils';
 import { isMonday, subDays } from 'date-fns';
 import app from '~/lib/app';
+import { DateInput } from '~/components/controls/inputs';
 
 export interface Model {
+  inputDate: app.Maybe<Date>;
   currentDate: app.Maybe<Date>;
 }
 
 @Component({
+  components: { DateInput },
   methods: { formatDate },
 })
 export default class ListingControls extends Vue {
@@ -29,6 +32,7 @@ export default class ListingControls extends Vue {
   onSelectDate (date?: Date) {
     this.$emit('input', {
       ...this.value,
+      inputDate: date,
       currentDate: date ? closestMonday(date) : undefined,
     });
   }
@@ -44,7 +48,22 @@ function closestMonday (date: Date): Date {
 </script>
 
 <template>
-  <div class="border p-3">
-    no-control (date: {{ formatDate(value.currentDate) }})
+  <div class="row">
+    <b-form-group
+      class="col-md-4 col-lg-3"
+      label-for="attendance_filters_date"
+    >
+      <template #label>
+        <t value="db.records.group.attendance.filters.date" />
+      </template>
+      <DateInput
+        dom-id="attendance_filters_date"
+        :disabled="!term"
+        :value="value.inputDate"
+        :min="term?.begin"
+        :max="term?.end"
+        @change="onSelectDate"
+      />
+    </b-form-group>
   </div>
 </template>
