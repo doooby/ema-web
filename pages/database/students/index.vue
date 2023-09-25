@@ -65,6 +65,11 @@ export default class extends DatabasePage {
       populateParams: (values: any, params) => {
         params.school_year_id = values.school_years?.map(b => b.id);
       },
+      onChange: (values) => {
+        values.courses = undefined;
+        values.groups = undefined;
+        values.non_classified = undefined;
+      },
     },
     {
       name: 'standardized_courses',
@@ -139,7 +144,7 @@ export default class extends DatabasePage {
             :value="group.getValue('courses')"
             entity="courses"
             :multiple="true"
-            :params="{ school_id: group.getParam('school_id') }"
+            :params="{ school_id: group.getParam('school_id'), school_year_id: group.getParam('school_year_id') }"
             @change="group.update('courses', $event)"
           />
         </b-form-group>
