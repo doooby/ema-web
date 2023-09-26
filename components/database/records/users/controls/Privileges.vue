@@ -43,6 +43,7 @@ export default class Privileges extends Vue {
         switch (value.type) {
           case 'country_admin':
           case 'view_only':
+          case 'data_officer':
             return { type: value.type };
           case 'school_manager':
             return { type: value.type, school_id: value.school?.id };
@@ -71,6 +72,7 @@ export default class Privileges extends Vue {
       { value: 'country_admin', text: this.$t('db.record.users.privileges.country_admin') },
       { value: 'view_only', text: this.$t('db.record.users.privileges.view_only') },
       { value: 'school_manager', text: this.$t('db.record.users.privileges.school_manager') },
+      { value: 'data_officer', text: this.$t('db.record.users.privileges.data_officer') },
     ];
   }
 
