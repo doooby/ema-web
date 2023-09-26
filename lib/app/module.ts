@@ -2,8 +2,10 @@ import * as api from './api';
 import * as country from './country';
 import * as session from './session';
 import app from '~/lib/app/index';
+import Ema from '~/lib/app/Ema';
 export * from './types';
-export { api, country, session };
+export * from './global';
+export { api, country, session, Ema };
 
 export const OTHER_OPTION = '_other';
 

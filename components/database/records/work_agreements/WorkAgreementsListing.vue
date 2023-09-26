@@ -66,13 +66,13 @@ export default class extends Vue {
       </td>
       <td>
         <div>
-          <span>{{ record.starts_on && $d(record.starts_on) }}</span>
+          <span>{{ $ema.localizeDate(record.starts_on) }}</span>
           <span>-</span>
-          <span>{{ record.ends_on && $d(record.ends_on) }}</span>
+          <span>{{ $ema.localizeDate(record.ends_on) }}</span>
         </div>
       </td>
       <td>
-        {{ record.resigned_on && $d(record.resigned_on) }}
+        {{ $ema.localizeDate(record.resigned_on) }}
       </td>
       <td />
     </template>

@@ -12,7 +12,7 @@ export default class DayColumnHeader extends Vue {
 
 <template>
   <div>
-    {{ $d(date) }}
+    {{ $ema.localizeDate(date) }}
     <br>
     <span class="text-muted font-12">
       {{ format(date, 'EEEE') }}

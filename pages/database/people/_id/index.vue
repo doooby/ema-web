@@ -72,7 +72,7 @@ export default class extends DatabasePage {
           <small>{{ record.first_name[0] }}</small>
         </show-page-table-row>
         <show-page-table-row label="db.record.people.label.born_on">
-          {{ $d(record.born_on) }}
+          {{ $ema.localizeDate(record.born_on) }}
         </show-page-table-row>
         <show-page-table-row v-if="record.main_group" label="db.record.people.label.main_group">
           <RecordAssociations

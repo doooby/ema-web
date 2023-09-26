@@ -6,6 +6,7 @@
     <b-form-datepicker
       :id="domIdBase"
       :value="sanitizedValue"
+      :locale="$ema.klass.GLOBAL_DATE_LOCALE"
       label-no-date-selected=""
       :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
       @input="onDateChange"

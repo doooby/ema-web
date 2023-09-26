@@ -9,6 +9,7 @@
       </span>
       <b-form-datepicker
         :value="term.from"
+        :locale="$ema.klass.GLOBAL_DATE_LOCALE"
         label-no-date-selected=""
         :date-format-options="dateFormat"
         @input="onChangeFrom"
@@ -20,6 +21,7 @@
       </span>
       <b-form-datepicker
         :value="term.to"
+        :locale="$ema.klass.GLOBAL_DATE_LOCALE"
         label-no-date-selected=""
         :date-format-options="dateFormat"
         @input="onChangeTo"

@@ -66,7 +66,7 @@ export default class PeopleListing extends Vue {
       <td>
         <PrintFullName :person="record" />
         <div v-if="record.born_on">
-          {{ $d(record.born_on) }}
+          {{ $ema.localizeDate(record.born_on) }}
         </div>
       </td>
       <td v-if="!hideGroup">

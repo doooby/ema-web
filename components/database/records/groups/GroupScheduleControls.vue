@@ -10,6 +10,7 @@
     <div style="max-width: 160px;">
       <b-form-datepicker
         :value="value"
+        :locale="$ema.klass.GLOBAL_DATE_LOCALE"
         label-no-date-selected=""
         :min="startDate"
         :max="endDate"

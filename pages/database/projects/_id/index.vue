@@ -69,9 +69,9 @@ export default class extends DatabasePage {
           {{ record.short_name_en }}
         </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.duration">
-          {{ record.starts_on ? $d(record.starts_on) : '' }}
+          {{ $ema.localizeDate(record.starts_on) }}
           -
-          {{ record.ends_on ? $d(record.ends_on) : '' }}
+          {{ $ema.localizeDate(record.ends_on) }}
         </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.donors">
           <AssociationList entity="donors" :records="record.donors" />
