@@ -67,6 +67,7 @@ export default class AttendanceListing extends Vue {
     :columns="columns"
     :actions-size="0"
     :params="listingParams"
+    @load="$emit('pageLoad')"
   >
     <template #row="{ record }">
       <td>

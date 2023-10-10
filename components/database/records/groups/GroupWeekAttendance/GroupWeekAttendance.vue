@@ -116,6 +116,10 @@ export default class GroupWeekAttendance extends Vue {
     this.attendance.value = undefined;
   }
 
+  onPageLoad () {
+    this.attendance.value = undefined;
+  }
+
   onChangeValue (
     [ person_id, date_index, value ]: [ string, number, string ],
   ) {
@@ -211,6 +215,7 @@ function padArrayWithBlanks (array: any) {
       :group="group"
       :days="listedDays"
       @input="onChangeValue($event)"
+      @pageLoad="onPageLoad"
     >
       <template v-if="attendance.value" #footer>
         <CardSaveableFooter
