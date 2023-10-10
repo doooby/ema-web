@@ -54,7 +54,7 @@ function closestMonday (date: Date): Date {
       label-for="attendance_filters_date"
     >
       <template #label>
-        <t value="db.records.group.attendance.filters.date" />
+        <t value="db.record.groups.attendance.filters.date" />
       </template>
       <DateInput
         dom-id="attendance_filters_date"

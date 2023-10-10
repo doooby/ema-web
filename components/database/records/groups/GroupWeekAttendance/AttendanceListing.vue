@@ -54,7 +54,7 @@ export default class AttendanceListing extends Vue {
         if (!option) return undefined;
         return {
           value: option.value,
-          text: `[ ${option.value} ] ${this.$t(option.item)}`,
+          text: `${option.value} ${this.$t(option.item)}`,
         };
       });
   }
