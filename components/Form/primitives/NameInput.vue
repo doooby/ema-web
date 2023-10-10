@@ -48,12 +48,12 @@ export default class NameInput extends Vue {
   }
 
   onInputEn (event) {
-    const newValue = [ event.target.value, this.sanitizedValue[1] ];
+    const newValue = [ event.target.value, this.sanitizedValue[1] ?? '' ];
     this.$emit('input', newValue);
   }
 
   onInputLoc (event) {
-    const newValue = [ this.sanitizedValue[0], event.target.value ];
+    const newValue = [ this.sanitizedValue[0] ?? '', event.target.value ];
     this.$emit('input', newValue);
   }
 }
