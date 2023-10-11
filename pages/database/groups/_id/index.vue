@@ -108,6 +108,11 @@ export default class extends DatabasePage {
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.term">
           {{ record.term }}
+          <div v-if="record.term_dates">
+            {{ $ema.localizeDate(record.term_dates[0]) }}
+            -
+            {{ $ema.localizeDate(record.term_dates[1]) }}
+          </div>
         </show-page-table-row>
       </table>
     </template>

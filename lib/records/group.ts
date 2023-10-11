@@ -1,7 +1,7 @@
 import { BRecord, Params, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { wai } from '~/vendor/wai';
-import { mapAssociation, mapAssociations, mapName } from '~/lib/api2/mappers';
+import { mapAssociation, mapAssociations, mapDate, mapName } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
 
@@ -16,6 +16,7 @@ export interface Group extends application_record.SharedAttributes {
   name: string[];
   term: number;
   term_info: [number, number];
+  term_date?: [Date, Date];
 }
 
 export function parseRecord (
@@ -34,6 +35,9 @@ export function parseRecord (
       wai.integer,
       wai.integer,
     )),
+    term_dates: wai.prop('term_dates', value, wai.nullable(wai.tuple(
+      mapDate, mapDate,
+    ))),
   }))(value);
 }
 
