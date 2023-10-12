@@ -14,6 +14,8 @@ import ArchiveAction from '~/components/database/components/detail/actions/Archi
 import { course, group } from '~/lib/records';
 import { RequestResponse, SearchRecordsResponsePayload } from '~/lib/api2';
 import GroupWeekAttendance from '~/components/database/records/groups/GroupWeekAttendance/GroupWeekAttendance.vue';
+import PrintGroupTerm from '~/components/database/records/groups/PrintGroupTerm.vue';
+import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 
 enum Tabs {
   students,
@@ -23,6 +25,8 @@ enum Tabs {
 
 @Component({
   components: {
+    RecordAssociations,
+    PrintGroupTerm,
     GroupWeekAttendance,
     ArchiveAction,
     EditAction,
@@ -107,11 +111,27 @@ export default class extends DatabasePage {
           />
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.term">
-          {{ record.term }}
-          <div v-if="record.term_dates">
-            {{ $ema.localizeDate(record.term_dates[0]) }}
-            -
-            {{ $ema.localizeDate(record.term_dates[1]) }}
+          <RecordAssociations
+            v-if="record.school_year"
+            :record="record"
+            :associations="[
+              { entity: 'school_years', attr: 'school_year' },
+            ]"
+          />
+          <div v-if="record.term_info">
+            <div>
+              <small>
+                <t value="db.record.groups.caption.term" />&nbsp;:
+              </small>
+              {{ record.term_info[0] }}
+            </div>
+            <PrintGroupTerm
+              v-if="record.term_dates"
+              :dates="record.term_dates"
+            />
+          </div>
+          <div v-else class="mt-1">
+            <t value="db.record.groups.caption.is_non_classified" />
           </div>
         </show-page-table-row>
       </table>

@@ -6,9 +6,11 @@ import { application_record, school } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';
 import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
+import PrintCourseTerms from '~/components/database/records/courses/PrintCourseTerms.vue';
 
 @Component({
   components: {
+    PrintCourseTerms,
     RecordAssociations,
     RecordHeader,
     ARecordsListing,
@@ -25,6 +27,7 @@ export default class CoursesListing extends Vue {
     { name: 'associations2', size: 240 },
     ...application_record.fillDataTableColumns('courses', [
       { name: 'groups_count' },
+      { name: 'term_dates' },
     ]),
   ];
 
@@ -89,6 +92,9 @@ export default class CoursesListing extends Vue {
         <div class="text-center">
           {{ record.groups_count }}
         </div>
+      </td>
+      <td>
+        <PrintCourseTerms :dates="record.term_dates" />
       </td>
       <td />
     </template>

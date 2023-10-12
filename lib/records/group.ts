@@ -16,7 +16,7 @@ export interface Group extends application_record.SharedAttributes {
   name: string[];
   term: number;
   term_info: [number, number];
-  term_date?: [Date, Date];
+  term_dates?: [Date, Date];
 }
 
 export function parseRecord (

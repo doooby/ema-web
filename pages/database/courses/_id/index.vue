@@ -42,6 +42,9 @@
             :record="record.school_year"
           />
         </show-page-table-row>
+        <show-page-table-row label="db.record.courses.label.term_dates">
+          <PrintCourseTerms :dates="record.term_dates" />
+        </show-page-table-row>
       </table>
     </template>
 
@@ -78,6 +81,7 @@ import CourseGroups from '~/components/database/records/courses/CourseGroups.vue
 import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
+import PrintCourseTerms from '~/components/database/records/courses/PrintCourseTerms.vue';
 
 enum Tabs {
   groups,
@@ -86,6 +90,7 @@ enum Tabs {
 
 @Component({
   components: {
+    PrintCourseTerms,
     BRecordLink,
     Show2Page,
     ShowPageAction,

@@ -9,9 +9,10 @@ import { Column } from '~/components/DataTable/v3';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
+import PrintGroupTerm from '~/components/database/records/groups/PrintGroupTerm.vue';
 
 @Component({
-  components: { RecordAssociations, RecordHeader, ARecordsListing, ARecordLink, BRecordLink, TextNames },
+  components: { PrintGroupTerm, RecordAssociations, RecordHeader, ARecordsListing, ARecordLink, BRecordLink, TextNames },
 })
 export default class GroupsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -23,6 +24,7 @@ export default class GroupsListing extends Vue {
     { name: 'record', size: 180 },
     ...application_record.fillDataTableColumns('groups', [
       (this.hideCourse ? undefined : { name: 'course', size: 200 }),
+      { name: 'students_count', size: 200 },
       { name: 'term', size: 200 },
     ]),
   ];
@@ -66,26 +68,30 @@ export default class GroupsListing extends Vue {
           ]"
         />
       </td>
+      <td>
+        {{ record.students?.length ?? 0 }}
+      </td>
       <td class="ml-1">
         <RecordAssociations
-          v-if="!hideSchoolYear && record.school_year"
+          v-if="!hideCourse && record.school_year"
           :record="record"
           :associations="[
             { entity: 'school_years', attr: 'school_year' },
           ]"
         />
-        <div
-          v-if="record.term_info[0]"
-          class="mt-1"
-        >
-          {{ record.term_info[0] }}
-          /
-          {{ record.term_info[1] }}
+        <div v-if="record.term_info">
+          <div>
+            <small>
+              <t value="db.record.groups.caption.term" />&nbsp;:
+            </small>
+            {{ record.term_info[0] }}
+          </div>
+          <PrintGroupTerm
+            v-if="record.term_dates"
+            :dates="record.term_dates"
+          />
         </div>
-        <div
-          v-else
-          class="mt-1"
-        >
+        <div v-else class="mt-1">
           <t value="db.record.groups.caption.is_non_classified" />
         </div>
       </td>

@@ -49,24 +49,26 @@ export default class ResourcesMenuResourcesListing extends Vue {
       <nuxt-link to="/database/education_levels">
         <t value="db.menu.resource.education_levels" class="text-capitalize" />
       </nuxt-link>
-    </li>
 
-    <li v-if="admissible['standardized_courses.index']">
-      <nuxt-link to="/database/standardized_courses">
-        <t value="db.menu.resource.standardized_courses" class="text-capitalize" />
-      </nuxt-link>
-    </li>
+      <ul class="pl-4">
+        <li v-if="admissible['standardized_courses.index']">
+          <nuxt-link to="/database/standardized_courses">
+            <t value="db.menu.resource.standardized_courses" class="text-capitalize" />
+          </nuxt-link>
+        </li>
 
-    <li v-if="admissible['subjects.index']">
-      <nuxt-link to="/database/subjects">
-        <t value="db.menu.resource.subjects" class="text-capitalize" />
-      </nuxt-link>
-    </li>
+        <li v-if="admissible['subjects.index']">
+          <nuxt-link to="/database/subjects">
+            <t value="db.menu.resource.subjects" class="text-capitalize" />
+          </nuxt-link>
+        </li>
 
-    <li v-if="admissible['subject_categories.index']">
-      <nuxt-link to="/database/subject_categories">
-        <t value="db.menu.resource.subject_categories" class="text-capitalize" />
-      </nuxt-link>
+        <li v-if="admissible['subject_categories.index']">
+          <nuxt-link to="/database/subject_categories">
+            <t value="db.menu.resource.subject_categories" class="text-capitalize" />
+          </nuxt-link>
+        </li>
+      </ul>
     </li>
 
     <li v-if="admissible['school_years.index']">
@@ -85,12 +87,14 @@ export default class ResourcesMenuResourcesListing extends Vue {
       <nuxt-link to="/database/courses">
         <t value="db.menu.resource.courses" class="text-capitalize" />
       </nuxt-link>
-    </li>
 
-    <li v-if="admissible['groups.index']">
-      <nuxt-link to="/database/groups">
-        <t value="db.menu.resource.groups" class="text-capitalize" />
-      </nuxt-link>
+      <ul class="pl-4">
+        <li v-if="admissible['groups.index']">
+          <nuxt-link to="/database/groups">
+            <t value="db.menu.resource.groups" class="text-capitalize" />
+          </nuxt-link>
+        </li>
+      </ul>
     </li>
 
     <li v-if="admissible['people.index']">
@@ -98,7 +102,7 @@ export default class ResourcesMenuResourcesListing extends Vue {
         <t value="db.menu.resource.people" class="text-capitalize" />
       </nuxt-link>
 
-      <ul>
+      <ul class="pl-4">
         <li>
           <nuxt-link to="/database/students">
             <t value="db.menu.title.students" class="text-capitalize" />
