@@ -68,8 +68,9 @@ export default class SessionModule extends VuexModule {
     country: null | BRecord;
     $api2: Api2Plugin;
   }) {
-    this.context.commit('setCountry', null);
+    this.context.commit('setCountry', undefined);
     if (!country) return;
+    country = Object.freeze({ ...country });
     const data = await app.session.loadCountryData(country, $api2);
     this.context.commit('setCountry', data);
   }

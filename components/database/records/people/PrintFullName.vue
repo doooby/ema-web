@@ -10,9 +10,8 @@ export default class PrintFullName extends Vue {
 
 <template>
   <div>
-    <div v-if="person.first_name">
-      {{ person.first_name[1] }}
-      <span v-if="person.last_name"> {{ person.last_name[1] }}</span>
+    <div v-if="person.full_name_local">
+      {{ person.full_name_local }}
     </div>
     <div class="font-12">
       <span>{{ person.first_name[0] }}</span>

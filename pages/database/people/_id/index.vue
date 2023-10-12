@@ -8,6 +8,7 @@ import PeopleGroupsListing from '~/components/database/records/people/PeopleGrou
 import WorkAgreementsListing from '~/components/database/records/people/WorkAgreementsListing.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import { person } from '~/lib/records';
+import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
 
 enum Tabs {
   groups,
@@ -16,6 +17,7 @@ enum Tabs {
 
 @Component({
   components: {
+    PrintFullName,
     RecordAssociations,
     WorkAgreementsListing,
     PeopleGroupsListing,
@@ -52,6 +54,9 @@ export default class extends DatabasePage {
 
     <template #details="{ record }">
       <table class="table">
+        <show-page-table-row label="db.record.people.label.full_name">
+          <PrintFullName :person="record" />
+        </show-page-table-row>
         <show-page-table-row label="db.record.people.label.student_kobo_no">
           {{ record.student_kobo_no }}
         </show-page-table-row>
@@ -60,16 +65,6 @@ export default class extends DatabasePage {
         </show-page-table-row>
         <show-page-table-row label="db.record.people.label.navision_id">
           {{ record.navision_id }}
-        </show-page-table-row>
-        <show-page-table-row label="db.record.people.label.last_name">
-          {{ record.last_name?.[1] }}
-          <br>
-          <small>{{ record.last_name?.[0] }}</small>
-        </show-page-table-row>
-        <show-page-table-row label="db.record.people.label.first_name">
-          {{ record.first_name[1] }}
-          <br>
-          <small>{{ record.first_name[0] }}</small>
         </show-page-table-row>
         <show-page-table-row label="db.record.people.label.born_on">
           {{ $ema.localizeDate(record.born_on) }}

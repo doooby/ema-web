@@ -1,16 +1,11 @@
 <template>
-  <div>
-    <div v-if="viableCountries.length > 1">
-      <form-group
-        :value="{ country: currentCountryId }"
-        :fields="fields"
-        name-prefix="resources_menu"
-        @input="onSelectCountry"
-      />
-    </div>
-    <div v-if="viableCountries.length === 1">
-      {{ viableCountries[0].caption }}
-    </div>
+  <div v-if="viableCountries.length > 1">
+    <form-group
+      :value="{ country: currentCountryId }"
+      :fields="fields"
+      name-prefix="resources_menu"
+      @input="onSelectCountry"
+    />
   </div>
 </template>
 
@@ -18,6 +13,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { buildFormFields, controls, FormField } from '~/components/Form';
 import { BRecord } from '~/lib/api2';
+import * as localStorage from '~/lib/localStorage';
 
 @Component
 export default class ResourcesMenuCountrySwitch extends Vue {
@@ -43,10 +39,8 @@ export default class ResourcesMenuCountrySwitch extends Vue {
   onSelectCountry (value: any): void {
     const { country: countryId } = value;
     const country = this.viableCountries.find(item => item.id === countryId);
-    this.$store.dispatch('session/switchCountry', {
-      country: country ?? null,
-      $api2: this.$api2,
-    });
+    localStorage.set(localStorage.values.currentCountryId, country?.id);
+    window.location.reload();
   }
 }
 </script>

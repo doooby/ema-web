@@ -2,7 +2,7 @@ import { recordsQueries } from '~/lib/api2';
 import { Location } from '~/lib/records/location';
 import { wai } from '~/vendor/wai';
 import { mapName } from '~/lib/api2/mappers';
-import { times } from 'lodash';
+// import { times } from 'lodash';
 
 export const entity = 'location_systems';
 
@@ -31,37 +31,38 @@ export function parseRecord (
   value: unknown,
 ): LocationSystem {
   return wai.object((value) => {
-    const levels = wai.prop('levels', value, wai.integer);
+    // const levels = wai.prop('levels', value, wai.integer);
     return {
       id: wai.prop('id', value, wai.string),
       name: wai.prop('name', value, wai.nullable(mapName)),
-      levels: wai.prop('settings', value, value => parseSettings(value, levels)),
+      levels: [],
+      // levels: wai.prop('settings', value, value => parseSettings(value, levels)),
     };
   })(value);
 }
 
-function parseSettings (
-  value,
-  levels: number,
-): LocationSystemLevel[] {
-  if (!wai.isObject(value)) {
-    throw new wai.MappingError('not object');
-  }
-  const list: LocationSystemLevel[] = [];
-  times(levels, (index) => {
-    list[index] = wai.prop(index + 1, value, (value) => {
-      const item = wai.object(value => ({
-        type: wai.prop('type', value, wai.string),
-        name: wai.prop('name', value, mapName),
-      }))(value);
-      if (!item.type.match(/^[lt]$/)) {
-        throw new wai.MappingError(`invalid level type: ${item.type}`);
-      }
-      return item as LocationSystemLevel;
-    });
-  });
-  return list;
-}
+// function parseSettings (
+//   value,
+//   levels: number,
+// ): LocationSystemLevel[] {
+//   if (!wai.isObject(value)) {
+//     throw new wai.MappingError('not object');
+//   }
+//   const list: LocationSystemLevel[] = [];
+//   times(levels, (index) => {
+//     list[index] = wai.prop(index + 1, value, (value) => {
+//       const item = wai.object(value => ({
+//         type: wai.prop('type', value, wai.string),
+//         name: wai.prop('name', value, mapName),
+//       }))(value);
+//       if (!item.type.match(/^[lt]$/)) {
+//         throw new wai.MappingError(`invalid level type: ${item.type}`);
+//       }
+//       return item as LocationSystemLevel;
+//     });
+//   });
+//   return list;
+// }
 
 export const queries = {
   search: recordsQueries.search(entity, parseRecord),

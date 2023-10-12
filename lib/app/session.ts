@@ -25,11 +25,11 @@ export async function loadCountryData (
   $api2: Api2Plugin,
 ): Promise<CountryData> {
   const addressSystem = await fetchAddressSystem(country, $api2);
-  return {
+  return Object.freeze({
     record: country,
     addressSystem,
     internalLists: staticLists,
-  };
+  });
 }
 
 async function fetchAddressSystem (
