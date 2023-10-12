@@ -3,7 +3,9 @@ import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import Privileges from '~/components/database/records/users/controls/Privileges.vue';
 import { BRecord, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
-import { mapAssociation, mapName, mapOptionalAssociation } from '~/lib/api2/mappers';
+import { mapAssociation, mapIndex, mapName, mapOptionalAssociation } from '~/lib/api2/mappers';
+import app from '~/lib/app';
+import { bRecordMapper } from '~/lib/api2/parsers';
 
 export const entity = 'users';
 
@@ -16,9 +18,21 @@ export interface User extends application_record.SharedAttributes {
   is_root: boolean;
 }
 
+export interface V3_User extends wai.AResource {
+  session?: SessionSlice;
+}
+
 export interface UserPrivilege {
   type: null | 'country_admin' | 'view_only' | 'data_officer' | 'school_manager';
   [ opt: string ]: any;
+}
+
+export interface SessionSlice {
+  id: string;
+  login: string;
+  name: string[];
+  countries: wai.AResource[];
+  admissible_actions?: app.Map<app.List<string>>;
 }
 
 export function parseRecord (
@@ -33,6 +47,29 @@ export function parseRecord (
     lock: wai.prop('lock', value, wai.nullable(wai.string)),
     is_root: wai.prop('is_root', value, wai.boolean),
     privileges: wai.prop('privileges', value, wai.listOf(value => mapUserPrivilege(value, associations))),
+  }))(value);
+}
+
+export function V3_parseRecord (
+  value,
+  associations: wai.Associations,
+): V3_User {
+  return wai.uncertainResource(record => ({
+    session: wai.property(record, 'session', wai.nullable(value => parseSessionSlice(value))),
+  }))(value, associations);
+}
+
+function parseSessionSlice (value): SessionSlice {
+  return wai.object(value => ({
+    id: wai.prop('id', value, wai.string),
+    login: wai.prop('login', value, wai.string),
+    name: wai.prop('name', value, mapName),
+    countries: wai.prop('countries', value, wai.listOf(bRecordMapper())),
+    admissible_actions: wai.prop(
+      'admissible_actions',
+      value,
+      wai.nullable(mapIndex(wai.listOf(wai.string))),
+    ),
   }))(value);
 }
 

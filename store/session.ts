@@ -2,6 +2,7 @@ import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import * as localStorage from '~/lib/localStorage';
 import { Api2Plugin, BRecord } from '~/lib/api2';
 import app from '~/lib/app';
+import { user } from '~/lib/records';
 
 @Module({
   stateFactory: true,
@@ -9,6 +10,7 @@ import app from '~/lib/app';
 })
 export default class SessionModule extends VuexModule {
   user: null | app.session.User = null;
+  user2: null | user.SessionSlice = null;
   country: null | app.session.CountryData = null;
 
   loginModalShown = false;
@@ -16,11 +18,26 @@ export default class SessionModule extends VuexModule {
   debugTranslations: boolean = false;
 
   @Mutation
-  setUser (user: null | app.session.User) {
-    this.user = user;
-    if (user === null) {
-      this.debugTranslations = false;
-    }
+  setUser (user: user.SessionSlice) {
+    this.user2 = user;
+    this.user = {
+      id: user.id,
+      login: user.login,
+      name: user.name,
+      countries: user.countries.map(
+        country => ({
+          id: country.id ?? '-1',
+          caption: country.caption ?? 'unknown',
+        }),
+      ),
+      admissible_actions: user.admissible_actions as app.Maybe<Record<string, string[]>>,
+    };
+  }
+
+  @Mutation
+  clearUser () {
+    this.user = null;
+    this.debugTranslations = false;
   }
 
   @Mutation
@@ -52,12 +69,6 @@ export default class SessionModule extends VuexModule {
   @Mutation
   toggleDebugTranslations () {
     this.debugTranslations = !this.debugTranslations;
-  }
-
-  @Action
-  async fetchSession ({ api2 }: { api2: Api2Plugin }) {
-    const session = await api2.transientRequest(app.session.queries.getSession());
-    this.context.commit('setUser', session.ok ? session.payload.user : null);
   }
 
   @Action

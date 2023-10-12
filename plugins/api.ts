@@ -99,7 +99,7 @@ class ApiPlugin {
       const { ok, message, payload }: RequestResponse = await rawResponse.json();
       if (!ok) {
         if (!isOnServer && rawResponse.status === 401) {
-          this.context.store.commit('session/setUser', null);
+          this.context.store.commit('session/clearUser', null);
         }
 
         return {

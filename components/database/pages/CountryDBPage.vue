@@ -7,8 +7,9 @@ import * as localStorage from '~/lib/localStorage';
 @Component({
   layout: 'database',
   async asyncData (context: Context) {
-    await context.store.dispatch('session/fetchSession', {
+    await app.session.fetchUser({
       api2: context.app.$api2,
+      store: context.store,
     });
   },
 })

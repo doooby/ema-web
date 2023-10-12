@@ -131,10 +131,11 @@ export default Vue.extend({
         this.$api.queries.session.login({ country, login, password }),
         this.$api.newQueryState(),
       );
-      await this.$store.dispatch('session/fetchSession', {
+      await app.session.fetchUser({
         api2: this.$api2,
+        store: this.$store,
       });
-      if (result) {
+      if (result && this.$store.state.session.user2) {
         this.$store.commit('session/hideLoginModal');
       } else {
         this.form.error = 'invalid login';
@@ -145,8 +146,9 @@ export default Vue.extend({
         this.$api.queries.session.logout(),
         this.$api.newQueryState(),
       );
-      await this.$store.dispatch('session/fetchSession', {
+      await app.session.fetchUser({
         api2: this.$api2,
+        store: this.$store,
       });
     },
   },

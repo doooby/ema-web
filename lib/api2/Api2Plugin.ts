@@ -115,6 +115,14 @@ export default class Api2Plugin {
     return state.response!;
   }
 
+  async transientRequest2<V> (
+    query: api.Query<V>,
+  ): Promise<RequestResponse<V>> {
+    const state = this.newQueryState<V>();
+    await this.request(state, query.toDefinition());
+    return state.response!;
+  }
+
   async cachedRequest<V> (
     state: CachedRequestState<V>,
     query: api.Query<V>,
@@ -165,7 +173,7 @@ export default class Api2Plugin {
     const response = await rawResponse.json();
     if (!response.ok) {
       if (!isOnServer && rawResponse.status === 401) {
-        this.context.store.commit('session/setUser', null);
+        this.context.store.commit('session/clearUser');
       }
       response.message = response.message || 'unknown_error';
     }

@@ -9,6 +9,7 @@ import { mapAssociation, mapDate, mapName, mapSelectOrFillTuple } from '~/lib/ap
 import { dbFields } from '~/components/database/fields';
 import app from '~/lib/app';
 import * as grading from './grading';
+import { uncertainResource } from '~/vendor/wai/mappers';
 
 export { grading };
 
@@ -33,8 +34,7 @@ export interface Course extends application_record.SharedAttributes {
   term_dates: app.List<{ begin: Date, end: Date }>;
 }
 
-export interface V3_Course {
-  id: string;
+export interface V3_Course extends wai.AResource {
   record?: RecordSlice;
   computed?: ComputedSlice;
 }
@@ -109,15 +109,14 @@ function V3_parseRecord (
   value,
   associations: wai.Associations,
 ): V3_Course {
-  return wai.object(value => ({
-    id: wai.prop('id', value, wai.string),
-    record: wai.property(value, 'record', wai.nullable(value => parseRecordSlice(value, associations))),
-    computed: wai.property(value, 'computed', wai.nullable(value => parseComputedSlice(value))),
-  }))(value);
+  return wai.uncertainResource(record => ({
+    record: wai.property(record, 'record', wai.nullable(value => parseRecordSlice(value, associations))),
+    computed: wai.property(record, 'computed', wai.nullable(value => parseComputedSlice(value))),
+  }))(value, associations);
 }
 
 function parseRecordSlice (
-  value: unknown,
+  value,
   wai_associations: wai.Associations,
 ): RecordSlice {
   const associations = wai_associations as any;
@@ -144,7 +143,7 @@ function parseRecordSlice (
   }))(value);
 }
 
-function parseComputedSlice (value: unknown): ComputedSlice {
+function parseComputedSlice (value): ComputedSlice {
   return wai.object(value => ({
     term_dates: wai.prop('term_dates', value, wai.listOf(
       wai.object(value => ({
@@ -156,7 +155,7 @@ function parseComputedSlice (value: unknown): ComputedSlice {
 }
 
 export function mapSubject (
-  value: unknown,
+  value,
   associations?: RecordAssociations,
 ): CourseSubject {
   return wai.object(value => ({
