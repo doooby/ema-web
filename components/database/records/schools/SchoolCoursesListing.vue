@@ -1,6 +1,6 @@
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { school } from '~/lib/records';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { school, user } from '~/lib/records';
 import CoursesListing from '~/components/database/records/courses/CoursesListing.vue';
 import controls from '~/components/controls';
 import SearchForm from '~/components/database/pages/index/SearchForm.vue';
@@ -16,22 +16,45 @@ import BRecordsSelect from '~/components/controls/inputs/BRecordsSelect.vue';
 export default class SchoolCoursesListing extends Vue {
   @Prop({ required: true }) readonly school!: school.School;
 
-  searchParams = {};
-  searchControls = controls.Group.compose(
-    {
-      name: 'standardized_course',
-      populateParams: (values: any, params) => {
-        params.standardized_course_id =
-          values.standardized_course?.map(b => b.id)?.[0];
+  searchControls = controls.Group.compose();
+  searchParams = this.searchControls.getParams();
+
+  created () {
+    this.reCreateSearchControls();
+  }
+
+  get currentCountry (): null | user.CurrentCountrySlice {
+    return this.$store.state.session.currentCountry;
+  }
+
+  @Watch('currentCountry')
+  reCreateSearchControls () {
+    const current_school_year = this.currentCountry?.current_school_year;
+
+    this.searchControls = controls.Group.compose(
+      {
+        name: 'standardized_course',
+        populateParams: (values: any, params) => {
+          params.standardized_course_id =
+            values.standardized_course?.map(b => b.id)?.[0];
+        },
       },
-    },
-    {
-      name: 'school_year',
-      populateParams: (values: any, params) => {
-        params.school_year_id = values.school_year?.map(b => b.id)?.[0];
+      {
+        name: 'school_year',
+        default: () => {
+          if (!current_school_year) return;
+          return [ {
+            id: current_school_year.id,
+            caption: current_school_year.caption,
+          } ];
+        },
+        populateParams: (values: any, params) => {
+          params.school_year_id = values.school_year?.map(b => b.id)?.[0];
+        },
       },
-    },
-  );
+    );
+    this.searchParams = this.searchControls.getParams();
+  }
 }
 </script>
 

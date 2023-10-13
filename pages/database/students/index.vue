@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Component } from 'vue-property-decorator';
+import { Component, Watch } from 'vue-property-decorator';
 import { DatabasePage } from '~/components';
 import PeopleListing from '~/components/database/records/people/PeopleListing.vue';
 import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
@@ -28,69 +28,88 @@ const nonAssignedOptions = Object.freeze([
   },
 })
 export default class extends DatabasePage {
-  searchParams = {};
-  searchControls = controls.Group.compose(
-    {
-      name: 'schools',
-      populateParams: (values: any, params) => {
-        params.school_id = values.schools?.map(b => b.id);
-      },
-      onChange: (values) => {
-        values.courses = undefined;
-        values.groups = undefined;
-        values.non_classified = undefined;
-      },
-    },
-    {
-      name: 'courses',
-      populateParams: (values: any, params) => {
-        params.course_id = values.courses?.map(b => b.id);
-      },
-      onChange: (values) => {
-        values.groups = undefined;
-        values.non_classified = undefined;
-      },
-    },
-    {
-      name: 'groups',
-      populateParams: (values: any, params) => {
-        params.group_id = values.groups?.map(b => b.id);
-      },
-      onChange: (values) => {
-        values.non_classified = undefined;
-      },
-    },
-    {
-      name: 'school_years',
-      populateParams: (values: any, params) => {
-        params.school_year_id = values.school_years?.map(b => b.id);
-      },
-      onChange: (values) => {
-        values.courses = undefined;
-        values.groups = undefined;
-        values.non_classified = undefined;
-      },
-    },
-    {
-      name: 'standardized_courses',
-      populateParams: (values: any, params) => {
-        params.standardized_course_id =
-          values.standardized_courses?.map(b => b.id);
-      },
-    },
-    {
-      name: 'non_classified',
-      default: () => [ nonAssignedOptions[0] ],
-      options: nonAssignedOptions as any,
-      populateParams: (values: any, params) => {
-        params.non_classified =
-          values.non_classified?.map(b => b.value)?.[0];
-      },
-    },
-  );
+  searchControls = controls.Group.compose();
+  searchParams = {
+    students: this.searchControls.getParams(),
+  };
 
-  get studentsSearchParams () {
-    return { students: this.searchParams };
+  created () {
+    this.reCreateSearchControls();
+  }
+
+  @Watch('currentCountry')
+  reCreateSearchControls () {
+    const current_school_year = this.currentCountry?.current_school_year;
+
+    this.searchControls = controls.Group.compose(
+      {
+        name: 'schools',
+        populateParams: (values: any, params) => {
+          params.school_id = values.schools?.map(b => b.id);
+        },
+        onChange: (values) => {
+          values.courses = undefined;
+          values.groups = undefined;
+          values.non_classified = undefined;
+        },
+      },
+      {
+        name: 'courses',
+        populateParams: (values: any, params) => {
+          params.course_id = values.courses?.map(b => b.id);
+        },
+        onChange: (values) => {
+          values.groups = undefined;
+          values.non_classified = undefined;
+        },
+      },
+      {
+        name: 'groups',
+        populateParams: (values: any, params) => {
+          params.group_id = values.groups?.map(b => b.id);
+        },
+        onChange: (values) => {
+          values.non_classified = undefined;
+        },
+      },
+      {
+        name: 'school_years',
+        default: () => {
+          if (!current_school_year) return;
+          return [ {
+            id: current_school_year.id,
+            caption: current_school_year.caption,
+          } ];
+        },
+        populateParams: (values: any, params) => {
+          params.school_year_id = values.school_years?.map(b => b.id);
+        },
+        onChange: (values) => {
+          values.courses = undefined;
+          values.groups = undefined;
+          values.non_classified = undefined;
+        },
+      },
+      {
+        name: 'standardized_courses',
+        populateParams: (values: any, params) => {
+          params.standardized_course_id =
+            values.standardized_courses?.map(b => b.id);
+        },
+      },
+      {
+        name: 'non_classified',
+        default: () => [ nonAssignedOptions[0] ],
+        options: nonAssignedOptions as any,
+        populateParams: (values: any, params) => {
+          params.non_classified =
+            values.non_classified?.map(b => b.value)?.[0];
+        },
+      },
+    );
+    this.searchParams = {
+      students: this.searchControls.getParams(),
+    };
   }
 }
 </script>
@@ -199,7 +218,7 @@ export default class extends DatabasePage {
       >
         <OptionsSelect
           :value="group.getValue('non_classified')"
-          :options="group.fieldsIndex.non_classified.options"
+          :options="group.fieldsIndex.non_classified?.options ?? []"
           @change="group.update('non_classified', $event)"
         >
           <template #options="{options, isSelected, onToggleOption}">
@@ -222,7 +241,7 @@ export default class extends DatabasePage {
 
     <PeopleListing
       class="mt-3"
-      :params="studentsSearchParams"
+      :params="searchParams"
       :hide-contract="true"
     >
       <template
