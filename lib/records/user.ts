@@ -5,7 +5,6 @@ import { BRecord, parsers, RecordAssociations, recordsQueries } from '~/lib/api2
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapIndex, mapName, mapOptionalAssociation } from '~/lib/api2/mappers';
 import app from '~/lib/app';
-import { bRecordMapper } from '~/lib/api2/parsers';
 
 export const entity = 'users';
 
@@ -20,6 +19,7 @@ export interface User extends application_record.SharedAttributes {
 
 export interface V3_User extends wai.AResource {
   session?: SessionSlice;
+  current_country?: CurrentCountrySlice;
 }
 
 export interface UserPrivilege {
@@ -33,6 +33,11 @@ export interface SessionSlice {
   name: string[];
   countries: wai.AResource[];
   admissible_actions?: app.Map<app.List<string>>;
+}
+
+export interface CurrentCountrySlice {
+  record: wai.AResource;
+  current_school_year?: wai.AResource;
 }
 
 export function parseRecord (
@@ -56,20 +61,28 @@ export function V3_parseRecord (
 ): V3_User {
   return wai.uncertainResource(record => ({
     session: wai.property(record, 'session', wai.nullable(value => parseSessionSlice(value))),
+    current_country: wai.property(record, 'current_country', wai.nullable(value => parseCurrentCountrySlice(value))),
   }))(value, associations);
 }
 
 function parseSessionSlice (value): SessionSlice {
   return wai.object(value => ({
-    id: wai.prop('id', value, wai.string),
-    login: wai.prop('login', value, wai.string),
-    name: wai.prop('name', value, mapName),
-    countries: wai.prop('countries', value, wai.listOf(bRecordMapper())),
-    admissible_actions: wai.prop(
-      'admissible_actions',
+    id: wai.property(value, 'id', wai.string),
+    login: wai.property(value, 'login', wai.string),
+    name: wai.property(value, 'name', mapName),
+    countries: wai.property(value, 'countries', wai.listOf(wai.aResource)),
+    admissible_actions: wai.property(
       value,
+      'admissible_actions',
       wai.nullable(mapIndex(wai.listOf(wai.string))),
     ),
+  }))(value);
+}
+
+function parseCurrentCountrySlice (value): CurrentCountrySlice {
+  return wai.object(value => ({
+    record: wai.property(value, 'record', wai.aResource),
+    current_school_year: wai.property(value, 'current_school_year', wai.nullable(wai.aResource)),
   }))(value);
 }
 

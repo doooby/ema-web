@@ -1,8 +1,7 @@
-import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
-import * as localStorage from '~/lib/localStorage';
-import { Api2Plugin, BRecord } from '~/lib/api2';
+import { Module, Mutation, VuexModule } from 'vuex-module-decorators';
 import app from '~/lib/app';
 import { user } from '~/lib/records';
+import { staticLists } from '~/lib/app/country/internalLists';
 
 @Module({
   stateFactory: true,
@@ -10,16 +9,24 @@ import { user } from '~/lib/records';
 })
 export default class SessionModule extends VuexModule {
   user: null | app.session.User = null;
-  user2: null | user.SessionSlice = null;
   country: null | app.session.CountryData = null;
+
+  userSession: null | user.SessionSlice = null;
+  currentCountry: null | user.CurrentCountrySlice = null;
 
   loginModalShown = false;
   languageModalShown: boolean = false;
   debugTranslations: boolean = false;
 
   @Mutation
-  setUser (user: user.SessionSlice) {
-    this.user2 = user;
+  setUser (data: {
+    session: user.SessionSlice;
+    current_country: user.CurrentCountrySlice;
+  }) {
+    this.userSession = data.session;
+    this.currentCountry = data.current_country;
+
+    const user = data.session;
     this.user = {
       id: user.id,
       login: user.login,
@@ -32,18 +39,26 @@ export default class SessionModule extends VuexModule {
       ),
       admissible_actions: user.admissible_actions as app.Maybe<Record<string, string[]>>,
     };
+    this.country = {
+      record: {
+        id: data.current_country.record.id ?? '-1',
+        caption: data.current_country.record.caption ?? 'unkown',
+      },
+      internalLists: staticLists,
+    };
   }
 
   @Mutation
   clearUser () {
     this.user = null;
+    this.userSession = null;
     this.debugTranslations = false;
   }
 
   @Mutation
-  setCountry (data: null | app.session.CountryData) {
-    localStorage.set(localStorage.values.currentCountryId, data?.record.id);
-    this.country = data;
+  clearCountry () {
+    this.country = null;
+    this.currentCountry = null;
   }
 
   @Mutation
@@ -69,21 +84,6 @@ export default class SessionModule extends VuexModule {
   @Mutation
   toggleDebugTranslations () {
     this.debugTranslations = !this.debugTranslations;
-  }
-
-  @Action
-  async switchCountry ({
-    country,
-    $api2,
-  }: {
-    country: null | BRecord;
-    $api2: Api2Plugin;
-  }) {
-    this.context.commit('setCountry', undefined);
-    if (!country) return;
-    country = Object.freeze({ ...country });
-    const data = await app.session.loadCountryData(country, $api2);
-    this.context.commit('setCountry', data);
   }
 
   get countryId (): null | string {

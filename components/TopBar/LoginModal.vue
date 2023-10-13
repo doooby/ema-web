@@ -123,34 +123,37 @@ export default Vue.extend({
     onHidden () {
       if (this.shown) this.$store.commit('session/hideLoginModal');
     },
+
     async onLoginSubmit (event: any) {
       event.preventDefault();
 
       const { country, login, password } = this.form;
-      const result = await this.$api.request(
-        this.$api.queries.session.login({ country, login, password }),
-        this.$api.newQueryState(),
+      const loginResult = await this.$api2.transientRequest2(
+        app.session.queries.login(
+          { country, login, password },
+        ),
       );
-      await app.session.fetchUser({
-        api2: this.$api2,
-        store: this.$store,
-      });
-      if (result && this.$store.state.session.user2) {
-        this.$store.commit('session/hideLoginModal');
-      } else {
-        this.form.error = 'invalid login';
+
+      if (!loginResult.ok) {
+        this.form.error = 'Bad login';
+        return;
       }
-    },
-    async onLogOut () {
-      await this.$api.request(
-        this.$api.queries.session.logout(),
-        this.$api.newQueryState(),
-      );
+
+      this.$store.commit('session/hideLoginModal');
+
       await app.session.fetchUser({
         api2: this.$api2,
         store: this.$store,
       });
     },
+
+    async onLogOut () {
+      await this.$api2.transientRequest2(
+        app.session.queries.logout(),
+      );
+      this.$store.commit('session/clearUser');
+    },
+
   },
 });
 

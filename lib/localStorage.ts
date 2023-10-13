@@ -4,10 +4,6 @@ import { wai } from '~/vendor/wai';
 const store = globalThis.localStorage;
 
 export const values = {
-  currentCountryId: {
-    key: 'EMA--currentCountryId',
-    mapper: wai.string,
-  },
   actionPageData: {
     key: 'EMA--actionPageData',
     mapper: value => value as unknown,

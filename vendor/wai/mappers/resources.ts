@@ -25,7 +25,7 @@ export interface ResourceUpdate {
 
 export type ResourceError = [ undefined | string, string ];
 
-function aResource (value): AResource {
+export function aResource (value): AResource {
   return wai.object(
     resource => resourceObject(resource, () => undefined),
   )(value);

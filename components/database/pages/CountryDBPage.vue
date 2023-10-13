@@ -2,7 +2,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { Context } from '@nuxt/types';
 import app from '~/lib/app';
-import * as localStorage from '~/lib/localStorage';
 
 @Component({
   layout: 'database',
@@ -13,18 +12,11 @@ import * as localStorage from '~/lib/localStorage';
     });
   },
 })
-class Base extends Vue {
-
-}
+class Base extends Vue {}
 
 @Component
 export default class CountryDBPage extends Vue {
   static Base = Base;
-
-  beforeMount () {
-    if (!this.user) return;
-    this.onLoadCountry();
-  }
 
   get user (): null | app.session.User {
     return this.$store.state.session.user;
@@ -36,20 +28,6 @@ export default class CountryDBPage extends Vue {
 
   get isLoaded (): boolean {
     return (!!this.user && !!this.country);
-  }
-
-  onLoadCountry () {
-    const user = this.user!;
-    const savedId = localStorage.get(localStorage.values.currentCountryId);
-    const country = user.countries.find(country => country.id === savedId) ?? user.countries[0];
-    if (country && country.id === this.$store.getters['session/countryId']) {
-      return;
-    }
-
-    this.$store.dispatch('session/switchCountry', {
-      country: country ?? null,
-      $api2: this.$api2,
-    });
   }
 }
 

@@ -13,7 +13,8 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { buildFormFields, controls, FormField } from '~/components/Form';
 import { BRecord } from '~/lib/api2';
-import * as localStorage from '~/lib/localStorage';
+import app from '~/lib/app';
+import { queries } from '~/lib/app/session';
 
 @Component
 export default class ResourcesMenuCountrySwitch extends Vue {
@@ -36,11 +37,18 @@ export default class ResourcesMenuCountrySwitch extends Vue {
     ]);
   }
 
-  onSelectCountry (value: any): void {
+  async onSelectCountry (value: any) {
     const { country: countryId } = value;
     const country = this.viableCountries.find(item => item.id === countryId);
-    localStorage.set(localStorage.values.currentCountryId, country?.id);
-    window.location.reload();
+    if (!country) return;
+    this.$store.commit('session/clearCountry');
+    await this.$api2.transientRequest2(
+      queries.set_current_country(country.id),
+    );
+    await app.session.fetchUser({
+      api2: this.$api2,
+      store: this.$store,
+    });
   }
 }
 </script>

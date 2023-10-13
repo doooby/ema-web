@@ -51,11 +51,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { reloadLocales } from '~/lib/api/session';
 import { parsers, UpdatedRecordResponsePayload } from '~/lib/api2';
-import { show } from '~/lib/api/queries/session';
 
-@Component({
-  methods: { show },
-})
+@Component
 export default class Translation extends Vue {
   @Prop({ required: true }) value!: string;
   @Prop({ required: false }) position?: boolean;
