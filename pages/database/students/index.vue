@@ -117,7 +117,7 @@ export default class extends DatabasePage {
 <template>
   <IndexPage2
     :search-controls="searchControls"
-    @search="searchParams = $event"
+    @search="searchParams = { students: $event }"
   >
 
     <template #header>
