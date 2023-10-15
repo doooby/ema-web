@@ -65,8 +65,17 @@ export default class PeopleListing extends Vue {
       </td>
       <td>
         <PrintFullName :person="record" />
-        <div v-if="record.born_on">
-          {{ $ema.localizeDate(record.born_on) }}
+        <div class="d-flex justify-content-between align-items-center">
+          <small class="mr-2">
+            <t
+              v-if="record.gender"
+              class="text-muted"
+              :value="`app.internal_lists.gender.${record.gender}`"
+            />
+          </small>
+          <span v-if="record.born_on" class="mr-3">
+            {{ $ema.localizeDate(record.born_on) }}
+          </span>
         </div>
       </td>
       <td v-if="!hideGroup">
