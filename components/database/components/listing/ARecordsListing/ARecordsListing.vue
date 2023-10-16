@@ -1,7 +1,7 @@
 <script lang="ts">
 import { h } from 'vue';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import SelectPage from '~/components/database/components/listing/SelectPage.vue';
+import SelectPage, { PER_PAGE } from '~/components/database/components/listing/SelectPage.vue';
 import { Params, SearchRecordsResponsePayload } from '~/lib/api2';
 import { Column, DataTable, DataTableHeadersRow } from '~/components/DataTable/v3';
 import ActionsCell from './ActionsCell.vue';
@@ -124,8 +124,20 @@ export default class ARecordsListing extends Vue {
       : [];
   }
 
-  async fetchRecords (page?: number) {
+  async fetchRecords (
+    opts?: {
+      pagination: {
+        page: number;
+        perPage: number;
+      }
+    },
+  ) {
     if (this.liveQuery.processing) return;
+
+    let { pagination } = opts ?? {};
+    if (!pagination) {
+      pagination = { page: 1, perPage: PER_PAGE[0] };
+    }
 
     const country_id = this.$store.getters['session/countryId'];
     await this.$api2.request(
@@ -133,7 +145,8 @@ export default class ARecordsListing extends Vue {
       this.$api2.getQuery(this.entity, 'search')({
         ...this.params,
         country_id,
-        page,
+        page: pagination.page,
+        per_page: pagination.perPage,
       }),
     );
     this.stableQuery.response = this.liveQuery.response;
@@ -194,7 +207,10 @@ export default class ARecordsListing extends Vue {
         <slot name="filters-actions" />
       </div>
       <div v-else />
-      <select-page :request="stableQuery" @select="fetchRecords" />
+      <SelectPage
+        :request="stableQuery"
+        @select="fetchRecords({ pagination: $event })"
+      />
     </div>
     <data-table
       class="mt-2"

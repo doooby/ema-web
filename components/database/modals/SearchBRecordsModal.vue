@@ -4,7 +4,7 @@ import Vue from 'vue';
 import { BRecord, SearchRecordsResponsePayload } from '~/lib/api2';
 import LoaderStrip from '~/components/database/components/LoaderStrip.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
-import SelectPage from '~/components/database/components/listing/SelectPage.vue';
+import SelectPage, { PER_PAGE } from '~/components/database/components/listing/SelectPage.vue';
 
 interface Item {
   selected: boolean;
@@ -55,16 +55,28 @@ export default class SearchBRecordsModal extends Vue {
     }));
   }
 
-  onSearch (page?: number) {
+  onSearch (
+    opts?: {
+      pagination: {
+        page: number;
+        perPage: number;
+      }
+    },
+  ) {
     if (this.searchQueryState.processing) return;
+
+    let { pagination } = opts ?? {};
+    if (!pagination) {
+      pagination = { page: 1, perPage: PER_PAGE[0] };
+    }
 
     let query;
     try {
       query = this.$api2.getQuery(this.entity, 'searchB')({
         ...this.params,
         country_id: this.$store.getters['session/countryId'],
-        page,
-        per_page: 10,
+        page: pagination.page,
+        per_page: pagination.perPage,
         search: this.searchValue,
       });
     } catch (error) {
@@ -121,7 +133,10 @@ function bRecordLabels ({ caption: _caption, id: _id, ...labels }: BRecord) {
         </b-form-group>
       </div>
       <loader-strip :request-state="searchQueryState" />
-      <select-page :request="searchQueryState" @select="onSearch($event)" />
+      <SelectPage
+        :request="searchQueryState"
+        @select="onSearch({ pagination: $event })"
+      />
       <div class="mt-2" />
       <b-list-group>
         <b-list-group-item
