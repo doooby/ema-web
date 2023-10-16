@@ -9,7 +9,7 @@ import ListingControls, { Model } from './ListingControls.vue';
 import app from '~/lib/app';
 import AttendanceListing, { Day } from '~/components/database/records/groups/GroupWeekAttendance/AttendanceListing.vue';
 import { times } from 'lodash';
-import { addDays, isWithinInterval } from 'date-fns';
+import { addDays, isSameDay, isWithinInterval } from 'date-fns';
 import { h } from 'vue';
 import DayColumnHeader from '~/components/database/records/groups/GroupWeekAttendance/DayColumnHeader.vue';
 import CardSaveableFooter from '~/components/database/components/CardSaveableFooter.vue';
@@ -45,6 +45,8 @@ export default class GroupWeekAttendance extends Vue {
   } = {
     value: undefined,
   };
+
+  studentRecords: null | any[] = null;
 
   async mounted () {
     await Promise.resolve();
@@ -99,6 +101,18 @@ export default class GroupWeekAttendance extends Vue {
     return app.api.updateErrors(this.updateWeek.response);
   }
 
+  get attendanceOptions (): app.List<{ value: string, text: string }> {
+    return app
+      .internalOptionsList2(this.$store.state.session.country, 'attendance')
+      .map((option) => {
+        if (!option) return undefined;
+        return {
+          value: option.value,
+          text: `${option.value} ${this.$t(option.item)}`,
+        };
+      });
+  }
+
   @Watch('group')
   @Watch('course')
   @Watch('controlsModel.currentDate')
@@ -116,8 +130,9 @@ export default class GroupWeekAttendance extends Vue {
     this.attendance.value = undefined;
   }
 
-  onPageLoad () {
+  onPageLoad (records) {
     this.attendance.value = undefined;
+    this.studentRecords = records;
   }
 
   onChangeValue (
@@ -180,6 +195,19 @@ export default class GroupWeekAttendance extends Vue {
       this.onShowWeek();
     }
   }
+
+  onPrefillDay ({ value }) {
+    const { inputDate } = this.controlsModel;
+    if (!inputDate) return;
+    const dateIndex = this.listedDays.findIndex(
+      day => isSameDay(day.date, inputDate),
+    );
+    if (!dateIndex) return;
+
+    for (const student of this.studentRecords ?? []) {
+      this.onChangeValue([ student.id, dateIndex, value ]);
+    }
+  }
 }
 
 function updateArrayAt (array: unknown[], index: number, value: unknown): unknown[] {
@@ -207,11 +235,14 @@ function padArrayWithBlanks (array: any) {
       v-model="controlsModel"
       :group="group"
       :term="termDates"
+      :attendance-options="attendanceOptions"
+      @prefill="onPrefillDay"
     />
     <AttendanceListing
       v-if="course"
       :original-attendance="originalAttendance"
       :attendance="attendance.value"
+      :attendance-options="attendanceOptions"
       :group="group"
       :days="listedDays"
       @input="onChangeValue($event)"

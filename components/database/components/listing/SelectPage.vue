@@ -10,6 +10,7 @@ export const PER_PAGE = [ 10, 25, 50, 100 ];
 @Component
 export default class SelectPage extends Vue {
   @Prop({ required: true }) readonly request!: RequestState<SearchRecordsResponsePayload<unknown>>;
+  @Prop() readonly hidePerPage?: boolean;
 
   perPage = PER_PAGE[0];
 
@@ -117,7 +118,10 @@ export default class SelectPage extends Vue {
         &nbsp;/&nbsp;{{ lastPage }}
       </span>
     </div>
-    <div class="d-flex px-1">
+    <div
+      v-if="!hidePerPage"
+      class="d-flex px-1"
+    >
       <span>
         <t value="db.listing.SearchPagination.per_page" />
       </span>

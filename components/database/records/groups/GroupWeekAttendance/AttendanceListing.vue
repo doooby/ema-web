@@ -31,6 +31,7 @@ export interface Day {
 export default class AttendanceListing extends Vue {
   @Prop({ required: true }) readonly originalAttendance!: app.Maybe<WeekAttendance['students']>;
   @Prop({ required: true }) readonly attendance!: app.Maybe<WeekAttendance['students']>;
+  @Prop({ required: true }) readonly attendanceOptions!: app.List<{ value: string, text: string }>;
   @Prop({ required: true }) readonly group!: group.Group;
   @Prop({ required: true }) readonly days!: Day[];
 
@@ -46,18 +47,6 @@ export default class AttendanceListing extends Vue {
       ...this.days.map(({ column }) => column),
     ];
   }
-
-  get attendanceOptions (): app.List<{ value: string, text: string }> {
-    return app
-      .internalOptionsList2(this.$store.state.session.country, 'attendance')
-      .map((option) => {
-        if (!option) return undefined;
-        return {
-          value: option.value,
-          text: `${option.value} ${this.$t(option.item)}`,
-        };
-      });
-  }
 }
 </script>
 
@@ -67,10 +56,11 @@ export default class AttendanceListing extends Vue {
     :columns="columns"
     :actions-size="0"
     :params="listingParams"
-    @load="$emit('pageLoad')"
+    :static-per-page="100"
+    @load="$emit('pageLoad', $event)"
   >
     <template #row="{ record }">
-      <td>
+      <td class="ema--data-table--td">
         <div class="d-flex align-items-center">
           <a-record-link
             :id="record.id"
@@ -83,7 +73,10 @@ export default class AttendanceListing extends Vue {
       <td
         v-for="day in days"
         :key="day.index"
-        :class="{ 'bg-transparent': !day.included }"
+        :class="[
+          'ema--data-table--td',
+          { 'bg-transparent': !day.included },
+        ]"
       >
         <div v-if="day.included" class="px-2">
           <DayAttendance

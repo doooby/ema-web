@@ -34,6 +34,7 @@ export default class ARecordsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
   @Prop({ required: true }) readonly columns!: Column[];
   @Prop({ default: () => {} }) readonly params!: Params;
+  @Prop() readonly staticPerPage?: number;
   @Prop({ default: () => 36 }) readonly actionsSize!: number;
   @Prop() readonly isProcessing?: boolean;
 
@@ -146,7 +147,7 @@ export default class ARecordsListing extends Vue {
         ...this.params,
         country_id,
         page: pagination.page,
-        per_page: pagination.perPage,
+        per_page: this.staticPerPage ?? pagination.perPage,
       }),
     );
     this.stableQuery.response = this.liveQuery.response;
@@ -209,6 +210,7 @@ export default class ARecordsListing extends Vue {
       <div v-else />
       <SelectPage
         :request="stableQuery"
+        :hide-per-page="!!staticPerPage"
         @select="fetchRecords({ pagination: $event })"
       />
     </div>
