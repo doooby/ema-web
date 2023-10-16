@@ -82,7 +82,7 @@ export default class SelectPage extends Vue {
 
   onPerPageSelect () {
     this.$emit('select', {
-      page: this.currentPage,
+      page: 1,
       perPage: this.perPage,
     });
   }
