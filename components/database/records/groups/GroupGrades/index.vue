@@ -174,6 +174,7 @@ export default class GroupGrades extends Vue {
         :columns="columns"
         :actions-size="0"
         :params="listingParams"
+        :static-per-page="100"
         @load="gradeChanges = null"
       >
         <template #prepend-body>
