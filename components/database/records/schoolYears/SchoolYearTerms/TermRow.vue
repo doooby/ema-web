@@ -7,24 +7,18 @@
       <span class="emr-2">
         <t value="app.common.label.from" />
       </span>
-      <b-form-datepicker
+      <DateInput
         :value="term.from"
-        :locale="$ema.klass.GLOBAL_DATE_LOCALE"
-        label-no-date-selected=""
-        :date-format-options="dateFormat"
-        @input="onChangeFrom"
+        @change="onChangeFrom"
       />
     </div>
     <div class="d-flex align-items-center flex-fill eml-1">
       <span class="emr-2">
         <t value="app.common.label.to" />
       </span>
-      <b-form-datepicker
+      <DateInput
         :value="term.to"
-        :locale="$ema.klass.GLOBAL_DATE_LOCALE"
-        label-no-date-selected=""
-        :date-format-options="dateFormat"
-        @input="onChangeTo"
+        @change="onChangeTo"
       />
     </div>
   </div>
@@ -33,25 +27,23 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Term } from './index.vue';
-import { parseISO as parseDate } from 'date-fns';
+import DateInput from '~/components/controls/inputs/DateInput.vue';
 
 const dateFormat = Object.freeze({ year: 'numeric', month: 'numeric', day: 'numeric' });
 
-@Component
+@Component({
+  components: { DateInput },
+})
 export default class TermRow extends Vue {
   @Prop({ required: true }) term!: Term;
   @Prop({ required: true }) index!: number;
   dateFormat = dateFormat;
 
-  onChangeFrom (rawDate: string) {
-    let date: any = parseDate(rawDate);
-    date = isNaN(date as any) ? undefined : date;
+  onChangeFrom (date) {
     this.$emit('change', { ...this.term, from: date });
   }
 
-  onChangeTo (rawDate: string) {
-    let date: any = parseDate(rawDate);
-    date = isNaN(date as any) ? undefined : date;
+  onChangeTo (date) {
     this.$emit('change', { ...this.term, to: date });
   }
 }

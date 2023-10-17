@@ -1,9 +1,6 @@
 <template>
   <div class="page-content -padded">
     <div class="container emy-4">
-      <h2 class="text-center">
-        North-West Syria
-      </h2>
       <div class="text-center mb-5 d-flex align-items-center justify-content-center">
         <span class="mr-3">project:</span>
         <div class="width-px-300 form--group">

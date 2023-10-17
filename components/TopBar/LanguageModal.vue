@@ -28,11 +28,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState } from 'vuex';
+import app from '~/lib/app';
 
 export default Vue.extend({
   data () {
     return {
-      languages: [ 'en', 'cs', 'ar' ],
+      languages: app.locales.KNOWN_LOCALES,
       loading: false,
     };
   },
@@ -49,7 +50,7 @@ export default Vue.extend({
       this.$store.commit('session/hideLanguageModal');
     },
     onSelectLocale (locale: string) {
-      this.$i18n.setLocale(locale);
+      this.$ema.setLocale(locale);
     },
   },
 });

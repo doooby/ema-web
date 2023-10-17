@@ -14,8 +14,8 @@ import ArchiveAction from '~/components/database/components/detail/actions/Archi
 import { course, group } from '~/lib/records';
 import { RequestResponse, SearchRecordsResponsePayload } from '~/lib/api2';
 import GroupWeekAttendance from '~/components/database/records/groups/GroupWeekAttendance/GroupWeekAttendance.vue';
-import PrintGroupTerm from '~/components/database/records/groups/PrintGroupTerm.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
+import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 
 enum Tabs {
   students,
@@ -26,7 +26,7 @@ enum Tabs {
 @Component({
   components: {
     RecordAssociations,
-    PrintGroupTerm,
+    PrintDateRange,
     GroupWeekAttendance,
     ArchiveAction,
     EditAction,
@@ -125,7 +125,7 @@ export default class extends DatabasePage {
               </small>
               {{ record.term_info[0] }}
             </div>
-            <PrintGroupTerm
+            <PrintDateRange
               v-if="record.term_dates"
               :dates="record.term_dates"
             />

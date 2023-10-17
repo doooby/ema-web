@@ -8,9 +8,10 @@ import { application_record, person } from '~/lib/records';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
+import PrintDate from '~/components/toolkit/PrintDate.vue';
 
 @Component({
-  components: { PrintFullName, RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
+  components: { PrintDate, PrintFullName, RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
 export default class PeopleListing extends Vue {
   @Prop({ default: () => {} }) readonly params!: Params;
@@ -74,7 +75,7 @@ export default class PeopleListing extends Vue {
             />
           </small>
           <span v-if="record.born_on" class="mr-3">
-            {{ $ema.localizeDate(record.born_on) }}
+            <PrintDate :value="record.born_on" />
           </span>
         </div>
       </td>

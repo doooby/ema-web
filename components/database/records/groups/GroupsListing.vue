@@ -9,10 +9,10 @@ import { Column } from '~/components/DataTable/v3';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
-import PrintGroupTerm from '~/components/database/records/groups/PrintGroupTerm.vue';
+import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 
 @Component({
-  components: { PrintGroupTerm, RecordAssociations, RecordHeader, ARecordsListing, ARecordLink, BRecordLink, TextNames },
+  components: { PrintDateRange, RecordAssociations, RecordHeader, ARecordsListing, ARecordLink, BRecordLink, TextNames },
 })
 export default class GroupsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -86,7 +86,7 @@ export default class GroupsListing extends Vue {
             </small>
             {{ record.term_info[0] }}
           </div>
-          <PrintGroupTerm
+          <PrintDateRange
             v-if="record.term_dates"
             :dates="record.term_dates"
           />

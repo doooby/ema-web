@@ -9,6 +9,7 @@ import ProjectSchoolsListing from '~/components/database/records/projects/Projec
 import CoursesListing from '~/components/database/records/projects/CoursesListing.vue';
 import AssociationList from '~/components/database/components/listing/AssociationList.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
+import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 
 enum Tabs {
   schools,
@@ -17,6 +18,7 @@ enum Tabs {
 
 @Component({
   components: {
+    PrintDateRange,
     TextNames,
     AssociationList,
     ProjectSchoolsListing,
@@ -69,9 +71,12 @@ export default class extends DatabasePage {
           {{ record.short_name_en }}
         </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.duration">
-          {{ $ema.localizeDate(record.starts_on) }}
-          -
-          {{ $ema.localizeDate(record.ends_on) }}
+          <PrintDateRange
+            :dates="[
+              record.starts_on,
+              record.ends_on
+            ]"
+          />
         </show-page-table-row>
         <show-page-table-row label="db.record.projects.label.donors">
           <AssociationList entity="donors" :records="record.donors" />

@@ -7,9 +7,11 @@ import { Params } from '~/lib/api2';
 import { application_record } from '~/lib/records';
 import { Column } from '~/components/DataTable/v3';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
+import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
+import PrintDate from '~/components/toolkit/PrintDate.vue';
 
 @Component({
-  components: { ARecordsListing, ARecordLink, TextNames, BRecordLink },
+  components: { PrintDate, PrintDateRange, ARecordsListing, ARecordLink, TextNames, BRecordLink },
 })
 export default class extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -22,7 +24,7 @@ export default class extends Vue {
         { name: 'position' },
         { name: 'person' },
         { name: 'school', size: 300 },
-        { name: 'validity' },
+        { name: 'validity', size: 250 },
         { name: 'resigned_on' },
       ]),
     ];
@@ -65,14 +67,15 @@ export default class extends Vue {
         <b-record-link entity="schools" :record="record.school" />
       </td>
       <td>
-        <div>
-          <span>{{ $ema.localizeDate(record.starts_on) }}</span>
-          <span>-</span>
-          <span>{{ $ema.localizeDate(record.ends_on) }}</span>
-        </div>
+        <PrintDateRange
+          :dates="[
+            record.starts_on,
+            record.ends_on
+          ]"
+        />
       </td>
       <td>
-        {{ $ema.localizeDate(record.resigned_on) }}
+        <PrintDate :value="record.resigned_on" />
       </td>
       <td />
     </template>

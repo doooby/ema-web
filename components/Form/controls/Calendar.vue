@@ -3,22 +3,19 @@
     <template #label>
       <t :value="labelTranslation" />
     </template>
-    <b-form-datepicker
-      :id="domIdBase"
+    <DateInput
+      :dom-id="domIdBase"
       :value="sanitizedValue"
-      :locale="$ema.klass.GLOBAL_DATE_LOCALE"
-      label-no-date-selected=""
-      :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-      @input="onDateChange"
+      @change="onChange"
     />
   </b-form-group>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { parseISO as parseDate } from 'date-fns';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '..';
 import ControlMixin from '../ControlMixin';
+import { DateInput } from '~/components/controls/inputs';
 
 export const type: FormFieldType = {
   name: 'calendar',
@@ -33,6 +30,7 @@ export const type: FormFieldType = {
   },
 };
 export default Vue.extend({
+  components: { DateInput },
   mixins: [ ControlMixin ],
   props: {
     field: { type: Object as Vue.PropType<FormField>, required: true },
@@ -48,9 +46,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    onDateChange (rawDate: string) {
-      const date = parseDate(rawDate);
-      this.context.onChange({ [this.field.name]: isNaN(date as any) ? undefined : date });
+    onChange (date) {
+      this.context.onChange({ [this.field.name]: date });
     },
   },
 });

@@ -4,7 +4,7 @@ import { group } from '~/lib/records';
 import { formatDate } from '~/lib/global_utils';
 import { isMonday, subDays } from 'date-fns';
 import app from '~/lib/app';
-import { CalendarInput } from '~/components/controls/inputs';
+import { DateInput } from '~/components/controls/inputs';
 
 export interface Model {
   inputDate: app.Maybe<Date>;
@@ -12,7 +12,7 @@ export interface Model {
 }
 
 @Component({
-  components: { CalendarInput },
+  components: { DateInput },
   methods: { formatDate },
 })
 export default class ListingControls extends Vue {
@@ -73,8 +73,8 @@ function closestMonday (date: Date): Date {
       <template #label>
         <t value="db.record.groups.attendance.filters.date" />
       </template>
-      <CalendarInput
-        dom-id="attendance_filters_date"
+      <DateInput
+        dom-id="attendance__filters_date"
         :disabled="!term"
         :value="value.inputDate"
         :min="term?.begin"

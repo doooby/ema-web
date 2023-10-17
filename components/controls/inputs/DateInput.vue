@@ -1,8 +1,11 @@
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { formatDate, parseDate } from '~/lib/global_utils';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import app from '~/lib/app';
+import TextInput from '~/components/controls/inputs/TextInput.vue';
 
-@Component
+@Component({
+  components: { TextInput },
+})
 export default class DateInput extends Vue {
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
@@ -11,34 +14,80 @@ export default class DateInput extends Vue {
   @Prop() readonly min?: Date;
   @Prop() readonly max?: Date;
 
-  get valueString () {
-    return formatDate(this.value);
+  textValue = '';
+
+  created () {
+    this.textValue = this.$ema.localizeDate(this.value) ?? '';
   }
 
-  get minString () {
-    return formatDate(this.min);
+  get textEnUk () {
+    return formatDateInEnglish(this.value);
   }
 
-  get maxString () {
-    return formatDate(this.max);
+  onChange (value): void {
+    this.$emit('change', app.parseDate(value));
   }
 
-  onChange (event: { target: HTMLInputElement }): void {
-    this.$emit('change', parseDate(event.target.value));
+  onTextChange (value) {
+    const newDate = app.sanitizedDate(app.parseDate(value));
+    this.textValue = this.$ema.localizeDate(this.value) ?? '';
+    this.$emit('change', newDate);
   }
+
+  @Watch('value')
+  @Watch('$ema.locale')
+  onValueChange () {
+    this.textValue = this.$ema.localizeDate(this.value) ?? '';
+  }
+}
+
+function formatDateInEnglish (date?: Date) {
+  if (!date) return '';
+  return app.locales.createDateTimeFormat(
+    app.locales.INTL_GLOBAL,
+  ).format(date);
 }
 </script>
 
 <template>
-  <input
-    :id="domId"
-    type="date"
-    :class="[ 'form-control', $attrs.class ]"
-    :value="valueString"
-    :disabled="disabled"
-    autocomplete="off"
-    :min="minString"
-    :max="maxString"
-    @change="onChange"
-  >
+  <div class="d-flex">
+    <b-form-datepicker
+      class="ema--control--date-input--picker"
+      :value="value ?? ''"
+      :min="min ?? ''"
+      :max="max ?? ''"
+      :disabled="disabled"
+      :locale="$ema.intlLocale"
+      :button-only="true"
+      @input="onChange"
+    />
+    <div
+      v-if="!$ema.localeIsEn"
+      class="px-2 font-14 border-top border-bottom label_en d-flex align-items-center"
+    >
+      {{ textEnUk }}
+    </div>
+    <div class="flex-fill">
+      <TextInput
+        :dom-id="domId"
+        :value="textValue"
+        @change="onTextChange"
+      />
+    </div>
+  </div>
 </template>
+
+<style>
+.ema--control--date-input--picker > .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+</style>
+
+<style lang="scss" scoped>
+@import "assets/css/variables";
+.label_en {
+  background-color: $input-group-addon-bg;
+}
+</style>

@@ -1,10 +1,10 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
-import PrintGroupTerm from '~/components/database/records/groups/PrintGroupTerm.vue';
+import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 
 @Component({
-  components: { PrintGroupTerm },
+  components: { PrintDateRange },
 })
 export default class PrintCourseTerms extends Vue {
   @Prop({ required: true }) readonly dates!: app.List<{ begin: Date, end: Date }>;
@@ -25,7 +25,7 @@ export default class PrintCourseTerms extends Vue {
         <div class="mr-2">
           {{ index + 1 }}&nbsp;:
         </div>
-        <PrintGroupTerm :dates="date" />
+        <PrintDateRange :dates="date" />
       </div>
     </li>
   </ul>

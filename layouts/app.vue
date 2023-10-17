@@ -1,6 +1,6 @@
 <template>
   <div>
-    <top-bar />
+    <TopBar />
     <div class="position-relative page-body">
       <Nuxt />
     </div>

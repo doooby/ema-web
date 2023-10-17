@@ -8,7 +8,6 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
 })
 export default class UserPrivileges extends Vue {
   @Prop({ required: true }) user!: user.User;
-
 }
 </script>
 

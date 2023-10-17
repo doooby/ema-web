@@ -8,12 +8,16 @@ export default class TextInput extends Vue {
   @Prop() readonly value?: string;
 
   onChange (event: { target: HTMLInputElement }): void {
-    this.$emit('change', event.target.value);
+    this.invokeChange(event.target.value);
   }
 
   onSubmit (event: { target: HTMLInputElement }): void {
-    this.$emit('change', event.target.value);
-    this.$emit('submit', event.target.value);
+    this.invokeChange(event.target.value);
+    this.$emit('submit');
+  }
+
+  invokeChange (newValue) {
+    if (newValue !== this.value) this.$emit('change', newValue);
   }
 }
 </script>
@@ -27,6 +31,7 @@ export default class TextInput extends Vue {
     :disabled="disabled"
     autocomplete="off"
     @blur="onChange"
-    @keypress.enter.stop="onSubmit"
+    @keypress.exact.enter.stop="onChange"
+    @keypress.ctrl.enter.stop="onSubmit"
   >
 </template>

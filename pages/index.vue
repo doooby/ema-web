@@ -1,60 +1,52 @@
-<template>
-  <div class="page-content -padded">
-    <h1>EMA Monitoring v2</h1>
-<!--    <p>-->
-<!--      Is it any good?-->
-<!--      <br>-->
-<!--      <a href="https://news.ycombinator.com/item?id=3067434">yes.</a>-->
-<!--    </p>-->
-<!--    <hr>-->
-    <h3>Homepage</h3>
-    <p>
-      We're working on it.
-    </p>
-<!--    <h3>Database</h3>-->
-<!--    <ul>-->
-<!--      <li>-->
-<!--        <nuxt-link to="/database">-->
-<!--          browse-->
-<!--        </nuxt-link>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--    <h3>Admin</h3>-->
-<!--    <ul>-->
-<!--      <li>-->
-<!--        <a href="/admin/translations/edit/en">Edit EN Translations</a>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--    <h3>Dev</h3>-->
-<!--    <ul>-->
-<!--      <li>-->
-<!--        <nuxt-link to="/toolkit/playground">-->
-<!--          playground (empty page)-->
-<!--        </nuxt-link>-->
-<!--      </li>-->
-<!--      <li>-->
-<!--        <nuxt-link to="/toolkit/form_controls">-->
-<!--          toolkit - form controls-->
-<!--        </nuxt-link>-->
-<!--      </li>-->
-<!--      <li>-->
-<!--        <nuxt-link to="/toolkit/bs_icons">-->
-<!--          toolkit - bootstrap 1.5.0 icons-->
-<!--        </nuxt-link>-->
-<!--      </li>-->
-<!--      <li>-->
-<!--        <nuxt-link to="/toolkit/charts">-->
-<!--          toolkit - charts demo-->
-<!--        </nuxt-link>-->
-<!--      </li>-->
-<!--    </ul>-->
-  </div>
-</template>
-
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import { AppPage } from '~/components';
 
 @Component
-export default class Index extends AppPage {}
+export default class Index extends AppPage {
+  get userSession () {
+    return this.$ema.userSession;
+  }
+}
 </script>
+
+<template>
+  <div class="page-content -padded">
+    <h1>EMA Monitoring v2</h1>
+    <div class="mt2">
+      <ul>
+        <li>
+          <div
+            style="height: 26px;"
+            class="m-1"
+          >
+            <nuxt-link to="/">
+              <h6 class="m-0 d-flex align-items-center">
+                <b-icon icon="house-door-fill" class="mr-2" />
+                <t value="top_bar.action.home" />
+              </h6>
+            </nuxt-link>
+          </div>
+        </li>
+        <li v-if="userSession">
+          <div
+            style="height: 26px;"
+            class="d-flex align-items-center"
+          >
+            <nuxt-link to="/database">
+              <h6 class="m-0 d-flex align-items-center">
+                <b-icon icon="server" class="mr-2" />
+                <t value="top_bar.action.db" />
+              </h6>
+            </nuxt-link>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div v-if="!userSession">
+      <b-alert show variant="info">
+        <t value="app.user_not_present" />
+      </b-alert>
+    </div>
+  </div>
+</template>

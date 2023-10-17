@@ -9,6 +9,7 @@ import WorkAgreementsListing from '~/components/database/records/people/WorkAgre
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import { person } from '~/lib/records';
 import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
+import PrintDate from '~/components/toolkit/PrintDate.vue';
 
 enum Tabs {
   groups,
@@ -17,6 +18,7 @@ enum Tabs {
 
 @Component({
   components: {
+    PrintDate,
     PrintFullName,
     RecordAssociations,
     WorkAgreementsListing,
@@ -67,7 +69,7 @@ export default class extends DatabasePage {
           {{ record.navision_id }}
         </show-page-table-row>
         <show-page-table-row label="db.record.people.label.born_on">
-          {{ $ema.localizeDate(record.born_on) }}
+          <PrintDate :value="record.born_on" />
         </show-page-table-row>
         <show-page-table-row v-if="record.main_group" label="db.record.people.label.main_group">
           <RecordAssociations

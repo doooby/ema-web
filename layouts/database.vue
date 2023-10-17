@@ -1,6 +1,6 @@
 <template>
   <div>
-    <top-bar />
+    <TopBar />
     <div class="page-body">
       <resources-menu v-if="userPresent" />
       <div v-if="userPresent">
