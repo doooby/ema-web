@@ -90,7 +90,7 @@ export default class ListingControlsRow extends Vue {
                 :key="option.value"
                 :value="option.value"
               >
-                {{ option.item }}
+                {{ $t(option.item) }}
               </option>
             </select>
           </div>
