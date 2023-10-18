@@ -9,9 +9,9 @@ import SearchForm from '~/components/database/pages/index/SearchForm.vue';
 import controls from '~/components/controls';
 import BRecordsSelect from '~/components/controls/inputs/BRecordsSelect.vue';
 import OptionsSelect from '~/components/controls/inputs/OptionsSelect.vue';
+import app from '~/lib/app';
 
 const nonAssignedOptions = Object.freeze([
-  { value: '', item: 'db.record.groups.filters.non_classified.all' },
   { value: 'only', item: 'db.record.groups.filters.non_classified.only' },
   { value: 'exclude', item: 'db.record.groups.filters.non_classified.exclude' },
 ]);
@@ -99,11 +99,20 @@ export default class extends DatabasePage {
       },
       {
         name: 'non_classified',
-        default: () => [ nonAssignedOptions[0] ],
         options: nonAssignedOptions as any,
         populateParams: (values: any, params) => {
           params.non_classified =
             values.non_classified?.map(b => b.value)?.[0];
+        },
+      },
+      {
+        name: 'gender',
+        options: app.internalOptionsList2(
+          this.$store.state.session.country,
+          'gender',
+        ) as any,
+        populateParams: (values: any, params) => {
+          params.gender = values.gender?.map(b => b.value)?.[0];
         },
       },
     );
@@ -211,32 +220,60 @@ export default class extends DatabasePage {
             @change="group.update('standardized_courses', $event)"
           />
         </b-form-group>
-      </div>
-      <b-form-group
-        class="col-md-4 col-lg-3"
-        :label="$t('db.record.groups.filters.non_classified.label')"
-      >
-        <OptionsSelect
-          :value="group.getValue('non_classified')"
-          :options="group.fieldsIndex.non_classified?.options ?? []"
-          @change="group.update('non_classified', $event)"
+        <b-form-group
+          class="mt-2"
+          :label="$t('db.record.groups.filters.non_classified.label')"
         >
-          <template #options="{options, isSelected, onToggleOption}">
-            <li
-              v-for="option in options"
-              :key="option.value"
-              class="list-group-item list-group-item-action d-flex"
-              style="cursor: pointer;"
-              @click="onToggleOption(option)"
-            >
-              <input type="radio" :checked="isSelected(option)">
-              <span class="ml-4">
-                <t :value="option.item" />
-              </span>
-            </li>
-          </template>
-        </OptionsSelect>
-      </b-form-group>
+          <OptionsSelect
+            :value="group.getValue('non_classified')"
+            :options="group.fieldsIndex.non_classified?.options ?? []"
+            @change="group.update('non_classified', $event)"
+          >
+            <template #options="{options, isSelected, onToggleOption}">
+              <li
+                v-for="option in options"
+                :key="option.value"
+                class="list-group-item list-group-item-action d-flex"
+                style="cursor: pointer;"
+                @click="onToggleOption(option)"
+              >
+                <input type="radio" :checked="isSelected(option)">
+                <span class="ml-4">
+                  <t :value="option.item" />
+                </span>
+              </li>
+            </template>
+          </OptionsSelect>
+        </b-form-group>
+      </div>
+      <div class="col-md-4 col-lg-3">
+        <b-form-group
+          class="mt-2"
+          :label="$t('db.record.people.filters.gender.label')"
+        >
+          <OptionsSelect
+            :value="group.getValue('gender')"
+            :options="group.fieldsIndex.gender?.options ?? []"
+            @change="group.update('gender', $event)"
+          >
+            <template #options="{options, isSelected, onToggleOption}">
+              <li
+                v-for="option in options"
+                :key="option.value"
+                class="list-group-item list-group-item-action d-flex"
+                style="cursor: pointer;"
+                @click="onToggleOption(option)"
+              >
+                <input type="radio" :checked="isSelected(option)">
+                <span class="ml-4">
+                  <t :value="option.item" />
+                </span>
+              </li>
+            </template>
+          </OptionsSelect>
+        </b-form-group>
+      </div>
+
     </template>
 
     <PeopleListing
