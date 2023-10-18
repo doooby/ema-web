@@ -91,84 +91,93 @@ export default class SelectPage extends Vue {
 </script>
 
 <template>
-  <div
-    class="pagination d-flex flex-wrap"
-    @click="onPageSelect"
-  >
-    <div class="px-1 d-flex">
-      <t value="db.listing.SearchPagination.count" />
-      <span>&nbsp;:&nbsp;</span>
-      <span>{{ countOnPage }}</span>
-      <span>&nbsp;/&nbsp;</span>
-      <span>{{ total }}</span>
-    </div>
-    <div class="pagination-input d-flex px-1">
-      <span>
-        <t value="db.listing.SearchPagination.pages" />
-      </span>
-      <span>&nbsp;:&nbsp;</span>
-      <input
-        type="text"
-        class="form-control-plaintext p-0"
-        :value="currentPage"
-        @blur="onPageInput"
-        @keydown.enter="onPageInput"
+  <div>
+
+    <div class="pagination-row d-flex justify-content-end flex-wrap">
+      <div
+        v-if="!hidePerPage"
+        class="d-flex px-1"
       >
-      <span class="flex-fill">
-        &nbsp;/&nbsp;{{ lastPage }}
-      </span>
-    </div>
-    <div
-      v-if="!hidePerPage"
-      class="d-flex px-1"
-    >
-      <span>
-        <t value="db.listing.SearchPagination.per_page" />
-      </span>
-      <span>&nbsp;:&nbsp;</span>
-      <select
-        v-model="perPage"
-        class="form-control pagination--per_page"
-        @change="onPerPageSelect"
-      >
-        <option
-          v-for="option of perPageOptions"
-          :key="option.value"
-          :value="option.value"
+        <span>
+          <t value="db.listing.SearchPagination.per_page" />
+        </span>
+        <span>&nbsp;:&nbsp;</span>
+        <select
+          v-model="perPage"
+          class="form-control pagination--per_page"
+          @change="onPerPageSelect"
         >
-          {{ option.text }}
-        </option>
-      </select>
-    </div>
-    <div
-      v-for="page of availablePages"
-      :key="page"
-      :class="{ 'pagination-item': true, 'current-page': currentPage === page }"
-    >
-      <div :data-page="page">
-        {{ renderContent(page) }}
+          <option
+            v-for="option of perPageOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      <div class="pagination-input d-flex px-1">
+        <span>
+          <t value="db.listing.SearchPagination.pages" />
+        </span>
+        <span>&nbsp;:&nbsp;</span>
+        <input
+          type="text"
+          class="form-control-plaintext p-0"
+          :value="currentPage"
+          @blur="onPageInput"
+          @keydown.enter="onPageInput"
+        >
+        <span class="flex-fill">
+          &nbsp;/&nbsp;{{ lastPage }}
+        </span>
+      </div>
+      <div class="px-1 d-flex">
+        <t value="db.listing.SearchPagination.count" />
+        <span>&nbsp;:&nbsp;</span>
+        <span>{{ countOnPage }}</span>
+        <span>&nbsp;/&nbsp;</span>
+        <span>{{ total }}</span>
       </div>
     </div>
+
+    <div class="d-flex justify-content-end">
+      <div
+        class="pt-1 pagination-row d-flex flex-wrap"
+        @click="onPageSelect"
+      >
+        <div
+          v-for="page of availablePages"
+          :key="page"
+          :class="{ 'pagination-item': true, 'current-page': currentPage === page }"
+        >
+          <div :data-page="page">
+            {{ renderContent(page) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <style lang="scss" scoped>
 @import "assets/css/variables";
-.pagination {
+.pagination-row {
   gap: 4px;
-}
-.pagination > div {
-  min-width: 28px;
-  height: 28px;
-  border: 2px solid $input-bg;
-  padding: 2px;
-  font-size: 14px;
+  > div {
+    min-width: 28px;
+    height: 28px;
+    border: 2px solid $input-bg;
+    padding: 2px;
+    font-size: 14px;
 
-  &.current-page {
-    border-color: $body-color;
-    > div {
-      background-color: $body-color;
-      color: $body-bg;
+    &.current-page {
+      border-color: $body-color;
+      > div {
+        background-color: $body-color;
+        color: $body-bg;
+      }
     }
   }
 }
@@ -183,6 +192,7 @@ export default class SelectPage extends Vue {
   line-height: 20px;
   user-select: none;
   cursor: pointer;
+  padding: 0 2px;
 }
 .pagination--per_page {
   height: 20px;

@@ -25,6 +25,7 @@ export function searchResponsePayload<R> (
         records: wai.prop('records', value, parseListOfRecords(
           value => parseRecord(value, associations),
         )),
+        sort_keys: wai.prop('sort_keys', value, wai.nullable(wai.listOf(wai.string))),
       };
     },
   );

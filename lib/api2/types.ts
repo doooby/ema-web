@@ -1,3 +1,5 @@
+import app from '~/lib/app';
+
 export interface Params {
   [field: string]: any;
 }
@@ -40,6 +42,7 @@ export interface SearchRecordsResponsePayload<R = never> {
   total: number;
   per_page: number;
   records: R[];
+  sort_keys: app.Maybe<string[]>;
 }
 
 export type UpdatedRecordResponsePayload =

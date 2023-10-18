@@ -37,3 +37,39 @@
 .separator {
   border-bottom: 1px solid $card-border-color;
 }
+
+.gray-border-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+
+  > div {
+    min-width: 28px;
+    height: 28px;
+    border: 2px solid $input-bg;
+    padding: 2px;
+    font-size: 14px;
+
+    &.gray-border-controls--field__active {
+      border-color: $body-color;
+      > div {
+        background-color: $body-color;
+        color: $body-bg;
+      }
+    }
+  }
+}
+
+.gray-border-controls--field--button {
+  text-align: center;
+  line-height: 20px;
+  user-select: none;
+  cursor: pointer;
+  padding: 0 2px;
+}
+
+.gray-border-controls--field--select {
+  height: 20px;
+  font-size: 14px;
+  padding: 0 4px;
+}

@@ -5,8 +5,12 @@ import SelectPage, { PER_PAGE } from '~/components/database/components/listing/S
 import { Params, SearchRecordsResponsePayload } from '~/lib/api2';
 import { Column, DataTable, DataTableHeadersRow } from '~/components/DataTable/v3';
 import ActionsCell from './ActionsCell.vue';
+import ListingControlsRow, {
+  ListingControls,
+} from '~/components/database/components/listing/ARecordsListing/ListingControlsRow.vue';
 
 export interface Model {
+  controls: ListingControls;
   records: unknown[];
   selected: unknown[];
   isAllSelected: boolean;
@@ -22,6 +26,7 @@ const CellContent = Vue.extend({
 
 @Component({
   components: {
+    ListingControlsRow,
     SelectPage,
     DataTable,
     DataTableHeadersRow,
@@ -42,6 +47,10 @@ export default class ARecordsListing extends Vue {
   stableQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>();
 
   model: Model = {
+    controls: {
+      pagination: { page: 1, perPage: PER_PAGE[0] },
+      sort: [ 'id', 'desc' ],
+    },
     records: [],
     selected: [],
     isAllSelected: false,
@@ -55,12 +64,6 @@ export default class ARecordsListing extends Vue {
       }
     },
   };
-
-  @Watch('entity')
-  @Watch('params')
-  onEntityChanged () {
-    this.fetchRecords();
-  }
 
   @Watch('records')
   onRecordsChanged () {
@@ -125,20 +128,11 @@ export default class ARecordsListing extends Vue {
       : [];
   }
 
-  async fetchRecords (
-    opts?: {
-      pagination: {
-        page: number;
-        perPage: number;
-      }
-    },
-  ) {
+  @Watch('entity')
+  @Watch('params')
+  @Watch('model.controls')
+  async fetchRecords () {
     if (this.liveQuery.processing) return;
-
-    let { pagination } = opts ?? {};
-    if (!pagination) {
-      pagination = { page: 1, perPage: PER_PAGE[0] };
-    }
 
     const country_id = this.$store.getters['session/countryId'];
     await this.$api2.request(
@@ -146,8 +140,9 @@ export default class ARecordsListing extends Vue {
       this.$api2.getQuery(this.entity, 'search')({
         ...this.params,
         country_id,
-        page: pagination.page,
-        per_page: this.staticPerPage ?? pagination.perPage,
+        page: this.model.controls.pagination.page,
+        per_page: this.staticPerPage ?? this.model.controls.pagination.perPage,
+        sort: [ this.model.controls.sort ],
       }),
     );
     this.stableQuery.response = this.liveQuery.response;
@@ -167,53 +162,42 @@ export default class ARecordsListing extends Vue {
 
 <template>
   <div :class="$attrs.class">
-    <div class="actions-row d-flex flex-wrap justify-content-between position-relative">
-      <div
-        v-if="isLoading"
-        class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center"
+
+    <div
+      v-if="$scopedSlots['group-actions']"
+      class="d-flex align-items-center"
+    >
+      <b-button
+        variant="outline-secondary"
+        size="xs"
+        :disabled="isLoading"
+        @click="model.toggleSelectAll()"
       >
-        <div class="spinner-border spinner-border-sm" role="status">
-          <span class="sr-only" />
-        </div>
-      </div>
-      <div
-        v-if="$scopedSlots['group-actions']"
-        class="d-flex align-items-center pl-2"
-      >
-        <b-button
-          variant="outline-secondary"
-          size="xs"
-          @click="model.toggleSelectAll()"
+        <b-icon :icon="model.isAllSelected ? 'x' : 'check-all'" />
+      </b-button>
+      <div class="ml-3">
+        <b-dropdown
+          :disabled="!model.selected.length"
+          toggle-class="py-0"
         >
-          <b-icon :icon="model.isAllSelected ? 'x' : 'check-all'" />
-        </b-button>
-        <div class="ml-2">
-          <b-dropdown
-            :disabled="!model.selected.length"
-            size="sm"
-            toggle-class="py-0"
-          >
-            <template #button-content>
-              <t value="db.listing.selection.count" />
-              ({{ model.selected.length }})
-            </template>
-            <slot name="group-actions" :records="model.selected" />
-          </b-dropdown>
-        </div>
+          <template #button-content>
+            <t value="db.listing.selection.count" />
+            ({{ model.selected.length }})
+          </template>
+          <slot name="group-actions" :records="model.selected" />
+        </b-dropdown>
       </div>
-      <div
-        v-else-if="$scopedSlots['filters-actions']"
-        class="pl-2"
-      >
-        <slot name="filters-actions" />
-      </div>
-      <div v-else />
-      <SelectPage
-        :request="stableQuery"
-        :hide-per-page="!!staticPerPage"
-        @select="fetchRecords({ pagination: $event })"
-      />
     </div>
+
+    <ListingControlsRow
+      v-model="model.controls"
+      class="mt-3"
+      :entity="entity"
+      :request="stableQuery"
+      :hide-per-page="!!staticPerPage"
+      :disabled="isLoading"
+    />
+
     <data-table
       class="mt-2"
       :columns="allColumns"
@@ -254,9 +238,3 @@ export default class ARecordsListing extends Vue {
     </data-table>
   </div>
 </template>
-
-<style scoped>
-.actions-row {
-  gap: 4px;
-}
-</style>
