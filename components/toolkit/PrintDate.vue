@@ -25,7 +25,7 @@ function formatDateInEnglish (date?: Date) {
       {{ $ema.localizeDate(value) }}
     </div>
     <div
-      v-if="value && !$ema.localeIsEn"
+      v-if="value && !$ema.intlDateLocaleIsEnUk"
       class="font-12"
     >
       {{ textEnUk }}

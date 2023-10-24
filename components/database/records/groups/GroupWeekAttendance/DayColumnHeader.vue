@@ -14,7 +14,7 @@ export default class DayColumnHeader extends Vue {
   get weekdayName () {
     if (!this.date) return;
     return app.locales.createDateTimeFormat(
-      this.$ema.locale, { weekday: 'long' },
+      this.$ema.intlLocale, { weekday: 'long' },
     ).format(this.date);
   }
 }

@@ -17,12 +17,16 @@ export default class Ema {
     return this.context.i18n.locale;
   }
 
-  get localeIsEn () {
-    return this.locale === 'en';
-  }
-
   get intlLocale (): string {
     return app.locales.intlLocale(this.locale);
+  }
+
+  get intlDateLocale (): string {
+    return app.locales.intlDateLocale(this.locale);
+  }
+
+  get intlDateLocaleIsEnUk (): boolean {
+    return this.intlDateLocale === app.locales.INTL_GLOBAL;
   }
 
   setLocale (locale: string): void {
@@ -35,7 +39,7 @@ export default class Ema {
   ): app.Maybe<string> {
     if (!date) return;
     return app.locales.createDateTimeFormat(
-      this.locale, options,
+      this.intlDateLocale, options,
     ).format(date);
   }
 }
