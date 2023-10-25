@@ -150,80 +150,97 @@ export default class extends DatabasePage {
     <template #search-form="{ group }">
       <div class="col-md-4 col-lg-3">
         <b-form-group
-          v-slot="{ labelId }"
-          :label="$t('db.record.schools.meta.p')"
           label-for="students_filters_schools"
         >
-          <BRecordsSelect
-            :dom-id="labelId"
-            :value="group.getValue('schools')"
-            entity="schools"
-            :multiple="true"
-            @change="group.update('schools', $event)"
-          />
+          <template #label>
+            <t value="db.record.schools.meta.p" />
+          </template>
+          <template #default="{ labelId }">
+            <BRecordsSelect
+              :dom-id="labelId"
+              :value="group.getValue('schools')"
+              entity="schools"
+              :multiple="true"
+              @change="group.update('schools', $event)"
+            />
+          </template>
         </b-form-group>
         <b-form-group
-          v-slot="{ labelId }"
-          :label="$t('db.record.courses.meta.p')"
           label-for="students_filters_courses"
         >
-          <BRecordsSelect
-            :dom-id="labelId"
-            :value="group.getValue('courses')"
-            entity="courses"
-            :multiple="true"
-            :params="{ school_id: group.getParam('school_id'), school_year_id: group.getParam('school_year_id') }"
-            @change="group.update('courses', $event)"
-          />
+          <template #label>
+            <t value="db.record.courses.meta.p" />
+          </template>
+          <template #default="{ labelId }">
+            <BRecordsSelect
+              :dom-id="labelId"
+              :value="group.getValue('courses')"
+              entity="courses"
+              :multiple="true"
+              :params="{ school_id: group.getParam('school_id'), school_year_id: group.getParam('school_year_id') }"
+              @change="group.update('courses', $event)"
+            />
+          </template>
         </b-form-group>
         <b-form-group
-          v-slot="{ labelId }"
           class="mt-2"
-          :label="$t('db.record.groups.meta.p')"
           label-for="students_filters_groups"
         >
-          <BRecordsSelect
-            :dom-id="labelId"
-            :value="group.getValue('groups')"
-            entity="groups"
-            :multiple="true"
-            :params="{ course_id: group.getParam('course_id') }"
-            @change="group.update('groups', $event)"
-          />
+          <template #label>
+            <t value="db.record.groups.meta.p" />
+          </template>
+          <template #default="{ labelId }">
+            <BRecordsSelect
+              :dom-id="labelId"
+              :value="group.getValue('groups')"
+              entity="groups"
+              :multiple="true"
+              :params="{ course_id: group.getParam('course_id') }"
+              @change="group.update('groups', $event)"
+            />
+          </template>
         </b-form-group>
       </div>
       <div class="col-md-4 col-lg-3">
         <b-form-group
-          v-slot="{ labelId }"
-          :label="$t('db.record.school_years.meta.s')"
           label-for="students_filters_school_years"
         >
-          <BRecordsSelect
-            :dom-id="labelId"
-            :value="group.getValue('school_years')"
-            entity="school_years"
-            :multiple="true"
-            @change="group.update('school_years', $event)"
-          />
+          <template #label>
+            <t value="db.record.school_years.meta.s" />
+          </template>
+          <template #default="{ labelId }">
+            <BRecordsSelect
+              :dom-id="labelId"
+              :value="group.getValue('school_years')"
+              entity="school_years"
+              :multiple="true"
+              @change="group.update('school_years', $event)"
+            />
+          </template>
         </b-form-group>
         <b-form-group
-          v-slot="{ labelId }"
           class="mt-2"
-          :label="$t('db.record.standardized_courses.meta.s')"
           label-for="students_filters_standardized_courses"
         >
-          <BRecordsSelect
-            :dom-id="labelId"
-            :value="group.getValue('standardized_courses')"
-            entity="standardized_courses"
-            :multiple="true"
-            @change="group.update('standardized_courses', $event)"
-          />
+          <template #label>
+            <t value="db.record.standardized_courses.meta.s" />
+          </template>
+          <template #default="{ labelId }">
+            <BRecordsSelect
+              :dom-id="labelId"
+              :value="group.getValue('standardized_courses')"
+              entity="standardized_courses"
+              :multiple="true"
+              @change="group.update('standardized_courses', $event)"
+            />
+          </template>
         </b-form-group>
         <b-form-group
           class="mt-2"
-          :label="$t('db.record.groups.filters.non_classified.label')"
         >
+          <template #label>
+            <t value="db.record.groups.filters.non_classified.label" />
+          </template>
           <OptionsSelect
             :value="group.getValue('non_classified')"
             :options="group.fieldsIndex.non_classified?.options ?? []"
@@ -249,8 +266,10 @@ export default class extends DatabasePage {
       <div class="col-md-4 col-lg-3">
         <b-form-group
           class="mt-2"
-          :label="$t('db.record.people.filters.gender.label')"
         >
+          <template #label>
+            <t value="db.record.people.filters.gender.label" />
+          </template>
           <OptionsSelect
             :value="group.getValue('gender')"
             :options="group.fieldsIndex.gender?.options ?? []"

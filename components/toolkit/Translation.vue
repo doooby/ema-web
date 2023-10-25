@@ -5,7 +5,7 @@
       v-if="debugTranslations"
       icon="chat-left-quote"
       class="d-inline-block"
-      @click.prevent.capture="isModalShown = !isModalShown"
+      @click="onClickToOpen"
     />
     <b-modal
       id="modal"
@@ -70,6 +70,12 @@ export default class Translation extends Vue {
   get debugTranslations (): boolean {
     const { user, debugTranslations } = this.$store.state.session;
     return !!(user && debugTranslations);
+  }
+
+  onClickToOpen (event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isModalShown = !this.isModalShown;
   }
 
   onCopy (): void {

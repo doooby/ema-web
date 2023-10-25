@@ -71,7 +71,7 @@ export default class MoveStudents extends DatabasePage {
     }
 
     const studentsResponse = await this.$api2.transientRequest<SearchRecordsResponsePayload<BRecord>>(
-      this.$api2.getQuery('people', 'searchB')({ id: params.studentsIds }),
+      this.$api2.getQuery('people', 'searchB')({ id: params.studentsIds, per_page: 100 }),
     );
     if (studentsResponse.ok) {
       this.students = studentsResponse.payload.records;
