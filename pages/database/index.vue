@@ -17,7 +17,7 @@ export default class Index extends DatabasePage {}
       {{ currentCountry.record.caption }}
     </h2>
 
-<!--    <CountryDashboard />-->
+    <CountryDashboard />
 
   </div>
 </template>

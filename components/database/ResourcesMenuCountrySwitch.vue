@@ -13,7 +13,6 @@
 import { Vue, Component } from 'vue-property-decorator';
 import { buildFormFields, controls, FormField } from '~/components/Form';
 import { BRecord } from '~/lib/api2';
-import app from '~/lib/app';
 import { queries } from '~/lib/app/session';
 
 @Component
@@ -45,10 +44,7 @@ export default class ResourcesMenuCountrySwitch extends Vue {
     await this.$api2.transientRequest2(
       queries.set_current_country(country.id),
     );
-    await app.session.fetchUser({
-      api2: this.$api2,
-      store: this.$store,
-    });
+    window.location.reload();
   }
 }
 </script>
