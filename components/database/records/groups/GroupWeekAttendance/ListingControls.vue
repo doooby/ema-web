@@ -20,7 +20,11 @@ export default class ListingControls extends Vue {
   @Prop({ required: true }) readonly value!: Model;
   @Prop({ required: true }) readonly attendanceOptions!: app.List<{ value: string, text: string }>;
 
-  selectedPrefillValue = null;
+  selectedPrefillValue = '';
+
+  created () {
+    this.selectedPrefillValue = this.attendanceOptions[0]?.value ?? '';
+  }
 
   mounted () {
     this.onReset();
@@ -64,48 +68,45 @@ function closestSunday (date: Date): Date {
 </script>
 
 <template>
-  <div class="row">
-    <b-form-group
-      class="col-md-4 col-lg-3"
-      label-for="attendance__filters_date"
-    >
-      <template #label>
-        <t value="db.record.groups.attendance.filters.date" />
-      </template>
-      <DateInput
-        dom-id="attendance__filters_date"
-        :disabled="!term"
-        :value="value.inputDate"
-        :min="term?.begin"
-        :max="term?.end"
-        @change="onSelectDate"
-      />
-    </b-form-group>
-
-    <b-form-group
-      class="col-md-4 col-lg-3"
-      label-for="attendance__btn_start_day"
-    >
-      <template #label>
-        &nbsp;
-      </template>
-      <div class="d-flex">
-        <button
-          class="flex-fill btn btn-sm btn-outline-secondary d-flex align-items-center"
-          @click="onStartDay"
-        >
-          <b-icon
-            icon="chevron-down"
-            class="mr-2"
-          />
-          <t value="db.record.groups.attendance.btn_start_day" />
-        </button>
-        <b-form-select
-          v-model="selectedPrefillValue"
-          :style="{ width: '50px' }"
-          :options="computedAttendanceOptions"
+  <div>
+    <div class="row">
+      <b-form-group
+        class="col-md-4 col-lg-3"
+        label-for="attendance__filters_date"
+      >
+        <template #label>
+          <t value="db.record.groups.attendance.filters.date" />
+        </template>
+        <DateInput
+          dom-id="attendance__filters_date"
+          :disabled="!term"
+          :value="value.inputDate"
+          :min="term?.begin"
+          :max="term?.end"
+          @change="onSelectDate"
         />
+      </b-form-group>
+      <div class="col-lg-6">
+        <label>&nbsp;</label>
+        <div class="d-flex">
+          <button
+            class="btn btn-sm btn-outline-secondary d-flex align-items-center"
+            @click="onStartDay"
+          >
+            <b-icon
+              icon="chevron-down"
+              class="mr-2"
+            />
+            <t value="db.record.groups.attendance.btn_start_day" />
+          </button>
+          <div>
+            <b-form-select
+              v-model="selectedPrefillValue"
+              :options="computedAttendanceOptions"
+            />
+          </div>
+        </div>
       </div>
-    </b-form-group>
+    </div>
   </div>
 </template>
