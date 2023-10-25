@@ -18,8 +18,6 @@ export default class RecordLoader extends Vue {
 
   query = this.$api2.newQueryState<wai.ResourceShow<unknown>>();
 
-  splashManuallyHidden = false;
-
   onReload = () => this.onLoadRecord();
 
   mounted () {
@@ -49,7 +47,6 @@ export default class RecordLoader extends Vue {
   @Watch('entity')
   @Watch('recordId')
   async onLoadRecord () {
-    this.splashManuallyHidden = false;
     await this.$api2.request(
       this.query,
       this.$api2.getQuery(this.entity, 'V3_show')({

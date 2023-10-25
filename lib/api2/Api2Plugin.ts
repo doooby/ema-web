@@ -64,6 +64,34 @@ export default class Api2Plugin {
     };
   }
 
+  resourceState<R> (
+    query: api.Query<R>,
+  ): api.QueryResourseState<R> {
+    const state = Vue.observable<api.QueryResourseState<R>>({
+      isLoading: false,
+      resource: undefined,
+      failReason: undefined,
+      onReload: undefined,
+    });
+
+    const requestState = this.newQueryState<wai.ResourceShow<R>>();
+
+    state.onReload = async () => {
+      if (state.isLoading) return;
+
+      state.isLoading = true;
+      await this.request(requestState, query);
+      state.isLoading = false;
+      const { response } = requestState;
+      if (response) {
+        state.resource = response?.ok ? response.payload : undefined;
+        state.failReason = response?.ok === false ? response.reason : undefined;
+      }
+    };
+
+    return state;
+  }
+
   async request<V> (
     state: RequestState<V>,
     query_or_definition: api.Query<V> | QueryDefinition<V>,

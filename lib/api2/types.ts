@@ -1,4 +1,5 @@
 import app from '~/lib/app';
+import { wai } from '~/vendor/wai';
 
 export interface Params {
   [field: string]: any;
@@ -79,4 +80,11 @@ export interface RecordLoader<R> {
     record: null | R;
   },
   load(): Promise<void>;
+}
+
+export interface QueryResourseState<R = unknown> {
+  isLoading: boolean;
+  resource?: wai.ResourceShow<R>;
+  failReason?: string;
+  onReload?(): Promise<void>;
 }
