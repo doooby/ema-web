@@ -1,6 +1,5 @@
 import BooleanControl from './Boolean.vue';
 import CalendarControl, { type as CalendarControlType } from './Calendar.vue';
-import DateControl, { type as DateControlType } from './Date.vue';
 import ImageFile from './ImageFile.vue';
 import IntegerControl, { type as IntegerControlType } from './Integer.vue';
 import SelectControl from './Select.vue';
@@ -23,7 +22,6 @@ export function asFieldType (component: any): FormFieldType {
 export const controlsIndex2 = {
   boolean: asFieldType(BooleanControl),
   calendar: { ...CalendarControlType, control: CalendarControl },
-  date: { ...DateControlType, control: DateControl },
   imageFile: asFieldType(ImageFile),
   integer: { ...IntegerControlType, control: IntegerControl },
   location: asFieldType(LocationControl),

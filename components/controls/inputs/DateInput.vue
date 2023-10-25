@@ -2,6 +2,7 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import app from '~/lib/app';
 import TextInput from '~/components/controls/inputs/TextInput.vue';
+import { padStart } from 'lodash';
 
 @Component({
   components: { TextInput },
@@ -24,8 +25,8 @@ export default class DateInput extends Vue {
     return formatDateInEnglish(this.value);
   }
 
-  onChange (value): void {
-    this.$emit('change', app.parseDate(value));
+  onPick (value): void {
+    this.emitChange(app.parseDate(value));
   }
 
   onTextChange (value) {
@@ -35,23 +36,29 @@ export default class DateInput extends Vue {
       /^\s*(\d{1,2})\s*\/\s*(\d{1,2})\s*\/\s*(\d{1,4})\s*$/,
     );
 
-    try {
-      newDate = app.sanitizedDate(
-        app.parseDate(
-          match
-            ? `${match[3]}-${match[2]}-${match[1]}`
-            : value,
-        ),
-      );
-    } catch (err) {}
+    if (match) {
+      const utc_date = [
+        padStart(match[3], 4, '0'),
+        padStart(match[2], 2, '0'),
+        padStart(match[1], 2, '0'),
+      ].join('-');
+      newDate = app.parseDate(utc_date);
+    } else {
+      newDate = app.parseDate(value);
+    }
 
-    this.$emit('change', newDate);
+    this.emitChange(app.sanitizedDate(newDate));
   }
 
   @Watch('value')
   @Watch('$ema.locale')
   onValueChange () {
     this.textValue = this.$ema.localizeDate(this.value) ?? '';
+  }
+
+  emitChange (newDate: app.Maybe<Date>) {
+    if (!newDate) this.textValue = '';
+    this.$emit('change', newDate);
   }
 }
 
@@ -73,7 +80,7 @@ function formatDateInEnglish (date?: Date) {
       :disabled="disabled"
       :locale="$ema.intlLocale"
       :button-only="true"
-      @input="onChange"
+      @input="onPick"
     />
     <div
       v-if="!$ema.intlDateLocaleIsEnUk"

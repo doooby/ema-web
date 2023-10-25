@@ -152,7 +152,7 @@ export function recordControls ({
     [ 'mother_last_name', controls.name ],
     [ 'father_first_name', controls.name ],
     [ 'father_last_name', controls.name ],
-    [ 'born_on', controls.date ],
+    [ 'born_on', controls.calendar ],
     [ 'gender', controls.select, {
       options: app.internalOptionsList(countryData, 'gender'),
     } ],
@@ -177,8 +177,8 @@ export function recordControls ({
     [ 'spoken_languages', controls.selectMultiple, {
       options: app.internalOptionsList(countryData, 'languages'),
     } ],
-    [ 'registered_on', controls.date ],
-    [ 'enrolled_on', controls.date ],
+    [ 'registered_on', controls.calendar ],
+    [ 'enrolled_on', controls.calendar ],
     [ 'enrollment_reasons', controls.selectMultiple, {
       options: app.internalOptionsList(countryData, 'enrolment_reasons'),
     } ],
