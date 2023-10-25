@@ -35,7 +35,10 @@ export interface Term {
 export default class SchoolYearTerms extends Vue {
   static fieldType: FormFieldType = {
     fillParams ({ name }, values, params) {
-      params[name] = values[name] ?? [];
+      params[name] = (values[name] ?? []).map((term: Term) => ({
+        from: utils.dateToParam(term.from),
+        to: utils.dateToParam(term.to),
+      }));
     },
   };
 

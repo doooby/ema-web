@@ -12,11 +12,13 @@ export function warnOfError (error, ...context: any) {
   if (context) console.log(...context);
 }
 
-export function formatDate (date?: Date): string {
+// this strips the timezone, which is necessary, when sending the date to the server
+export function dateToParam (date?: Date): string {
   if (!date) return '';
   return formatISO(date, { representation: 'date' });
 }
 
+// TOTO rename to parseParamDate
 export function parseDate (value?: string) {
   return value ? parseISO(value) : undefined;
 }

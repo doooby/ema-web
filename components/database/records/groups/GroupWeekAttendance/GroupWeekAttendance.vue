@@ -3,7 +3,6 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { course, group } from '~/lib/records';
 import { wai } from '~/vendor/wai';
 import { RecordLoader } from '~/lib/api2';
-import { formatDate } from '~/lib/global_utils';
 import LoadingBlock from '~/components/database/components/LoadingBlock.vue';
 import ListingControls, { Model } from './ListingControls.vue';
 import app from '~/lib/app';
@@ -122,7 +121,7 @@ export default class GroupWeekAttendance extends Vue {
         this.showWeek,
         group.attendance.queries.show({
           group_id: this.group.id,
-          date: formatDate(this.controlsModel.currentDate),
+          date: utils.dateToParam(this.controlsModel.currentDate),
         }),
       );
     }
@@ -186,7 +185,7 @@ export default class GroupWeekAttendance extends Vue {
       this.updateWeek,
       group.attendance.queries.update({
         group_id: this.group.id,
-        date: formatDate(this.controlsModel.currentDate),
+        date: utils.dateToParam(this.controlsModel.currentDate),
         students,
       }),
     );
@@ -202,7 +201,7 @@ export default class GroupWeekAttendance extends Vue {
     const dateIndex = this.listedDays.findIndex(
       day => isSameDay(day.date, inputDate),
     );
-    if (!dateIndex) return;
+    if (dateIndex === -1) return;
 
     for (const student of this.studentRecords ?? []) {
       this.onChangeValue([ student.id, dateIndex, value ]);

@@ -2,7 +2,6 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import app from '~/lib/app';
 import TextInput from '~/components/controls/inputs/TextInput.vue';
-import { parse as parseDate } from 'date-fns';
 
 @Component({
   components: { TextInput },
@@ -33,14 +32,18 @@ export default class DateInput extends Vue {
     let newDate: undefined | Date;
 
     const match = value.match(
-      /^\s*\d{1,2}\/\d{1,2}\/\d{1,4}\s*$/,
+      /^\s*(\d{1,2})\s*\/\s*(\d{1,2})\s*\/\s*(\d{1,4})\s*$/,
     );
 
-    if (match) {
-      newDate = parseDate(value, 'd/M/y', new Date());
-    } else {
-      newDate = app.sanitizedDate(app.parseDate(value));
-    }
+    try {
+      newDate = app.sanitizedDate(
+        app.parseDate(
+          match
+            ? `${match[3]}-${match[2]}-${match[1]}`
+            : value,
+        ),
+      );
+    } catch (err) {}
 
     this.$emit('change', newDate);
   }
@@ -68,7 +71,7 @@ function formatDateInEnglish (date?: Date) {
       :min="min ?? ''"
       :max="max ?? ''"
       :disabled="disabled"
-      :locale="$ema.intlDateLocale"
+      :locale="$ema.intlLocale"
       :button-only="true"
       @input="onChange"
     />

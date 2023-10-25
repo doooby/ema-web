@@ -1,8 +1,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { group } from '~/lib/records';
-import { formatDate } from '~/lib/global_utils';
-import { isMonday, subDays } from 'date-fns';
+import { isSunday, subDays } from 'date-fns';
 import app from '~/lib/app';
 import { DateInput } from '~/components/controls/inputs';
 
@@ -13,7 +12,7 @@ export interface Model {
 
 @Component({
   components: { DateInput },
-  methods: { formatDate },
+  methods: { formatDate: utils.dateToParam },
 })
 export default class ListingControls extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
@@ -43,7 +42,7 @@ export default class ListingControls extends Vue {
     this.$emit('input', {
       ...this.value,
       inputDate: date,
-      currentDate: date ? closestMonday(date) : undefined,
+      currentDate: date ? closestSunday(date) : undefined,
     });
   }
 
@@ -55,11 +54,11 @@ export default class ListingControls extends Vue {
   }
 }
 
-function closestMonday (date: Date): Date {
-  if (isMonday(date)) {
+function closestSunday (date: Date): Date {
+  if (isSunday(date)) {
     return date;
   } else {
-    return subDays(date, date.getDay() - 1);
+    return subDays(date, date.getDay());
   }
 }
 </script>
