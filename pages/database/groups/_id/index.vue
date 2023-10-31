@@ -16,15 +16,19 @@ import { RequestResponse, SearchRecordsResponsePayload } from '~/lib/api2';
 import GroupWeekAttendance from '~/components/database/records/groups/GroupWeekAttendance/GroupWeekAttendance.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
+import AssignmentHistoryListing
+  from '~/components/views/group/students_change/AssignmentHistoryListing.vue';
 
 enum Tabs {
   students,
+  assignment_history,
   attendance,
-  grading
+  grading,
 }
 
 @Component({
   components: {
+    AssignmentHistoryListing,
     RecordAssociations,
     PrintDateRange,
     GroupWeekAttendance,
@@ -147,7 +151,18 @@ export default class extends DatabasePage {
             <students-listing :group="record" />
           </div>
         </b-tab>
-        <b-tab title="Attendance">
+        <b-tab>
+          <template #title>
+            <t value="db.pages.groups.show.tabs.assignment_history.title" />
+          </template>
+          <div v-if="currenTab === Tabs.assignment_history">
+            <AssignmentHistoryListing :group="record" />
+          </div>
+        </b-tab>
+        <b-tab>
+          <template #title>
+            <t value="db.pages.groups.show.tabs.attendance.title" />
+          </template>
           <div v-if="currenTab === Tabs.attendance">
             <GroupWeekAttendance
               :group="record"
@@ -155,7 +170,10 @@ export default class extends DatabasePage {
             />
           </div>
         </b-tab>
-        <b-tab title="Grading">
+        <b-tab>
+          <template #title>
+            <t value="db.pages.groups.show.tabs.grading.title" />
+          </template>
           <div v-if="currenTab === Tabs.grading">
             <GroupGrades
               :group="record"

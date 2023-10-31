@@ -5,12 +5,12 @@ export default class Ema {
   // eslint-disable-next-line no-useless-constructor
   constructor (readonly context) {}
 
-  get userSession (): null | user.SessionSlice {
-    return this.context.store.state.session.userSession;
-  }
-
   get currentCountry (): null | user.CurrentCountrySlice {
     return this.context.store.state.session.currentCountry;
+  }
+
+  get userSession (): null | user.SessionSlice {
+    return this.context.store.state.session.userSession;
   }
 
   get locale (): string {

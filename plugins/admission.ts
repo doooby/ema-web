@@ -1,6 +1,6 @@
 import { Context } from '@nuxt/types';
 
-class Admission {
+export class Admission {
   // eslint-disable-next-line no-useless-constructor
   constructor (readonly context: Context) {}
 

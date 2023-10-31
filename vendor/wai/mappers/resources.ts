@@ -9,9 +9,6 @@ export type AResource<S = {}> = S & {
 export type Associations = Record<string, undefined | Record<string, undefined | AResource>>;
 
 export interface ResourcesListing<R = {}> {
-  page: number;
-  pages_count: number;
-  per_page: number;
   total: number;
   records: AResource<R>[];
 }
@@ -78,31 +75,24 @@ export function resourceErrors (value): ResourceError[] {
   return wai.listOf(resourceError)(value);
 }
 
-export function recordsListing<S> (
-  value,
-  mapRecord: (record, associations: Associations) => S,
-): ResourcesListing<S> {
-  return wai.object((listing) => {
-    const associations = wai.property(listing, 'associations',
-      wai.indexOf(wai.indexOf(aResource)),
-    );
-    const record = uncertainResource(mapRecord);
-    return {
-      page: wai.property(listing, 'page', wai.integer),
-      pages_count: wai.property(listing, 'pages_count', wai.integer),
-      per_page: wai.property(listing, 'per_page', wai.integer),
-      total: wai.property(listing, 'total', wai.integer),
-      records: wai.property(listing, 'records',
-        wai.listOf(item => record(item, associations)),
-      ),
-    };
-  })(value);
+export function associatedRecord (
+  associations: Associations,
+  name: string,
+  value_id,
+): AResource {
+  const item = associations[name]?.[value_id];
+
+  if (!item) {
+    throw new wai.MappingError(`association ${name}.${value_id} is missing`);
+  }
+
+  return item;
 }
 
-export function recordShow<S> (
+export function recordShow<R> (
   value,
-  mapRecord: (record, associations: Associations) => S,
-): ResourceShow<S> {
+  mapRecord: (record, associations: Associations) => R,
+): ResourceShow<R> {
   return wai.object((listing) => {
     const associations = wai.property(listing, 'associations',
       wai.nullable(wai.indexOf(wai.indexOf(aResource))),

@@ -52,3 +52,9 @@ export function indexOf<I> (item: (value) => I): (value) => Record<string, I> {
     return value;
   });
 }
+
+export function listOfStrings (value): string[] {
+  return wai.listOf(
+    value => wai.nullable(wai.string)(value) ?? '',
+  )(value);
+}

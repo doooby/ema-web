@@ -1,4 +1,5 @@
 import { wai } from '~/vendor/wai';
+import { parseISO } from 'date-fns';
 
 export function integer (value): number {
   if (typeof value !== 'number' || !Number.isInteger(value)) {
@@ -19,4 +20,13 @@ export function boolean (value): boolean {
     throw new wai.MappingError('not boolean');
   }
   return value;
+}
+
+export function time (value): Date {
+  if (typeof value === 'string') {
+    const date = parseISO(value);
+    if (date && !isNaN(date as any)) return date;
+  }
+
+  throw new wai.MappingError('not date');
 }

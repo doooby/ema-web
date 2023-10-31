@@ -82,9 +82,9 @@ export interface RecordLoader<R> {
   load(): Promise<void>;
 }
 
-export interface QueryResourseState<R = unknown> {
+export interface QueryResourceState<R = unknown> {
   isLoading: boolean;
-  resource?: wai.ResourceShow<R>;
+  resource?: R;
   failReason?: string;
   onReload?(): Promise<void>;
 }

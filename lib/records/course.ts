@@ -9,7 +9,6 @@ import { mapAssociation, mapDate, mapName, mapSelectOrFillTuple } from '~/lib/ap
 import { dbFields } from '~/components/database/fields';
 import app from '~/lib/app';
 import * as grading from './grading';
-import { uncertainResource } from '~/vendor/wai/mappers';
 
 export { grading };
 

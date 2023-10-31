@@ -1,2 +1,6 @@
 import * as attendance from './attendance';
-export { attendance };
+import * as students_change from './students_change';
+export {
+  attendance,
+  students_change,
+};
