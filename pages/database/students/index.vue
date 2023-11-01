@@ -7,8 +7,7 @@ import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
 import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
 import SearchForm from '~/components/database/pages/index/SearchForm.vue';
 import controls from '~/components/controls';
-import BRecordsSelect from '~/components/controls/inputs/BRecordsSelect.vue';
-import OptionsSelect from '~/components/controls/inputs/OptionsSelect.vue';
+import { BRecordsSelect, OptionsSelect } from '~/components/controls/inputs';
 import app from '~/lib/app';
 
 const nonAssignedOptions = Object.freeze([

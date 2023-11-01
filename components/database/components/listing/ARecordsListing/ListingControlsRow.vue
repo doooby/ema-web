@@ -3,6 +3,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import SelectPage from '~/components/database/components/listing/SelectPage.vue';
 import { RequestState, SearchRecordsResponsePayload } from '~/lib/api2';
 import app from '~/lib/app';
+import { DropdownSelect } from '~/components/controls/inputs';
 
 export interface ListingControls {
   pagination: {
@@ -13,7 +14,7 @@ export interface ListingControls {
 }
 
 @Component({
-  components: { SelectPage },
+  components: { DropdownSelect, SelectPage },
 })
 export default class ListingControlsRow extends Vue {
   @Prop({ required: true }) readonly value!: ListingControls;
@@ -30,6 +31,11 @@ export default class ListingControlsRow extends Vue {
     }
 
     return [];
+  }
+
+  get currentOrderKeyValue () {
+    const value = this.value.sort?.[0];
+    return [ this.sortDirections.find(option => option?.value === value) ];
   }
 
   get currentSortDirection () {
@@ -79,21 +85,18 @@ export default class ListingControlsRow extends Vue {
           v-if="sortDirections.length"
           class="gray-border-controls"
         >
-          <div>
-            <select
-              :value="value.sort?.[0]"
-              class="form-control gray-border-controls--field--select"
-              @change="onChangeSortKey($event.target.value)"
-            >
-              <option
-                v-for="option of sortDirections"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ $t(option.item) }}
-              </option>
-            </select>
-          </div>
+          <DropdownSelect
+            :value="currentOrderKeyValue"
+            :options="sortDirections"
+            @change="$event[0] && onChangeSortKey($event[0].value)"
+          >
+            <template #button-content="{ option }">
+              <t v-if="option" :value="option.item" />
+            </template>
+            <template #option-content="{ option }">
+              <t :value="option.item" />
+            </template>
+          </DropdownSelect>
           <div>
             <div
               class="direction--dir-btn gray-border-controls--field--button border-0 "

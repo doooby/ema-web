@@ -4,7 +4,7 @@ import { school, user } from '~/lib/records';
 import CoursesListing from '~/components/database/records/courses/CoursesListing.vue';
 import controls from '~/components/controls';
 import SearchForm from '~/components/database/pages/index/SearchForm.vue';
-import BRecordsSelect from '~/components/controls/inputs/BRecordsSelect.vue';
+import { BRecordsSelect } from '~/components/controls/inputs';
 
 @Component({
   components: {

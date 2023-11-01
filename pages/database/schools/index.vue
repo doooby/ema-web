@@ -5,7 +5,7 @@ import SchoolsListing from '~/components/database/records/schools/SchoolsListing
 import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
 import controls from '~/components/controls';
 import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
-import BRecordsSelect from '~/components/controls/inputs/BRecordsSelect.vue';
+import { BRecordsSelect } from '~/components/controls/inputs';
 
 @Component({
   components: {

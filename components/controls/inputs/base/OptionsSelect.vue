@@ -12,12 +12,20 @@ export default class OptionsSelect extends Vue {
   @Prop({ default: 150 }) readonly maxHeight?: number;
 
   get sanitizedValue (): app.OptionItem[] {
-    return this.value ?? [];
+    if (this.multiple) {
+      if (Array.isArray(this.value)) return this.value;
+    } else if (Array.isArray(this.value)) {
+      if (this.value[0]) {
+        return [ this.value[0] ];
+      }
+    }
+
+    return [];
   }
 
   isSelected (option: app.OptionItem): boolean {
     return !!this.sanitizedValue.find(
-      ({ value }) => value === option.value,
+      item => item.value === option.value,
     );
   }
 

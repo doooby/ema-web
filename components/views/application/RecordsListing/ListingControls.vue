@@ -2,9 +2,10 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 import PageSelect from '~/components/views/application/RecordsListing/PageSelect.vue';
+import { DropdownSelect } from '~/components/controls/inputs';
 
 @Component({
-  components: { PageSelect },
+  components: { DropdownSelect, PageSelect },
 })
 export default class ListingControls extends Vue {
   @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.ResourcesListing<never>>;
@@ -13,6 +14,11 @@ export default class ListingControls extends Vue {
 
   get currentListing () {
     return this.resource.state.resource?.listing;
+  }
+
+  get currentOrderKeyValue () {
+    const value = this.currentListing?.order_by[0]?.[0];
+    return [ this.orderByOptions?.find(option => option?.value === value) ];
   }
 
   get currentOrderDirection () {
@@ -63,21 +69,18 @@ export default class ListingControls extends Vue {
           v-if="orderByOptions?.length"
           class="gray-border-controls"
         >
-          <div>
-            <select
-              :value="currentListing?.order_by[0]?.[0]"
-              class="form-control gray-border-controls--field--select"
-              @change="onChangeOrderKey($event.target.value)"
-            >
-              <option
-                v-for="option of orderByOptions"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ $t(option.item) }}
-              </option>
-            </select>
-          </div>
+          <DropdownSelect
+            :value="currentOrderKeyValue"
+            :options="orderByOptions"
+            @change="$event[0] && onChangeOrderKey($event[0].value)"
+          >
+            <template #button-content="{ option }">
+              <t v-if="option" :value="option.item" />
+            </template>
+            <template #option-content="{ option }">
+              <t :value="option.item" />
+            </template>
+          </DropdownSelect>
           <div>
             <div
               class="dir-btn gray-border-controls--field--button border-0 "

@@ -27,7 +27,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Term } from './index.vue';
-import DateInput from '~/components/controls/inputs/DateInput.vue';
+import { DateInput } from '~/components/controls/inputs';
 
 const dateFormat = Object.freeze({ year: 'numeric', month: 'numeric', day: 'numeric' });
 
