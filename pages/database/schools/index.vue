@@ -44,17 +44,20 @@ export default class extends DatabasePage {
 
     <template #search-form="{ group }">
       <b-form-group
-        v-slot="{ labelId }"
         class="col-md-4 col-lg-3"
-        :label="$t('db.record.projects.meta.s')"
         label-for="schools_filters_project"
       >
-        <BRecordsSelect
-          :dom-id="labelId"
-          :value="group.getValue('project')"
-          entity="projects"
-          @change="group.update('project', $event)"
-        />
+        <template #label>
+          <t value="db.record.projects.meta.s" />
+        </template>
+        <template #default="{ labelId }">
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="group.getValue('project')"
+            entity="projects"
+            @change="group.update('project', $event)"
+          />
+        </template>
       </b-form-group>
     </template>
 

@@ -70,56 +70,66 @@ export default class extends DatabasePage {
 
     <template #search-form="{ group }">
       <b-form-group
-        v-slot="{ labelId }"
         class="col-md-4 col-lg-3"
-        :label="$t('db.record.schools.meta.s')"
         label-for="groups_filters_school"
       >
-        <BRecordsSelect
-          :dom-id="labelId"
-          :value="group.getValue('school')"
-          entity="schools"
-          @change="group.update('school', $event)"
-        />
+        <template #label>
+          <t value="db.record.schools.meta.s" />
+        </template>
+        <template #default="{ labelId }">
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="group.getValue('school')"
+            entity="schools"
+            @change="group.update('school', $event)"
+          />
+        </template>
       </b-form-group>
       <b-form-group
-        v-slot="{ labelId }"
         class="col-md-4 col-lg-3"
-        :label="$t('db.record.courses.meta.s')"
         label-for="groups_filters_courses"
       >
-        <BRecordsSelect
-          :dom-id="labelId"
-          :value="group.getValue('courses')"
-          entity="courses"
-          :params="{ school_id: group.getParam('school_id') }"
-          @change="group.update('courses', $event)"
-        />
+        <template #label>
+          <t value="db.record.courses.meta.s" />
+        </template>
+        <template #default="{ labelId }">
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="group.getValue('courses')"
+            entity="courses"
+            :params="{ school_id: group.getParam('school_id') }"
+            @change="group.update('courses', $event)"
+          />
+        </template>
       </b-form-group>
       <b-form-group
         class="col-md-4 col-lg-3"
-        :label="$t('db.record.groups.filters.non_classified.label')"
       >
-        <OptionsSelect
-          :value="group.getValue('non_classified')"
-          :options="group.fieldsIndex.non_classified?.options ?? []"
-          @change="group.update('non_classified', $event)"
-        >
-          <template #options="{options, isSelected, onToggleOption}">
-            <li
-              v-for="option in options"
-              :key="option.value"
-              class="list-group-item list-group-item-action d-flex"
-              style="cursor: pointer;"
-              @click="onToggleOption(option)"
-            >
-              <input type="radio" :checked="isSelected(option)">
-              <span class="ml-4">
-                <t :value="option.item" />
-              </span>
-            </li>
-          </template>
-        </OptionsSelect>
+        <template #label>
+          <t value="db.record.groups.filters.non_classified.label" />
+        </template>
+        <template #default>
+          <OptionsSelect
+            :value="group.getValue('non_classified')"
+            :options="group.fieldsIndex.non_classified?.options ?? []"
+            @change="group.update('non_classified', $event)"
+          >
+            <template #options="{options, isSelected, onToggleOption}">
+              <li
+                v-for="option in options"
+                :key="option.value"
+                class="list-group-item list-group-item-action d-flex"
+                style="cursor: pointer;"
+                @click="onToggleOption(option)"
+              >
+                <input type="radio" :checked="isSelected(option)">
+                <span class="ml-4">
+                  <t :value="option.item" />
+                </span>
+              </li>
+            </template>
+          </OptionsSelect>
+        </template>
       </b-form-group>
     </template>
 

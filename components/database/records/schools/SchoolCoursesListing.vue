@@ -65,30 +65,36 @@ export default class SchoolCoursesListing extends Vue {
       @search="searchParams = searchControls.getParams()"
     >
       <b-form-group
-        v-slot="{ labelId }"
         class="col-md-4 col-lg-3"
-        :label="$t('db.record.standardized_courses.meta.s')"
         label-for="courses_filters_standardized_course"
       >
-        <BRecordsSelect
-          :dom-id="labelId"
-          :value="searchControls.getValue('standardized_course')"
-          entity="standardized_courses"
-          @change="searchControls.update('standardized_course', $event)"
-        />
+        <template #label>
+          <t value="db.record.standardized_courses.meta.s" />
+        </template>
+        <template #default="{ labelId }">
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="searchControls.getValue('standardized_course')"
+            entity="standardized_courses"
+            @change="searchControls.update('standardized_course', $event)"
+          />
+        </template>
       </b-form-group>
       <b-form-group
-        v-slot="{ labelId }"
         class="col-md-4 col-lg-3"
-        :label="$t('db.record.school_years.meta.s')"
         label-for="courses_filters_school_year"
       >
-        <BRecordsSelect
-          :dom-id="labelId"
-          :value="searchControls.getValue('school_year')"
-          entity="school_years"
-          @change="searchControls.update('school_year', $event)"
-        />
+        <template #label>
+          <t value="db.record.school_years.meta.s" />
+        </template>
+        <template #default="{ labelId }">
+          <BRecordsSelect
+            :dom-id="labelId"
+            :value="searchControls.getValue('school_year')"
+            entity="school_years"
+            @change="searchControls.update('school_year', $event)"
+          />
+        </template>
       </b-form-group>
     </SearchForm>
     <CoursesListing
