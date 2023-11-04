@@ -18,16 +18,19 @@ import RecordAssociations from '~/components/database/components/listing/RecordA
 import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 import AssignmentHistoryListing
   from '~/components/views/group/students_change/AssignmentHistoryListing.vue';
+import DropoutsListing from '~/components/views/group/dropout/DropoutsListing.vue';
 
 enum Tabs {
   students,
   assignment_history,
   attendance,
   grading,
+  dropout,
 }
 
 @Component({
   components: {
+    DropoutsListing,
     AssignmentHistoryListing,
     RecordAssociations,
     PrintDateRange,
@@ -179,6 +182,14 @@ export default class extends DatabasePage {
               :group="record"
               :course-loader="courseLoader"
             />
+          </div>
+        </b-tab>
+        <b-tab>
+          <template #title>
+            <t value="db.pages.groups.show.tabs.dropout.title" />
+          </template>
+          <div v-if="currenTab === Tabs.dropout">
+            <DropoutsListing :params="{ group_id: record.id }" />
           </div>
         </b-tab>
       </b-tabs>
