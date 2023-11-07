@@ -67,7 +67,10 @@ export default class AssignmentHistoryListing extends Vue {
     >
       <template #row="{ record }">
         <td>
-          <PrintTime :value="record.assignment_record?.created_at" />
+          <PrintTime
+            class="font-14 text-muted"
+            :value="record.assignment_record?.created_at"
+          />
         </td>
         <td>
           <UserLogin :user="record.assignment_record?.created_by" />

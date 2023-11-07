@@ -184,7 +184,7 @@ export default class extends DatabasePage {
             />
           </div>
         </b-tab>
-        <b-tab>
+        <b-tab v-if="$ema.canI('act:/groups/dropouts/index')">
           <template #title>
             <t value="db.pages.groups.show.tabs.dropout.title" />
           </template>
