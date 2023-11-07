@@ -114,7 +114,9 @@ export const queries = {
       pathIsFull: true,
       path: '/v3/users/session/show',
       reducer: data => wai.object(value => ({
-        record: wai.property(value, 'record', value => user.V3_parseRecord(value, {})),
+        record: wai.property(value, 'record',
+          value => user.V3_parseRecord(value, {}),
+        ),
       }))(data),
     });
   },

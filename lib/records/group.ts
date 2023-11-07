@@ -4,6 +4,7 @@ import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations, mapDate, mapName } from '~/lib/api2/mappers';
 import { controls, FormFieldDefinition } from '~/components/Form';
 import { dbFields } from '~/components/database/fields';
+import app from '~/lib/app';
 
 export const entity = 'groups';
 export * from './group/index';
@@ -17,6 +18,20 @@ export interface Group extends application_record.SharedAttributes {
   term: number;
   term_info: [number, number];
   term_dates?: [Date, Date];
+}
+
+export interface V3_Group extends wai.AResource {
+  school_course?: SchoolCourseSlice;
+  students_list?: StudentsListSlice;
+}
+
+export interface SchoolCourseSlice {
+  course: wai.AResource;
+  school: wai.AResource;
+}
+
+export interface StudentsListSlice {
+  students: app.Maybe<app.List<wai.AResource>>;
 }
 
 export function parseRecord (
@@ -38,6 +53,36 @@ export function parseRecord (
     term_dates: wai.prop('term_dates', value, wai.nullable(wai.tuple(
       mapDate, mapDate,
     ))),
+  }))(value);
+}
+
+export function V3_parseRecord (
+  value,
+  associations: wai.Associations,
+): V3_Group {
+  return wai.object(record => ({
+    school_course: wai.property(record, 'school_course', wai.nullable(value => parseComputedSlice(value))),
+    students_list: wai.property(record, 'students_list', wai.nullable(value => parseStudentsListSlice(value, associations))),
+  }))(value);
+}
+
+function parseComputedSlice (value): SchoolCourseSlice {
+  return wai.object(value => ({
+    course: wai.property(value, 'course', wai.aResource),
+    school: wai.property(value, 'school', wai.aResource),
+  }))(value);
+}
+
+function parseStudentsListSlice (
+  value,
+  associations: wai.Associations,
+): StudentsListSlice {
+  return wai.object(value => ({
+    students: wai.property(value, 'students',
+      wai.nullable(wai.listOf(
+        value => wai.associatedRecord(associations, 'people', value),
+      )),
+    ),
   }))(value);
 }
 

@@ -13,6 +13,10 @@ export default class Ema {
     return this.context.store.state.session.userSession;
   }
 
+  get admissionActions (): user.AdmissionActions {
+    return this.context.store.getters['session/admissionActions'];
+  }
+
   get locale (): string {
     return this.context.i18n.locale;
   }
@@ -41,5 +45,24 @@ export default class Ema {
     return app.locales.createDateTimeFormat(
       this.intlDateLocale, options,
     ).format(date);
+  }
+
+  canI (action: string): boolean {
+    if (this.admissionActions?.isRoot) return true;
+
+    if (action.startsWith('act:/')) {
+      const parts = action.substring(5).split('/');
+      return this.admissionActions?.resolve(parts) ?? false;
+    }
+
+    return false;
+  }
+
+  canIAny (actions: string[]): boolean {
+    for (const action of actions) {
+      if (this.canI(action)) return true;
+    }
+
+    return false;
   }
 }

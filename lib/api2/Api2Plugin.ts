@@ -26,6 +26,7 @@ import {
 } from '~/lib/records';
 import { Vue } from 'vue-property-decorator';
 import { api } from '~/lib/api2/module';
+import app from '~/lib/app';
 
 export default class Api2Plugin {
   queries = {
@@ -53,6 +54,7 @@ export default class Api2Plugin {
     return {
       processing: false,
       response: undefined,
+      okPayload: undefined,
     };
   }
 
@@ -60,6 +62,7 @@ export default class Api2Plugin {
     return {
       processing: false,
       response: undefined,
+      okPayload: undefined,
       currentPayload: undefined,
     };
   }
@@ -87,6 +90,37 @@ export default class Api2Plugin {
         state.resource = response?.ok ? response.payload : undefined;
         state.failReason = response?.ok === false ? response.reason : undefined;
       }
+
+      return state.resource;
+    };
+
+    return state;
+  }
+
+  V3_createLoader<R> (
+    query: QueryDefinition<R>,
+  ): api.QueryResourceState<R> {
+    const api = this;
+
+    const state = Vue.observable<api.QueryResourceState<R>>({
+      isLoading: false,
+      resource: undefined,
+      failReason: undefined,
+      onReload: undefined,
+    });
+
+    state.onReload = async function onReload () {
+      if (state.isLoading) return;
+
+      state.isLoading = true;
+      const { response, okPayload } = await api.V3_request(query);
+      state.isLoading = false;
+      if (response) {
+        state.resource = okPayload;
+        state.failReason = response?.ok === false ? response.reason : undefined;
+      }
+
+      return state.resource;
     };
 
     return state;
@@ -135,12 +169,27 @@ export default class Api2Plugin {
     }
 
     state.processing = false;
+    state.okPayload = (state.response?.ok && state.response.payload) || undefined;
   }
 
   async transientRequest<V> (query: QueryDefinition<V>): Promise<RequestResponse<V>> {
     const state = this.newQueryState<V>();
     await this.request(state, query);
     return state.response!;
+  }
+
+  async V3_request<V> (query: QueryDefinition<V>): Promise<{
+    response: RequestResponse<V>;
+    okPayload: app.Maybe<V>;
+  }> {
+    query.pathIsFull = true;
+    query.path = '/v3' + query.path;
+    const state = this.newQueryState<V>();
+    await this.request(state, query);
+    return {
+      response: state.response!,
+      okPayload: state.okPayload,
+    };
   }
 
   async transientRequest2<V> (

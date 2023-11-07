@@ -1,4 +1,5 @@
 import { wai } from '~/vendor/wai';
+import app from '~/lib/app';
 
 export type AResource<S = {}> = S & {
   id?: string;
@@ -14,6 +15,16 @@ export interface ResourcesListing<R = {}> {
 }
 
 export type ResourceShow<R = {}> = undefined | AResource<R>;
+
+export interface RecordsList<R = {}> {
+  listing: {
+    page: number;
+    per_page: number;
+    order_by: app.Maybe<[ string, string ][]>;
+  }
+  total: number;
+  records: AResource<R>[];
+}
 
 export interface ResourceUpdate {
   record_id?: string;
@@ -102,6 +113,34 @@ export function recordShow<R> (
       () => undefined,
     ));
     return record;
+  })(value);
+}
+
+export function recordsList<R = {}> (
+  value,
+  mapRecord?: (record, associations: Associations) => R,
+): RecordsList<R> {
+  return wai.object((value) => {
+    const associations = wai.property(value, 'associations',
+      wai.indexOf(wai.indexOf(aResource)),
+    );
+    const record = uncertainResource(mapRecord ?? (() => undefined));
+
+    return {
+      listing: wai.property(value, 'listing', wai.object(value => ({
+        page: wai.property(value, 'page', wai.integer),
+        per_page: wai.property(value, 'per_page', wai.integer),
+        order_by: wai.property(value, 'order_by',
+          wai.nullable(wai.listOf(
+            wai.tuple(wai.string, wai.string),
+          )),
+        ),
+      }))),
+      total: wai.property(value, 'total', wai.integer),
+      records: wai.property(value, 'records',
+        wai.listOf(item => record(item, associations)),
+      ),
+    };
   })(value);
 }
 

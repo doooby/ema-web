@@ -109,7 +109,7 @@ export default class extends DatabasePage {
         options: app.internalOptionsList2(
           this.$store.state.session.country,
           'gender',
-        ) as any,
+        ) as app.OptionItem[],
         populateParams: (values: any, params) => {
           params.gender = values.gender?.map(b => b.value)?.[0];
         },

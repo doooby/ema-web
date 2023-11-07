@@ -3,10 +3,12 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 import { application_record, group } from '~/lib/records';
 import RecordId from '~/components/views/application/RecordId.vue';
-import AssociatedRecordsListing from '~/components/views/application/AssociatedRecordsListing.vue';
+import AssociatedRecordsList from '~/components/views/application/AssociatedRecordsList.vue';
 import RecordsListing from '~/components/views/application/RecordsListing/RecordsListing.vue';
 import PrintTime from '~/components/toolkit/PrintTime.vue';
 import UserLogin from '~/components/views/user/UserLogin.vue';
+import PrintDate from '~/components/toolkit/PrintDate.vue';
+import RecordNamedValue from '~/components/views/application/RecordNamedValue.vue';
 
 type SearchParams =
   | { group_id: string }
@@ -14,10 +16,12 @@ type SearchParams =
 
 @Component({
   components: {
+    RecordNamedValue,
+    PrintDate,
     UserLogin,
     PrintTime,
     RecordsListing,
-    AssociatedRecordsListing,
+    AssociatedRecordsList,
     RecordId,
   },
 })
@@ -62,10 +66,11 @@ export default class DropoutsListing extends Vue {
   get columns () {
     return [
       ...application_record.fillDataTableColumns('groups.dropouts', [
+        { name: 'student', size: 150 },
         { name: 'timestamp', size: 150 },
         { name: 'user', size: 150 },
-        { name: 'reason', size: 150 },
-        { name: 'students', size: 800 },
+        { name: 'dates', size: 150 },
+        { name: 'reason', size: 200 },
       ]),
     ];
   }
@@ -91,26 +96,58 @@ export default class DropoutsListing extends Vue {
     >
       <template #row="{ record }">
         <td>
-          <PrintTime :value="record.record?.created_at" />
+          <RecordId
+            :record="record.record?.student"
+            :show-link="`/database/people/${record.record?.student.id}`"
+          />
+        </td>
+        <td>
+          <PrintTime
+            class="font-14 text-muted"
+            :value="record.record?.created_at"
+          />
         </td>
         <td>
           <UserLogin :user="record.record?.created_by" />
         </td>
         <td>
-          <div>
-            <AssociatedRecordsListing
-              v-slot="student"
-              :records="record.record?.students"
-            >
-              <RecordId
-                :record="student.record"
-                :show-link="`/database/people/${student.record.id}`"
-              />
-            </AssociatedRecordsListing>
-          </div>
+          <RecordNamedValue
+            v-if="record.record?.return_on"
+          >
+            <template #label>
+              <t value="db.record.groups.dropouts.label.return_on" />
+            </template>
+            <PrintDate :value="record.record?.return_on" />
+          </RecordNamedValue>
+          <RecordNamedValue
+            class="mt-1"
+          >
+            <template #label>
+              <t value="db.record.groups.dropouts.label.dropout_on" />
+            </template>
+            <PrintDate :value="record.record?.dropout_on" />
+          </RecordNamedValue>
+          <RecordNamedValue
+            v-if="record.record?.return_on"
+            class="mt-1"
+          >
+            <template #label>
+              <t value="db.record.groups.dropouts.label.archived_at" />
+            </template>
+            <PrintDate :value="record.record?.archived_at" />
+          </RecordNamedValue>
+          <PrintDate />
         </td>
         <td>
-          // reason
+          <div >
+            {{ record.record?.reasons?.join('; ') }}
+          </div>
+          <div
+            v-if="record.record?.note"
+            class="mt-1"
+          >
+            {{ record.record?.note }}
+          </div>
         </td>
       </template>
     </RecordsListing>

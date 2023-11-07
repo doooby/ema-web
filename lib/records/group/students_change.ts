@@ -18,9 +18,9 @@ export function parseRecord (
   value,
   associations: wai.Associations,
 ): StudentsChange {
-  return wai.uncertainResource(record => ({
+  return wai.object(record => ({
     assignment_record: wai.property(record, 'assignment_record', wai.nullable(value => parseAssignmentRecordSlice(value, associations))),
-  }))(value, associations);
+  }))(value);
 }
 
 function parseAssignmentRecordSlice (

@@ -17,21 +17,20 @@ export default class RecordId extends Vue {
 </script>
 
 <template>
-  <div
-    :class="[ $attrs.class, 'p-1 d-flex align-items-center border' ]"
-  >
+  <div :class="$attrs.class">
 
     <code class="mr-1">
-      [ {{ record.id }} ]
+      [&nbsp;{{ record.id }}&nbsp;]
     </code>
 
-    <div v-if="showLink">
+    <span v-if="showLink">
       <nuxt-link
         v-if="!newTab"
         :to="showLink"
         class="p-1 icon-link"
       >
-        <b-icon icon="card-heading" />&nbsp;{{ record.caption }}
+        <b-icon icon="card-heading" />
+        {{ record.caption }}
       </nuxt-link>
       <a
         v-else
@@ -40,9 +39,10 @@ export default class RecordId extends Vue {
         class="p-1 icon-link"
         @click.stop
       >
-        <b-icon icon="card-heading" />&nbsp;{{ record.caption }}
+        <b-icon icon="card-heading" />
+        {{ record.caption }}
       </a>
-    </div>
+    </span>
 
     <span v-else>
       {{ record.caption }}

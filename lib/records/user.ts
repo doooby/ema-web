@@ -7,6 +7,7 @@ import { mapAssociation, mapIndex, mapName, mapOptionalAssociation } from '~/lib
 import app from '~/lib/app';
 
 export const entity = 'users';
+export * from './user/index';
 
 export interface User extends application_record.SharedAttributes {
   country?: BRecord;
@@ -33,6 +34,9 @@ export interface SessionSlice {
   name: string[];
   countries: wai.AResource[];
   admissible_actions?: app.Map<app.List<string>>;
+  admission?: {
+    actions: app.Map<unknown>;
+  };
 }
 
 export interface CurrentCountrySlice {
@@ -57,12 +61,12 @@ export function parseRecord (
 
 export function V3_parseRecord (
   value,
-  associations: wai.Associations,
+  _associations: wai.Associations,
 ): V3_User {
-  return wai.uncertainResource(record => ({
+  return wai.object(record => ({
     session: wai.property(record, 'session', wai.nullable(value => parseSessionSlice(value))),
     current_country: wai.property(record, 'current_country', wai.nullable(value => parseCurrentCountrySlice(value))),
-  }))(value, associations);
+  }))(value);
 }
 
 function parseSessionSlice (value): SessionSlice {
@@ -71,10 +75,11 @@ function parseSessionSlice (value): SessionSlice {
     login: wai.property(value, 'login', wai.string),
     name: wai.property(value, 'name', mapName),
     countries: wai.property(value, 'countries', wai.listOf(wai.aResource)),
-    admissible_actions: wai.property(
-      value,
-      'admissible_actions',
+    admissible_actions: wai.property(value, 'admissible_actions',
       wai.nullable(mapIndex(wai.listOf(wai.string))),
+    ),
+    admission: wai.property(value, 'admission',
+      wai.nullable(wai.object(value => Object.freeze(value))),
     ),
   }))(value);
 }

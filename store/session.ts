@@ -93,4 +93,8 @@ export default class SessionModule extends VuexModule {
   get admissibleActions (): Record<string, string[]> {
     return this.user?.admissible_actions ?? {};
   }
+
+  get admissionActions (): user.AdmissionActions {
+    return user.AdmissionActions.parse(this.userSession?.admission?.actions);
+  }
 }

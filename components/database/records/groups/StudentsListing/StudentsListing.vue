@@ -4,9 +4,11 @@ import { group } from '~/lib/records';
 import PeopleListing from '~/components/database/records/people/PeopleListing.vue';
 import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
 import RemoveStudents from '~/components/database/records/groups/students/actions/RemoveStudents.vue';
+import ActionDropoutStudents from '~/components/database/records/groups/students/actions/ActionDropoutStudents.vue';
 
 @Component({
   components: {
+    ActionDropoutStudents,
     PeopleListing,
     RemoveStudents,
     MoveStudents,
@@ -26,6 +28,13 @@ export default class StudentsListing extends Vue {
     );
   }
 
+  get showGroupActions () {
+    return this.admissibleGroup.canAny ||
+      this.$ema.canIAny([
+        'act:/groups/dropouts/create',
+      ]);
+  }
+
   onRefresh () {
     this.searchParams = { ...this.searchParams };
   }
@@ -41,7 +50,7 @@ export default class StudentsListing extends Vue {
       :hide-contract="true"
     >
       <template
-        v-if="admissibleGroup.canAny"
+        v-if="showGroupActions"
         #group-actions="{ records }"
       >
         <move-students
@@ -51,6 +60,12 @@ export default class StudentsListing extends Vue {
         />
         <remove-students
           v-if="admissibleGroup['groups.change_students']"
+          :group="group"
+          :students="records"
+          @done="onRefresh"
+        />
+        <ActionDropoutStudents
+          v-if="$ema.canI('act:/groups/dropouts/create')"
           :group="group"
           :students="records"
           @done="onRefresh"

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import app from '~/lib/app';
-import { TextInput } from '~/components/controls/inputs';
+import TextInput from '~/components/controls/inputs/base/TextInput.vue';
 import { padStart } from 'lodash';
 
 @Component({

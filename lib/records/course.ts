@@ -39,11 +39,11 @@ export interface V3_Course extends wai.AResource {
 }
 
 interface RecordSlice {
-  education_level: BRecord;
-  project?: BRecord;
-  school: BRecord;
-  school_year?: BRecord;
-  standardized_course?: BRecord;
+  education_level: wai.AResource;
+  project?: wai.AResource;
+  school: wai.AResource;
+  school_year?: wai.AResource;
+  standardized_course?: wai.AResource;
 
   accreditation_authority?: [string, undefined | string];
   attendance_limit?: number;
@@ -108,10 +108,10 @@ function V3_parseRecord (
   value,
   associations: wai.Associations,
 ): V3_Course {
-  return wai.uncertainResource(record => ({
+  return wai.object(record => ({
     record: wai.property(record, 'record', wai.nullable(value => parseRecordSlice(value, associations))),
     computed: wai.property(record, 'computed', wai.nullable(value => parseComputedSlice(value))),
-  }))(value, associations);
+  }))(value);
 }
 
 function parseRecordSlice (

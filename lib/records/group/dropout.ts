@@ -5,7 +5,7 @@ export interface Dropout extends wai.AResource {
 }
 
 interface RecordSlice {
-  students: wai.AResource[];
+  student: wai.AResource;
   created_at: Date;
   created_by?: {
     login: string;
@@ -13,15 +13,18 @@ interface RecordSlice {
   };
   reasons?: string[];
   note: string;
+  dropout_on: Date;
+  return_on?: Date;
+  archived_at?: Date;
 }
 
 export function parseRecord (
   value,
   associations: wai.Associations,
 ): Dropout {
-  return wai.uncertainResource(record => ({
+  return wai.object(record => ({
     record: wai.property(record, 'record', wai.nullable(value => parseRecordSlice(value, associations))),
-  }))(value, associations);
+  }))(value);
 }
 
 function parseRecordSlice (
@@ -29,8 +32,8 @@ function parseRecordSlice (
   associations: wai.Associations,
 ): RecordSlice {
   return wai.object(value => ({
-    students: wai.property(value, 'students_ids',
-      wai.listOf(id => wai.associatedRecord(associations, 'people', id)),
+    student: wai.property(value, 'student_id',
+      id => wai.associatedRecord(associations, 'people', id),
     ),
     created_at: wai.property(value, 'created_at', wai.time),
     created_by: wai.property(value, 'created_by',
@@ -41,5 +44,8 @@ function parseRecordSlice (
     ),
     reasons: wai.property(value, 'reasons', wai.nullable(wai.listOf(wai.string))),
     note: wai.property(value, 'note', wai.string),
+    dropout_on: wai.property(value, 'dropout_on', wai.time),
+    return_on: wai.property(value, 'return_on', wai.nullable(wai.time)),
+    archived_at: wai.property(value, 'archived_at', wai.nullable(wai.time)),
   }))(value);
 }

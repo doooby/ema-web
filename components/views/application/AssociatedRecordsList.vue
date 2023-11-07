@@ -7,7 +7,7 @@ import RecordId from '~/components/views/application/RecordId.vue';
 @Component({
   components: { RecordId },
 })
-export default class AssociatedRecordsListing extends Vue {
+export default class AssociatedRecordsList extends Vue {
   @Prop() readonly records?: app.List<wai.AResource>;
   @Prop() readonly showLink?: string;
   @Prop() readonly newTab?: boolean;
@@ -15,7 +15,7 @@ export default class AssociatedRecordsListing extends Vue {
 </script>
 
 <template>
-  <div class="AssociatedRecordsListing d-flex flex-wrap">
+  <div class="AssociatedRecordsList d-flex flex-wrap">
     <div
       v-for="(record, index) in records ?? []"
       :key="record.id ? record.id : `i:${index}`"
@@ -26,7 +26,7 @@ export default class AssociatedRecordsListing extends Vue {
 </template>
 
 <style scoped>
-.AssociatedRecordsListing {
+.AssociatedRecordsList {
   gap: 8px;
 }
 </style>

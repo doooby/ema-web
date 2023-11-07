@@ -5,7 +5,7 @@ import { application_record, group } from '~/lib/records';
 import RecordsListing from '~/components/views/application/RecordsListing/RecordsListing.vue';
 import PrintTime from '~/components/toolkit/PrintTime.vue';
 import UserLogin from '~/components/views/user/UserLogin.vue';
-import AssociatedRecordsListing from '~/components/views/application/AssociatedRecordsListing.vue';
+import AssociatedRecordsList from '~/components/views/application/AssociatedRecordsList.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 import { students_change } from '~/lib/records/group';
 
@@ -15,7 +15,7 @@ import { students_change } from '~/lib/records/group';
       return students_change;
     },
   },
-  components: { RecordId, AssociatedRecordsListing, UserLogin, PrintTime, RecordsListing },
+  components: { RecordId, AssociatedRecordsList, UserLogin, PrintTime, RecordsListing },
 })
 export default class AssignmentHistoryListing extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
@@ -86,15 +86,16 @@ export default class AssignmentHistoryListing extends Vue {
             >
               <t value="w.group.students_change.AssignmentHistoryListing.action.r.header" />
             </div>
-            <AssociatedRecordsListing
+            <AssociatedRecordsList
               v-slot="student"
               :records="record.assignment_record?.students"
             >
               <RecordId
+                class="p-1 border"
                 :record="student.record"
                 :show-link="`/database/people/${student.record.id}`"
               />
-            </AssociatedRecordsListing>
+            </AssociatedRecordsList>
           </div>
         </td>
       </template>

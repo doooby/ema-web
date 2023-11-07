@@ -108,28 +108,26 @@ export default class extends DatabasePage {
         <template #label>
           <t value="db.record.groups.filters.non_classified.label" />
         </template>
-        <template #default>
-          <OptionsSelect
-            :value="group.getValue('non_classified')"
-            :options="group.fieldsIndex.non_classified?.options ?? []"
-            @change="group.update('non_classified', $event)"
-          >
-            <template #options="{options, isSelected, onToggleOption}">
-              <li
-                v-for="option in options"
-                :key="option.value"
-                class="list-group-item list-group-item-action d-flex"
-                style="cursor: pointer;"
-                @click="onToggleOption(option)"
-              >
-                <input type="radio" :checked="isSelected(option)">
-                <span class="ml-4">
-                  <t :value="option.item" />
-                </span>
-              </li>
-            </template>
-          </OptionsSelect>
-        </template>
+        <OptionsSelect
+          :value="group.getValue('non_classified')"
+          :options="group.fieldsIndex.non_classified?.options ?? []"
+          @change="group.update('non_classified', $event)"
+        >
+          <template #options="{options, isSelected, onToggleOption}">
+            <li
+              v-for="option in options"
+              :key="option.value"
+              class="list-group-item list-group-item-action d-flex"
+              style="cursor: pointer;"
+              @click="onToggleOption(option)"
+            >
+              <input type="radio" :checked="isSelected(option)">
+              <span class="ml-4">
+                <t :value="option.item" />
+              </span>
+            </li>
+          </template>
+        </OptionsSelect>
       </b-form-group>
     </template>
 

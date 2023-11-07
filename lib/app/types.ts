@@ -1,5 +1,6 @@
 export type Map<V> = Record<string, Maybe<V>>;
 
+//  TODO should be SparseList
 export type List<V> = Array<Maybe<V>>;
 
 export type Maybe<V> = undefined | V;

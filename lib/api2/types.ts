@@ -1,5 +1,4 @@
 import app from '~/lib/app';
-import { wai } from '~/vendor/wai';
 
 export interface Params {
   [field: string]: any;
@@ -15,6 +14,7 @@ export interface QueryDefinition<D = never> {
 export interface RequestState<V> {
   processing: boolean;
   response: undefined | RequestResponse<V>;
+  okPayload: app.Maybe<V>;
 }
 
 export interface CachedRequestState<V> extends RequestState<V> {
@@ -86,5 +86,5 @@ export interface QueryResourceState<R = unknown> {
   isLoading: boolean;
   resource?: R;
   failReason?: string;
-  onReload?(): Promise<void>;
+  onReload?(): Promise<app.Maybe<R>>;
 }
