@@ -154,7 +154,7 @@ export default class extends DatabasePage {
             <students-listing :group="record" />
           </div>
         </b-tab>
-        <b-tab>
+        <b-tab v-if="$ema.canI('act:/groups/students_changes/index')">
           <template #title>
             <t value="db.pages.groups.show.tabs.assignment_history.title" />
           </template>

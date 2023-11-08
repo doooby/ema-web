@@ -19,9 +19,11 @@ export default class AdmissionActions {
     if (this.isRoot) return true;
 
     let pointer: any = this._actions;
-    const isLast = parts.length <= 1;
-    for (let i = 0; i < parts.length; i += 1) {
+    const len = parts.length;
+    const lastI = parts.length - 1;
+    for (let i = 0; i < len; i += 1) {
       const part = parts[i];
+      const isLast = i === lastI;
       if (isLast) {
         return !!(
           Array.isArray(pointer) &&

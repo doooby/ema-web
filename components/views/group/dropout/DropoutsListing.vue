@@ -139,9 +139,14 @@ export default class DropoutsListing extends Vue {
           <PrintDate />
         </td>
         <td>
-          <div >
-            {{ record.record?.reasons?.join('; ') }}
-          </div>
+          <ul v-id="record.record?.reasons?.length">
+            <li
+              v-for="reason in record.record.reasons"
+              :key="reason"
+            >
+              <t :value="`app.internal_lists.dropout_reasons.${reason}`" />
+            </li>
+          </ul>
           <div
             v-if="record.record?.note"
             class="mt-1"

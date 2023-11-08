@@ -15,6 +15,7 @@ export interface Person extends application_record.SharedAttributes {
     group: BRecord;
     course: BRecord;
     school: BRecord;
+    dropout?: Date;
   };
   main_contract?: {
     work_agreement: BRecord;
@@ -78,6 +79,7 @@ export function parseRecord (
       group: wai.prop('group_id', value, mapAssociation('groups', associations)),
       course: wai.prop('course_id', value, mapAssociation('courses', associations)),
       school: wai.prop('school_id', value, mapAssociation('schools', associations)),
+      dropout: wai.prop('dropout', value, wai.nullable(wai.time)),
     })))),
     main_contract: wai.prop('main_contract', value, wai.nullable(wai.object(value => ({
       work_agreement: wai.prop('work_agreement_id', value, mapAssociation('work_agreements', associations)),

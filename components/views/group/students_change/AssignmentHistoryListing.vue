@@ -79,13 +79,13 @@ export default class AssignmentHistoryListing extends Vue {
           <div>
             <div
               v-if="record.assignment_record?.operation === 'a'"
-              class="h5"
+              class="font-14"
             >
               <t value="w.group.students_change.AssignmentHistoryListing.action.a.header" />
             </div>
             <div
               v-if="record.assignment_record?.operation === 'r'"
-              class="h5"
+              class="font-14"
             >
               <t value="w.group.students_change.AssignmentHistoryListing.action.r.header" />
             </div>

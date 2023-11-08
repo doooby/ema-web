@@ -9,9 +9,10 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
+import RecordNamedValue from '~/components/views/application/RecordNamedValue.vue';
 
 @Component({
-  components: { PrintDate, PrintFullName, RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
+  components: { RecordNamedValue, PrintDate, PrintFullName, RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
 export default class PeopleListing extends Vue {
   @Prop({ default: () => {} }) readonly params!: Params;
@@ -84,6 +85,15 @@ export default class PeopleListing extends Vue {
           :record="record"
           :associations="mainGroupAssociations"
         />
+        <RecordNamedValue
+          v-if="record.main_group?.dropout"
+          class="font-12"
+        >
+          <template #label>
+            <t value="db.record.people.main_group.dropout" />
+          </template>
+          <PrintDate :value="record.main_group.dropout" />
+        </RecordNamedValue>
       </td>
       <td v-if="!hideContract">
         <RecordAssociations
