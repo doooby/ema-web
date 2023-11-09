@@ -68,7 +68,7 @@
           </b-button>
         </div>
         <b-alert :show="form.error !== null" variant="danger" class="emt-4">
-          {{ form.error }}
+          <t :value="`app.LoginModal.fail.${form.error}`" />
         </b-alert>
       </b-form>
     </div>
@@ -135,7 +135,7 @@ export default Vue.extend({
       );
 
       if (!loginResult.ok) {
-        this.form.error = 'Bad login';
+        this.form.error = loginResult.reason || 'bad_login';
         return;
       }
 
