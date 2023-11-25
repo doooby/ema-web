@@ -1,10 +1,11 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { wai } from '~/vendor/wai';
+import app from '~/lib/app';
 
 export interface RecordLoaderState<R = unknown> {
   isLoading: boolean;
-  record?: wai.ResourceShow<R>;
+  record?: app.Maybe<wai.AResource<R>>;
   failReason?: string;
   onReload(): void;
 }

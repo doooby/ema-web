@@ -13,7 +13,7 @@ import controls from '~/components/controls';
 export default class Edit extends CountryDBPage.ComponentBase {
   entity = group.dropout.entity;
   reducer = group.dropout.parseRecord;
-  controls: app.Ref<controls.Group> = { ref: undefined };
+  controls = app.createRef<controls.Group>();
 
   get transaction () {
     return new app.Transaction(
@@ -37,7 +37,7 @@ export default class Edit extends CountryDBPage.ComponentBase {
     <EditPage3
       v-slot="{ loader }"
       :entity="entity"
-      :slices="[ 'record' ]"
+      :slices="[ 'record', 'group' ]"
       :reducer="reducer"
       :transaction="transaction"
     >

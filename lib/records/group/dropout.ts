@@ -20,12 +20,19 @@ interface RecordSlice {
   archived_at?: Date;
 }
 
+export interface GroupSlice {
+  school: wai.AResource;
+  course: wai.AResource;
+  group: wai.AResource;
+}
+
 export function parseRecord (
   value,
   associations: wai.Associations,
 ): Dropout {
   return wai.object(record => ({
     record: wai.property(record, 'record', wai.nullable(value => parseRecordSlice(value, associations))),
+    group: wai.property(record, 'group', wai.nullable(parseGroupSlice)),
   }))(value);
 }
 
@@ -49,5 +56,13 @@ function parseRecordSlice (
     dropout_on: wai.property(value, 'dropout_on', wai.time),
     return_on: wai.property(value, 'return_on', wai.nullable(wai.time)),
     archived_at: wai.property(value, 'archived_at', wai.nullable(wai.time)),
+  }))(value);
+}
+
+function parseGroupSlice (value): GroupSlice {
+  return wai.object(value => ({
+    school: wai.property(value, 'school', wai.aResource),
+    course: wai.property(value, 'course', wai.aResource),
+    group: wai.property(value, 'group', wai.aResource),
   }))(value);
 }

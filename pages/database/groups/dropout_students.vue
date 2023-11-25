@@ -16,9 +16,11 @@ import CardSaveableFooter from '~/components/database/components/CardSaveableFoo
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import DropoutReasons from '~/components/views/group/dropout/controls/DropoutReasons.vue';
 import DropoutOn from '~/components/views/group/dropout/controls/DropoutOn.vue';
+import DropoutGroup from '~/components/views/group/dropout/DropoutGroup.vue';
 
 @Component({
   components: {
+    DropoutGroup,
     DropoutOn,
     DropoutReasons,
     DateInput,
@@ -54,6 +56,16 @@ export default class DropoutStudents extends DatabasePage {
       return `/database/groups/${groupId}`;
     } else {
       return '/database/people';
+    }
+  }
+
+  get dropoutGroup (): app.Maybe<group.dropout.GroupSlice> {
+    if (this.data.group.school_course) {
+      return {
+        school: this.data.group.school_course.school,
+        course: this.data.group.school_course.course,
+        group: this.data.group,
+      };
     }
   }
 
@@ -175,38 +187,7 @@ export default class DropoutStudents extends DatabasePage {
                 </AssociatedRecordsList>
               </div>
 
-              <div>
-                <h4 class="mt-2">
-                  <t value="db.pages.groups.dropout_students.group.subtitle" />
-                </h4>
-                <RecordNamedValue>
-                  <template #label>
-                    <t value="db.record.schools.meta.s" />
-                  </template>
-                  <RecordId
-                    :record="data.group.school_course?.school"
-                    :path="`/database/schools/${data.group.school_course?.school.id}`"
-                  />
-                </RecordNamedValue>
-                <RecordNamedValue>
-                  <template #label>
-                    <t value="db.record.courses.meta.s" />
-                  </template>
-                  <RecordId
-                    :record="data.group.school_course?.course"
-                    :path="`/database/courses/${data.group.school_course?.course.id}`"
-                  />
-                </RecordNamedValue>
-                <RecordNamedValue>
-                  <template #label>
-                    <t value="db.record.groups.meta.s" />
-                  </template>
-                  <RecordId
-                    :record="data.group"
-                    :path="`/database/groups/${data.group.id}`"
-                  />
-                </RecordNamedValue>
-              </div>
+              <DropoutGroup v-if="dropoutGroup" :group="dropoutGroup" />
 
               <div>
                 <h4 class="mt-2">

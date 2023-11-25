@@ -64,3 +64,7 @@ export function internalOptionsList3 (
     item: `app.internal_lists.${name}.${value}`,
   }));
 }
+
+export function createRef<V> (defaultValue?: V): app.Ref<V> {
+  return { ref: defaultValue };
+}
