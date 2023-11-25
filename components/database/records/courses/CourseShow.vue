@@ -18,10 +18,10 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
   },
 })
 export default class CourseShow extends Vue {
-  @Prop({ required: true }) readonly courseLoader!: RecordLoaderState<course.V3_Course>;
+  @Prop({ required: true }) readonly recordLoader!: RecordLoaderState<course.V3_Course>;
 
   get course (): undefined | course.V3_Course {
-    return this.courseLoader?.record;
+    return this.recordLoader?.record;
   }
 }
 </script>

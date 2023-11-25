@@ -9,6 +9,7 @@ import PrintTime from '~/components/toolkit/PrintTime.vue';
 import UserLogin from '~/components/views/user/UserLogin.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
 import RecordNamedValue from '~/components/views/application/RecordNamedValue.vue';
+import RowHeader from '~/components/views/application/RecordsListing/RowHeader.vue';
 
 type SearchParams =
   | { group_id: string }
@@ -16,6 +17,7 @@ type SearchParams =
 
 @Component({
   components: {
+    RowHeader,
     RecordNamedValue,
     PrintDate,
     UserLogin,
@@ -92,13 +94,24 @@ export default class DropoutsListing extends Vue {
       :columns="columns"
       :resource="resource"
       :order-by-options="orderByOptions"
+      :show-record-menu="true"
       @listingChange="onReload"
     >
       <template #row="{ record }">
         <td>
+          <RowHeader :record="record">
+            <template #menu>
+              <b-dropdown-item :to="`/database/groups/dropouts/${record.id}/edit`">
+                <b-icon icon="pencil" />
+                <t value="db.page.edit.action" />
+              </b-dropdown-item>
+            </template>
+          </RowHeader>
+        </td>
+        <td>
           <RecordId
             :record="record.record?.student"
-            :show-link="`/database/people/${record.record?.student.id}`"
+            :path="`/database/people/${record.record?.student.id}`"
           />
         </td>
         <td>

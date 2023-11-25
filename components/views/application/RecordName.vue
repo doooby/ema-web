@@ -13,7 +13,7 @@ export default class RecordName extends Vue {
     <div>
       {{ names?.[1] }}
     </div>
-    <div class="text-14">
+    <div class="font-14">
       {{ names?.[0] }}
     </div>
   </div>

@@ -5,13 +5,13 @@ import { wai } from '~/vendor/wai';
 @Component
 export default class RecordId extends Vue {
   @Prop({ required: true }) readonly record!: wai.AResource;
-  @Prop() readonly showLink?: string;
+  @Prop() readonly path?: string;
   @Prop() readonly newTab?: boolean;
 
   get fullPath () {
     let base = this.$router.options.base;
     if (base?.endsWith('/')) base = base.substring(0, base.length - 1);
-    return `${base}${this.showLink}`;
+    return `${base}${this.path}`;
   }
 }
 </script>
@@ -23,10 +23,10 @@ export default class RecordId extends Vue {
       [&nbsp;{{ record.id }}&nbsp;]
     </code>
 
-    <span v-if="showLink">
+    <span v-if="path">
       <nuxt-link
         v-if="!newTab"
-        :to="showLink"
+        :to="path"
         class="p-1 icon-link"
       >
         <b-icon icon="card-heading" />

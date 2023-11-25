@@ -14,9 +14,13 @@ import app from '~/lib/app';
 import { DateInput, OptionsSelect, TextArea } from '~/components/controls/inputs';
 import CardSaveableFooter from '~/components/database/components/CardSaveableFooter.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
+import DropoutReasons from '~/components/views/group/dropout/controls/DropoutReasons.vue';
+import DropoutOn from '~/components/views/group/dropout/controls/DropoutOn.vue';
 
 @Component({
   components: {
+    DropoutOn,
+    DropoutReasons,
     DateInput,
     RecordErrors,
     CardSaveableFooter,
@@ -118,19 +122,10 @@ export default class DropoutStudents extends DatabasePage {
   @Watch('currentCountry')
   reCreateControlsGroup () {
     this.controlsGroup = controls.Group.compose(
+      DropoutReasons.asField(this),
       {
-        name: 'dropout_on',
+        ...DropoutOn.asField(this),
         default: () => new Date(),
-      },
-      {
-        name: 'reasons',
-        options: app.internalOptionsList2(
-          this.$store.state.session.country,
-          'dropout_reasons',
-        ) as app.OptionItem[],
-        populateParams: (values: any, params) => {
-          params.reasons = values.reasons?.map(item => item.value);
-        },
       },
       {
         name: 'note',
@@ -175,7 +170,7 @@ export default class DropoutStudents extends DatabasePage {
                   <RecordId
                     class="p-1 border"
                     :record="student.record"
-                    :show-link="`/database/people/${student.record.id}`"
+                    :path="`/database/people/${student.record.id}`"
                   />
                 </AssociatedRecordsList>
               </div>
@@ -190,7 +185,7 @@ export default class DropoutStudents extends DatabasePage {
                   </template>
                   <RecordId
                     :record="data.group.school_course?.school"
-                    :show-link="`/database/schools/${data.group.school_course?.school.id}`"
+                    :path="`/database/schools/${data.group.school_course?.school.id}`"
                   />
                 </RecordNamedValue>
                 <RecordNamedValue>
@@ -199,7 +194,7 @@ export default class DropoutStudents extends DatabasePage {
                   </template>
                   <RecordId
                     :record="data.group.school_course?.course"
-                    :show-link="`/database/courses/${data.group.school_course?.course.id}`"
+                    :path="`/database/courses/${data.group.school_course?.course.id}`"
                   />
                 </RecordNamedValue>
                 <RecordNamedValue>
@@ -208,7 +203,7 @@ export default class DropoutStudents extends DatabasePage {
                   </template>
                   <RecordId
                     :record="data.group"
-                    :show-link="`/database/groups/${data.group.id}`"
+                    :path="`/database/groups/${data.group.id}`"
                   />
                 </RecordNamedValue>
               </div>
@@ -218,36 +213,16 @@ export default class DropoutStudents extends DatabasePage {
                   <t value="db.pages.groups.dropout_students.dropout.subtitle" />
                 </h4>
                 <div class="row">
+                  <DropoutReasons
+                    class="col-lg-6"
+                    :controls="controlsGroup"
+                    :disabled="disabled"
+                  />
                   <div class="col-lg-6">
-                    <b-form-group>
-                      <template #label>
-                        <t value="db.record.groups.dropout_students.reasons" />
-                      </template>
-                      <OptionsSelect
-                        :value="controlsGroup.getValue('reasons')"
-                        :multiple="true"
-                        :disabled="disabled"
-                        :options="controlsGroup.fieldsIndex.reasons?.options ?? []"
-                        max-height="250"
-                        @change="controlsGroup.update('reasons', $event)"
-                      >
-                        <template #option-content="{ option }">
-                          <t :value="option.item" />
-                        </template>
-                      </OptionsSelect>
-                    </b-form-group>
-                  </div>
-                  <div class="col-lg-6">
-                    <b-form-group>
-                      <template #label>
-                        <t value="db.record.groups.dropout_students.dropout_on" />
-                      </template>
-                      <DateInput
-                        :value="controlsGroup.getValue('dropout_on')"
-                        :disabled="disabled"
-                        @change="controlsGroup.update('dropout_on', $event)"
-                      />
-                    </b-form-group>
+                    <DropoutOn
+                      :controls="controlsGroup"
+                      :disabled="disabled"
+                    />
                     <b-form-group>
                       <template #label>
                         <t value="db.record.groups.dropout_students.note" />
@@ -267,7 +242,7 @@ export default class DropoutStudents extends DatabasePage {
 
             <CardSaveableFooter
               :disabled="disabled"
-              @submit="onSave"
+              @save="onSave"
               @cancel="$router.go(-1)"
             >
               <template v-if="saveErrors" #fail-content>

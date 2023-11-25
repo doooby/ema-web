@@ -52,17 +52,3 @@ export function update (
     };
   };
 }
-
-export function v3Show<R = unknown> (
-  path: string,
-  parseRecord: (value: unknown, associations: wai.Associations) => R,
-) {
-  return function show ({ id, slices }: api.Params) {
-    return {
-      pathIsFull: true,
-      path: `/v3/${path}`,
-      params: { id, slices, per_page: 1 },
-      reducer: value => wai.recordShow(value, parseRecord),
-    };
-  };
-}

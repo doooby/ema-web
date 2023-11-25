@@ -1,9 +1,13 @@
 export type Map<V> = Record<string, Maybe<V>>;
 
-//  TODO should be SparseList
+//  TODO should be Array or SparseList
 export type List<V> = Array<Maybe<V>>;
 
 export type Maybe<V> = undefined | V;
+
+export interface Ref<V> {
+  ref: Maybe<V>;
+}
 
 export type Option = {
   value?: string;

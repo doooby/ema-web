@@ -17,7 +17,7 @@ export default class CardSaveableFooter extends Vue {
         <b-button
           variant="outline-success"
           :disabled="disabled"
-          @click="$emit('submit')"
+          @click="$emit('save')"
         >
           <t value="app.action.save" />
         </b-button>

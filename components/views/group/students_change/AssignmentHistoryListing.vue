@@ -96,7 +96,7 @@ export default class AssignmentHistoryListing extends Vue {
               <RecordId
                 class="p-1 border"
                 :record="student.record"
-                :show-link="`/database/people/${student.record.id}`"
+                :path="`/database/people/${student.record.id}`"
               />
             </AssociatedRecordsList>
           </div>

@@ -25,12 +25,24 @@ export default class RecordsListing<R = unknown> extends Vue {
   @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.ResourcesListing<R>>;
   @Prop() readonly hidePerPage?: boolean;
   @Prop() readonly orderByOptions?: app.OptionItem<string>[];
+  @Prop() readonly showRecordMenu?: boolean;
+  @Prop({ default: () => 36 }) readonly rowHeaderWidth!: number;
 
-  get allColumns () {
-    return this.columns;
+  get allColumns (): Column[] {
+    const array = [ this.rowHeaderColumn, ...this.columns ];
+    return array.filter(id => id) as Column[];
   }
 
-  get failReson (): null | string {
+  get rowHeaderColumn (): undefined | Column {
+    if (!this.showRecordMenu) return;
+    return {
+      name: 'row_header',
+      size: this.rowHeaderWidth,
+      fixedSize: true,
+    };
+  }
+
+  get failReason (): null | string {
     if (this.resource.state.isLoading || !this.resource.state.failReason) {
       return null;
     } else {
@@ -63,13 +75,13 @@ export default class RecordsListing<R = unknown> extends Vue {
       :columns="allColumns"
     >
       <data-table-headers-row :columns="allColumns" />
-      <tbody v-if="failReson">
+      <tbody v-if="failReason">
         <tr>
           <td :colspan="allColumns.length">
             <b-alert variant="warning" show class="m-0">
               <t value="data_table.fetch_fail" />
               <span />
-              <t :value="`app.processing.${failReson}`" />
+              <t :value="`app.processing.${failReason}`" />
             </b-alert>
           </td>
         </tr>

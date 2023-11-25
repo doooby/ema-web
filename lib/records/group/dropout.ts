@@ -1,5 +1,7 @@
 import { wai } from '~/vendor/wai';
 
+export const entity = 'groups/dropouts';
+
 export interface Dropout extends wai.AResource {
   record?: RecordSlice;
 }

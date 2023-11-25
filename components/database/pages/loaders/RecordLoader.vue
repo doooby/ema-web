@@ -13,6 +13,7 @@ export interface RecordLoaderState<R = unknown> {
 export default class RecordLoader extends Vue {
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly slices!: string[];
+  @Prop({ required: true }) readonly reducer!: (record, associations: wai.Associations) => unknown;
   @Prop() readonly id?: string;
   @Prop() readonly idFromParams?: string;
 
@@ -47,12 +48,19 @@ export default class RecordLoader extends Vue {
   @Watch('entity')
   @Watch('recordId')
   async onLoadRecord () {
+    const params = {
+      id: this.recordId,
+      slices: this.slices,
+      per_page: 1,
+    };
     await this.$api2.request(
       this.query,
-      this.$api2.getQuery(this.entity, 'V3_show')({
-        id: this.recordId,
-        slices: this.slices,
-      }),
+      {
+        pathIsFull: true,
+        path: `/v3/${this.entity}`,
+        params,
+        reducer: value => wai.recordShow(value, this.reducer),
+      },
     );
   }
 }

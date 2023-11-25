@@ -104,7 +104,7 @@ export function parseRecord (
   }))(value);
 }
 
-function V3_parseRecord (
+export function V3_parseRecord (
   value,
   associations: wai.Associations,
 ): V3_Course {
@@ -182,8 +182,6 @@ export const queries = {
   searchB: recordsQueries.searchB(entity),
   create: recordsQueries.create(entity),
   update: recordsQueries.update(entity),
-
-  V3_show: recordsQueries.v3Show(entity, V3_parseRecord),
 };
 
 export function recordControls ({

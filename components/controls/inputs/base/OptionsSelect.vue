@@ -80,7 +80,7 @@ export default class OptionsSelect extends Vue {
         v-for="option in options"
         :key="option.value"
         :class="[
-          'list-group-item list-group-item-action',
+          'list-group-item list-group-item-action py-1 px-2 font-14',
           isSelected(option) && 'active',
         ]"
         style="cursor: pointer;"

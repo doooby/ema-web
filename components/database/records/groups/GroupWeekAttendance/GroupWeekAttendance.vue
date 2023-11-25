@@ -250,7 +250,7 @@ function padArrayWithBlanks (array: any) {
       <template v-if="attendance.value" #footer>
         <CardSaveableFooter
           :disabled="showWeek.processing || updateWeek.processing"
-          @submit="onSaveChanges"
+          @save="onSaveChanges"
           @cancel="attendance.value = undefined"
         >
           <template v-if="saveErrors" #fail-content>

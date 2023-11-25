@@ -1,7 +1,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import ARecordsListing from '~/components/database/components/listing/ARecordsListing/ARecordsListing.vue';
-import CardSaveableFooter from '~/components/database/components/CardSaveableFooter.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import { application_record, group } from '~/lib/records';
 import ARecordLink from '~/components/database/components/ARecordLink.vue';
@@ -24,7 +23,6 @@ export interface Day {
     PrintFullName,
     ARecordLink,
     RecordErrors,
-    CardSaveableFooter,
     ARecordsListing,
   },
 })

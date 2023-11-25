@@ -16,7 +16,7 @@ class Base extends Vue {}
 
 @Component
 export default class CountryDBPage extends Vue {
-  static Base = Base;
+  static ComponentBase = Base;
 
   get user (): null | app.session.User {
     return this.$store.state.session.user;
@@ -30,8 +30,6 @@ export default class CountryDBPage extends Vue {
     return (!!this.user && !!this.country);
   }
 }
-
-CountryDBPage.Base = Base;
 </script>
 
 <template>

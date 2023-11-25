@@ -113,19 +113,11 @@ export default class extends DatabasePage {
           :options="group.fieldsIndex.non_classified?.options ?? []"
           @change="group.update('non_classified', $event)"
         >
-          <template #options="{options, isSelected, onToggleOption}">
-            <li
-              v-for="option in options"
-              :key="option.value"
-              class="list-group-item list-group-item-action d-flex"
-              style="cursor: pointer;"
-              @click="onToggleOption(option)"
-            >
-              <input type="radio" :checked="isSelected(option)">
-              <span class="ml-4">
-                <t :value="option.item" />
-              </span>
-            </li>
+          <template #option-content="{ option, selected }">
+            <input type="radio" :checked="selected">
+            <span class="ml-4">
+              <t :value="option.item" />
+            </span>
           </template>
         </OptionsSelect>
       </b-form-group>

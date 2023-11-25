@@ -1,18 +1,15 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import RecordLoader from '~/components/database/pages/loaders/RecordLoader.vue';
+import { wai } from '~/vendor/wai';
 
 @Component({
   components: { RecordLoader },
 })
 export default class ShowPage3 extends Vue {
   @Prop({ required: true }) readonly entity!: string;
-  @Prop() readonly slices?: string[];
-
-  get sanitizedSlices (): string[] {
-    if (!this.slices) return [ 'record' ];
-    return this.slices;
-  }
+  @Prop({ required: true }) readonly slices!: string[];
+  @Prop({ required: true }) readonly reducer!: (record, associations: wai.Associations) => unknown;
 }
 </script>
 
@@ -20,8 +17,9 @@ export default class ShowPage3 extends Vue {
   <RecordLoader
     v-slot="{ loader }"
     :entity="entity"
+    :reducer="reducer"
     id-from-params="id"
-    :slices="sanitizedSlices"
+    :slices="slices"
   >
     <div class="container pt-4 pb-5">
       <h4 class="mb-3">
