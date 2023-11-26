@@ -9,9 +9,10 @@ import DropoutOn from '~/components/views/group/dropout/controls/DropoutOn.vue';
 import ReturnOn from '~/components/views/group/dropout/controls/ReturnOn.vue';
 import DropoutGroup from '~/components/views/group/dropout/DropoutGroup.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
+import DropoutNote from '~/components/views/group/dropout/controls/DropoutNote.vue';
 
 @Component({
-  components: { RecordId, DropoutGroup, ReturnOn, DropoutOn, DropoutReasons },
+  components: { DropoutNote, RecordId, DropoutGroup, ReturnOn, DropoutOn, DropoutReasons },
 })
 export default class DropoutEdit extends Vue {
   @Prop({ required: true }) readonly value!: app.Maybe<controls.Group>;
@@ -48,6 +49,9 @@ export default class DropoutEdit extends Vue {
       ReturnOn.asField({
         default: () => dropout.record?.return_on,
       }),
+      DropoutNote.asField({
+        default: () => dropout.record?.note,
+      }),
     ));
   }
 
@@ -60,23 +64,23 @@ export default class DropoutEdit extends Vue {
 
 <template>
   <div>
-    <div class="row">
-      <div class="col-lg-6">
-        <h6 class="mt-2">
+    <div v-if="dropout" class="row">
+      <div class="col-lg-6 mb-2">
+        <h6>
           <t value="views.group.dropout.DropoutEdit.student_title" />
         </h6>
         <RecordId
-          v-if="dropout?.record?.student"
+          v-if="dropout.record?.student"
           :record="dropout.record.student"
           :path="`/database/people/${dropout.record.student.id}`"
         />
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-6 mb-2">
         <h6>
           <t value="views.group.dropout.DropoutEdit.group_title" />
         </h6>
         <DropoutGroup
-          v-if="dropout?.group"
+          v-if="dropout.group"
           class="mt-2"
           :group="dropout.group"
         />
@@ -97,6 +101,11 @@ export default class DropoutEdit extends Vue {
         <ReturnOn
           :controls="controls"
           :disabled="isDisabled"
+        />
+        <DropoutNote
+          :controls="controls"
+          :disabled="isDisabled"
+          @submit="transaction.commit"
         />
       </div>
     </div>

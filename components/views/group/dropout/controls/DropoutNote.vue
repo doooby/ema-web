@@ -1,14 +1,14 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import controls from '~/components/controls';
-import { DateInput } from '~/components/controls/inputs';
+import { DateInput, TextArea } from '~/components/controls/inputs';
 
-const FIELD_NAME = 'return_on';
+const FIELD_NAME = 'note';
 
 @Component({
-  components: { DateInput },
+  components: { DateInput, TextArea },
 })
-export default class ReturnOn extends Vue {
+export default class DropoutNote extends Vue {
   @Prop({ required: true }) readonly controls!: controls.Group;
   @Prop() readonly disabled?: boolean;
 
@@ -24,7 +24,7 @@ export default class ReturnOn extends Vue {
   }
 
   onChange (value) {
-    this.controls.update(FIELD_NAME, value ?? '');
+    this.controls.update(FIELD_NAME, value);
   }
 }
 </script>
@@ -34,12 +34,13 @@ export default class ReturnOn extends Vue {
     :class="$attrs.class"
   >
     <template #label>
-      <t value="views.group.dropout.controls.ReturnOn.label" />
+      <t value="views.group.dropout.controls.DropoutNote.label" />
     </template>
-    <DateInput
+    <TextArea
       :value="value"
       :disabled="disabled"
       @change="onChange"
+      @submit="$emit('submit')"
     />
   </b-form-group>
 </template>

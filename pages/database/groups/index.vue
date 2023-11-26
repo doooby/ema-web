@@ -114,10 +114,8 @@ export default class extends DatabasePage {
           @change="group.update('non_classified', $event)"
         >
           <template #option-content="{ option, selected }">
-            <input type="radio" :checked="selected">
-            <span class="ml-4">
-              <t :value="option.item" />
-            </span>
+            <input type="radio" :checked="selected" class="mr-1">
+            <t :value="option.item" />
           </template>
         </OptionsSelect>
       </b-form-group>

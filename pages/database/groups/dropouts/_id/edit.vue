@@ -6,6 +6,7 @@ import { group } from '~/lib/records';
 import CountryDBPage from '~/components/database/pages/CountryDBPage.vue';
 import DropoutEdit from '~/components/views/group/dropout/DropoutEdit.vue';
 import controls from '~/components/controls';
+import { wai } from '~/vendor/wai';
 
 @Component({
   components: { DropoutEdit, CountryDBPage, EditPage3 },
@@ -14,6 +15,8 @@ export default class Edit extends CountryDBPage.ComponentBase {
   entity = group.dropout.entity;
   reducer = group.dropout.parseRecord;
   controls = app.createRef<controls.Group>();
+  saveErrors = app.createRef<wai.ResourceError[]>();
+  recordId = '';
 
   get transaction () {
     return new app.Transaction(
@@ -23,7 +26,26 @@ export default class Edit extends CountryDBPage.ComponentBase {
   }
 
   async onSubmit () {
-    console.log(this.controls?.ref?.state.params);
+    if (!this.recordId) return;
+    const params = this.controls?.ref?.getParams();
+
+    const result = await this.$api2.V3_request({
+      path: `/groups/dropouts/${this.recordId}/update`,
+      params: {
+        record: params,
+      },
+      reducer: wai.recordUpdate,
+    });
+
+    const success = app.api.updateSuccess(result.response);
+    const errors = app.api.updateErrors(result.response);
+    if (success && !errors?.length) {
+      window.location.reload();
+    } else {
+      this.saveErrors.ref = errors ?? [
+        [ undefined, 'failed' ],
+      ];
+    }
   }
 
   onCancel () {
@@ -40,6 +62,8 @@ export default class Edit extends CountryDBPage.ComponentBase {
       :slices="[ 'record', 'group' ]"
       :reducer="reducer"
       :transaction="transaction"
+      :errors="saveErrors.ref"
+      @load="recordId = $event.id"
     >
       <DropoutEdit
         v-model="controls.ref"

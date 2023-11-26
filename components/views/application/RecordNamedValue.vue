@@ -7,11 +7,11 @@ export default class RecordNamedValue extends Vue {}
 
 <template>
   <div
-    :class="[ $attrs.class, 'text-truncate' ]"
+    :class="[ $attrs.class, 'text-truncate lh-1' ]"
   >
-    <small class="text-muted">
+    <span class="text-muted">
       <slot name="label" />
-    </small>
+    </span>
     <br>
     <slot />
   </div>

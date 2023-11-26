@@ -140,16 +140,6 @@ export default class DropoutsListing extends Vue {
             </template>
             <PrintDate :value="record.record?.dropout_on" />
           </RecordNamedValue>
-          <RecordNamedValue
-            v-if="record.record?.return_on"
-            class="mt-1"
-          >
-            <template #label>
-              <t value="db.record.groups.dropouts.label.archived_at" />
-            </template>
-            <PrintDate :value="record.record?.archived_at" />
-          </RecordNamedValue>
-          <PrintDate />
         </td>
         <td>
           <ul v-id="record.record?.reasons?.length">

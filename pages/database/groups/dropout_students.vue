@@ -134,11 +134,10 @@ export default class DropoutStudents extends DatabasePage {
   @Watch('currentCountry')
   reCreateControlsGroup () {
     this.controlsGroup = controls.Group.compose(
-      DropoutReasons.asField(this),
-      {
-        ...DropoutOn.asField(this),
+      DropoutReasons.asField(),
+      DropoutOn.asField({
         default: () => new Date(),
-      },
+      }),
       {
         name: 'note',
         populateParams: (values: any, params) => {

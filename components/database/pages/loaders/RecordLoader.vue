@@ -63,6 +63,9 @@ export default class RecordLoader extends Vue {
         reducer: value => wai.recordShow(value, this.reducer),
       },
     );
+    if (this.loaderState.record) {
+      this.$emit('load', this.loaderState.record);
+    }
   }
 }
 </script>

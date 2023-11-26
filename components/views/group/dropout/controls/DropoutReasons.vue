@@ -43,7 +43,7 @@ export default class DropoutReasons extends Vue {
     :class="$attrs.class"
   >
     <template #label>
-      <t value="entity.groups.dropout.label.reasons" />
+      <t value="views.group.dropout.controls.DropoutReasons.label" />
     </template>
     <OptionsSelect
       :value="value"

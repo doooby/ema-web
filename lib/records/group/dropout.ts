@@ -17,7 +17,6 @@ interface RecordSlice {
   note?: string;
   dropout_on: Date;
   return_on?: Date;
-  archived_at?: Date;
 }
 
 export interface GroupSlice {
@@ -55,7 +54,6 @@ function parseRecordSlice (
     note: wai.property(value, 'note', wai.nullable(wai.string)),
     dropout_on: wai.property(value, 'dropout_on', wai.time),
     return_on: wai.property(value, 'return_on', wai.nullable(wai.time)),
-    archived_at: wai.property(value, 'archived_at', wai.nullable(wai.time)),
   }))(value);
 }
 

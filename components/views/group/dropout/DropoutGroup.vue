@@ -26,7 +26,7 @@ export default class DropoutGroup extends Vue {
         :path="`/database/schools/${group.school.id}`"
       />
     </RecordNamedValue>
-    <RecordNamedValue>
+    <RecordNamedValue class="mt-1">
       <template #label>
         <t value="db.record.courses.meta.s" />
       </template>
@@ -35,7 +35,7 @@ export default class DropoutGroup extends Vue {
         :path="`/database/courses/${group.course.id}`"
       />
     </RecordNamedValue>
-    <RecordNamedValue>
+    <RecordNamedValue class="mt-1">
       <template #label>
         <t value="db.record.groups.meta.s" />
       </template>

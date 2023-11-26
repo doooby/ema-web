@@ -6,14 +6,14 @@ export default class Transaction {
   };
 
   constructor (
-    readonly onCommit: null | (() => void),
-    readonly onCancel: null | (() => void),
+    readonly _onCommit: null | (() => void),
+    readonly _onCancel: null | (() => void),
   ) {
     this.state = Vue.observable({
       isProcessing: false,
     });
   }
 
-  commit = () => this.onCommit?.();
-  cancel = () => this.onCancel?.();
+  commit = () => this._onCommit?.();
+  cancel = () => this._onCancel?.();
 }

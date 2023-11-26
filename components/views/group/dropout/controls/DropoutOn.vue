@@ -24,7 +24,7 @@ export default class DropoutOn extends Vue {
   }
 
   onChange (value) {
-    this.controls.update(FIELD_NAME, value);
+    this.controls.update(FIELD_NAME, value ?? '');
   }
 }
 </script>
@@ -34,7 +34,7 @@ export default class DropoutOn extends Vue {
     :class="$attrs.class"
   >
     <template #label>
-      <t value="entity.groups.dropout.label.dropout_on" />
+      <t value="views.group.dropout.controls.DropoutOn.label" />
     </template>
     <DateInput
       :value="value"

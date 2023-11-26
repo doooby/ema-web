@@ -17,9 +17,9 @@ export default class RecordId extends Vue {
 </script>
 
 <template>
-  <div :class="$attrs.class">
+  <div :class="[ $attrs.class, 'lh-1_25' ]">
 
-    <code class="mr-1">
+    <code>
       [&nbsp;{{ record.id }}&nbsp;]
     </code>
 
