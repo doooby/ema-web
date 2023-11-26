@@ -1,7 +1,5 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { RecordLoaderState } from '~/components/database/pages/loaders/RecordLoader.vue';
-import { group } from '~/lib/records';
 import controls from '~/components/controls';
 import app from '~/lib/app';
 import DropoutReasons from '~/components/views/group/dropout/controls/DropoutReasons.vue';
@@ -10,17 +8,19 @@ import ReturnOn from '~/components/views/group/dropout/controls/ReturnOn.vue';
 import DropoutGroup from '~/components/views/group/dropout/DropoutGroup.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 import DropoutNote from '~/components/views/group/dropout/controls/DropoutNote.vue';
+import { wai } from '~/vendor/wai';
+import { group } from '~/lib/records';
 
 @Component({
   components: { DropoutNote, RecordId, DropoutGroup, ReturnOn, DropoutOn, DropoutReasons },
 })
 export default class DropoutEdit extends Vue {
   @Prop({ required: true }) readonly value!: app.Maybe<controls.Group>;
-  @Prop({ required: true }) readonly recordLoader!: RecordLoaderState<group.dropout.Dropout>;
+  @Prop({ required: true }) readonly recordResource!: app.Nullable<app.api.Resource<wai.ResourceShow<group.dropout.Dropout>>>;
   @Prop({ required: true }) readonly transaction!: app.Transaction;
 
   get dropout () {
-    return this.recordLoader.record;
+    return this.recordResource?.state.resource;
   }
 
   get controls () {
@@ -28,10 +28,10 @@ export default class DropoutEdit extends Vue {
   }
 
   get isDisabled () {
-    return !this.recordLoader || this.transaction.state.isProcessing;
+    return !this.dropout || this.transaction.state.isProcessing;
   }
 
-  @Watch('recordLoader.record')
+  @Watch('dropout')
   onResetRecord () {
     const dropout = this.dropout;
     if (!dropout?.record) {

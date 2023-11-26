@@ -13,10 +13,20 @@ import { wai } from '~/vendor/wai';
 })
 export default class Edit extends CountryDBPage.ComponentBase {
   entity = group.dropout.entity;
-  reducer = group.dropout.parseRecord;
   controls = app.createRef<controls.Group>();
-  saveErrors = app.createRef<wai.ResourceError[]>();
-  recordId = '';
+  dropoutResource = app.nullable<app.api.Resource<wai.ResourceShow<group.dropout.Dropout>>>();
+  saveErrors = app.nullable<wai.ResourceError[]>();
+
+  created () {
+    this.dropoutResource = app.api.Resource.loadRecord(this, {
+      path: `/v3/${this.entity}`,
+      reducer: group.dropout.parseRecord,
+      params: {
+        id: this.$route.params.id,
+        slices: [ 'record', 'group' ],
+      },
+    });
+  }
 
   get transaction () {
     return new app.Transaction(
@@ -26,26 +36,27 @@ export default class Edit extends CountryDBPage.ComponentBase {
   }
 
   async onSubmit () {
-    if (!this.recordId) return;
-    const params = this.controls?.ref?.getParams();
+    const dropout = this.dropoutResource?.state.resource;
+    if (!dropout?.record) return;
+    this.transaction.state.isProcessing = true;
+    this.saveErrors = null;
 
+    const params = this.controls?.ref?.getParams();
     const result = await this.$api2.V3_request({
-      path: `/groups/dropouts/${this.recordId}/update`,
+      path: `/groups/dropouts/${dropout.id}/update`,
       params: {
         record: params,
       },
       reducer: wai.recordUpdate,
     });
-
-    const success = app.api.updateSuccess(result.response);
-    const errors = app.api.updateErrors(result.response);
-    if (success && !errors?.length) {
-      window.location.reload();
-    } else {
-      this.saveErrors.ref = errors ?? [
-        [ undefined, 'failed' ],
-      ];
+    this.saveErrors = app.api.updateErrors(result.response) ?? null;
+    if (this.saveErrors) {
+      this.transaction.state.isProcessing = false;
+      return;
     }
+
+    const path = `/database/groups/${dropout.record.group.id}`;
+    await this.$router.replace({ path });
   }
 
   onCancel () {
@@ -57,17 +68,14 @@ export default class Edit extends CountryDBPage.ComponentBase {
 <template>
   <CountryDBPage>
     <EditPage3
-      v-slot="{ loader }"
       :entity="entity"
-      :slices="[ 'record', 'group' ]"
-      :reducer="reducer"
+      :record-resource="dropoutResource"
       :transaction="transaction"
-      :errors="saveErrors.ref"
-      @load="recordId = $event.id"
+      :save-errors="saveErrors ?? undefined"
     >
       <DropoutEdit
         v-model="controls.ref"
-        :record-loader="loader"
+        :record-resource="dropoutResource"
         :transaction="transaction"
       />
     </EditPage3>

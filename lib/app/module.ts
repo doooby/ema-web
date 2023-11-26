@@ -65,6 +65,10 @@ export function internalOptionsList3 (
   }));
 }
 
+export function nullable<V> (defaultValue?: V): app.Nullable<V> {
+  return defaultValue ?? null;
+}
+
 export function createRef<V> (defaultValue?: V): app.Ref<V> {
   return { ref: defaultValue };
 }

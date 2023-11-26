@@ -92,6 +92,7 @@ function formatDateInEnglish (date?: Date) {
       <TextInput
         :dom-id="domId"
         :value="textValue"
+        :disabled="disabled"
         @change="onTextChange"
       />
     </div>

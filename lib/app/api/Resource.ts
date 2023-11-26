@@ -1,6 +1,7 @@
 import app from '~/lib/app';
 import { Vue } from 'vue-property-decorator';
 import { api } from '~/lib/api2/module';
+import { wai } from '~/vendor/wai';
 
 export default class Resource<R> {
   static LISTING_PER_PAGE_OPTIONS = [ 10, 1, 25, 50, 100 ];
@@ -22,6 +23,24 @@ export default class Resource<R> {
       resource: undefined,
       failReason: undefined,
     });
+  }
+
+  static loadRecord<R> (context: Vue, options: {
+    path: string;
+    reducer: (value, associations: wai.Associations) => R;
+    params?: app.api.Params,
+  }): Resource<wai.ResourceShow<R>> {
+    const resource = new Resource(
+      options.path,
+      value => wai.recordShow(value, options.reducer),
+    );
+    if (options.params) {
+      resource.setDefaultParams(options.params);
+      resource.updateParams();
+    }
+    resource.bindApiClient(context.$api2);
+    resource.fetch();
+    return resource;
   }
 
   bindApiClient (api: api.Api2Plugin) {

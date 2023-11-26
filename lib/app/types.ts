@@ -5,6 +5,8 @@ export type List<V> = Array<Maybe<V>>;
 
 export type Maybe<V> = undefined | V;
 
+export type Nullable<V> = null | V;
+
 export interface Ref<V> {
   ref: Maybe<V>;
 }

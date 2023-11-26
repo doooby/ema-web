@@ -7,6 +7,7 @@ export interface Dropout extends wai.AResource {
 }
 
 interface RecordSlice {
+  group: wai.AResource;
   student: wai.AResource;
   created_at: Date;
   created_by?: {
@@ -42,6 +43,9 @@ function parseRecordSlice (
   return wai.object(value => ({
     student: wai.property(value, 'student_id',
       id => wai.associatedRecord(associations, 'people', id),
+    ),
+    group: wai.property(value, 'group_id',
+      id => wai.associatedRecord(associations, 'groups', id),
     ),
     created_at: wai.property(value, 'created_at', wai.time),
     created_by: wai.property(value, 'created_by',

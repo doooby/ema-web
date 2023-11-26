@@ -1,0 +1,63 @@
+<script lang="ts">
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+
+@Component
+export default class SaveButton extends Vue {
+  @Prop() readonly processing!: boolean;
+  @Prop() readonly active!: boolean;
+
+  delayedProcessing = this.processing;
+  t_delayedProcessing = null as null | NodeJS.Timeout;
+
+  @Watch('processing')
+  onProcessingChange (newValue) {
+    if (this.t_delayedProcessing) {
+      clearTimeout(this.t_delayedProcessing);
+      this.t_delayedProcessing = null;
+    }
+
+    if (newValue) this.delayedProcessing = true;
+    else {
+      this.t_delayedProcessing = setTimeout(
+        () => {
+          this.delayedProcessing = false;
+          this.t_delayedProcessing = null;
+        },
+        400,
+      );
+    }
+  }
+}
+</script>
+
+<template>
+  <b-button
+    variant="success"
+    :disabled="!active || delayedProcessing"
+    @click="$emit('click')"
+  >
+    <div class="position-relative">
+      <t value="app.action.save" />
+      <transition name="fade-in">
+        <div
+          v-if="delayedProcessing"
+          class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center"
+          :style="{ top: 0, left: 0 }"
+        >
+          <div class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only" />
+          </div>
+        </div>
+      </transition>
+    </div>
+  </b-button>
+</template>
+
+<style scoped>
+.fade-in-enter, .fade-in-leave-to {
+  opacity: 0;
+}
+.fade-in-enter-active {
+  transition: opacity 0.25s;
+}
+</style>

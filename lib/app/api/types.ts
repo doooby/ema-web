@@ -5,8 +5,8 @@ export type Params = app.Map<unknown>;
 
 export interface ResourceState<R = unknown> {
   isLoading: boolean;
-  resource?: R;
-  failReason?: string;
+  resource: app.Maybe<R>;
+  failReason: app.Maybe<string>;
 }
 
 export interface ListingParams {

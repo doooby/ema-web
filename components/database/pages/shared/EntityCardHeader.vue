@@ -9,11 +9,11 @@ import RecordId from '~/components/views/application/RecordId.vue';
 })
 export default class EntityCardHeader extends Vue {
   @Prop({ required: true }) readonly entity!: string;
-  @Prop({ required: true }) readonly record!: wai.AResource;
+  @Prop() readonly record?: wai.AResource;
   @Prop() readonly hasShowPage?: boolean;
 
   get path () {
-    if (this.hasShowPage) {
+    if (this.hasShowPage && this.record) {
       return `/database/${this.entity}/${this.record.id}`;
     }
   }
@@ -21,7 +21,7 @@ export default class EntityCardHeader extends Vue {
 </script>
 
 <template>
-  <div class="card-header d-flex flex-wrap justify-content-between align-items-center --component">
+  <div class="d-flex flex-wrap justify-content-between align-items-center --component">
     <h2 class="m-0">
       <t value="db.page.EntityCardHeader.text" />
       <br>
@@ -31,6 +31,7 @@ export default class EntityCardHeader extends Vue {
     </h2>
     <div>
       <RecordId
+        v-if="record"
         :record="record"
         :path="path"
         :new-tab="true"
