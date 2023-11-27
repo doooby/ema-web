@@ -8,7 +8,7 @@ import RecordId from '~/components/views/application/RecordId.vue';
   components: { RecordId, ARecordLink },
 })
 export default class EntityCardHeader extends Vue {
-  @Prop({ required: true }) readonly entity!: string;
+  @Prop() readonly entity?: string;
   @Prop() readonly record?: wai.AResource;
   @Prop() readonly hasShowPage?: boolean;
 
@@ -23,9 +23,9 @@ export default class EntityCardHeader extends Vue {
 <template>
   <div class="d-flex flex-wrap justify-content-between align-items-center --component">
     <h2 class="m-0">
-      <t value="db.page.EntityCardHeader.text" />
-      <br>
-      <small class="text-muted">
+      <slot />
+      <br v-if="$scopedSlots.default">
+      <small v-if="entity" class="text-muted">
         <t :value="`db.record.${entity}.meta.s`" />
       </small>
     </h2>

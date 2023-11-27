@@ -23,6 +23,13 @@ export default class EditPage3 extends Vue {
   get record () {
     return this.recordResource?.state.resource;
   }
+
+  get loadFailMessage () {
+    const failReason = this.recordResource?.state.failReason;
+    if (failReason) {
+      return `api.fail.${failReason}`;
+    }
+  }
 }
 </script>
 
@@ -37,7 +44,7 @@ export default class EditPage3 extends Vue {
     </h4>
 
     <RecordEditCard
-      :is-loading="!recordResource || recordResource.state.isLoading"
+      :active="!!record"
       :is-processing="transaction.state.isProcessing"
       @save="transaction.commit"
       @cancel="transaction.cancel"
@@ -47,11 +54,17 @@ export default class EditPage3 extends Vue {
           :record="record"
           :entity="entity"
           :has-show-page="hasShowPage"
-        />
+        >
+          <t value="page.EditPage.header.title" />
+        </EntityCardHeader>
       </template>
       <template v-if="saveErrors" #errors>
         <RecordErrors :entity="entity" :errors="saveErrors" />
       </template>
+      <LoadingBlock
+        :is-loading="recordResource?.state.isLoading"
+        :fail-message="loadFailMessage"
+      />
       <slot />
     </RecordEditCard>
   </div>

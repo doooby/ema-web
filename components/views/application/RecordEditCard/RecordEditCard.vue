@@ -12,8 +12,8 @@ import SaveButton from '~/components/toolkit/SaveButton.vue';
   },
 })
 export default class RecordEditCard extends Vue {
-  @Prop() readonly isLoading!: boolean;
-  @Prop() readonly isProcessing!: boolean;
+  @Prop() readonly active?: boolean;
+  @Prop() readonly isProcessing?: boolean;
 }
 </script>
 
@@ -23,13 +23,12 @@ export default class RecordEditCard extends Vue {
       <slot name="header" />
     </div>
     <div class="card-body">
-      <LoadingBlock :is-loading="isLoading" />
       <slot />
     </div>
     <div class="card-footer">
       <div>
         <SaveButton
-          :active="!isLoading"
+          :active="active"
           :processing="isProcessing"
           @click="$emit('save')"
         />

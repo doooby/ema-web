@@ -1,13 +1,14 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import app from '~/lib/app';
 
 @Component
 export default class SaveButton extends Vue {
-  @Prop() readonly processing!: boolean;
-  @Prop() readonly active!: boolean;
+  @Prop() readonly processing?: boolean;
+  @Prop() readonly active?: boolean;
 
-  delayedProcessing = this.processing;
-  t_delayedProcessing = null as null | NodeJS.Timeout;
+  delayedProcessing = this.processing ?? false;
+  t_delayedProcessing = app.nullable<any>();
 
   @Watch('processing')
   onProcessingChange (newValue) {

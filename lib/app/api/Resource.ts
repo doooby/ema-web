@@ -29,7 +29,10 @@ export default class Resource<R> {
     path: string;
     reducer: (value, associations: wai.Associations) => R;
     params?: app.api.Params,
-  }): Resource<wai.ResourceShow<R>> {
+  }): {
+    promise: Promise<void>;
+    resource: Resource<wai.ResourceShow<R>>;
+  } {
     const resource = new Resource(
       options.path,
       value => wai.recordShow(value, options.reducer),
@@ -39,8 +42,29 @@ export default class Resource<R> {
       resource.updateParams();
     }
     resource.bindApiClient(context.$api2);
-    resource.fetch();
-    return resource;
+    const promise = resource.fetch();
+    return { promise, resource };
+  }
+
+  static loadRecords<R = {}> (context: Vue, options: {
+    path: string;
+    reducer?: (value, associations: wai.Associations) => R;
+    params?: app.api.Params,
+  }): {
+    promise: Promise<void>;
+    resource: Resource<wai.RecordsList<R>>;
+  } {
+    const resource = new Resource(
+      options.path,
+      value => wai.recordsList(value, options.reducer),
+    );
+    if (options.params) {
+      resource.setDefaultParams(options.params);
+      resource.updateParams();
+    }
+    resource.bindApiClient(context.$api2);
+    const promise = resource.fetch();
+    return { promise, resource };
   }
 
   bindApiClient (api: api.Api2Plugin) {

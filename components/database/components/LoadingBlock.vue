@@ -3,8 +3,8 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 
 @Component
 export default class LoadingBlock extends Vue {
-  @Prop() readonly isLoading!: boolean;
-  @Prop() readonly failMessage!: string;
+  @Prop() readonly isLoading?: boolean;
+  @Prop() readonly failMessage?: string;
 }
 </script>
 

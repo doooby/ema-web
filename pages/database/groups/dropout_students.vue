@@ -1,66 +1,54 @@
 <script lang="ts">
-import { Component, Watch } from 'vue-property-decorator';
-import { DatabasePage } from '~/components';
-import ActionPage, { ActionParams } from '~/components/database/pages/ActionPage.vue';
+import { Component } from 'vue-property-decorator';
+import controls from '~/components/controls';
+import CountryDBPage from '~/components/database/pages/CountryDBPage.vue';
+import app from '~/lib/app';
+import { wai } from '~/vendor/wai';
+import ActionPage2, { ActionParams } from '~/components/database/pages/ActionPage2.vue';
 import { DropoutStudentsParams } from '~/components/database/records/groups/students/actions/ActionDropoutStudents.vue';
 import { group } from '~/lib/records';
-import { wai } from '~/vendor/wai';
-import ActionPageContent from '~/components/database/pages/ActionPageContent.vue';
+import RecordEditCard from '~/components/views/application/RecordEditCard/RecordEditCard.vue';
+import EntityCardHeader from '~/components/database/pages/shared/EntityCardHeader.vue';
+import RecordErrors from '~/components/database/RecordErrors.vue';
+import DropoutGroup from '~/components/views/group/dropout/DropoutGroup.vue';
+import DropoutReasons from '~/components/views/group/dropout/controls/DropoutReasons.vue';
+import ReturnOn from '~/components/views/group/dropout/controls/ReturnOn.vue';
+import DropoutNote from '~/components/views/group/dropout/controls/DropoutNote.vue';
+import DropoutOn from '~/components/views/group/dropout/controls/DropoutOn.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 import AssociatedRecordsList from '~/components/views/application/AssociatedRecordsList.vue';
-import RecordNamedValue from '~/components/views/application/RecordNamedValue.vue';
-import controls from '~/components/controls';
-import app from '~/lib/app';
-import { DateInput, OptionsSelect, TextArea } from '~/components/controls/inputs';
-import CardSaveableFooter from '~/components/database/components/CardSaveableFooter.vue';
-import RecordErrors from '~/components/database/RecordErrors.vue';
-import DropoutReasons from '~/components/views/group/dropout/controls/DropoutReasons.vue';
-import DropoutOn from '~/components/views/group/dropout/controls/DropoutOn.vue';
-import DropoutGroup from '~/components/views/group/dropout/DropoutGroup.vue';
 
 @Component({
   components: {
-    DropoutGroup,
-    DropoutOn,
-    DropoutReasons,
-    DateInput,
-    RecordErrors,
-    CardSaveableFooter,
-    TextArea,
-    OptionsSelect,
-    RecordNamedValue,
     AssociatedRecordsList,
     RecordId,
-    ActionPageContent,
-    ActionPage,
+    DropoutOn,
+    DropoutNote,
+    ReturnOn,
+    DropoutReasons,
+    DropoutGroup,
+    RecordErrors,
+    EntityCardHeader,
+    RecordEditCard,
+    ActionPage2,
+    CountryDBPage,
   },
 })
-export default class DropoutStudents extends DatabasePage {
-  connected = false;
-  data: any = null;
-  saveErrors: null | app.Maybe<wai.ResourceError[]> = null;
+export default class DropoutStudents extends CountryDBPage.ComponentBase {
+  onCleanAction = app.nullable<() => void>();
+  data = app.nullable<{
+    group: group.V3_Group;
+    students: wai.RecordsList;
+  }>();
 
-  onCleanAction?: () => void;
+  dataFailMessage = app.nullable<string>();
 
-  created () {
-    this.reCreateControlsGroup();
-  }
-
-  get disabled () {
-    return false;
-  }
-
-  get returnPath (): string {
-    if (this.data && this.data.group.id) {
-      const groupId = this.data.group.id;
-      return `/database/groups/${groupId}`;
-    } else {
-      return '/database/people';
-    }
-  }
+  entity = group.dropout.entity;
+  controls = app.nullable<controls.Group>();
+  saveErrors = app.nullable<wai.ResourceError[]>();
 
   get dropoutGroup (): app.Maybe<group.dropout.GroupSlice> {
-    if (this.data.group.school_course) {
+    if (this.data?.group.school_course) {
       return {
         school: this.data.group.school_course.school,
         course: this.data.group.school_course.course,
@@ -69,8 +57,70 @@ export default class DropoutStudents extends DatabasePage {
     }
   }
 
+  get isDisabled () {
+    return !this.data || this.transaction.state.isProcessing;
+  }
+
+  get transaction () {
+    return new app.Transaction(
+      () => this.onSave(),
+      () => this.$router.go(-1),
+    );
+  }
+
+  async onConnect ({
+    params,
+    onClean,
+  }: ActionParams<DropoutStudentsParams>) {
+    this.onCleanAction = onClean;
+
+    const groupResource = app.api.Resource.loadRecord(this, {
+      path: '/v3/groups',
+      reducer: group.V3_parseRecord,
+      params: {
+        id: params.groupId,
+        slices: [ 'school_course' ],
+      },
+    });
+
+    const studentsResource = app.api.Resource.loadRecords(this, {
+      path: '/v3/people',
+      params: {
+        id: params.studentsIds,
+        per_page: 100,
+      },
+    });
+
+    await Promise.all([
+      groupResource.promise,
+      studentsResource.promise,
+    ]);
+
+    if (
+      !groupResource.resource.state.resource ||
+      !studentsResource.resource.state.resource
+    ) {
+      this.dataFailMessage = 'api.fail.load_data';
+      return;
+    }
+
+    this.data = {
+      group: groupResource.resource.state.resource,
+      students: studentsResource.resource.state.resource,
+    };
+    this.controls = controls.Group.compose(
+      DropoutReasons.asField(),
+      DropoutOn.asField({
+        default: () => new Date(),
+      }),
+      DropoutNote.asField(),
+    );
+  }
+
   async onSave () {
-    this.saveErrors = undefined;
+    if (!this.data || !this.controls) return;
+    this.saveErrors = null;
+    const returnPath = `/database/groups/${this.data.group.id}`;
 
     const result = await this.$api2.V3_request({
       path: '/groups/dropouts/group_create',
@@ -78,162 +128,97 @@ export default class DropoutStudents extends DatabasePage {
         students_ids: this.data.students.records.map(r => r.id),
         record: {
           group_id: this.data.group.id,
-          ...this.controlsGroup.getParams(),
+          ...this.controls.getParams(),
         },
       },
       reducer: wai.recordUpdate,
     });
-
-    if (result.okPayload && !result.okPayload.errors?.length) {
-      await this.$router.replace({ path: this.returnPath });
+    this.saveErrors = app.api.updateErrors(result.response) ?? null;
+    if (this.saveErrors) {
+      this.transaction.state.isProcessing = false;
       return;
     }
 
-    this.saveErrors = app.api.updateErrors(result.response) ?? [
-      [ undefined, 'failed' ],
-    ];
-  }
-
-  async onConnect ({
-    params,
-    onClean,
-  }: ActionParams<DropoutStudentsParams>): Promise<void> {
-    this.onCleanAction = onClean;
-
-    const data = {
-      group: await this.$api2.V3_createLoader({
-        path: '/groups',
-        params: {
-          id: params.groupId,
-          per_page: 1,
-          slices: [ 'school_course' ],
-        },
-        reducer: value => wai.recordShow(value, group.V3_parseRecord),
-      }).onReload?.(),
-      students: await this.$api2.V3_createLoader({
-        path: '/people',
-        params: {
-          id: params.studentsIds,
-          per_page: 100,
-        },
-        reducer: value => wai.recordsList(value),
-      }).onReload?.(),
-    };
-
-    this.connected = true;
-    this.data =
-      (
-        data.group && data.group.school_course &&
-          data.students && data.students.records.length &&
-          data
-      ) || undefined;
-  }
-
-  controlsGroup = controls.Group.compose();
-
-  @Watch('currentCountry')
-  reCreateControlsGroup () {
-    this.controlsGroup = controls.Group.compose(
-      DropoutReasons.asField(),
-      DropoutOn.asField({
-        default: () => new Date(),
-      }),
-      {
-        name: 'note',
-        populateParams: (values: any, params) => {
-          params.note = values.note;
-        },
-      },
-    );
+    this.onCleanAction?.();
+    await this.$router.replace({ path: returnPath });
   }
 }
 </script>
 
 <template>
-  <ActionPage :is-loaded="!!data" @connect="onConnect">
-    <ActionPageContent v-if="connected" :present="!!data">
-
-      <div v-if="data" class="row">
-        <div class="col justify-content-md-center">
-          <div class="card">
-
-            <div class="card-header">
-              <h2 class="m-0">
-                <t value="db.pages.groups.dropout_students.title" />
-              </h2>
-            </div>
-
-            <div class="card-body pt-3 pt-0">
-
-              <div>
-                <h4 class="mt-2">
-                  <t value="db.pages.groups.dropout_students.students.subtitle" />
-                </h4>
-                <h6>
-                  <t value="db.pages.groups.dropout_students.students.count" />
-                  <span>:</span>
-                  <span>{{ data.students.records.length }}</span>
-                </h6>
-                <AssociatedRecordsList
-                  v-slot="student"
-                  :records="data.students.records"
-                >
-                  <RecordId
-                    class="p-1 border"
-                    :record="student.record"
-                    :path="`/database/people/${student.record.id}`"
-                  />
-                </AssociatedRecordsList>
-              </div>
-
-              <DropoutGroup v-if="dropoutGroup" :group="dropoutGroup" />
-
-              <div>
-                <h4 class="mt-2">
-                  <t value="db.pages.groups.dropout_students.dropout.subtitle" />
-                </h4>
-                <div class="row">
-                  <DropoutReasons
-                    class="col-lg-6"
-                    :controls="controlsGroup"
-                    :disabled="disabled"
-                  />
-                  <div class="col-lg-6">
-                    <DropoutOn
-                      :controls="controlsGroup"
-                      :disabled="disabled"
-                    />
-                    <b-form-group>
-                      <template #label>
-                        <t value="db.record.groups.dropout_students.note" />
-                      </template>
-                      <TextArea
-                        :value="controlsGroup.getValue('note')"
-                        :disabled="disabled"
-                        @change="controlsGroup.update('note', $event)"
-                        @submit="onSave"
-                      />
-                    </b-form-group>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-            <CardSaveableFooter
-              :disabled="disabled"
-              @save="onSave"
-              @cancel="$router.go(-1)"
+  <CountryDBPage>
+    <ActionPage2
+      :is-connected="!!data"
+      :fail-message="dataFailMessage"
+      @connect="onConnect"
+    >
+      <RecordEditCard
+        :active="!!data"
+        :is-processing="transaction.state.isProcessing"
+        @save="transaction.commit"
+        @cancel="transaction.cancel"
+      >
+        <template #header>
+          <EntityCardHeader>
+            <t value="page.EditPage.header.title" />
+          </EntityCardHeader>
+        </template>
+        <template v-if="saveErrors" #errors>
+          <RecordErrors :entity="entity" :errors="saveErrors" />
+        </template>
+        <div v-if="data" class="row">
+          <div class="col-lg-6 mb-2">
+            <h6>
+              <t value="db.pages.groups.dropout_students.students.subtitle" />
+              <br>
+              <small>
+                <t value="db.pages.groups.dropout_students.students.count" />
+                <span>:</span>
+                <span>{{ data.students.records.length }}</span>
+              </small>
+            </h6>
+            <AssociatedRecordsList
+              v-slot="student"
+              :records="data.students.records"
             >
-              <template v-if="saveErrors" #fail-content>
-                <RecordErrors entity="groups" :errors="saveErrors" />
-              </template>
-            </CardSaveableFooter>
-
+              <RecordId
+                class="p-1 border"
+                :record="student.record"
+                :path="`/database/people/${student.record.id}`"
+              />
+            </AssociatedRecordsList>
+          </div>
+          <div class="col-lg-6 mb-2">
+            <h6>
+              <t value="views.group.dropout.DropoutEdit.group_title" />
+            </h6>
+            <DropoutGroup
+              v-if="dropoutGroup"
+              class="mt-2"
+              :group="dropoutGroup"
+            />
           </div>
         </div>
-      </div>
-
-    </ActionPageContent>
-  </ActionPage>
+        <div v-if="controls" class="row mt-2">
+          <div class="col-lg-6">
+            <DropoutReasons
+              :controls="controls"
+              :disabled="isDisabled"
+            />
+          </div>
+          <div class="col-lg-6">
+            <DropoutOn
+              :controls="controls"
+              :disabled="isDisabled"
+            />
+            <DropoutNote
+              :controls="controls"
+              :disabled="isDisabled"
+              @submit="transaction.commit"
+            />
+          </div>
+        </div>
+      </RecordEditCard>
+    </ActionPage2>
+  </CountryDBPage>
 </template>

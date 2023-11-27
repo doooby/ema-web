@@ -12,9 +12,10 @@ import { wai } from '~/vendor/wai';
   components: { DropoutEdit, CountryDBPage, EditPage3 },
 })
 export default class Edit extends CountryDBPage.ComponentBase {
+  dropoutResource = app.nullable<app.api.Resource<wai.ResourceShow<group.dropout.Dropout>>>();
+
   entity = group.dropout.entity;
   controls = app.createRef<controls.Group>();
-  dropoutResource = app.nullable<app.api.Resource<wai.ResourceShow<group.dropout.Dropout>>>();
   saveErrors = app.nullable<wai.ResourceError[]>();
 
   created () {
@@ -25,13 +26,13 @@ export default class Edit extends CountryDBPage.ComponentBase {
         id: this.$route.params.id,
         slices: [ 'record', 'group' ],
       },
-    });
+    }).resource;
   }
 
   get transaction () {
     return new app.Transaction(
       () => this.onSubmit(),
-      () => this.onCancel(),
+      () => this.$router.go(-1),
     );
   }
 
@@ -57,10 +58,6 @@ export default class Edit extends CountryDBPage.ComponentBase {
 
     const path = `/database/groups/${dropout.record.group.id}`;
     await this.$router.replace({ path });
-  }
-
-  onCancel () {
-    this.$router.go(-1);
   }
 }
 </script>

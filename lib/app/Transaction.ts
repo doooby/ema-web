@@ -14,6 +14,9 @@ export default class Transaction {
     });
   }
 
-  commit = () => this._onCommit?.();
+  commit = () => {
+    if (!this.state.isProcessing) this._onCommit?.();
+  };
+
   cancel = () => this._onCancel?.();
 }
