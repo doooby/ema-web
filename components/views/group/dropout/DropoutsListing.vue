@@ -142,7 +142,7 @@ export default class DropoutsListing extends Vue {
           </RecordNamedValue>
         </td>
         <td>
-          <ul v-id="record.record?.reasons?.length">
+          <ul v-if="record.record?.reasons?.length">
             <li
               v-for="reason in record.record.reasons"
               :key="reason"
