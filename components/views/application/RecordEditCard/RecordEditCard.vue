@@ -14,6 +14,7 @@ import SaveButton from '~/components/toolkit/SaveButton.vue';
 export default class RecordEditCard extends Vue {
   @Prop() readonly active?: boolean;
   @Prop() readonly isProcessing?: boolean;
+  @Prop() readonly noBody?: boolean;
 }
 </script>
 
@@ -22,7 +23,7 @@ export default class RecordEditCard extends Vue {
     <div v-if="$scopedSlots.header" class="card-header">
       <slot name="header" />
     </div>
-    <div class="card-body">
+    <div v-if="!noBody" class="card-body">
       <slot />
     </div>
     <div class="card-footer">

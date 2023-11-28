@@ -249,9 +249,10 @@ export default class Api2Plugin {
 
     const response = await rawResponse.json();
     if (!response.ok) {
-      if (!isOnServer && rawResponse.status === 401) {
-        this.context.store.commit('session/clearUser');
-      }
+      // TODO validate & remove - we do not want to kick the user out when goes out of bounds
+      // if (!isOnServer && rawResponse.status === 401) {
+      //   this.context.store.commit('session/clearUser');
+      // }
       response.message = response.message || 'unknown_error';
     }
     return response;

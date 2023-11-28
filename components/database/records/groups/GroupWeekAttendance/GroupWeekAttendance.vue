@@ -14,9 +14,11 @@ import DayColumnHeader from '~/components/database/records/groups/GroupWeekAtten
 import CardSaveableFooter from '~/components/database/components/CardSaveableFooter.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import { ResourceError } from '~/vendor/wai/mappers';
+import RecordEditCard from '~/components/views/application/RecordEditCard/RecordEditCard.vue';
 
 @Component({
   components: {
+    RecordEditCard,
     RecordErrors,
     CardSaveableFooter,
     AttendanceListing,
@@ -157,10 +159,8 @@ export default class GroupWeekAttendance extends Vue {
         undefined,
       );
       if (personData.every(day => !day)) {
-        const newAttendance = {
-          ...this.attendance.value,
-          [person_id]: undefined,
-        };
+        const newAttendance = { ...this.attendance.value };
+        delete newAttendance[person_id];
         if (Object.values(newAttendance).every(person => !person)) {
           this.attendance.value = undefined;
         } else {
@@ -168,6 +168,8 @@ export default class GroupWeekAttendance extends Vue {
         }
       }
     }
+
+    this.updateWeek = this.$api2.newQueryState<wai.ResourceUpdate>();
   }
 
   async onSaveChanges () {
@@ -206,6 +208,11 @@ export default class GroupWeekAttendance extends Vue {
     for (const student of this.studentRecords ?? []) {
       this.onChangeValue([ student.id, dateIndex, value ]);
     }
+  }
+
+  onCancel () {
+    this.attendance.value = undefined;
+    this.updateWeek = this.$api2.newQueryState<wai.ResourceUpdate>();
   }
 }
 
@@ -248,15 +255,17 @@ function padArrayWithBlanks (array: any) {
       @pageLoad="onPageLoad"
     >
       <template v-if="attendance.value" #footer>
-        <CardSaveableFooter
-          :disabled="showWeek.processing || updateWeek.processing"
+        <RecordEditCard
+          :active="true"
+          :no-body="true"
+          :is-processing="showWeek.processing || updateWeek.processing"
           @save="onSaveChanges"
-          @cancel="attendance.value = undefined"
+          @cancel="onCancel"
         >
-          <template v-if="saveErrors" #fail-content>
+          <template v-if="saveErrors" #errors>
             <RecordErrors entity="groups" :errors="saveErrors" />
           </template>
-        </CardSaveableFooter>
+        </RecordEditCard>
       </template>
     </AttendanceListing>
   </LoadingBlock>
