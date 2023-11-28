@@ -41,23 +41,17 @@ export default class DataTable extends Vue {
       border-bottom: 1px solid $input-bg;
       &:last-child { border-bottom: none; }
 
-      &:hover {
-        background-color: $gray-100;
-        > td.ema--data-table--td {
-          background-color: $gray-100;
-        }
-      }
-
-      > td:not(.ema--data-table--td) {
+      > td:not(.ema--data-table--td__empty) {
         padding: 4px 0;
         background-color: $body-bg;
+      }
+
+      &:not(.ema--data-table--tr__non_hoverable):hover > td:not(.ema--data-table--td__empty) {
+        background-color: $gray-100;
       }
     }
   }
 }
 
-.ema--data-table--td {
-  padding: 4px 0;
-  background-color: $body-bg;
-}
+
 </style>

@@ -34,20 +34,18 @@ export default class AssignmentHistoryListing extends Vue {
     } as app.OptionItem<string>),
   );
 
+  columns = [
+    ...application_record.fillDataTableColumns('groups.students_changes', [
+      { name: 'timestamp', size: 150 },
+      { name: 'user', size: 150 },
+      { name: 'students', size: 800 },
+    ]),
+  ];
+
   created () {
     this.resource.bindApiClient(this.$api2);
     this.resource.setDefaultParams({ slices: [ 'assignment_record' ] });
     this.onReload();
-  }
-
-  get columns () {
-    return [
-      ...application_record.fillDataTableColumns('groups.students_changes', [
-        { name: 'timestamp', size: 150 },
-        { name: 'user', size: 150 },
-        { name: 'students', size: 800 },
-      ]),
-    ];
   }
 
   onReload () {

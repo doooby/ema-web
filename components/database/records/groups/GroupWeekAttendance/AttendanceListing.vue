@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import ARecordsListing from '~/components/database/components/listing/ARecordsListing/ARecordsListing.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
 import { application_record, group } from '~/lib/records';
@@ -33,11 +33,18 @@ export default class AttendanceListing extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
   @Prop({ required: true }) readonly days!: Day[];
 
+  columns = this.buildColumns();
+
   get listingParams () {
     return { group_id: this.group.id };
   }
 
-  get columns () {
+  @Watch('days')
+  onDaysChange () {
+    this.columns = this.buildColumns();
+  }
+
+  buildColumns () {
     return [
       ...application_record.fillDataTableColumns('people', [
         { name: 'person', size: 200 },
@@ -58,7 +65,7 @@ export default class AttendanceListing extends Vue {
     @load="$emit('pageLoad', $event)"
   >
     <template #row="{ record }">
-      <td class="ema--data-table--td">
+      <td>
         <div class="d-flex align-items-center">
           <a-record-link
             :id="record.id"
@@ -72,8 +79,7 @@ export default class AttendanceListing extends Vue {
         v-for="day in days"
         :key="day.index"
         :class="[
-          'ema--data-table--td',
-          { 'bg-transparent': !day.included },
+          { 'ema--data-table--td__empty': !day.included },
         ]"
       >
         <div v-if="day.included" class="px-2">

@@ -92,6 +92,11 @@ export default class ARecordsListing extends Vue {
 
     return [
       {
+        name: 'row_index',
+        size: 30,
+        fixedSize: true,
+      },
+      {
         name: 'actions',
         size: this.actionsSize,
         fixedSize: true,
@@ -220,7 +225,12 @@ export default class ARecordsListing extends Vue {
       <tbody>
         <tr v-for="(record, index) of records" :key="`${index}-${record.id}`">
           <td>
-            <cell-content :column="allColumns[0]" :record="record" />
+            <h6 class="text-muted text-center m-0">
+              {{ index + 1 }}.
+            </h6>
+          </td>
+          <td>
+            <cell-content :column="allColumns[1]" :record="record" />
           </td>
           <td v-for="column of initialColumns" :key="column.name">
             <cell-content v-if="column.renderCell" :column="column" :record="record" />

@@ -178,7 +178,8 @@ export default class GroupGrades extends Vue {
         @load="gradeChanges = null"
       >
         <template #prepend-body>
-          <tr>
+          <tr class="ema--data-table--tr__non_hoverable">
+            <td />
             <td />
             <td />
             <td
