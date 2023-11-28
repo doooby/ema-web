@@ -4,7 +4,7 @@ import app from '~/lib/app';
 
 @Component
 export default class SaveButton extends Vue {
-  @Prop() readonly processing?: boolean;
+  @Prop({ required: true }) readonly processing!: boolean;
   @Prop() readonly active?: boolean;
 
   delayedProcessing = this.processing ?? false;

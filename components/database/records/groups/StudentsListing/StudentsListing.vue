@@ -65,7 +65,7 @@ export default class StudentsListing extends Vue {
           @done="onRefresh"
         />
         <ActionDropoutStudents
-          v-if="$ema.canI('act:/groups/dropouts/create')"
+          v-if="$ema.canI('act:/groups/dropouts/group_create')"
           :group="group"
           :students="records"
           @done="onRefresh"

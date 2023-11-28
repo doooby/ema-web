@@ -10,7 +10,7 @@ import controls from '~/components/controls';
 import { BRecordsSelect, OptionsSelect } from '~/components/controls/inputs';
 import app from '~/lib/app';
 
-const nonAssignedOptions = Object.freeze([
+const onlyExcludeOptions = Object.freeze([
   { value: 'only', item: 'db.record.groups.filters.non_classified.only' },
   { value: 'exclude', item: 'db.record.groups.filters.non_classified.exclude' },
 ]);
@@ -98,7 +98,7 @@ export default class extends DatabasePage {
       },
       {
         name: 'non_classified',
-        options: nonAssignedOptions as any,
+        options: onlyExcludeOptions as any,
         populateParams: (values: any, params) => {
           params.non_classified =
             values.non_classified?.map(b => b.value)?.[0];
@@ -112,6 +112,14 @@ export default class extends DatabasePage {
         ) as app.OptionItem[],
         populateParams: (values: any, params) => {
           params.gender = values.gender?.map(b => b.value)?.[0];
+        },
+      },
+      {
+        name: 'dropout',
+        options: onlyExcludeOptions as any,
+        populateParams: (values: any, params) => {
+          params.dropout =
+            values.dropout?.map(b => b.value)?.[0];
         },
       },
     );
@@ -263,6 +271,23 @@ export default class extends DatabasePage {
             :value="group.getValue('gender')"
             :options="group.fieldsIndex.gender?.options ?? []"
             @change="group.update('gender', $event)"
+          >
+            <template #option-content="{ option, selected }">
+              <input type="radio" :checked="selected" class="mr-1">
+              <t :value="option.item" />
+            </template>
+          </OptionsSelect>
+        </b-form-group>
+        <b-form-group
+          class="mt-2"
+        >
+          <template #label>
+            <t value="db.record.groups.filters.dropout.label" />
+          </template>
+          <OptionsSelect
+            :value="group.getValue('dropout')"
+            :options="group.fieldsIndex.dropout?.options ?? []"
+            @change="group.update('dropout', $event)"
           >
             <template #option-content="{ option, selected }">
               <input type="radio" :checked="selected" class="mr-1">
