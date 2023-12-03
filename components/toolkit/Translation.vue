@@ -1,12 +1,23 @@
 <template>
   <span :class="$attrs.class">
-    {{ translatedText }}
-    <b-icon
+    <a
       v-if="debugTranslations"
-      icon="chat-left-quote"
-      class="d-inline-block"
+      class="mr-1 text-warning"
+      :style="{ cursor: 'pointer' }"
       @click="onClickToOpen"
-    />
+    >
+      <b-icon icon="chat-left-quote" />
+    </a>
+    <span
+      v-if="isMissing"
+      class="mr-1"
+      title="missing translation"
+    >
+      <b-icon icon="exclamation-triangle" />
+    </span>
+    <span>
+      {{ isMissing ? translatedText.replace(/\./g, ' ') : translatedText }}
+    </span>
     <b-modal
       id="modal"
       :visible="isModalShown"
@@ -65,6 +76,10 @@ export default class Translation extends Vue {
 
   get translatedText (): string {
     return this.$t(this.value) as string;
+  }
+
+  get isMissing (): boolean {
+    return this.value === this.translatedText;
   }
 
   get debugTranslations (): boolean {

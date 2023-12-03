@@ -3,6 +3,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import SearchBRecordsModal from '~/components/database/modals/SearchBRecordsModal.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import { BRecord, Params } from '~/lib/api2';
+import controls from '~/components/controls';
 
 @Component({
   components: { SearchBRecordsModal, BRecordLink },
@@ -39,6 +40,30 @@ export default class BRecordsSelect extends Vue {
       this.modalShown = false;
     }
   }
+
+  static asField = {
+
+    option: (
+      name: string,
+      param: string = name,
+    ): Pick<controls.FieldDefinition, 'name' | 'populateParams' > => ({
+      name,
+      populateParams (values: any, params) {
+        params[param] = values[name]?.map(({ value }) => value)?.[0];
+      },
+    }),
+
+    records: (
+      name: string,
+      param: string = `${name}_ids`,
+    ): Pick<controls.FieldDefinition, 'name' | 'populateParams' > => ({
+      name,
+      populateParams (values: any, params) {
+        params[param] = values[name]?.map(({ id }) => id);
+      },
+    }),
+
+  };
 }
 </script>
 

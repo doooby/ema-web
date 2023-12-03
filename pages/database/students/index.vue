@@ -9,14 +9,19 @@ import SearchForm from '~/components/database/pages/index/SearchForm.vue';
 import controls from '~/components/controls';
 import { BRecordsSelect, OptionsSelect } from '~/components/controls/inputs';
 import app from '~/lib/app';
+import SchoolsFilter from '~/components/views/application/filters/records/SchoolsFilter.vue';
+import CoursesFilter from '~/components/views/application/filters/records/CoursesFilter.vue';
+import GroupsFilter from '~/components/views/application/filters/records/GroupsFilter.vue';
+import HasDropoutFilter from '~/components/views/student/filters/HasDropoutFilter.vue';
 
-const onlyExcludeOptions = Object.freeze([
-  { value: 'only', item: 'db.record.groups.filters.non_classified.only' },
-  { value: 'exclude', item: 'db.record.groups.filters.non_classified.exclude' },
-]);
+const onlyExcludeOptions = app.country.defaults.options.onlyExclude();
 
 @Component({
   components: {
+    HasDropoutFilter,
+    GroupsFilter,
+    CoursesFilter,
+    SchoolsFilter,
     OptionsSelect,
     BRecordsSelect,
     SearchForm,
@@ -42,10 +47,7 @@ export default class extends DatabasePage {
 
     this.searchControls = controls.Group.compose(
       {
-        name: 'schools',
-        populateParams: (values: any, params) => {
-          params.school_id = values.schools?.map(b => b.id);
-        },
+        ...SchoolsFilter.asField('schools', 'school_id'),
         onChange: (values) => {
           values.courses = undefined;
           values.groups = undefined;
@@ -53,33 +55,21 @@ export default class extends DatabasePage {
         },
       },
       {
-        name: 'courses',
-        populateParams: (values: any, params) => {
-          params.course_id = values.courses?.map(b => b.id);
-        },
+        ...CoursesFilter.asField('courses', 'course_id'),
         onChange: (values) => {
           values.groups = undefined;
           values.non_classified = undefined;
         },
       },
       {
-        name: 'groups',
-        populateParams: (values: any, params) => {
-          params.group_id = values.groups?.map(b => b.id);
-        },
+        ...GroupsFilter.asField('groups', 'group_id'),
         onChange: (values) => {
           values.non_classified = undefined;
         },
       },
       {
         name: 'school_years',
-        default: () => {
-          if (!current_school_year) return;
-          return [ {
-            id: current_school_year.id,
-            caption: current_school_year.caption,
-          } ];
-        },
+        default: () => current_school_year && [ current_school_year ],
         populateParams: (values: any, params) => {
           params.school_year_id = values.school_years?.map(b => b.id);
         },
@@ -114,14 +104,7 @@ export default class extends DatabasePage {
           params.gender = values.gender?.map(b => b.value)?.[0];
         },
       },
-      {
-        name: 'dropout',
-        options: onlyExcludeOptions as any,
-        populateParams: (values: any, params) => {
-          params.dropout =
-            values.dropout?.map(b => b.value)?.[0];
-        },
-      },
+      HasDropoutFilter.asField('dropout', 'dropout'),
     );
     this.searchParams = {
       students: this.searchControls.getParams(),
@@ -156,57 +139,20 @@ export default class extends DatabasePage {
 
     <template #search-form="{ group }">
       <div class="col-md-4 col-lg-3">
-        <b-form-group
-          label-for="students_filters_schools"
-        >
-          <template #label>
-            <t value="db.record.schools.meta.p" />
-          </template>
-          <template #default="{ labelId }">
-            <BRecordsSelect
-              :dom-id="labelId"
-              :value="group.getValue('schools')"
-              entity="schools"
-              :multiple="true"
-              @change="group.update('schools', $event)"
-            />
-          </template>
-        </b-form-group>
-        <b-form-group
-          label-for="students_filters_courses"
-        >
-          <template #label>
-            <t value="db.record.courses.meta.p" />
-          </template>
-          <template #default="{ labelId }">
-            <BRecordsSelect
-              :dom-id="labelId"
-              :value="group.getValue('courses')"
-              entity="courses"
-              :multiple="true"
-              :params="{ school_id: group.getParam('school_id'), school_year_id: group.getParam('school_year_id') }"
-              @change="group.update('courses', $event)"
-            />
-          </template>
-        </b-form-group>
-        <b-form-group
-          class="mt-2"
-          label-for="students_filters_groups"
-        >
-          <template #label>
-            <t value="db.record.groups.meta.p" />
-          </template>
-          <template #default="{ labelId }">
-            <BRecordsSelect
-              :dom-id="labelId"
-              :value="group.getValue('groups')"
-              entity="groups"
-              :multiple="true"
-              :params="{ course_id: group.getParam('course_id') }"
-              @change="group.update('groups', $event)"
-            />
-          </template>
-        </b-form-group>
+        <SchoolsFilter
+          :controls="group"
+          field-name="schools"
+        />
+        <CoursesFilter
+          :controls="group"
+          field-name="courses"
+          :params="{ school_id: group.getParam('school_id'), school_year_id: group.getParam('school_year_id') }"
+        />
+        <GroupsFilter
+          :controls="group"
+          field-name="groups"
+          :params="{ course_id: group.getParam('course_id') }"
+        />
       </div>
       <div class="col-md-4 col-lg-3">
         <b-form-group
@@ -278,23 +224,11 @@ export default class extends DatabasePage {
             </template>
           </OptionsSelect>
         </b-form-group>
-        <b-form-group
-          class="mt-2"
-        >
-          <template #label>
-            <t value="db.record.groups.filters.dropout.label" />
-          </template>
-          <OptionsSelect
-            :value="group.getValue('dropout')"
-            :options="group.fieldsIndex.dropout?.options ?? []"
-            @change="group.update('dropout', $event)"
-          >
-            <template #option-content="{ option, selected }">
-              <input type="radio" :checked="selected" class="mr-1">
-              <t :value="option.item" />
-            </template>
-          </OptionsSelect>
-        </b-form-group>
+        <HasDropoutFilter
+          v-if="$ema.canI('act:/ff_t116')"
+          :controls="group"
+          field-name="dropout"
+        />
       </div>
 
     </template>
