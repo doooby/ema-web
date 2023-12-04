@@ -9,14 +9,14 @@
       <b-icon icon="chat-left-quote" />
     </a>
     <span
-      v-if="isMissing"
+      v-if="translatedText.isMissing"
       class="mr-1"
       title="missing translation"
     >
       <b-icon icon="exclamation-triangle" />
     </span>
     <span>
-      {{ isMissing ? translatedText.replace(/\./g, ' ') : translatedText }}
+      {{ translatedText.value }}
     </span>
     <b-modal
       id="modal"
@@ -38,7 +38,7 @@
       >
         <b-form-input
           id="translation-new"
-          :value="translatedText"
+          :value="translatedText.isMissing ? value : translatedText.value"
           @input.native="onInput"
           @keydown.ctrl.enter="onChange"
         />
@@ -74,12 +74,38 @@ export default class Translation extends Vue {
 
   saveRequest = this.$api2.newQueryState<UpdatedRecordResponsePayload>();
 
-  get translatedText (): string {
-    return this.$t(this.value) as string;
-  }
+  get translatedText (): {
+    isMissing: boolean;
+    value: string;
+    } {
+    const value = this.$t(this.value) as string;
+    const isMissing = this.value === value;
 
-  get isMissing (): boolean {
-    return this.value === this.translatedText;
+    if (isMissing) {
+      if (this.$i18n.locale !== 'en') {
+        const value_en = this.$t(this.value, 'en') as string;
+        if (this.value === value_en) {
+          return {
+            isMissing,
+            value: `key: ${value.replace(/\./g, ' ')}`,
+            // value: value.replace(/\./g, ' '),
+          };
+        } else {
+          return {
+            isMissing,
+            value: value_en,
+            // value: `(en) ${value_en}`,
+          };
+        }
+      } else {
+        return {
+          isMissing,
+          value: value.replace(/\./g, ' '),
+        };
+      }
+    }
+
+    return { isMissing, value };
   }
 
   get debugTranslations (): boolean {
