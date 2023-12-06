@@ -17,6 +17,22 @@ export default {
     port: process.env.PORT || 3072,
   },
 
+  // TODO does this work?
+  // ssr: false,
+  // target: 'static',
+
+  generate: {
+    devtools: true,
+  },
+
+  publicRuntimeConfig: {
+    apiBaseUrl: `${serverHostName}/api/web`,
+  },
+
+  router: {
+    base: '/web/',
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'web',
@@ -33,22 +49,17 @@ export default {
     ],
   },
 
-  router: {
-    base: '/web/',
-  },
-
   i18n: {
     strategy: 'no_prefix',
-  },
-
-  publicRuntimeConfig: {
-    apiBaseUrl: `${serverHostName}/api/web`,
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '~/assets/css/application',
   ],
+
+  // Auto import components: https://go.nuxtjs.dev/config-components
+  components: false,
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -58,9 +69,6 @@ export default {
     '~/plugins/ema.ts',
     '~/plugins/global.ts',
   ],
-
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: false,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -88,10 +96,6 @@ export default {
       langDir: 'config/locales',
     } ],
   ],
-
-  generate: {
-    devtools: true,
-  },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {

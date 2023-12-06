@@ -4,7 +4,6 @@ import app from '~/lib/app';
 import FieldWithLabel from '~/components/controls/fields/FieldWithLabel.vue';
 import controls from '~/components/controls';
 import { DropdownSelect } from '~/components/controls/inputs';
-import { emptyOption } from '~/lib/app/country/defaults/options';
 
 @Component({
   components: {

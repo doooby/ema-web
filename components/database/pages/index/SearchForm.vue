@@ -51,7 +51,7 @@ export default class SearchForm extends Vue {
         variant="outline-secondary"
       >
         <b-icon
-          :icon=" filtersShown ? 'chevron-up' : 'chevron-down'"
+          :icon="filtersShown ? 'chevron-up' : 'chevron-down'"
           class="mr-1"
         />
         <t v-if="filtersShown" value="db.page.index.filters.hide_filters_btn" />
@@ -67,7 +67,18 @@ export default class SearchForm extends Vue {
       <div class="row">
         <slot />
       </div>
-      <div>
+      <div
+        class="d-flex"
+        style="gap: 16px;"
+      >
+        <b-button
+          size="sm"
+          variant="primary"
+          @click="onSearch"
+        >
+          <b-icon icon="search" class="mr-1" />
+          <t value="db.page.index.filters.search_btn" />
+        </b-button>
         <b-button
           size="sm"
           variant="outline-secondary"
