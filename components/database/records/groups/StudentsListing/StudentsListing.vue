@@ -43,9 +43,10 @@ export default class StudentsListing extends Vue {
 
 <template>
   <div class="mt-3">
-    <people-listing
+    <PeopleListing
       class="mt-2"
       :params="searchParams"
+      :hide-detials="true"
       :hide-group="true"
       :hide-contract="true"
     >
@@ -71,6 +72,6 @@ export default class StudentsListing extends Vue {
           @done="onRefresh"
         />
       </template>
-    </people-listing>
+    </PeopleListing>
   </div>
 </template>

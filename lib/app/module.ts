@@ -53,10 +53,10 @@ export function internalOptionsList2 (
   }));
 }
 
-export function internalOptionsList3 (
+export function internalOptionsList3<I=unknown> (
   vue: Vue,
   name: string,
-): app.OptionItem[] {
+): app.OptionItem<I>[] {
   const countryData = vue.$store.state.session.country;
   const options = countryData?.internalLists?.[name]?.options ?? [];
   return options.map(value => ({

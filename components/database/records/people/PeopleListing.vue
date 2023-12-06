@@ -10,12 +10,15 @@ import RecordAssociations from '~/components/database/components/listing/RecordA
 import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
 import RecordNamedValue from '~/components/views/application/RecordNamedValue.vue';
+import RecordId from '~/components/views/application/RecordId.vue';
+import RecordListingDetails from '~/components/database/records/people/RecordListingDetails.vue';
 
 @Component({
-  components: { RecordNamedValue, PrintDate, PrintFullName, RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
+  components: { RecordListingDetails, RecordId, RecordNamedValue, PrintDate, PrintFullName, RecordAssociations, BRecordLink, ARecordsListing, ARecordLink, TextNames },
 })
 export default class PeopleListing extends Vue {
   @Prop({ default: () => {} }) readonly params!: Params;
+  @Prop({ default: undefined }) readonly hideDetails!: boolean;
   @Prop({ default: undefined }) readonly hideGroup!: boolean;
   @Prop({ default: undefined }) readonly hideContract!: boolean;
 
@@ -24,6 +27,7 @@ export default class PeopleListing extends Vue {
     ...application_record.fillDataTableColumns('people', [
       { name: 'ids' },
       { name: 'person' },
+      (this.hideDetails ? undefined : { name: 'details' }),
       (this.hideGroup ? undefined : { name: 'main_group' }),
       (this.hideContract ? undefined : { name: 'main_contract' }),
     ]),
@@ -79,6 +83,9 @@ export default class PeopleListing extends Vue {
             <PrintDate :value="record.born_on" />
           </span>
         </div>
+      </td>
+      <td v-if="!hideDetails">
+        <RecordListingDetails :person="record" />
       </td>
       <td v-if="!hideGroup">
         <RecordAssociations
