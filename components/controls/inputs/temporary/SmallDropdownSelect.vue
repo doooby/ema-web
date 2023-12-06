@@ -3,7 +3,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 
 @Component
-export default class DropdownSelect extends Vue {
+export default class SmallDropdownSelect extends Vue {
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
   @Prop() readonly value?: app.OptionItem[];
@@ -43,13 +43,14 @@ export default class DropdownSelect extends Vue {
 }
 </script>
 
+
 <template>
   <b-dropdown
     size="sm"
-    variant="secondary"
+    variant="default"
     :class="[
       $attrs.class,
-      'd-flex ema--control--dropdown-select',
+      'ema--control--small-dropdown-select',
     ]"
     no-caret
   >
@@ -62,8 +63,9 @@ export default class DropdownSelect extends Vue {
           />
         </div>
         <b-button
-          variant="secondary"
+          variant="default"
           size="sm"
+          class="ema--control--dropdown-select--button"
         >
           <b-icon icon="chevron-down" />
         </b-button>
@@ -86,7 +88,7 @@ export default class DropdownSelect extends Vue {
 
 <style lang="scss">
 @import "assets/css/variables";
-.ema--control--dropdown-select {
+.ema--control--small-dropdown-select {
   padding: 0;
   > .btn {
     padding: 0;
@@ -99,6 +101,16 @@ export default class DropdownSelect extends Vue {
   .controls--label {
     text-align: start;
     color: $body-color;
+    padding: 0 4px;
+    height: 20px;
+    line-height: 18px;
+    background-color: transparent;
+    border: none;
+  }
+  .ema--control--dropdown-select--button {
+    padding: 0 2px;
+    height: 20px;
+    font-size: 80%;
   }
   .dropdown-item {
     padding: 4px 8px;

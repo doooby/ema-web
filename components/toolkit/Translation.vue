@@ -88,13 +88,11 @@ export default class Translation extends Vue {
           return {
             isMissing,
             value: `key: ${value.replace(/\./g, ' ')}`,
-            // value: value.replace(/\./g, ' '),
           };
         } else {
           return {
             isMissing,
             value: value_en,
-            // value: `(en) ${value_en}`,
           };
         }
       } else {

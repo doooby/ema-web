@@ -13,11 +13,13 @@ import SchoolsFilter from '~/components/views/application/filters/records/School
 import CoursesFilter from '~/components/views/application/filters/records/CoursesFilter.vue';
 import GroupsFilter from '~/components/views/application/filters/records/GroupsFilter.vue';
 import HasDropoutFilter from '~/components/views/student/filters/HasDropoutFilter.vue';
+import PersonResidencyStatus from '~/components/views/student/filters/PersonResidencyStatus.vue';
 
 const onlyExcludeOptions = app.country.defaults.options.onlyExclude();
 
 @Component({
   components: {
+    PersonResidencyStatus,
     HasDropoutFilter,
     GroupsFilter,
     CoursesFilter,
@@ -105,6 +107,7 @@ export default class extends DatabasePage {
         },
       },
       HasDropoutFilter.asField('dropout', 'dropout'),
+      PersonResidencyStatus.asField('residency', 'residency'),
     );
     this.searchParams = {
       students: this.searchControls.getParams(),
@@ -228,6 +231,10 @@ export default class extends DatabasePage {
           v-if="$ema.canI('act:/ff_t116')"
           :controls="group"
           field-name="dropout"
+        />
+        <PersonResidencyStatus
+          :controls="group"
+          field-name="residency"
         />
       </div>
 

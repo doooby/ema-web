@@ -6,6 +6,7 @@ export default class TextInput extends Vue {
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
   @Prop() readonly value?: string;
+  @Prop() readonly placeholder?: string;
 
   onChange (event: { target: HTMLInputElement }): void {
     this.invokeChange(event.target.value);
@@ -29,6 +30,7 @@ export default class TextInput extends Vue {
     :class="[ 'form-control', $attrs.class ]"
     :value="value"
     :disabled="disabled"
+    :placeholder="placeholder"
     autocomplete="off"
     @blur="onChange"
     @keypress.exact.enter.stop="onChange"

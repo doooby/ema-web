@@ -2,10 +2,10 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 import PageSelect from '~/components/views/application/RecordsListing/PageSelect.vue';
-import { DropdownSelect } from '~/components/controls/inputs';
+import SmallDropdownSelect from '~/components/controls/inputs/temporary/SmallDropdownSelect.vue';
 
 @Component({
-  components: { DropdownSelect, PageSelect },
+  components: { SmallDropdownSelect, PageSelect },
 })
 export default class ListingControls extends Vue {
   @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.ResourcesListing<never>>;
@@ -69,18 +69,18 @@ export default class ListingControls extends Vue {
           v-if="orderByOptions?.length"
           class="gray-border-controls"
         >
-          <DropdownSelect
+          <SmallDropdownSelect
             :value="currentOrderKeyValue"
             :options="orderByOptions"
             @change="$event[0] && onChangeOrderKey($event[0].value)"
           >
-            <template #button-content="{ option }">
+            <template #content="{ option }">
               <t v-if="option" :value="option.item" />
             </template>
             <template #option-content="{ option }">
               <t :value="option.item" />
             </template>
-          </DropdownSelect>
+          </SmallDropdownSelect>
           <div>
             <div
               class="dir-btn gray-border-controls--field--button border-0 "

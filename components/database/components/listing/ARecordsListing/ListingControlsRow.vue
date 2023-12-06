@@ -3,7 +3,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import SelectPage from '~/components/database/components/listing/SelectPage.vue';
 import { RequestState, SearchRecordsResponsePayload } from '~/lib/api2';
 import app from '~/lib/app';
-import { DropdownSelect } from '~/components/controls/inputs';
+import SmallDropdownSelect from '~/components/controls/inputs/temporary/SmallDropdownSelect.vue';
 
 export interface ListingControls {
   pagination: {
@@ -14,7 +14,7 @@ export interface ListingControls {
 }
 
 @Component({
-  components: { DropdownSelect, SelectPage },
+  components: { SmallDropdownSelect, SelectPage },
 })
 export default class ListingControlsRow extends Vue {
   @Prop({ required: true }) readonly value!: ListingControls;
@@ -85,18 +85,18 @@ export default class ListingControlsRow extends Vue {
           v-if="sortDirections.length"
           class="gray-border-controls"
         >
-          <DropdownSelect
+          <SmallDropdownSelect
             :value="currentOrderKeyValue"
             :options="sortDirections"
             @change="$event[0] && onChangeSortKey($event[0].value)"
           >
-            <template #button-content="{ option }">
+            <template #content="{ option }">
               <t v-if="option" :value="option.item" />
             </template>
             <template #option-content="{ option }">
               <t :value="option.item" />
             </template>
-          </DropdownSelect>
+          </SmallDropdownSelect>
           <div>
             <div
               class="direction--dir-btn gray-border-controls--field--button border-0 "

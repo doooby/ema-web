@@ -9,6 +9,8 @@ import { TextInput } from '~/components/controls/inputs';
 export default class SearchForm extends Vue {
   @Prop({ required: true }) readonly group!: controls.Group;
 
+  filtersShown = true;
+
   onSearch () {
     this.$emit('search');
   }
@@ -22,26 +24,19 @@ export default class SearchForm extends Vue {
 
 <template>
   <div :class="['border p-3', $attrs.class]">
-    <div class="row">
 
-      <b-form-group
-        class="col-md-4 col-lg-3"
-        label-for="page_index_filters_search"
-      >
-        <template #label>
-          <t value="db.page.index.filters.search" />
-        </template>
+    <div
+      class="d-flex flex-wrap"
+      :style="{ gap: '16px' }"
+    >
+      <div :style="{ width: '150px' }">
         <TextInput
           dom-id="page_index_filters_search"
           :value="group.getValue('search')"
           @change="group.update('search', $event)"
           @submit="onSearch"
         />
-      </b-form-group>
-
-      <slot />
-    </div>
-    <div class="d-flex justify-content-between">
+      </div>
       <b-button
         size="sm"
         variant="primary"
@@ -51,13 +46,38 @@ export default class SearchForm extends Vue {
         <t value="db.page.index.filters.search_btn" />
       </b-button>
       <b-button
+        v-b-toggle="'collapse__pages_search_form'"
         size="sm"
         variant="outline-secondary"
-        @click="onClear"
       >
-        <b-icon icon="x-lg" class="mr-1" />
-        <t value="db.page.index.filters.clear_btn" />
+        <b-icon
+          :icon=" filtersShown ? 'chevron-up' : 'chevron-down'"
+          class="mr-1"
+        />
+        <t v-if="filtersShown" value="db.page.index.filters.hide_filters_btn" />
+        <t v-else value="db.page.index.filters.show_filters_btn" />
       </b-button>
     </div>
+
+    <b-collapse
+      v-model="filtersShown"
+      id="collapse__pages_search_form"
+      class="mt-3"
+    >
+      <div class="row">
+        <slot />
+      </div>
+      <div>
+        <b-button
+          size="sm"
+          variant="outline-secondary"
+          @click="onClear"
+        >
+          <b-icon icon="x-lg" class="mr-1" />
+          <t value="db.page.index.filters.clear_btn" />
+        </b-button>
+      </div>
+    </b-collapse>
+
   </div>
 </template>
