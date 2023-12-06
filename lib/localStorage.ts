@@ -12,7 +12,7 @@ export const values = {
 
 interface StoredValue<V> {
   key: string;
-  mapper(value: string): V;
+  mapper(value): V;
 }
 
 export function get<V> ({ key, mapper }: StoredValue<V>): null | V {
@@ -29,7 +29,10 @@ export function get<V> ({ key, mapper }: StoredValue<V>): null | V {
   }
 }
 
-export function set ({ key }: StoredValue<any>, value: any = undefined): void {
+export function set (
+  { key }: Pick<StoredValue<any>, 'key'>,
+  value: any = undefined,
+): void {
   if (!store) return;
   if (value) store.setItem(key, JSON.stringify(value));
   else store.removeItem(key);

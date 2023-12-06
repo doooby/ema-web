@@ -29,6 +29,7 @@ export default class IndexPage2 extends Vue {
         v-if="$scopedSlots['search-form']"
         class="mt-3"
         :group="searchControls"
+        :entity-scope="entity ?? 'unknown'"
         @search="$emit('search', searchControls.getParams())"
       >
         <slot

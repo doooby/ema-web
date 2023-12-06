@@ -1,15 +1,38 @@
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import controls from '~/components/controls';
 import { TextInput } from '~/components/controls/inputs';
+import * as localStorage from '~/lib/localStorage';
+import { wai } from '~/vendor/wai';
+import app from '~/lib/app';
+
+export interface Model {
+  filtersShown: boolean;
+}
 
 @Component({
   components: { TextInput },
 })
 export default class SearchForm extends Vue {
   @Prop({ required: true }) readonly group!: controls.Group;
+  @Prop({ required: true }) readonly entityScope!: string;
 
-  filtersShown = true;
+  get storageToken () {
+    return {
+      key: `EMA--pages--index--search--${this.entityScope}`,
+      mapper: wai.object<Model>(parent => ({
+        filtersShown: wai.property(parent, 'filtersShown', wai.boolean),
+      })),
+    };
+  }
+
+  model = app.nullable<Model>();
+  filtersShown = false;
+
+  mounted () {
+    this.model = localStorage.get(this.storageToken);
+    this.filtersShown = !!this.model?.filtersShown;
+  }
 
   onSearch () {
     this.$emit('search');
@@ -18,6 +41,15 @@ export default class SearchForm extends Vue {
   onClear () {
     this.group.reset();
     this.onSearch();
+  }
+
+  @Watch('filtersShown')
+  onFiltersShownChange (value: boolean) {
+    this.model = {
+      ...this.model,
+      filtersShown: value,
+    };
+    localStorage.set(this.storageToken, this.model);
   }
 }
 </script>
@@ -59,12 +91,13 @@ export default class SearchForm extends Vue {
       </b-button>
     </div>
 
+    <div v-if="!filtersShown" class="mt-3" />
+
     <b-collapse
-      v-model="filtersShown"
       id="collapse__pages_search_form"
-      class="mt-3"
+      v-model="filtersShown"
     >
-      <div class="row">
+      <div class="row mt-3">
         <slot />
       </div>
       <div

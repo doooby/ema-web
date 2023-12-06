@@ -62,6 +62,7 @@ export default class SchoolCoursesListing extends Vue {
   <div class="mt-3">
     <SearchForm
       :group="searchControls"
+      entity-scope="schools/courses"
       @search="searchParams = searchControls.getParams()"
     >
       <b-form-group
