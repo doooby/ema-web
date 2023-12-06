@@ -10,7 +10,7 @@ export interface ListingControls {
     page: number;
     perPage: number;
   };
-  sort: [ string, string ];
+  sort: app.Maybe<[ string, string ]>;
 }
 
 @Component({

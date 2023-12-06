@@ -42,7 +42,7 @@ export default class ARecordsListing extends Vue {
   @Prop() readonly staticPerPage?: number;
   @Prop({ default: () => 36 }) readonly actionsSize!: number;
   @Prop() readonly isProcessing?: boolean;
-  @Prop() readonly defaultSort?: [string, string][];
+  @Prop() readonly defaultSort?: [string, string];
 
   liveQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>();
   stableQuery = this.$api2.newQueryState<SearchRecordsResponsePayload>();
@@ -50,7 +50,7 @@ export default class ARecordsListing extends Vue {
   model: Model = {
     controls: {
       pagination: { page: 1, perPage: PER_PAGE[0] },
-      sort: this.defaultSort?.[0] ?? [ 'id', 'desc' ],
+      sort: undefined,
     },
     records: [],
     selected: [],
@@ -65,6 +65,10 @@ export default class ARecordsListing extends Vue {
       }
     },
   };
+
+  created () {
+    this.model.controls.sort = this.defaultSort ?? [ 'id', 'desc' ];
+  }
 
   @Watch('records')
   onRecordsChanged () {

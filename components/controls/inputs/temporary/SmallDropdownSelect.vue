@@ -43,7 +43,6 @@ export default class SmallDropdownSelect extends Vue {
 }
 </script>
 
-
 <template>
   <b-dropdown
     size="sm"
