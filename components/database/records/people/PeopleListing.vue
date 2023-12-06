@@ -44,6 +44,7 @@ export default class PeopleListing extends Vue {
     entity="people"
     :columns="columns"
     :params="params"
+    :default-sort="[ [ 'first_name_lo', 'asc' ] ]"
     @connect="$emit('connect', $event)"
   >
     <template
