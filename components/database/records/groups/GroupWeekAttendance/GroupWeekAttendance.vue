@@ -41,6 +41,8 @@ export default class GroupWeekAttendance extends Vue {
 
   updateWeek = this.$api2.newQueryState<wai.ResourceUpdate>();
 
+  sessions = app.nullable<app.List<boolean>>();
+
   attendance: {
     value: app.Maybe<group.attendance.WeekAttendance['students']>;
   } = {
@@ -94,7 +96,11 @@ export default class GroupWeekAttendance extends Vue {
     });
   }
 
-  get originalAttendance (): app.Maybe<group.attendance.WeekAttendance['students']> {
+  get originalSessions () {
+    return this.showWeek.currentPayload?.sessions;
+  }
+
+  get originalAttendance () {
     return this.showWeek.currentPayload?.students;
   }
 
@@ -128,10 +134,12 @@ export default class GroupWeekAttendance extends Vue {
       );
     }
 
+    this.sessions = null;
     this.attendance.value = undefined;
   }
 
   onPageLoad (records) {
+    this.sessions = null;
     this.attendance.value = undefined;
     this.studentRecords = records;
   }
@@ -172,22 +180,62 @@ export default class GroupWeekAttendance extends Vue {
     this.updateWeek = this.$api2.newQueryState<wai.ResourceUpdate>();
   }
 
-  async onSaveChanges () {
-    let students = this.attendance.value;
-    if (!students) return;
+  onSetSession ({
+    index,
+    happens,
+  }: {
+    index: number;
+    happens: boolean;
+  }) {
+    const newSessions = this.sessions?.slice() ?? [];
+    newSessions[index] = happens;
+    if (happens && this.originalSessions?.[index]) {
+      newSessions[index] = undefined;
+    }
+    if (!happens && !this.originalSessions?.[index]) {
+      newSessions[index] = undefined;
+    }
+    if (newSessions.filter(a => a !== undefined).length) {
+      this.sessions = newSessions;
+    } else {
+      this.sessions = null;
+    }
 
-    students = { ...students };
+    if (!happens) {
+      for (const student of this.studentRecords ?? []) {
+        this.onChangeValue([ student.id, index, '-' ]);
+      }
+    }
+  }
+
+  async onSaveChanges () {
+    const students = { ...this.attendance.value };
+
+    if (!this.attendance.value && !this.sessions) return;
+
     for (const student_id of Object.keys(students)) {
-      const days = [ ...students[student_id]! ];
-      padArrayWithBlanks(days);
+      const days = [ ...(students[student_id] ?? []) ];
+      for (let i = 0; i < days.length; i += 1) {
+        days[i] = days[i] ?? '';
+      }
       students[student_id] = days;
     }
+
+    const sessionsParams: string[] = [];
+    times(7, (index) => {
+      let value = this.sessions?.[index];
+      if (value === undefined) {
+        value = this.originalSessions?.[index];
+      }
+      sessionsParams[index] = value ? '1' : '';
+    });
 
     await this.$api2.request(
       this.updateWeek,
       group.attendance.queries.update({
         group_id: this.group.id,
         date: utils.dateToParam(this.controlsModel.currentDate),
+        sessions: sessionsParams,
         students,
       }),
     );
@@ -205,6 +253,8 @@ export default class GroupWeekAttendance extends Vue {
     );
     if (dateIndex === -1) return;
 
+    this.onSetSession({ index: dateIndex, happens: true });
+
     for (const student of this.studentRecords ?? []) {
       this.onChangeValue([ student.id, dateIndex, value ]);
     }
@@ -212,6 +262,7 @@ export default class GroupWeekAttendance extends Vue {
 
   onCancel () {
     this.attendance.value = undefined;
+    this.sessions = null;
     this.updateWeek = this.$api2.newQueryState<wai.ResourceUpdate>();
   }
 }
@@ -221,13 +272,6 @@ function updateArrayAt (array: unknown[], index: number, value: unknown): unknow
   array[index] = value;
   return array;
 }
-
-function padArrayWithBlanks (array: any) {
-  for (let i = 0; i < array.length; i += 1) {
-    array[i] = array[i] ?? '';
-  }
-}
-
 </script>
 
 <template>
@@ -246,15 +290,18 @@ function padArrayWithBlanks (array: any) {
     />
     <AttendanceListing
       v-if="course"
+      :original-sessions="originalSessions"
+      :sessions="sessions ?? undefined"
       :original-attendance="originalAttendance"
       :attendance="attendance.value"
       :attendance-options="attendanceOptions"
       :group="group"
       :days="listedDays"
-      @input="onChangeValue($event)"
+      @input="onChangeValue"
+      @setSession="onSetSession"
       @pageLoad="onPageLoad"
     >
-      <template v-if="attendance.value" #footer>
+      <template v-if="attendance.value || sessions" #footer>
         <RecordEditCard
           :active="true"
           :no-body="true"

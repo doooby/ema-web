@@ -175,6 +175,7 @@ export default class GroupGrades extends Vue {
         :actions-size="0"
         :params="listingParams"
         :static-per-page="100"
+        :default-sort="[ 'first_name_lo', 'asc' ]"
         @load="gradeChanges = null"
       >
         <template #prepend-body>

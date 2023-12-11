@@ -9,16 +9,20 @@ import { Column } from '~/components/DataTable/v3';
 import app from '~/lib/app';
 import { WeekAttendance } from '~/lib/records/group/attendance';
 import DayAttendance from '~/components/database/records/groups/GroupWeekAttendance/DayAttendance.vue';
+import CheckBox from '~/components/controls/inputs/base/CheckBox.vue';
 
 export interface Day {
   index: number;
   included: boolean;
   date: Date;
   column: Column;
+  session?: boolean;
+  sessionChanged?: boolean;
 }
 
 @Component({
   components: {
+    CheckBox,
     DayAttendance,
     PrintFullName,
     ARecordLink,
@@ -29,6 +33,8 @@ export interface Day {
 export default class AttendanceListing extends Vue {
   @Prop({ required: true }) readonly originalAttendance!: app.Maybe<WeekAttendance['students']>;
   @Prop({ required: true }) readonly attendance!: app.Maybe<WeekAttendance['students']>;
+  @Prop({ required: true }) readonly originalSessions!: app.Maybe<app.List<boolean>>;
+  @Prop({ required: true }) readonly sessions!: app.Maybe<app.List<boolean>>;
   @Prop({ required: true }) readonly attendanceOptions!: app.List<{ value: string, text: string }>;
   @Prop({ required: true }) readonly group!: group.Group;
   @Prop({ required: true }) readonly days!: Day[];
@@ -39,7 +45,19 @@ export default class AttendanceListing extends Vue {
     return { group_id: this.group.id };
   }
 
-  @Watch('days')
+  get sessionDays () {
+    return this.days.map((day) => {
+      const currentSession = this.sessions?.[day.index];
+      const originalSession = this.originalSessions?.[day.index];
+      return {
+        ...day,
+        session: currentSession ?? originalSession ?? false,
+        sessionChanged: currentSession !== undefined && originalSession !== currentSession,
+      };
+    });
+  }
+
+  @Watch('sessionDays')
   onDaysChange () {
     this.columns = this.buildColumns();
   }
@@ -62,8 +80,43 @@ export default class AttendanceListing extends Vue {
     :actions-size="0"
     :params="listingParams"
     :static-per-page="100"
+    :default-sort="[ 'first_name_lo', 'asc' ]"
     @load="$emit('pageLoad', $event)"
   >
+    <template #prepend-body>
+      <tr>
+        <td colspan="3" />
+        <td
+          v-for="day in sessionDays"
+          :key="day.index"
+        >
+          <div
+            v-if="day.included"
+            class="d-flex justify-content-center"
+          >
+            <div
+              :class="[
+                'p-1',
+                day.sessionChanged && 'border border-warning',
+              ]"
+            >
+              <CheckBox
+                :value="day.session"
+                @change="$emit('setSession', {
+                  index: day.index,
+                  happens: $event,
+                })"
+              >
+                <t
+                  class="font-12 text-muted"
+                  value="records.groups.GroupWeekAttendance.AttendanceListing.sessionDay"
+                />
+              </CheckBox>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </template>
     <template #row="{ record }">
       <td>
         <div class="d-flex align-items-center">
@@ -76,13 +129,13 @@ export default class AttendanceListing extends Vue {
         </div>
       </td>
       <td
-        v-for="day in days"
+        v-for="day in sessionDays"
         :key="day.index"
         :class="[
-          { 'ema--data-table--td__empty': !day.included },
+          { 'ema--data-table--td__empty': !day.session || !day.included },
         ]"
       >
-        <div v-if="day.included" class="px-2">
+        <div v-if="day.session && day.included" class="px-2">
           <DayAttendance
             :original-value="originalAttendance?.[record.id]?.[day.index]"
             :current-value="attendance?.[record.id]?.[day.index]"
