@@ -27,6 +27,18 @@ export default class Group {
     return Object.freeze(group) as Group;
   }
 
+  static Composer = class Composer {
+    fields: controls.FieldDefinition[] = [];
+
+    add (field: controls.FieldDefinition) {
+      this.fields.push(field);
+    }
+
+    finalize (): Group {
+      return Group.compose(...this.fields);
+    }
+  }
+
   getValue (field: string): unknown {
     return this.state.values[field];
   }
@@ -42,6 +54,9 @@ export default class Group {
   update (field?: string, value?: unknown): void {
     const newValues = { ...this.state.values };
     if (field) {
+      if (typeof value === 'function') {
+        value = value(this.getValue(field));
+      }
       newValues[field] = value;
       this.fieldsIndex[field]?.onChange?.(newValues);
     }
@@ -52,6 +67,16 @@ export default class Group {
   reset (): void {
     this.state.values = this.buildDefaultState();
     this.state.params = this.buildParams();
+  }
+
+  static defaultOf (field: controls.FieldDefinition) {
+    if (Object.prototype.hasOwnProperty.call(field, 'default')) {
+      if (typeof field.default === 'function') {
+        return field.default();
+      } else {
+        return field.default;
+      }
+    }
   }
 
   private buildParams (): Params {
@@ -69,13 +94,7 @@ export default class Group {
   private buildDefaultState (): controls.GroupValues {
     const newValue = {};
     for (const field of this.fields) {
-      if (Object.prototype.hasOwnProperty.call(field, 'default')) {
-        if (typeof field.default === 'function') {
-          newValue[field.name] = field.default();
-        } else {
-          newValue[field.name] = field.default;
-        }
-      }
+      newValue[field.name] = Group.defaultOf(field);
     }
     return Object.freeze(newValue);
   }

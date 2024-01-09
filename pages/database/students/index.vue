@@ -7,18 +7,21 @@ import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
 import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
 import SearchForm from '~/components/database/pages/index/SearchForm.vue';
 import controls from '~/components/controls';
-import { BRecordsSelect, OptionsSelect } from '~/components/controls/inputs';
+import { BRecordsSelect, OptionsSelect, CheckBox, DateInput } from '~/components/controls/inputs';
 import app from '~/lib/app';
 import SchoolsFilter from '~/components/views/application/filters/records/SchoolsFilter.vue';
 import CoursesFilter from '~/components/views/application/filters/records/CoursesFilter.vue';
 import GroupsFilter from '~/components/views/application/filters/records/GroupsFilter.vue';
 import HasDropoutFilter from '~/components/views/student/filters/HasDropoutFilter.vue';
 import PersonResidencyStatus from '~/components/views/student/filters/PersonResidencyStatus.vue';
+import { endOfDay, endOfMonth, startOfMonth } from 'date-fns';
 
 const onlyExcludeOptions = app.country.defaults.options.onlyExclude();
 
 @Component({
+  methods: { endOfDay },
   components: {
+    CheckBox,
     PersonResidencyStatus,
     HasDropoutFilter,
     GroupsFilter,
@@ -31,6 +34,7 @@ const onlyExcludeOptions = app.country.defaults.options.onlyExclude();
     NewRecordButton,
     IndexPage2,
     MoveStudents,
+    DateInput,
   },
 })
 export default class extends DatabasePage {
@@ -38,6 +42,8 @@ export default class extends DatabasePage {
   searchParams = {
     students: this.searchControls.getParams(),
   };
+
+  shownFilters = new Set<string>();
 
   created () {
     this.reCreateSearchControls();
@@ -47,71 +53,108 @@ export default class extends DatabasePage {
   reCreateSearchControls () {
     const current_school_year = this.currentCountry?.current_school_year;
 
-    this.searchControls = controls.Group.compose(
-      {
-        ...SchoolsFilter.asField('schools', 'school_id'),
-        onChange: (values) => {
-          values.courses = undefined;
-          values.groups = undefined;
-          values.non_classified = undefined;
-        },
+    const composer = new controls.Group.Composer();
+
+    composer.add({
+      ...SchoolsFilter.asField('schools', 'school_id'),
+      onChange: (values) => {
+        values.courses = undefined;
+        values.groups = undefined;
+        values.non_classified = undefined;
       },
-      {
-        ...CoursesFilter.asField('courses', 'course_id'),
-        onChange: (values) => {
-          values.groups = undefined;
-          values.non_classified = undefined;
-        },
+    });
+
+    composer.add({
+      ...CoursesFilter.asField('courses', 'course_id'),
+      onChange: (values) => {
+        values.groups = undefined;
+        values.non_classified = undefined;
       },
-      {
-        ...GroupsFilter.asField('groups', 'group_id'),
-        onChange: (values) => {
-          values.non_classified = undefined;
-        },
+    });
+
+    composer.add({
+      ...GroupsFilter.asField('groups', 'group_id'),
+      onChange: (values) => {
+        values.non_classified = undefined;
       },
-      {
-        name: 'school_years',
-        default: () => current_school_year && [ current_school_year ],
-        populateParams: (values: any, params) => {
-          params.school_year_id = values.school_years?.map(b => b.id);
-        },
-        onChange: (values) => {
-          values.courses = undefined;
-          values.groups = undefined;
-          values.non_classified = undefined;
-        },
+    });
+
+    composer.add({
+      name: 'school_years',
+      default: () => current_school_year && [ current_school_year ],
+      populateParams: (values: any, params) => {
+        params.school_year_id = values.school_years?.map(b => b.id);
       },
-      {
-        name: 'standardized_courses',
-        populateParams: (values: any, params) => {
-          params.standardized_course_id =
-            values.standardized_courses?.map(b => b.id);
-        },
+      onChange: (values) => {
+        values.courses = undefined;
+        values.groups = undefined;
+        values.non_classified = undefined;
       },
-      {
-        name: 'non_classified',
-        options: onlyExcludeOptions as any,
-        populateParams: (values: any, params) => {
-          params.non_classified =
-            values.non_classified?.map(b => b.value)?.[0];
-        },
+    });
+
+    composer.add({
+      name: 'standardized_courses',
+      populateParams: (values: any, params) => {
+        params.standardized_course_id =
+          values.standardized_courses?.map(b => b.id);
       },
-      {
-        name: 'gender',
-        options: app.internalOptionsList2(
-          this.$store.state.session.country,
-          'gender',
-        ) as app.OptionItem[],
-        populateParams: (values: any, params) => {
-          params.gender = values.gender?.map(b => b.value)?.[0];
-        },
+    });
+
+    composer.add({
+      name: 'non_classified',
+      options: onlyExcludeOptions as any,
+      populateParams: (values: any, params) => {
+        params.non_classified =
+          values.non_classified?.map(b => b.value)?.[0];
       },
-      HasDropoutFilter.asField('dropout', 'dropout'),
-      PersonResidencyStatus.asField('residency', 'residency'),
-    );
+    });
+
+    composer.add({
+      name: 'gender',
+      options: app.internalOptionsList2(
+        this.$store.state.session.country,
+        'gender',
+      ) as app.OptionItem[],
+      populateParams: (values: any, params) => {
+        params.gender = values.gender?.map(b => b.value)?.[0];
+      },
+    });
+
+    composer.add(HasDropoutFilter.asField('dropout', 'dropout'));
+
+    composer.add(PersonResidencyStatus.asField('residency', 'residency'));
+
+    composer.add({
+      name: 'person.enrolled_on',
+      default: () => {
+        const day_1 = startOfMonth(new Date());
+        return {
+          begin: day_1,
+          end: endOfMonth(day_1),
+        };
+      },
+    });
+
+    this.searchControls = composer.finalize();
     this.searchParams = {
       students: this.searchControls.getParams(),
     };
+    this.shownFilters.clear();
+  }
+
+  onToggleFilter (name: string, show: boolean, group: controls.Group) {
+    if (!show) {
+      this.shownFilters.delete(name);
+      group.update(name, undefined);
+      return;
+    }
+
+    const field = group.fieldsIndex[name];
+    console.log(field);
+    if (!field) return;
+
+    this.shownFilters.add(name);
+    group.update(name, controls.Group.defaultOf(field));
   }
 }
 </script>
@@ -210,9 +253,7 @@ export default class extends DatabasePage {
         </b-form-group>
       </div>
       <div class="col-md-4 col-lg-3">
-        <b-form-group
-          class="mt-2"
-        >
+        <b-form-group>
           <template #label>
             <t value="db.record.people.filters.gender.label" />
           </template>
@@ -237,7 +278,49 @@ export default class extends DatabasePage {
           field-name="residency"
         />
       </div>
-
+      <div class="col-12 mb-2">
+        <div>
+          <CheckBox
+            :value="shownFilters.has('person.enrolled_on')"
+            @change="onToggleFilter('person.enrolled_on', $event, group)"
+          >
+            <t value="db.record.students.filters.person.enrolled_on.caption" />
+          </CheckBox>
+        </div>
+        <div
+          v-if="shownFilters.has('person.enrolled_on')"
+          class="row"
+        >
+          <div class="col-md-4 col-lg-3">
+            <b-form-group>
+              <template #label>
+                <t value="db.record.students.filters.person.enrolled_on.begin" />
+              </template>
+              <DateInput
+                :value="group.getValue('person.enrolled_on')?.begin"
+                @change="group.update('person.enrolled_on', value => ({
+                  ...value,
+                  begin: $event,
+                }))"
+              />
+            </b-form-group>
+          </div>
+          <div class="col-md-4 col-lg-3">
+            <b-form-group>
+              <template #label>
+                <t value="db.record.students.filters.person.enrolled_on.end" />
+              </template>
+              <DateInput
+                :value="group.getValue('person.enrolled_on')?.end"
+                @change="group.update('person.enrolled_on', value => ({
+                  ...value,
+                  end: $event ? endOfDay($event) : undefined,
+                }))"
+              />
+            </b-form-group>
+          </div>
+        </div>
+      </div>
     </template>
 
     <PeopleListing
