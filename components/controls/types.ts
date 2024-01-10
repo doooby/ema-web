@@ -7,6 +7,7 @@ export interface FieldDefinition {
   onChange?:(values: GroupValues) => void;
   populateParams?:(values: GroupValues, params: Params) => void;
   options?: app.OptionItem[];
+  custom?: any;
 }
 
 export interface GroupState {

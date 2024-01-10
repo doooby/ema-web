@@ -126,12 +126,14 @@ export default class extends DatabasePage {
 
     composer.add({
       name: 'person.enrolled_on',
-      default: () => {
-        const day_1 = startOfMonth(new Date());
-        return {
-          begin: day_1,
-          end: endOfMonth(day_1),
-        };
+      custom: {
+        emptyValue: () => {
+          const day_1 = startOfMonth(new Date());
+          return {
+            begin: day_1,
+            end: endOfMonth(day_1),
+          };
+        },
       },
     });
 
@@ -150,11 +152,10 @@ export default class extends DatabasePage {
     }
 
     const field = group.fieldsIndex[name];
-    console.log(field);
     if (!field) return;
 
     this.shownFilters.add(name);
-    group.update(name, controls.Group.defaultOf(field));
+    group.update(name, field.custom?.emptyValue?.());
   }
 }
 </script>
