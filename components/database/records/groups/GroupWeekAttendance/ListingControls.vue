@@ -39,10 +39,10 @@ export default class ListingControls extends Vue {
 
   get printFilledAttendanceUrl () {
     const id = this.group?.id ?? '-1';
-    const date = this.value.currentDate
-      ? app.dateToParam(startOfMonth(this.value.currentDate))
+    const date = this.value.inputDate
+      ? app.dateToParam(this.value.inputDate)
       : '-1';
-    return `/server/pdf/group_attendance_empty/${id}/${date}`;
+    return `/server/pdf/group_attendance/${id}/${date}`;
   }
 
   @Watch('course')
