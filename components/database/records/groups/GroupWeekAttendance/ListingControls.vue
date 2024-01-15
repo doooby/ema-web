@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { group } from '~/lib/records';
-import { isSunday, subDays } from 'date-fns';
+import { addDays, isAfter, isBefore, isSunday, startOfMonth, subDays } from 'date-fns';
 import app from '~/lib/app';
 import { DateInput } from '~/components/controls/inputs';
 
@@ -37,6 +37,14 @@ export default class ListingControls extends Vue {
     ];
   }
 
+  get printFilledAttendanceUrl () {
+    const id = this.group?.id ?? '-1';
+    const date = this.value.currentDate
+      ? app.dateToParam(startOfMonth(this.value.currentDate))
+      : '-1';
+    return `/server/pdf/group_attendance_empty/${id}/${date}`;
+  }
+
   @Watch('course')
   onReset () {
     this.onSelectDate(this.term?.begin);
@@ -48,6 +56,22 @@ export default class ListingControls extends Vue {
       inputDate: date,
       currentDate: date ? closestSunday(date) : undefined,
     });
+  }
+
+  onSelectPreviousWeek () {
+    let date = this.value.inputDate;
+    if (!date || !this.term) return;
+    date = subDays(closestSunday(date), 7);
+    if (isBefore(date, this.term.begin)) date = this.term.begin;
+    this.onSelectDate(date);
+  }
+
+  onSelectNextWeek () {
+    let date = this.value.inputDate;
+    if (!date || !this.term) return;
+    date = addDays(closestSunday(date), 7);
+    if (isAfter(date, this.term.end)) date = this.term.end;
+    this.onSelectDate(date);
   }
 
   onStartDay () {
@@ -85,9 +109,29 @@ function closestSunday (date: Date): Date {
           :max="term?.end"
           @change="onSelectDate"
         />
+        <div class="mt-1 d-flex">
+          <div>
+            <button
+              class="btn btn-xs btn-outline-secondary"
+              :disabled="!term"
+              @click="onSelectPreviousWeek"
+            >
+              <b-icon icon="chevron-left" />
+            </button>
+          </div>
+          <div class="ml-1">
+            <button
+              class="btn btn-xs btn-outline-secondary"
+              :disabled="!term"
+              @click="onSelectNextWeek"
+            >
+              <b-icon icon="chevron-right" />
+            </button>
+          </div>
+        </div>
       </b-form-group>
-      <div class="col-lg-6">
-        <label>&nbsp;</label>
+      <div class="col-lg-6 mb-3">
+        <label class="d-none d-lg-block">&nbsp;</label>
         <div class="d-flex">
           <button
             class="btn btn-sm btn-outline-secondary d-flex align-items-center"
@@ -106,6 +150,17 @@ function closestSunday (date: Date): Date {
             />
           </div>
         </div>
+      </div>
+      <div class="col-md-4 col-lg-3 mb-3">
+        <label class="d-none d-lg-block">&nbsp;</label>
+        <a
+          class="btn btn-link p-0"
+          :href="printFilledAttendanceUrl"
+          target="_blank"
+        >
+          <b-icon icon="file-pdf-fill" />
+          <t value="db.record.groups.attendance.print_filled" />
+        </a>
       </div>
     </div>
   </div>
