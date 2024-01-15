@@ -56,7 +56,7 @@ export default class extends DatabasePage {
   courseLoader = this.$api2.createRecordLoader(this.onLoadCourse);
 
   get urlGenerateMonth (): string {
-    return `/server/pdf/group_attendance/${this.group?.id}`;
+    return `/server/pdf/group_attendance_empty/${this.group?.id}`;
   }
 
   onLoadCourse (): Promise<RequestResponse<SearchRecordsResponsePayload<course.Course>>> {
