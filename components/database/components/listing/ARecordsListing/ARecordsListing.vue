@@ -138,6 +138,13 @@ export default class ARecordsListing extends Vue {
       : [];
   }
 
+  get recordsOffset (): number {
+    const { response } = this.stableQuery;
+    return response?.ok
+      ? (response.payload.page - 1) * response.payload.per_page
+      : 0;
+  }
+
   @Watch('entity')
   @Watch('params')
   @Watch('model.controls')
@@ -229,10 +236,10 @@ export default class ARecordsListing extends Vue {
       </tbody>
       <tbody>
         <tr v-for="(record, index) of records" :key="`${index}-${record.id}`">
-          <td>
-            <h6 class="text-muted text-center m-0">
-              {{ index + 1 }}.
-            </h6>
+          <td class="align-top">
+            <span class="text-muted m-0 font-12">
+              {{ recordsOffset + index + 1 }}.
+            </span>
           </td>
           <td>
             <cell-content :column="allColumns[1]" :record="record" />
