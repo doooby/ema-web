@@ -21,19 +21,20 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { MaybeData, Option } from '~/lib/types';
+import { Option } from '~/lib/types';
 import SelectModal from '~/components/Form/primitives/SelectModal.vue';
+import app from '~/lib/app';
 
 export type OptionsSource =
   | { list: Option[] }
-  | { fetch: () => Promise<MaybeData<Option[]>> };
+  | { fetch: () => Promise<app.Maybe<Option[]>> };
 
 @Component({
   components: { SelectModal },
 })
 export default class SelectWithModal extends Vue {
   @Prop({ default: () => undefined }) readonly domId?: string;
-  @Prop({ required: true }) readonly value!: string;
+  @Prop({ required: true }) readonly value!: app.Maybe<string>;
   @Prop({ required: true }) readonly optionsSource!: OptionsSource;
   @Prop() readonly disabled?: boolean;
 
@@ -72,8 +73,8 @@ export default class SelectWithModal extends Vue {
       this.state = 'loading';
       this.options = [];
       const result = await this.optionsSource.fetch();
-      if (result.ok) {
-        this.options = result.data;
+      if (result) {
+        this.options = result;
         this.state = 'loaded';
       } else {
         this.state = 'failed';

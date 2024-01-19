@@ -15,7 +15,7 @@
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
 import { buildFormFields, controls, prefillFormValues } from '~/components/Form';
-import { Location } from '~/lib/records';
+import { location } from '~/lib/records';
 import { MaybeData } from '~/lib/types';
 
 @Component
@@ -32,7 +32,7 @@ export default class SpecialsForm extends Vue {
           3: { type: 't', name: [ 'Town', 'Město' ] },
         },
       },
-      fetchLocations (parent_id?: number): Promise<MaybeData<Location[]>> {
+      fetchLocations (parent_id?: number): Promise<MaybeData<location.Location[]>> {
         return Promise.resolve({
           ok: true,
           data: addresses.locations.filter(location => location.parent_id === parent_id),

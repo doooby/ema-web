@@ -1,4 +1,4 @@
-import { application_record, user } from '~/lib/records';
+import { application_record, location_system, user } from '~/lib/records';
 import { asFieldType, controls, FormFieldDefinition } from '~/components/Form';
 import Privileges from '~/components/database/records/users/controls/Privileges.vue';
 import { BRecord, parsers, RecordAssociations, recordsQueries } from '~/lib/api2';
@@ -42,6 +42,9 @@ export interface SessionSlice {
 export interface CurrentCountrySlice {
   record: wai.AResource;
   current_school_year?: wai.AResource;
+  locations: {
+    address: app.Maybe<location_system.V3_LocationSystem>;
+  };
 }
 
 export function parseRecord (
@@ -70,7 +73,7 @@ export function V3_parseRecord (
 }
 
 function parseSessionSlice (value): SessionSlice {
-  return wai.object(value => ({
+  return wai.object2(value, value => ({
     id: wai.property(value, 'id', wai.string),
     login: wai.property(value, 'login', wai.string),
     name: wai.property(value, 'name', mapName),
@@ -81,14 +84,21 @@ function parseSessionSlice (value): SessionSlice {
     admission: wai.property(value, 'admission',
       wai.nullable(wai.object(value => Object.freeze(value))),
     ),
-  }))(value);
+  }));
 }
 
 function parseCurrentCountrySlice (value): CurrentCountrySlice {
-  return wai.object(value => ({
+  return wai.object2(value, value => ({
     record: wai.property(value, 'record', wai.aResource),
     current_school_year: wai.property(value, 'current_school_year', wai.nullable(wai.aResource)),
-  }))(value);
+    locations: wai.property(value, 'locations', wai.object(value => ({
+      address: wai.property(value, 'address',
+        value => wai.uncertainResource(
+          location_system.V3_parseRecord,
+        )(value, {}),
+      ),
+    }))),
+  }));
 }
 
 export const queries = {

@@ -3,6 +3,7 @@ import * as course from './course';
 import * as donor from './donor';
 import * as education_level from './education_level';
 import * as group from './group';
+import * as location from './location';
 import * as location_system from './location_system';
 import * as material_kit from './material_kit';
 import * as person from './person';
@@ -24,6 +25,7 @@ export {
   group,
   person,
   project,
+  location,
   location_system,
   material_kit,
   school,

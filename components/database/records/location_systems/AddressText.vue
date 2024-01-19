@@ -23,6 +23,7 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { location_system } from '~/lib/records';
 
+// TODO t-locations
 @Component
 export default class AddressText extends Vue {
   @Prop({ required: true }) readonly system!: location_system.LocationSystem;

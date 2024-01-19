@@ -7,7 +7,7 @@
       <form-field name="external_id" :context="context" :values="values" />
     </div>
     <div class="col-md-6">
-<!--      <form-field name="address" :context="context" :values="values" />-->
+      <form-field name="address" :context="context" :values="values" />
     </div>
     <div class="col-12">
       <div class="border-bottom my-2" />

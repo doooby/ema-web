@@ -3,7 +3,6 @@ import { Component } from 'vue-property-decorator';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
-import AddressText from '~/components/database/records/location_systems/AddressText.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import SchoolCoursesListing from '~/components/database/records/schools/SchoolCoursesListing.vue';
@@ -28,7 +27,6 @@ enum Tabs {
     Show2Page,
     ShowPageAction,
     ShowPageTableRow,
-    AddressText,
     SchoolCoursesListing,
     ConfirmArchiveModal,
   },

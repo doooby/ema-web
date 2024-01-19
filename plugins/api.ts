@@ -1,10 +1,8 @@
 import { Context } from '@nuxt/types';
 import { QueryDefinition, RequestResponse, RequestState } from '~/lib/api';
-import queries from '~/lib/api/queries';
 import { MappingError } from '~/lib/api/mappers';
 
 class ApiPlugin {
-  queries = queries;
   context: Context;
 
   constructor (context: Context) {

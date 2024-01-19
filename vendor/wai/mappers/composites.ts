@@ -1,12 +1,17 @@
 import { wai } from '~/vendor/wai';
 
+// TODO rename `mapObject`
 export function object<T> (map: (value) => T): (value) => T {
   return (value) => {
-    if (!wai.isObject(value)) {
-      throw new wai.MappingError('not object');
-    }
+    wai.throwUnlessIsObject(value);
     return Object.freeze(map(value));
   };
+}
+
+// TODO rename `object`
+export function object2<T> (value, map: (value) => T): T {
+  wai.throwUnlessIsObject(value);
+  return Object.freeze(map(value));
 }
 
 export function listOf<I> (item: (value) => I): (value) => I[] {

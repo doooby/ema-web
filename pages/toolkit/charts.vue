@@ -4,7 +4,6 @@
       <div class="text-center mb-5 d-flex align-items-center justify-content-center">
         <span class="mr-3">project:</span>
         <div class="width-px-300 form--group">
-          <select-with-modal value="" :options-source="projectsListSource" />
         </div>
       </div>
 

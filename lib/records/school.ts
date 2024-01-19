@@ -1,6 +1,14 @@
-import { Api2Plugin, BRecord, RecordAssociations, recordsQueries } from '~/lib/api2';
+import {
+  Api2Plugin,
+  BRecord,
+  RecordAssociations,
+  recordsQueries,
+} from '~/lib/api2';
 import { controls, FormFieldDefinition } from '~/components/Form';
-import { application_record } from '~/lib/records/index';
+import {
+  application_record,
+  location,
+} from '~/lib/records';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations, mapName } from '~/lib/api2/mappers';
 import { dbFields } from '~/components/database/fields';
@@ -60,22 +68,11 @@ export function recordControls ({
   return [
     [ 'director', dbFields.selectBRecord, { entity: 'people' } ],
     [ 'education_levels', dbFields.selectManyBRecords, { entity: 'education_levels' } ],
-    // [ 'address', controls.location, {
-    //   system: addressSystem,
-    //   fetchLocations: async (parent_id?: number): Promise<MaybeData<Location[]>> => {
-    //     if (!addressSystem) return { ok: false };
-    //     const result = await api.request(
-    //       api.queries.locations.index({
-    //         location_system_id: addressSystem.id,
-    //         parent: parent_id,
-    //       }),
-    //       api.newQueryState(),
-    //     );
-    //     if (!result) return { ok: false };
-    //     const records = result.records.filter(record => !('__invalid' in record)) as Location[];
-    //     return { ok: true, data: records };
-    //   },
-    // } ],
+    [ 'address', controls.location, {
+      system: countryData?.addressSystem,
+      fetchLocations: parent_id =>
+        location.browseLocationsOfParent($api2, countryData?.addressSystem, parent_id),
+    } ],
     [ 'name', controls.name ],
     [ 'external_id', controls.text ],
     [ 'education_types', controls.selectMultiple, {

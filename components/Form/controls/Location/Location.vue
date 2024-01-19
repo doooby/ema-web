@@ -24,7 +24,6 @@ import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import { location_system } from '~/lib/records';
 import LocationRow from '~/components/Form/controls/Location/LocationRow.vue';
-import { MaybeData } from '~/lib/types';
 
 @Component({
   mixins: [ ControlMixin ],
@@ -49,25 +48,25 @@ export default class Location extends Vue {
     else return value;
   }
 
-  get system (): undefined | location_system.LocationSystem {
+  get system (): undefined | location_system.V3_LocationSystem {
     return this.field.options.system;
   }
 
   get levelDefinitions (): location_system.LocationSystemLevel[] {
     const list: location_system.LocationSystemLevel[] = [];
     if (!this.system) return list;
-    // for (let i = 0; i < this.system.levels; i += 1) {
-    //   const level = this.system.settings?.[i + 1];
-    //   if (!level) break;
-    //   list.push(level);
-    // }
+    for (let i = 0; i < this.system.levels; i += 1) {
+      const level = this.system.settings?.[i + 1];
+      if (!level) break;
+      list.push(level);
+    }
     return list;
   }
 
-  onFetchLocations (index: number): Promise<MaybeData<Location[]>> {
-    const fetchLocations = this.field.options.fetchLocations;
-    if (!fetchLocations || !this.system) return Promise.resolve({ ok: false });
-    return fetchLocations(index === 0 ? undefined : this.values[index - 1]);
+  async onFetchLocations (index: number) {
+    const { fetchLocations } = this.field.options;
+    if (!this.system || !fetchLocations) return;
+    return await fetchLocations(index === 0 ? undefined : this.values[index - 1]);
   }
 
   onChangeLocation (index: number, value: string) {

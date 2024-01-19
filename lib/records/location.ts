@@ -1,19 +1,40 @@
-import * as mappers from '~/lib/api/mappers';
+import { Api2Plugin, mappers } from '~/lib/api2';
+import app from '~/lib/app';
+import { location_system } from '~/lib/records';
+import { wai } from '~/vendor/wai';
 
-export interface Location {
-  id: number;
+export interface Location extends wai.AResource {
   level: number;
-  parent_id?: number;
+  parent_id: app.Maybe<number>;
   name: [string, string];
 }
 
-export const location = {
-  mapRecord (value: any): mappers.InvalidRecord | Location {
-    return mappers.safeRecord(value, record => ({
-      id: mappers.recordId(record),
-      name: mappers.prop('name', record, mappers.val.nameTuple),
-      level: mappers.prop('level', record, mappers.val.integer),
-      parent_id: mappers.maybeProp('parent_id', record, mappers.val.integer),
-    }));
-  },
-};
+export function parseRecord (
+  value,
+) {
+  return wai.object2(value, value => ({
+    level: wai.property(value, 'level', value => wai.integer(value ?? -1)),
+    parent_id: wai.property(value, 'parent_id', wai.nullable(wai.integer)),
+    name: wai.property(value, 'name', value => mappers.mapName(value ?? [])),
+  }));
+}
+
+export async function browseLocationsOfParent (
+  $api2: Api2Plugin,
+  system: app.Maybe<location_system.V3_LocationSystem>,
+  parent_id?: number,
+) {
+  if (!system) return;
+
+  const response = await $api2.transientRequest({
+    pathIsFull: true,
+    path: '/v3/locations',
+    params: {
+      per_page: 25,
+      location_system_id: system.id,
+      parent_id,
+    },
+    reducer: value => wai.recordsList(value, parseRecord),
+  });
+  return response.ok ? response.payload : undefined;
+}

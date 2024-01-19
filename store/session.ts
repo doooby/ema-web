@@ -44,6 +44,7 @@ export default class SessionModule extends VuexModule {
         id: data.current_country.record.id ?? '-1',
         caption: data.current_country.record.caption ?? 'unkown',
       },
+      addressSystem: data.current_country.locations.address,
       internalLists: staticLists,
     };
   }
