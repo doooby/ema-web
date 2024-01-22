@@ -10,9 +10,10 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
+import RecordId from '~/components/views/application/RecordId.vue';
 
 @Component({
-  components: { PrintDateRange, RecordAssociations, RecordHeader, ARecordsListing, ARecordLink, BRecordLink, TextNames },
+  components: { RecordId, PrintDateRange, RecordAssociations, RecordHeader, ARecordsListing, ARecordLink, BRecordLink, TextNames },
 })
 export default class GroupsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -21,11 +22,12 @@ export default class GroupsListing extends Vue {
   @Prop({ default: undefined }) readonly hideSchoolYear!: boolean;
 
   columns = [
-    { name: 'record', size: 180 },
     ...application_record.fillDataTableColumns('groups', [
+      { name: 'record', size: 180 },
       (this.hideCourse ? undefined : { name: 'course', size: 200 }),
-      { name: 'students_count', size: 200 },
+      { name: 'students_count', size: 150 },
       { name: 'term', size: 200 },
+      { name: 'joined_groups', size: 200 },
     ]),
   ];
 }
@@ -69,9 +71,11 @@ export default class GroupsListing extends Vue {
         />
       </td>
       <td>
-        {{ record.students?.length ?? 0 }}
+        <div class="text-center">
+          {{ record.students?.length ?? 0 }}
+        </div>
       </td>
-      <td class="ml-1">
+      <td class="pl-1">
         <RecordAssociations
           v-if="!hideCourse && record.school_year"
           :record="record"
@@ -93,6 +97,28 @@ export default class GroupsListing extends Vue {
         </div>
         <div v-else class="mt-1">
           <t value="db.record.groups.caption.is_non_classified" />
+        </div>
+      </td>
+      <td class="pl-1">
+        <div v-if="record.parent_link">
+          <div class="font-12 text-muted">
+            <t value="db.record.groups.caption.parent_group" />
+          </div>
+          <RecordId
+            class="font-14"
+            :record="record.parent_link"
+            :path="`/database/groups/${record.parent_link.id}`"
+          />
+        </div>
+        <div v-else-if="record.pss_link">
+          <div class="font-12 text-muted">
+            <t value="db.record.groups.caption.pss_group" />
+          </div>
+          <RecordId
+            class="font-14"
+            :record="record.pss_link"
+            :path="`/database/groups/${record.pss_link.id}`"
+          />
         </div>
       </td>
       <td />

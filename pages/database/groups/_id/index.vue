@@ -3,7 +3,6 @@ import { Component } from 'vue-property-decorator';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
-import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import StudentsListing from '~/components/database/records/groups/StudentsListing/StudentsListing.vue';
 import GroupGrades from '~/components/database/records/groups/GroupGrades/index.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
@@ -19,6 +18,8 @@ import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 import AssignmentHistoryListing
   from '~/components/views/group/students_change/AssignmentHistoryListing.vue';
 import DropoutsListing from '~/components/views/group/dropout/DropoutsListing.vue';
+import LinkedGroups from '~/components/views/group/linked_groups/LinkedGroups.vue';
+import RecordId from '~/components/views/application/RecordId.vue';
 
 enum Tabs {
   students,
@@ -30,6 +31,8 @@ enum Tabs {
 
 @Component({
   components: {
+    RecordId,
+    LinkedGroups,
     DropoutsListing,
     AssignmentHistoryListing,
     RecordAssociations,
@@ -40,7 +43,6 @@ enum Tabs {
     Show2Page,
     ShowPageAction,
     ShowPageTableRow,
-    ShowRecordLink,
     StudentsListing,
     GroupGrades,
     TextNames,
@@ -106,15 +108,17 @@ export default class extends DatabasePage {
           <text-names :value="record.name" />
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.course">
-          <show-record-link
-            entity="courses"
-            :record="{ id: record.course.id, caption: record.course.caption }"
+          <RecordId
+            class="font-14"
+            :record="record.course"
+            :path="`/database/courses/${record.course.id}`"
           />
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.school">
-          <show-record-link
-            entity="schools"
-            :record="{ id: record.school.id, caption: record.school.caption }"
+          <RecordId
+            class="font-14"
+            :record="record.school"
+            :path="`/database/schools/${record.school.id}`"
           />
         </show-page-table-row>
         <show-page-table-row label="db.record.groups.label.term">
@@ -141,12 +145,13 @@ export default class extends DatabasePage {
             <t value="db.record.groups.caption.is_non_classified" />
           </div>
         </show-page-table-row>
+        <LinkedGroups :group="record" />
       </table>
     </template>
 
     <template #container="{ record }">
       <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
-        <b-tab>
+        <b-tab v-if="!record.parent_link">
           <template #title>
             <t value="db.record.groups.label.students" />
           </template>
@@ -154,7 +159,7 @@ export default class extends DatabasePage {
             <students-listing :group="record" />
           </div>
         </b-tab>
-        <b-tab v-if="$ema.canI('act:/groups/students_changes/index')">
+        <b-tab v-if="!record.parent_link && $ema.canI('act:/groups/students_changes/index')">
           <template #title>
             <t value="db.pages.groups.show.tabs.assignment_history.title" />
           </template>
@@ -184,7 +189,7 @@ export default class extends DatabasePage {
             />
           </div>
         </b-tab>
-        <b-tab v-if="$ema.canI('act:/groups/dropouts/index')">
+        <b-tab v-if="!record.parent_link && $ema.canI('act:/groups/dropouts/index')">
           <template #title>
             <t value="db.pages.groups.show.tabs.dropout.title" />
           </template>

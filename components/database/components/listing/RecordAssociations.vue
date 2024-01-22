@@ -1,10 +1,10 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import app from '~/lib/app';
 import { BRecord } from '~/lib/api2';
 import { get } from 'lodash';
 import RecordNamedValue from '~/components/views/application/RecordNamedValue.vue';
+import RecordId from '~/components/views/application/RecordId.vue';
 
 export interface Association {
   entity: string;
@@ -17,7 +17,7 @@ interface Item {
 }
 
 @Component({
-  components: { RecordNamedValue, BRecordLink },
+  components: { RecordId, RecordNamedValue },
 })
 export default class RecordAssociations extends Vue {
   @Prop({ required: true }) readonly record!: any;
@@ -49,9 +49,10 @@ function filterAssociations (record, list): Item[] {
       <template #label>
         <t :value="`db.record.${entity}.meta.s`" />
       </template>
-      <BRecordLink
-        :entity="entity"
+      <RecordId
+        class="font-14"
         :record="bRecord"
+        :path="`/database/${entity}/${bRecord.id}`"
         :new-tab="newTab"
       />
     </RecordNamedValue>
