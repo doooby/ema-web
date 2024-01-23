@@ -27,7 +27,7 @@ export default class GroupsListing extends Vue {
       (this.hideCourse ? undefined : { name: 'course', size: 200 }),
       { name: 'students_count', size: 150 },
       { name: 'term', size: 200 },
-      { name: 'joined_groups', size: 200 },
+      { name: 'linked_groups', size: 200 },
     ]),
   ];
 }
@@ -84,10 +84,9 @@ export default class GroupsListing extends Vue {
           ]"
         />
         <div v-if="record.term_info">
-          <div>
-            <small>
-              <t value="db.record.groups.caption.term" />&nbsp;:
-            </small>
+          <div class="font-12 text-muted">
+            <t value="db.record.groups.caption.term" />
+            <span>: </span>
             {{ record.term_info[0] }}
           </div>
           <PrintDateRange
@@ -100,25 +99,22 @@ export default class GroupsListing extends Vue {
         </div>
       </td>
       <td class="pl-1">
-        <div v-if="record.parent_link">
+        <div v-if="record.parent">
           <div class="font-12 text-muted">
             <t value="db.record.groups.caption.parent_group" />
           </div>
           <RecordId
             class="font-14"
-            :record="record.parent_link"
-            :path="`/database/groups/${record.parent_link.id}`"
+            :record="record.parent"
+            :path="`/database/groups/${record.parent.id}`"
           />
         </div>
-        <div v-else-if="record.pss_link">
+        <div v-else-if="record.linked_groups?.length">
           <div class="font-12 text-muted">
-            <t value="db.record.groups.caption.pss_group" />
+            <t value="db.record.groups.caption.linked_groups" />
+            <span>: </span>
+            {{ record.linked_groups.length }}
           </div>
-          <RecordId
-            class="font-14"
-            :record="record.pss_link"
-            :path="`/database/groups/${record.pss_link.id}`"
-          />
         </div>
       </td>
       <td />

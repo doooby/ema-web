@@ -21,7 +21,7 @@ export function listOf<I> (item: (value) => I): (value) => I[] {
     }
     const array: any = [];
     for (let i = 0; i < value.length; i += 1) {
-      array[i] = wai.prop(i, value, item);
+      array[i] = wai.property(value, i, item);
     }
     return Object.freeze(array) as I[];
   };

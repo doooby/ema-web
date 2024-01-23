@@ -18,8 +18,8 @@ export interface Group extends application_record.SharedAttributes {
   term: number;
   term_info: [number, number];
   term_dates?: [Date, Date];
-  parent_link?: wai.AResource;
-  pss_link?: wai.AResource;
+  parent?: wai.AResource;
+  linked_groups?: wai.AResource[];
 }
 
 export interface V3_Group extends wai.AResource {
@@ -55,8 +55,8 @@ export function parseRecord (
     term_dates: wai.prop('term_dates', value, wai.nullable(wai.tuple(
       mapDate, mapDate,
     ))),
-    parent_link: wai.property(value, 'parent_link', wai.nullable(wai.aResource)),
-    pss_link: wai.property(value, 'pss_link', wai.nullable(wai.aResource)),
+    parent: wai.property(value, 'parent', wai.nullable(wai.aResource)),
+    linked_groups: wai.property(value, 'linked_groups', wai.nullable(wai.listOf(wai.aResource))),
   }))(value);
 }
 

@@ -20,8 +20,10 @@ import AssignmentHistoryListing
 import DropoutsListing from '~/components/views/group/dropout/DropoutsListing.vue';
 import LinkedGroups from '~/components/views/group/linked_groups/LinkedGroups.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
+import PageTab from '~/components/views/toolkit/PageTab.vue';
 
 enum Tabs {
+  none,
   students,
   assignment_history,
   attendance,
@@ -31,6 +33,7 @@ enum Tabs {
 
 @Component({
   components: {
+    PageTab,
     RecordId,
     LinkedGroups,
     DropoutsListing,
@@ -51,7 +54,7 @@ enum Tabs {
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.students;
+  currentTab: Tabs = Tabs.none;
 
   group: null | group.Group = null;
 
@@ -64,13 +67,25 @@ export default class extends DatabasePage {
   onLoadCourse (): Promise<RequestResponse<SearchRecordsResponsePayload<course.Course>>> {
     return this.$api2.fetchRecord('courses', { id: this.group!.course.id });
   }
+
+  onLoadGroup (group) {
+    this.group = group;
+
+    if (this.currentTab === Tabs.none) {
+      if (group.parent) {
+        this.currentTab = Tabs.attendance;
+      } else {
+        this.currentTab = Tabs.students;
+      }
+    }
+  }
 }
 </script>
 
 <template>
   <show2-page
     entity="groups"
-    @load="group = $event"
+    @load="onLoadGroup"
   >
     <template #title="{ record }">
       {{ record.id }}
@@ -150,53 +165,76 @@ export default class extends DatabasePage {
     </template>
 
     <template #container="{ record }">
-      <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
-        <b-tab v-if="!record.parent_link">
+      <b-tabs content-class="emt-3 emb-6" no-fade>
+        <PageTab
+          v-if="!record.parent"
+          :id="Tabs.students"
+          v-model="currentTab"
+        >
           <template #title>
             <t value="db.record.groups.label.students" />
           </template>
-          <div v-if="currenTab === Tabs.students">
-            <students-listing :group="record" />
-          </div>
-        </b-tab>
-        <b-tab v-if="!record.parent_link && $ema.canI('act:/groups/students_changes/index')">
+          <template #content="{ present }">
+            <StudentsListing v-if="present" :group="record" />
+          </template>
+        </PageTab>
+        <PageTab
+          v-if="!record.parent && $ema.canI('act:/groups/students_changes/index')"
+          :id="Tabs.assignment_history"
+          v-model="currentTab"
+        >
           <template #title>
             <t value="db.pages.groups.show.tabs.assignment_history.title" />
           </template>
-          <div v-if="currenTab === Tabs.assignment_history">
-            <AssignmentHistoryListing :group="record" />
-          </div>
-        </b-tab>
-        <b-tab>
+          <template #content="{ present }">
+            <AssignmentHistoryListing v-if="present" :group="record" />
+          </template>
+        </PageTab>
+        <PageTab
+          :id="Tabs.attendance"
+          v-model="currentTab"
+        >
           <template #title>
             <t value="db.pages.groups.show.tabs.attendance.title" />
           </template>
-          <div v-if="currenTab === Tabs.attendance">
+          <template #content="{ present }">
             <GroupWeekAttendance
+              v-if="present"
               :group="record"
               :course-loader="courseLoader"
             />
-          </div>
-        </b-tab>
-        <b-tab>
+          </template>
+        </PageTab>
+        <PageTab
+          :id="Tabs.grading"
+          v-model="currentTab"
+        >
           <template #title>
             <t value="db.pages.groups.show.tabs.grading.title" />
           </template>
-          <div v-if="currenTab === Tabs.grading">
+          <template #content="{ present }">
             <GroupGrades
+              v-if="present"
               :group="record"
               :course-loader="courseLoader"
             />
-          </div>
-        </b-tab>
-        <b-tab v-if="!record.parent_link && $ema.canI('act:/groups/dropouts/index')">
+          </template>
+        </PageTab>
+        <PageTab
+          v-if="!record.parent && $ema.canI('act:/groups/dropouts/index')"
+          :id="Tabs.dropout"
+          v-model="currentTab"
+        >
           <template #title>
             <t value="db.pages.groups.show.tabs.dropout.title" />
           </template>
-          <div v-if="currenTab === Tabs.dropout">
-            <DropoutsListing :params="{ group_id: record.id }" />
-          </div>
-        </b-tab>
+          <template #content="{ present }">
+            <DropoutsListing
+              v-if="present"
+              :params="{ group_id: record.id }"
+            />
+          </template>
+        </PageTab>
       </b-tabs>
     </template>
   </show2-page>
