@@ -93,9 +93,9 @@ function parseCurrentCountrySlice (value): CurrentCountrySlice {
     current_school_year: wai.property(value, 'current_school_year', wai.nullable(wai.aResource)),
     locations: wai.property(value, 'locations', wai.object(value => ({
       address: wai.property(value, 'address',
-        value => wai.uncertainResource(
+        wai.nullable(value => wai.uncertainResource(
           location_system.V3_parseRecord,
-        )(value, {}),
+        )(value, {})),
       ),
     }))),
   }));
