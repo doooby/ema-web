@@ -8,8 +8,13 @@ export default class IntegerInput extends Vue {
   @Prop() readonly disabled?: boolean;
   @Prop() readonly value?: string;
 
-  internalValue = sanitizeValue(this.value);
-  inputValue = sanitizeInputValue(this.internalValue);
+  internalValue: app.Maybe<number> = undefined;
+  inputValue = '';
+
+  created () {
+    this.internalValue = sanitizeValue(this.value);
+    this.inputValue = sanitizeInputValue(this.internalValue);
+  }
 
   onChange (event: { target: HTMLInputElement }): void {
     this.invokeChange(event.target);
