@@ -41,9 +41,6 @@ export default class DropoutStudents extends CountryDBPage.ComponentBase {
     students: wai.RecordsList;
   }>();
 
-  dataFailMessage = app.nullable<string>();
-
-  entity = group.dropout.entity;
   controls = app.nullable<controls.Group>();
   saveErrors = app.nullable<wai.ResourceError[]>();
 
@@ -100,7 +97,6 @@ export default class DropoutStudents extends CountryDBPage.ComponentBase {
       !groupResource.resource.state.resource ||
       !studentsResource.resource.state.resource
     ) {
-      this.dataFailMessage = 'api.fail.load_data';
       return;
     }
 
@@ -149,7 +145,6 @@ export default class DropoutStudents extends CountryDBPage.ComponentBase {
   <CountryDBPage>
     <ActionPage2
       :is-connected="!!data"
-      :fail-message="dataFailMessage"
       @connect="onConnect"
     >
       <RecordEditCard
@@ -164,7 +159,7 @@ export default class DropoutStudents extends CountryDBPage.ComponentBase {
           </EntityCardHeader>
         </template>
         <template v-if="saveErrors" #errors>
-          <RecordErrors :entity="entity" :errors="saveErrors" />
+          <RecordErrors entity="groups/dropouts" :errors="saveErrors" />
         </template>
         <div v-if="data" class="row">
           <div class="col-lg-6 mb-2">

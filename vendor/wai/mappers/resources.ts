@@ -109,7 +109,7 @@ export function recordShow<R> (
       wai.nullable(wai.indexOf(wai.indexOf(aResource))),
     ) ?? {};
     const [ record ] = wai.property(listing, 'records', wai.tuple(
-      value => uncertainResource(mapRecord)(value, associations),
+      wai.nullable(value => uncertainResource(mapRecord)(value, associations)),
       () => undefined,
     ));
     return record;

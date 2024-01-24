@@ -14,6 +14,7 @@ export interface Group extends application_record.SharedAttributes {
   school: BRecord;
   school_year?: BRecord;
   students?: BRecord[];
+  caption?: string;
   name: string[];
   term: number;
   term_info: [number, number];
@@ -46,6 +47,7 @@ export function parseRecord (
     school: wai.prop('school_id', value, mapAssociation('schools', associations)),
     school_year: wai.prop('school_year_id', value, wai.nullable(mapAssociation('school_years', associations))),
     students: wai.prop('students_ids', value, mapAssociations('students', associations)),
+    caption: wai.property(value, 'caption', wai.string),
     name: wai.prop('name', value, mapName),
     term: wai.prop('term', value, wai.integer),
     term_info: wai.prop('term_info', value, wai.tuple(

@@ -40,7 +40,6 @@ export default class ActionPage extends Vue {
   }
 
   onCleanAction = () => {
-    localStorage.set(localStorage.values.actionPageData);
     this.$store.commit('action/setActionData');
   }
 }

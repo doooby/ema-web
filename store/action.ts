@@ -11,6 +11,7 @@ export default class SessionModule extends VuexModule {
   @Mutation
   setActionData (data: null | unknown = null) {
     this.data = data;
+    localStorage.set(localStorage.values.actionPageData, data);
   }
 
   @Action
@@ -23,7 +24,6 @@ export default class SessionModule extends VuexModule {
     newPage: string;
     data: null | unknown;
   }) {
-    localStorage.set(localStorage.values.actionPageData);
     this.context.commit('setActionData', data);
     context.$router.push(newPage);
   }

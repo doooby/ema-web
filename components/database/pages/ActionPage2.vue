@@ -42,7 +42,6 @@ export default class ActionPage2 extends Vue {
   }
 
   onCleanAction () {
-    localStorage.set(localStorage.values.actionPageData);
     this.$store.commit('action/setActionData');
   }
 }

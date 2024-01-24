@@ -26,9 +26,8 @@ export async function browseLocationsOfParent (
 ) {
   if (!system) return;
 
-  const response = await $api2.transientRequest({
-    pathIsFull: true,
-    path: '/v3/locations',
+  const request = await $api2.V3_request({
+    path: '/locations',
     params: {
       per_page: 25,
       location_system_id: system.id,
@@ -36,5 +35,5 @@ export async function browseLocationsOfParent (
     },
     reducer: value => wai.recordsList(value, parseRecord),
   });
-  return response.ok ? response.payload : undefined;
+  return request.okPayload;
 }

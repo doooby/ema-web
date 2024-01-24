@@ -190,6 +190,29 @@ export default class Api2Plugin {
     };
   }
 
+  async V3_loadRecord<R> (query: {
+    path: string;
+    params: Params;
+    reducer: (payload, associations: wai.Associations) => R;
+  }) {
+    return await this.V3_request({
+      path: query.path,
+      params: query.params,
+      reducer: value => ({ record: wai.recordShow(value, query.reducer) }),
+    });
+  }
+
+  async V3_updateRecord (query: {
+    path: string;
+    record: Params;
+  }) {
+    return await this.V3_request({
+      path: query.path,
+      params: { record: query.record },
+      reducer: wai.recordUpdate,
+    });
+  }
+
   async transientRequest2<V> (
     query: api.Query<V>,
   ): Promise<RequestResponse<V>> {

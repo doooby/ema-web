@@ -2,16 +2,18 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import SearchBRecordsModal from '~/components/database/modals/SearchBRecordsModal.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
-import { BRecord, Params } from '~/lib/api2';
+import { Params } from '~/lib/api2';
 import controls from '~/components/controls';
+import { wai } from '~/vendor/wai';
+import RecordId from '~/components/views/application/RecordId.vue';
 
 @Component({
-  components: { SearchBRecordsModal, BRecordLink },
+  components: { RecordId, SearchBRecordsModal, BRecordLink },
 })
 export default class BRecordsSelect extends Vue {
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
-  @Prop({ default: () => [] }) readonly value!: BRecord[];
+  @Prop({ default: () => [] }) readonly value!: wai.AResource[];
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ default: false }) readonly multiple!: boolean;
   @Prop() params?: Params;
@@ -23,13 +25,13 @@ export default class BRecordsSelect extends Vue {
     this.modalShown = true;
   }
 
-  onRemoveRecord (record: BRecord) {
+  onRemoveRecord (record: wai.AResource) {
     if (this.disabled) return;
     const list = this.value.filter(({ id }) => id !== record.id);
     this.$emit('change', list);
   }
 
-  onSelect (record: BRecord) {
+  onSelect (record: wai.AResource) {
     const selectedIds = this.value.map(record => record.id);
     if (selectedIds.includes(record.id)) {
       this.onRemoveRecord(record);
@@ -39,6 +41,11 @@ export default class BRecordsSelect extends Vue {
       this.$emit('change', [ record ]);
       this.modalShown = false;
     }
+  }
+
+  // TODO cleanup
+  get unsafeValue () {
+    return this.value as any;
   }
 
   static asField = {
@@ -80,7 +87,12 @@ export default class BRecordsSelect extends Vue {
         :key="record.id"
         class="mr-3 d-flex align-items-center"
       >
-        <b-record-link class="mr-2" :entity="entity" :record="record" :new-tab="true" />
+        <RecordId
+          class="d-inline-block mr-2 font-14"
+          :record="record"
+          :path="`/database/${entity}/${record.id}`"
+          :new-tab="true"
+        />
         <btn-mini variant="secondary" icon="x" @click="onRemoveRecord(record)" />
       </div>
     </div>
@@ -96,7 +108,7 @@ export default class BRecordsSelect extends Vue {
       v-model="modalShown"
       :entity="entity"
       :params="params"
-      :selected="value"
+      :selected="unsafeValue"
       @select="onSelect"
     />
   </div>

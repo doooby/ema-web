@@ -6,6 +6,7 @@ import controls from '~/components/controls';
 import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
 import { BRecordsSelect, OptionsSelect } from '~/components/controls/inputs';
 import GroupsListing from '~/components/database/records/groups/GroupsListing.vue';
+import CreateGroup from '~/components/views/group/CreateGroup.vue';
 
 const nonAssignedOptions = Object.freeze([
   { value: '', item: 'db.record.groups.filters.non_classified.all' },
@@ -15,6 +16,7 @@ const nonAssignedOptions = Object.freeze([
 
 @Component({
   components: {
+    CreateGroup,
     OptionsSelect,
     GroupsListing,
     NewRecordButton,
@@ -65,7 +67,10 @@ export default class extends DatabasePage {
       v-if="$admission.can('groups.create')"
       #resource-actions
     >
-      <NewRecordButton entity="groups" />
+      <CreateGroup v-if="$ema.canI('act:/groups/actions/create')">
+        <b-icon icon="clipboard-plus" class="mr-1" />
+        <t value="db.page.new.action" />
+      </CreateGroup>
     </template>
 
     <template #search-form="{ group }">
