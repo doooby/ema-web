@@ -21,7 +21,6 @@ import RecordId from '~/components/views/application/RecordId.vue';
 import PageTab from '~/components/views/toolkit/PageTab.vue';
 import ButtonToModal from '~/components/views/application/actions/ButtonToModal.vue';
 import ArchiveRecord from '~/components/views/application/modals/ArchiveRecord.vue';
-import app from '~/lib/app';
 
 enum Tabs {
   none,

@@ -39,6 +39,10 @@ export default class GroupsListing extends Vue {
       { name: 'linked_groups', size: 200 },
     ]),
   ];
+
+  filterLinkedGroups (groups) {
+    return groups?.filter(group => !group.archived_at);
+  }
 }
 </script>
 
@@ -121,11 +125,11 @@ export default class GroupsListing extends Vue {
             :path="`/database/groups/${record.parent.id}`"
           />
         </div>
-        <div v-else-if="record.linked_groups?.length">
+        <div v-else-if="filterLinkedGroups(record.linked_groups)?.length">
           <div class="font-12 text-muted">
             <t value="db.record.groups.caption.linked_groups" />
             <span>: </span>
-            {{ record.linked_groups.length }}
+            {{ filterLinkedGroups(record.linked_groups).length }}
           </div>
         </div>
       </td>
