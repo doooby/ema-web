@@ -7,9 +7,7 @@ import StudentsListing from '~/components/database/records/groups/StudentsListin
 import GroupGrades from '~/components/database/records/groups/GroupGrades/index.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
-import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
 import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
-import ArchiveAction from '~/components/database/components/detail/actions/ArchiveAction.vue';
 import { course, group } from '~/lib/records';
 import { RequestResponse, SearchRecordsResponsePayload } from '~/lib/api2';
 import GroupWeekAttendance from '~/components/database/records/groups/GroupWeekAttendance/GroupWeekAttendance.vue';
@@ -21,6 +19,9 @@ import DropoutsListing from '~/components/views/group/dropout/DropoutsListing.vu
 import LinkedGroups from '~/components/views/group/linked_groups/LinkedGroups.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 import PageTab from '~/components/views/toolkit/PageTab.vue';
+import ButtonToModal from '~/components/views/application/actions/ButtonToModal.vue';
+import ArchiveRecord from '~/components/views/application/modals/ArchiveRecord.vue';
+import app from '~/lib/app';
 
 enum Tabs {
   none,
@@ -33,6 +34,8 @@ enum Tabs {
 
 @Component({
   components: {
+    ArchiveRecord,
+    ButtonToModal,
     PageTab,
     RecordId,
     LinkedGroups,
@@ -41,7 +44,6 @@ enum Tabs {
     RecordAssociations,
     PrintDateRange,
     GroupWeekAttendance,
-    ArchiveAction,
     EditAction,
     Show2Page,
     ShowPageAction,
@@ -49,7 +51,6 @@ enum Tabs {
     StudentsListing,
     GroupGrades,
     TextNames,
-    ConfirmArchiveModal,
   },
 })
 export default class extends DatabasePage {
@@ -62,6 +63,12 @@ export default class extends DatabasePage {
 
   get urlGenerateMonth (): string {
     return `/server/pdf/group_attendance_empty/${this.group?.id}`;
+  }
+
+  get pills (): string[] {
+    return ([
+      this.group?.archived_at && 'archived',
+    ]).filter(self => self) as any;
   }
 
   onLoadCourse (): Promise<RequestResponse<SearchRecordsResponsePayload<course.Course>>> {
@@ -87,23 +94,35 @@ export default class extends DatabasePage {
     entity="groups"
     @load="onLoadGroup"
   >
-    <template #title="{ record }">
-      {{ record.id }}
-    </template>
+    <template #title />
 
-    <template #actions="{ record, reloadRecord }">
+    <template #actions="{ record }">
       <ul>
         <EditAction
           v-if="$admission.can('groups.update')"
           entity="groups"
           :record="record"
         />
-        <ArchiveAction
-          v-if="$admission.can('groups.archive')"
-          entity="groups"
-          :record="record"
-          @archived="reloadRecord"
-        />
+        <li
+          v-if="
+            $ema.canI('act:/groups/actions/archive') &&
+              !record.archived_at
+          "
+        >
+          <ButtonToModal
+            v-slot="{ shown }"
+            class="btn-link"
+            icon="lock"
+          >
+            <t value="lexicon.to_archive" />
+            <ArchiveRecord
+              v-model="shown.ref"
+              entity="groups"
+              :record-id="record.id"
+              @archived="$router.push('/database/groups')"
+            />
+          </ButtonToModal>
+        </li>
         <li v-if="$admission.can('groups.generate_attendance')">
           <a
             class="btn btn-link d-flex align-items-center"
@@ -119,9 +138,24 @@ export default class extends DatabasePage {
 
     <template #details="{ record }">
       <table class="table">
-        <show-page-table-row label="db.record.groups.label.name">
-          <text-names :value="record.name" />
-        </show-page-table-row>
+        <tr>
+          <td colspan="99" class="border-0">
+            <h5 v-if="pills.length">
+              <span v-if="pills.includes('archived')" class="badge badge-dark">
+                <t value="lexicon.archived" />
+              </span>
+            </h5>
+            <h2>
+              {{ record.name?.[1] }}
+            </h2>
+            <br>
+            <RecordId
+              class="font-14"
+              :record="record"
+              :path="`/database/groups/${record.id}`"
+            />
+          </td>
+        </tr>
         <show-page-table-row label="db.record.groups.label.course">
           <RecordId
             class="font-14"

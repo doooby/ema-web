@@ -20,7 +20,7 @@
         >
           <div class="square-color mr-2" :style="{ backgroundColor: item.color }" />
           <div>
-            <div class="text-11">
+            <div class="font-12">
               {{ item.text }}
             </div>
             <div class="text-h-08">

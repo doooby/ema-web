@@ -6,9 +6,7 @@ import { DatabasePage } from '~/components';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import SchoolCoursesListing from '~/components/database/records/schools/SchoolCoursesListing.vue';
-import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
 import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
-import ArchiveAction from '~/components/database/components/detail/actions/ArchiveAction.vue';
 import AssociationList from '~/components/database/components/listing/AssociationList.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 
@@ -21,14 +19,12 @@ enum Tabs {
   components: {
     TextNames,
     AssociationList,
-    ArchiveAction,
     EditAction,
     BRecordLink,
     Show2Page,
     ShowPageAction,
     ShowPageTableRow,
     SchoolCoursesListing,
-    ConfirmArchiveModal,
   },
 })
 export default class extends DatabasePage {
@@ -52,12 +48,13 @@ export default class extends DatabasePage {
           entity="schools"
           :record="record"
         />
-        <ArchiveAction
-          v-if="$admission.can('schools.archive')"
-          entity="schools"
-          :record="record"
-          @archived="reloadRecord"
-        />
+        <!-- TODO t239 -->
+<!--        <ArchiveAction-->
+<!--          v-if="$admission.can('schools.archive')"-->
+<!--          entity="schools"-->
+<!--          :record="record"-->
+<!--          @archived="reloadRecord"-->
+<!--        />-->
       </ul>
     </template>
 

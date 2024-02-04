@@ -1,7 +1,7 @@
 import { wai } from '~/vendor/wai';
 
 // TODO rename `mapObject`
-export function object<T> (map: (value) => T): (value) => T {
+export function object<T> (map: (value: wai.Object) => T): (value) => T {
   return (value) => {
     wai.throwUnlessIsObject(value);
     return Object.freeze(map(value));
@@ -9,7 +9,7 @@ export function object<T> (map: (value) => T): (value) => T {
 }
 
 // TODO rename `object`
-export function object2<T> (value, map: (value) => T): T {
+export function object2<T> (value, map: (value: wai.Object) => T): T {
   wai.throwUnlessIsObject(value);
   return Object.freeze(map(value));
 }

@@ -4,12 +4,30 @@ import { group } from '~/lib/records';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 import CreateGroup from '~/components/views/group/CreateGroup.vue';
+import { wai } from '~/vendor/wai';
+import app from '~/lib/app';
 
 @Component({
   components: { CreateGroup, RecordId, ShowPageTableRow },
 })
 export default class LinkedGroups extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
+
+  showArchived = false;
+
+  get shownGroups (): app.Maybe<wai.AResource[]> {
+    if (this.showArchived) {
+      return this.group.linked_groups;
+    } else {
+      return this.group.linked_groups?.filter(
+        group => !group.archived_at,
+      );
+    }
+  }
+
+  get anyArchivedGroup () {
+    return this.group.linked_groups?.some(group => group.archived_at) ?? false;
+  }
 }
 </script>
 
@@ -27,7 +45,27 @@ export default class LinkedGroups extends Vue {
     </div>
     <div v-else>
       <div
-        v-for="linked_group of group.linked_groups"
+        v-if="anyArchivedGroup"
+        class="mb-2 d-flex justify-content-end"
+      >
+        <div>
+          <button
+            :class="[ 'btn btn-xs btn-link d-flex align-items-center font-14', {
+              'text-archived': !showArchived
+            } ]"
+            type="button"
+            @click="showArchived = !showArchived"
+          >
+            <b-icon
+              :icon="showArchived ? 'eye-slash' : 'eye' "
+              class="mr-2"
+            />
+            <t :value="showArchived ? 'app.hide_archived' : 'app.show_archived'" />
+          </button>
+        </div>
+      </div>
+      <div
+        v-for="linked_group of shownGroups"
         :key="linked_group.id"
         class="mb-2"
       >
@@ -40,7 +78,7 @@ export default class LinkedGroups extends Vue {
 
       <div
         v-if="$ema.canI('act:/groups/actions/create_linked')"
-        :class="[ { 'mt-3': group.linked_groups?.length } ]"
+        :class="[ { 'mt-3': shownGroups?.length } ]"
       >
         <CreateGroup
           class="font-14 btn-sm"

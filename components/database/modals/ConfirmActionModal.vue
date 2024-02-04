@@ -12,6 +12,7 @@ export enum ActionState {
 export default class ConfirmModal extends Vue {
   @Prop({ required: true }) readonly value!: boolean;
   @Prop({ required: true }) readonly state!: ActionState;
+  @Prop() readonly failMessage?: string;
 
   get isBusy () {
     return this.state === ActionState.processing || this.state === ActionState.success;
@@ -45,8 +46,9 @@ export default class ConfirmModal extends Vue {
     <div v-else-if="state === 'fail'" class="my-3">
       <div class="alert alert-danger d-flex align-items-center">
         <b-icon icon="x-octagon-fill" font-scale="2" />
-        <t class="ml-2" value="db.modals.ConfirmActionModal.failed" />
+        <t class="ml-2" :value="failMessage ?? 'db.modals.ConfirmActionModal.failed'" />
       </div>
+      <slot name="errors" />
     </div>
     <div v-else class="my-3">
       <slot />

@@ -21,11 +21,6 @@
 }
 
 
-// text
-@each $size in (11) {
-  .text-#{$size} { font-size: px($size); }
-}
-
 @each $name, $size in (
   '08': 0.8
 ) {

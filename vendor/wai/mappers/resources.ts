@@ -4,6 +4,7 @@ import app from '~/lib/app';
 export type AResource<S = {}> = S & {
   id?: string;
   caption?: string;
+  archived_at?: string;
   error?: wai.MappingError;
 };
 
@@ -34,20 +35,25 @@ export interface ResourceUpdate {
 export type ResourceError = [ undefined | string, string ];
 
 export function aResource (value): AResource {
-  return wai.object(
-    resource => resourceObject(resource, () => undefined),
-  )(value);
+  return wai.object2(value, basicResource);
 }
 
-function resourceObject<S> (
-  value,
-  mapRecord: (record) => S,
-): AResource<S> {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { id, caption, ...record } = value;
+function basicResource (value: wai.Object): AResource {
   return {
     id: wai.property(value, 'id', wai.nullable(wai.string)),
     caption: wai.property(value, 'caption', wai.nullable(wai.string)),
+    archived_at: wai.property(value, 'archived_at', wai.nullable(wai.string)),
+  };
+}
+
+function specificResource<S> (
+  value: wai.Object,
+  mapRecord: (record) => S,
+): AResource<S> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id, caption, archived_at, ...record } = value;
+  return {
+    ...basicResource(value),
     ...(mapRecord(record)),
   };
 }
@@ -57,9 +63,9 @@ export function uncertainResource<S> (
 ): (value, associations: Associations) => AResource<S> {
   return (value, associations) => {
     try {
-      return wai.object(
-        value => resourceObject(value, record => mapRecord(record, associations)),
-      )(value);
+      return wai.object2(value,
+        value => specificResource(value, record => mapRecord(record, associations)),
+      );
     } catch (error) {
       if (!(error instanceof wai.MappingError)) {
         throw error;

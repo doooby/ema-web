@@ -82,7 +82,8 @@ function parseSessionSlice (value): SessionSlice {
       wai.nullable(mapIndex(wai.listOf(wai.string))),
     ),
     admission: wai.property(value, 'admission',
-      wai.nullable(wai.object(value => Object.freeze(value))),
+      // admission is a nested hash containing settings
+      wai.nullable(wai.object(value => value as any)),
     ),
   }));
 }

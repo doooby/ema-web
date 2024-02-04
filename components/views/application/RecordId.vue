@@ -17,17 +17,23 @@ export default class RecordId extends Vue {
 </script>
 
 <template>
-  <div :class="[ $attrs.class, 'lh-1_25' ]">
+  <div
+    :class="[ $attrs.class, 'lh-1_25', {
+      'text-decoration-line-through': record.archived_at,
+    } ]"
+  >
 
     <code>
       [&nbsp;{{ record.id }}&nbsp;]
     </code>
 
-    <span v-if="path">
+    <span class="--link" v-if="path">
       <nuxt-link
         v-if="!newTab"
         :to="path"
-        class="p-1 icon-link"
+        :class="[ 'p-1 icon-link', {
+          'text-archived': record.archived_at,
+        } ]"
       >
         <b-icon icon="card-heading" />
         {{ record.caption }}
@@ -36,7 +42,9 @@ export default class RecordId extends Vue {
         v-else
         :href="fullPath"
         target="_blank"
-        class="p-1 icon-link"
+        :class="[ 'p-1 icon-link', {
+          'text-archived': record.archived_at,
+        } ]"
         @click.stop
       >
         <b-icon icon="card-heading" />

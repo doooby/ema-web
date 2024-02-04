@@ -38,20 +38,6 @@
             @recordChanged="reloadRecord"
           />
         </li>
-        <li v-if="$admission.can('users.archive')">
-          <show-page-action
-            icon="lock"
-            @click="archiveModalShown = true"
-          >
-            <t value="db.components.modals.ConfirmArchiveModal.action" />
-          </show-page-action>
-          <confirm-archive-modal
-            v-model="archiveModalShown"
-            entity="users"
-            :record-id="record.id"
-            @recordChanged="reloadRecord"
-          />
-        </li>
       </ul>
     </template>
 
@@ -86,7 +72,6 @@ import ChangePasswordModal from '~/components/database/records/users/ChangePassw
 import LockModal from '~/components/database/records/users/LockModal.vue';
 import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
-import ConfirmArchiveModal from '~/components/database/modals/ConfirmArchiveModal.vue';
 import UserPrivileges from '~/components/database/records/users/views/UserPrivileges.vue';
 
 @Component({
@@ -97,12 +82,10 @@ import UserPrivileges from '~/components/database/records/users/views/UserPrivil
     ShowPageTableRow,
     ChangePasswordModal,
     LockModal,
-    ConfirmArchiveModal,
   },
 })
 export default class extends DatabasePage {
   changePassModalShown = false;
   lockModalShown = false;
-  archiveModalShown = false;
 }
 </script>

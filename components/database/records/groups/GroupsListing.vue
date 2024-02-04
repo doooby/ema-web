@@ -13,7 +13,16 @@ import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 
 @Component({
-  components: { RecordId, PrintDateRange, RecordAssociations, RecordHeader, ARecordsListing, ARecordLink, BRecordLink, TextNames },
+  components: {
+    RecordId,
+    PrintDateRange,
+    RecordAssociations,
+    RecordHeader,
+    ARecordsListing,
+    ARecordLink,
+    BRecordLink,
+    TextNames,
+  },
 })
 export default class GroupsListing extends Vue {
   @Prop({ default: () => [] }) readonly initialColumns!: Column[];
@@ -56,9 +65,12 @@ export default class GroupsListing extends Vue {
     </template>
     <template #row="{ record }">
       <td>
-        <RecordHeader
-          entity="groups"
+        <div>
+          {{ record.name?.[1] }}
+        </div>
+        <RecordId
           :record="record"
+          :path="`/database/groups/${record.id}`"
         />
       </td>
       <td v-if="!hideCourse">
