@@ -1,0 +1,26 @@
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import RecordId from '~/components/views/application/RecordId.vue';
+import { wai } from '~/vendor/wai';
+
+@Component({
+  components: { RecordId },
+})
+export default class HeaderCell extends Vue {
+  @Prop() record!: wai.AResource;
+  @Prop() readonly path?: string;
+  @Prop() names?: string[];
+}
+</script>
+
+<template>
+  <td>
+    <h5>
+      {{ names?.[1] }}
+    </h5>
+    <RecordId
+      :record="record"
+      :path="path"
+    />
+  </td>
+</template>

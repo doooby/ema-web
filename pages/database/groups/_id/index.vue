@@ -21,6 +21,7 @@ import RecordId from '~/components/views/application/RecordId.vue';
 import PageTab from '~/components/views/toolkit/PageTab.vue';
 import ButtonToModal from '~/components/views/application/actions/ButtonToModal.vue';
 import ArchiveRecord from '~/components/views/application/modals/ArchiveRecord.vue';
+import HeaderRow, { RecordHeaderLabels } from '~/components/views/application/pages/show/HeaderRow.vue';
 
 enum Tabs {
   none,
@@ -33,6 +34,7 @@ enum Tabs {
 
 @Component({
   components: {
+    HeaderRow,
     ArchiveRecord,
     ButtonToModal,
     PageTab,
@@ -64,10 +66,10 @@ export default class extends DatabasePage {
     return `/server/pdf/group_attendance_empty/${this.group?.id}`;
   }
 
-  get pills (): string[] {
-    return ([
-      this.group?.archived_at && 'archived',
-    ]).filter(self => self) as any;
+  get labels (): RecordHeaderLabels {
+    const labels = new RecordHeaderLabels();
+    if (this.group?.archived_at) labels.add({ name: 'archived' });
+    return labels;
   }
 
   onLoadCourse (): Promise<RequestResponse<SearchRecordsResponsePayload<course.Course>>> {
@@ -137,24 +139,12 @@ export default class extends DatabasePage {
 
     <template #details="{ record }">
       <table class="table">
-        <tr>
-          <td colspan="99" class="border-0">
-            <h5 v-if="pills.length">
-              <span v-if="pills.includes('archived')" class="badge badge-dark">
-                <t value="lexicon.archived" />
-              </span>
-            </h5>
-            <h2>
-              {{ record.name?.[1] }}
-            </h2>
-            <br>
-            <RecordId
-              class="font-14"
-              :record="record"
-              :path="`/database/groups/${record.id}`"
-            />
-          </td>
-        </tr>
+        <HeaderRow
+          :record="record"
+          :path="`/database/groups/${record.id}`"
+          :names="record.name"
+          :labels="labels"
+        />
         <show-page-table-row label="db.record.groups.label.course">
           <RecordId
             class="font-14"

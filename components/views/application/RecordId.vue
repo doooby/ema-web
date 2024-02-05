@@ -4,7 +4,7 @@ import { wai } from '~/vendor/wai';
 
 @Component
 export default class RecordId extends Vue {
-  @Prop({ required: true }) readonly record!: wai.AResource;
+  @Prop() readonly record!: wai.AResource;
   @Prop() readonly path?: string;
   @Prop() readonly newTab?: boolean;
 

@@ -7,9 +7,13 @@ import { Column } from '~/components/DataTable/v3';
 import RecordHeader from '~/components/database/components/listing/RecordHeader.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import PrintCourseTerms from '~/components/database/records/courses/PrintCourseTerms.vue';
+import RecordId from '~/components/views/application/RecordId.vue';
+import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
 
 @Component({
   components: {
+    HeaderCell,
+    RecordId,
     PrintCourseTerms,
     RecordAssociations,
     RecordHeader,
@@ -22,7 +26,9 @@ export default class CoursesListing extends Vue {
   @Prop({ default: undefined }) readonly school!: school.School;
 
   columns = [
-    { name: 'record', size: 240 },
+    ...application_record.fillDataTableColumns('courses', [
+      { name: 'record', size: 240 },
+    ]),
     { name: 'associations1', size: 240 },
     { name: 'associations2', size: 240 },
     ...application_record.fillDataTableColumns('courses', [
@@ -70,12 +76,11 @@ export default class CoursesListing extends Vue {
       <slot name="group-actions" :records="records" />
     </template>
     <template #row="{ record }">
-      <td>
-        <RecordHeader
-          entity="courses"
-          :record="record"
-        />
-      </td>
+      <HeaderCell
+        :record="record"
+        :path="`/database/courses/${record.id}`"
+        :names="record.name"
+      />
       <td>
         <RecordAssociations
           :record="record"

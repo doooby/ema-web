@@ -11,9 +11,11 @@ import RecordHeader from '~/components/database/components/listing/RecordHeader.
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
+import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
 
 @Component({
   components: {
+    HeaderCell,
     RecordId,
     PrintDateRange,
     RecordAssociations,
@@ -68,15 +70,11 @@ export default class GroupsListing extends Vue {
       <slot name="group-actions" :records="records" />
     </template>
     <template #row="{ record }">
-      <td>
-        <div>
-          {{ record.name?.[1] }}
-        </div>
-        <RecordId
-          :record="record"
-          :path="`/database/groups/${record.id}`"
-        />
-      </td>
+      <HeaderCell
+        :record="record"
+        :path="`/database/groups/${record.id}`"
+        :names="record.name"
+      />
       <td v-if="!hideCourse">
         <RecordAssociations
           :record="record"

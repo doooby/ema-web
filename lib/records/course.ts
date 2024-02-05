@@ -78,6 +78,7 @@ export function parseRecord (
     education_level: wai.prop('education_level_id', value, mapAssociation('education_levels', associations)),
     school_year: wai.prop('school_year_id', value, wai.nullable(mapAssociation('school_years', associations))),
     standardized_course: wai.prop('standardized_course_id', value, wai.nullable(mapAssociation('standardized_courses', associations))),
+    caption: wai.property(value, 'caption', wai.string),
     name: wai.prop('name', value, mapName),
     grade: wai.prop('grade', value, wai.integer),
     is_formal: wai.prop('is_formal', value, wai.nullable(wai.boolean)),

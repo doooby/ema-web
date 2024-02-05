@@ -14,7 +14,6 @@ export interface Group extends application_record.SharedAttributes {
   school: BRecord;
   school_year?: BRecord;
   students?: BRecord[];
-  caption?: string;
   name: string[];
   term: number;
   term_info: [number, number];

@@ -6,6 +6,7 @@ import Translation from '~/components/toolkit/Translation.vue';
 
 export interface SharedAttributes {
   id: string;
+  caption?: string;
   created_at: Date;
   updated_at?: Date;
   archived_at?: Date;
