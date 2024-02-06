@@ -70,7 +70,7 @@ export default class extends DatabasePage {
       <ButtonToAction
         v-if="$ema.canI('act:/groups/actions/create')"
         class="btn-outline-secondary border-0"
-        new-page="/database/groups/new_linked"
+        new-page="/database/groups/new"
       >
         <b-icon icon="clipboard-plus" class="mr-2" />
         <t value="db.page.new.action" />

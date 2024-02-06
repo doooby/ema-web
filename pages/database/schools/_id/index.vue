@@ -9,6 +9,7 @@ import SchoolCoursesListing from '~/components/database/records/schools/SchoolCo
 import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
 import AssociationList from '~/components/database/components/listing/AssociationList.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
+import ButtonToPath from '~/components/views/application/buttons/ButtonToPath.vue';
 
 enum Tabs {
   courses,
@@ -17,6 +18,7 @@ enum Tabs {
 
 @Component({
   components: {
+    ButtonToPath,
     TextNames,
     AssociationList,
     EditAction,
@@ -42,19 +44,19 @@ export default class extends DatabasePage {
     </template>
 
     <template #actions="{ record, reloadRecord }">
-      <ul>
-        <EditAction
+      <ul class="list-group">
+        <li
           v-if="$admission.can('schools.update')"
-          entity="schools"
-          :record="record"
-        />
-        <!-- TODO t239 -->
-<!--        <ArchiveAction-->
-<!--          v-if="$admission.can('schools.archive')"-->
-<!--          entity="schools"-->
-<!--          :record="record"-->
-<!--          @archived="reloadRecord"-->
-<!--        />-->
+          class="list-group-item d-flex p-1 border-0"
+        >
+          <ButtonToPath
+            class="btn-outline-secondary border-0 flex-fill"
+            :path="`/database/schools/${record.id}/edit`"
+          >
+            <b-icon icon="pencil" class="mr-3" />
+            <t value="lexicon.to_edit" />
+          </ButtonToPath>
+        </li>
       </ul>
     </template>
 
