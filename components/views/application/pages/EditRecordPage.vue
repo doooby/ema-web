@@ -16,9 +16,9 @@ import EntityCardHeader from '~/components/database/pages/shared/EntityCardHeade
   },
 })
 export default class EditRecordPage extends Vue {
-  @Prop() readonly title!: string;
-  @Prop() readonly active!: boolean;
-  @Prop() readonly transaction!: app.Transaction;
+  @Prop({ required: true }) readonly title!: string;
+  @Prop({ required: true }) readonly active!: boolean;
+  @Prop({ required: true }) readonly transaction!: app.Transaction;
   @Prop() readonly saveErrors: app.Maybe<{
     entity: string;
     messages: ErrorMessage[];

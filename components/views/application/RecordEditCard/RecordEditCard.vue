@@ -38,7 +38,7 @@ export default class RecordEditCard extends Vue {
           :disabled="isProcessing"
           @click="$emit('cancel')"
         >
-          <t value="app.action.cancel" />
+          <t value="lexicon.to_cancel" />
         </b-button>
       </div>
       <div

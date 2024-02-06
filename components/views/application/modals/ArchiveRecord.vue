@@ -10,9 +10,9 @@ import RecordErrors from '~/components/database/RecordErrors.vue';
   components: { RecordErrors, ConfirmActionModal },
 })
 export default class ArchiveRecord extends Vue {
-  @Prop() readonly value!: boolean;
-  @Prop() readonly entity!: string;
-  @Prop() readonly recordId!: string;
+  @Prop({ required: true }) readonly value!: boolean;
+  @Prop({ required: true }) readonly entity!: string;
+  @Prop({ required: true }) readonly recordId!: string;
 
   actionState = ActionState.idle;
 

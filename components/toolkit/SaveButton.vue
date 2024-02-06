@@ -6,6 +6,8 @@ import app from '~/lib/app';
 export default class SaveButton extends Vue {
   @Prop({ required: true }) readonly processing!: boolean;
   @Prop() readonly active?: boolean;
+  @Prop() readonly text?: string;
+  @Prop() readonly variant?: 'success' | 'dark';
 
   delayedProcessing = this.processing ?? false;
   t_delayedProcessing = app.nullable<any>();
@@ -33,12 +35,12 @@ export default class SaveButton extends Vue {
 
 <template>
   <b-button
-    variant="success"
+    :variant="variant ?? 'success'"
     :disabled="!active || delayedProcessing"
     @click="$emit('click')"
   >
     <div class="position-relative">
-      <t value="app.action.save" />
+      <t :value="text ?? 'app.action.save'" />
       <transition name="fade-in">
         <div
           v-if="delayedProcessing"
