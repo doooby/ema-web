@@ -19,9 +19,11 @@ import DropoutsListing from '~/components/views/group/dropout/DropoutsListing.vu
 import LinkedGroups from '~/components/views/group/linked_groups/LinkedGroups.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 import PageTab from '~/components/views/toolkit/PageTab.vue';
-import ButtonToModal from '~/components/views/application/actions/ButtonToModal.vue';
-import ArchiveRecord from '~/components/views/application/modals/ArchiveRecord.vue';
+import ButtonToModal from '~/components/views/application/buttons/ButtonToModal.vue';
+import ArchiveRecordModal from '~/components/views/application/modals/ArchiveRecordModal.vue';
 import HeaderRow, { RecordHeaderLabels } from '~/components/views/application/pages/show/HeaderRow.vue';
+import ButtonToPath from '~/components/views/application/buttons/ButtonToPath.vue';
+import ButtonToHref from '~/components/views/application/buttons/ButtonToHref.vue';
 
 enum Tabs {
   none,
@@ -34,8 +36,10 @@ enum Tabs {
 
 @Component({
   components: {
+    ButtonToHref,
+    ButtonToPath,
     HeaderRow,
-    ArchiveRecord,
+    ArchiveRecordModal,
     ButtonToModal,
     PageTab,
     RecordId,
@@ -98,25 +102,33 @@ export default class extends DatabasePage {
     <template #title />
 
     <template #actions="{ record }">
-      <ul>
-        <EditAction
+      <ul class="list-group">
+        <li
           v-if="$admission.can('groups.update')"
-          entity="groups"
-          :record="record"
-        />
+          class="list-group-item d-flex p-1 border-0"
+        >
+          <ButtonToPath
+            class="btn-outline-secondary border-0 flex-fill"
+            :path="`/database/groups/${record.id}/edit`"
+          >
+            <b-icon icon="pencil" class="mr-3" />
+            <t value="lexicon.to_edit" />
+          </ButtonToPath>
+        </li>
         <li
           v-if="
             $ema.canI('act:/groups/actions/archive') &&
               !record.archived_at
           "
+          class="list-group-item d-flex p-1 border-0"
         >
           <ButtonToModal
             v-slot="{ shown }"
-            class="btn-link"
-            icon="lock"
+            class="btn-outline-secondary border-0 flex-fill"
           >
+            <b-icon icon="lock" class="mr-3" />
             <t value="lexicon.to_archive" />
-            <ArchiveRecord
+            <ArchiveRecordModal
               v-model="shown.ref"
               entity="groups"
               :record-id="record.id"
@@ -124,15 +136,18 @@ export default class extends DatabasePage {
             />
           </ButtonToModal>
         </li>
-        <li v-if="$admission.can('groups.generate_attendance')">
-          <a
-            class="btn btn-link d-flex align-items-center"
+        <li
+          v-if="$admission.can('groups.generate_attendance')"
+          class="list-group-item d-flex p-1 border-0"
+        >
+          <ButtonToHref
             :href="urlGenerateMonth"
             target="_blank"
+            class="btn-outline-secondary border-0 flex-fill"
           >
-            <b-icon icon="file-pdf" class="emr-4" />
+            <b-icon icon="file-pdf" class="emr-3" />
             <t value="db.record.groups.actions.generate_month_attendance" />
-          </a>
+          </ButtonToHref>
         </li>
       </ul>
     </template>

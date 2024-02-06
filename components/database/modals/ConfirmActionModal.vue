@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import SaveButton from '~/components/toolkit/SaveButton.vue';
+import RequestButton from '~/components/views/application/buttons/RequestButton.vue';
 
 export enum ActionState {
   idle = 'idle',
@@ -10,7 +10,7 @@ export enum ActionState {
 }
 
 @Component({
-  components: { SaveButton },
+  components: { RequestButton },
 })
 export default class ConfirmModal extends Vue {
   @Prop({ required: true }) readonly value!: boolean;
@@ -60,15 +60,13 @@ export default class ConfirmModal extends Vue {
     </div>
     <template #modal-footer="{ close }">
       <div class="flex-fill">
-        <slot v-if="$slots.button" name="button">
-          <SaveButton
-            :active="!isOkDisabled && !isBusy"
-            :processing="isProcessing"
-            @click="$emit('confirm')"
-          />
-        </slot>
-        <SaveButton
-          variant="dark"
+        <slot
+          v-if="$slots.button"
+          name="button"
+        />
+        <RequestButton
+          v-else
+          class="btn-dark"
           text="lexicon.to_archive"
           :active="!isOkDisabled && !isBusy"
           :processing="isProcessing"

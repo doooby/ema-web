@@ -2,11 +2,11 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import LoadingBlock from '~/components/database/components/LoadingBlock.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
-import SaveButton from '~/components/toolkit/SaveButton.vue';
+import RequestButton from '~/components/views/application/buttons/RequestButton.vue';
 
 @Component({
   components: {
-    SaveButton,
+    RequestButton,
     RecordErrors,
     LoadingBlock,
   },
@@ -28,7 +28,8 @@ export default class RecordEditCard extends Vue {
     </div>
     <div class="card-footer">
       <div>
-        <SaveButton
+        <RequestButton
+          class="btn-success"
           :active="active"
           :processing="isProcessing"
           @click="$emit('save')"

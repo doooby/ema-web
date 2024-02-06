@@ -9,7 +9,7 @@ import RecordErrors from '~/components/database/RecordErrors.vue';
 @Component({
   components: { RecordErrors, ConfirmActionModal },
 })
-export default class ArchiveRecord extends Vue {
+export default class ArchiveRecordModal extends Vue {
   @Prop({ required: true }) readonly value!: boolean;
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ required: true }) readonly recordId!: string;
@@ -49,13 +49,13 @@ export default class ArchiveRecord extends Vue {
   <ConfirmActionModal
     :value="value"
     :state="actionState"
-    fail-message="application.modals.ArchiveRecord.failed"
+    fail-message="application.modals.ArchiveRecordModal.failed"
     @input="$emit('input', $event)"
     @confirm="onSubmit"
   >
     <div v-if="value">
       <div class="alert alert-warning" role="alert">
-        <t value="application.modals.ArchiveRecord.confirm" />
+        <t value="application.modals.ArchiveRecordModal.confirm" />
       </div>
     </div>
     <template v-if="archiveErrors.ref" #errors>

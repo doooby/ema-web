@@ -3,11 +3,10 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import app from '~/lib/app';
 
 @Component
-export default class SaveButton extends Vue {
-  @Prop({ required: true }) readonly processing!: boolean;
+export default class RequestButton extends Vue {
+  @Prop() readonly processing?: boolean;
   @Prop() readonly active?: boolean;
   @Prop() readonly text?: string;
-  @Prop() readonly variant?: 'success' | 'dark';
 
   delayedProcessing = this.processing ?? false;
   t_delayedProcessing = app.nullable<any>();
@@ -34,26 +33,28 @@ export default class SaveButton extends Vue {
 </script>
 
 <template>
-  <b-button
-    :variant="variant ?? 'success'"
+  <button
+    :class="[
+      'btn position-relative',
+      $attrs.class,
+    ]"
+    type="button"
     :disabled="!active || delayedProcessing"
     @click="$emit('click')"
   >
-    <div class="position-relative">
-      <t :value="text ?? 'app.action.save'" />
-      <transition name="fade-in">
-        <div
-          v-if="delayedProcessing"
-          class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center"
-          :style="{ top: 0, left: 0 }"
-        >
-          <div class="spinner-border spinner-border-sm" role="status">
-            <span class="sr-only" />
-          </div>
+    <t :value="text ?? 'app.action.save'" />
+    <transition name="fade-in">
+      <div
+        v-if="delayedProcessing"
+        class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center"
+        :style="{ top: 0, left: 0 }"
+      >
+        <div class="spinner-border spinner-border-sm" role="status">
+          <span class="sr-only" />
         </div>
-      </transition>
-    </div>
-  </b-button>
+      </div>
+    </transition>
+  </button>
 </template>
 
 <style scoped>

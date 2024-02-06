@@ -9,11 +9,12 @@ import ShowRecordLink from '~/components/database/ShowRecordLink.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
 import PrintCourseTerms from '~/components/database/records/courses/PrintCourseTerms.vue';
-import ArchiveRecord from '~/components/views/application/modals/ArchiveRecord.vue';
-import ButtonToModal from '~/components/views/application/actions/ButtonToModal.vue';
+import ArchiveRecordModal from '~/components/views/application/modals/ArchiveRecordModal.vue';
+import ButtonToModal from '~/components/views/application/buttons/ButtonToModal.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 import { course } from '~/lib/records';
 import HeaderRow, { RecordHeaderLabels } from '~/components/views/application/pages/show/HeaderRow.vue';
+import ButtonToPath from '~/components/views/application/buttons/ButtonToPath.vue';
 
 enum Tabs {
   groups,
@@ -22,10 +23,11 @@ enum Tabs {
 
 @Component({
   components: {
+    ButtonToPath,
     HeaderRow,
     RecordId,
     ButtonToModal,
-    ArchiveRecord,
+    ArchiveRecordModal,
     PrintCourseTerms,
     BRecordLink,
     Show2Page,
@@ -62,28 +64,33 @@ export default class extends DatabasePage {
     <template #title />
 
     <template #actions="{ record }">
-      <ul>
-        <li v-if="$admission.can('courses.update')">
-          <show-page-action
-            icon="pencil"
+      <ul class="list-group">
+        <li
+          v-if="$admission.can('courses.update')"
+          class="list-group-item d-flex p-1 border-0"
+        >
+          <ButtonToPath
+            class="btn-outline-secondary border-0 flex-fill"
             :path="`/database/courses/${record.id}/edit`"
           >
-            <t value="db.page.edit.action" />
-          </show-page-action>
+            <b-icon icon="pencil" class="mr-3" />
+            <t value="lexicon.to_edit" />
+          </ButtonToPath>
         </li>
         <li
           v-if="
             $ema.canI('act:/courses/actions/archive') &&
               !record.archived_at
           "
+          class="list-group-item d-flex p-1 border-0"
         >
           <ButtonToModal
             v-slot="{ shown }"
-            class="btn-link"
-            icon="lock"
+            class="btn-outline-secondary border-0 flex-fill"
           >
+            <b-icon icon="lock" class="mr-3" />
             <t value="lexicon.to_archive" />
-            <ArchiveRecord
+            <ArchiveRecordModal
               v-model="shown.ref"
               entity="courses"
               :record-id="record.id"

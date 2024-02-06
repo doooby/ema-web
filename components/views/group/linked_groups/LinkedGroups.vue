@@ -3,12 +3,12 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { group } from '~/lib/records';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
-import CreateGroup from '~/components/views/group/CreateGroup.vue';
 import { wai } from '~/vendor/wai';
 import app from '~/lib/app';
+import ButtonToAction from '~/components/views/application/buttons/ButtonToAction.vue';
 
 @Component({
-  components: { CreateGroup, RecordId, ShowPageTableRow },
+  components: { ButtonToAction, RecordId, ShowPageTableRow },
 })
 export default class LinkedGroups extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
@@ -80,13 +80,14 @@ export default class LinkedGroups extends Vue {
         v-if="$ema.canI('act:/groups/actions/create_linked')"
         :class="[ { 'mt-3': shownGroups?.length } ]"
       >
-        <CreateGroup
-          class="font-14 btn-sm"
-          :parent="{ id: group.id, caption: group.caption}"
+        <ButtonToAction
+          class="font-14 btn-sm btn-outline-secondary border-0"
+          new-page="/database/groups/new_linked"
+          :data="{ parent: { id: group.id, caption: group.caption} }"
         >
-          <b-icon icon="plus-lg" />
+          <b-icon icon="plus" class="mr-1" />
           <t value="group.linked_groups.CreateLinkedGroup.text" />
-        </CreateGroup>
+        </ButtonToAction>
       </div>
     </div>
   </ShowPageTableRow>
