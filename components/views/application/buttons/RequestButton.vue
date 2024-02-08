@@ -8,7 +8,7 @@ export default class RequestButton extends Vue {
   @Prop() readonly active?: boolean;
   @Prop() readonly text?: string;
 
-  delayedProcessing = this.processing ?? false;
+  delayedProcessing = false;
   t_delayedProcessing = app.nullable<any>();
 
   @Watch('processing')
