@@ -27,6 +27,7 @@ export default {
 
   publicRuntimeConfig: {
     apiBaseUrl: `${serverHostName}/api/web`,
+    appEnv: process.env.APP_ENV || undefined,
   },
 
   router: {

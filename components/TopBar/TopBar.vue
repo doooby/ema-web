@@ -51,6 +51,16 @@ export default class TopBar extends Vue {
     </div>
     <div style="flex: 1 1 auto;" />
     <div
+      v-if="$config.appEnv"
+      class="d-flex align-items-center mx-3 px-3 bg-primary"
+    >
+      <div class="text-center">
+        <strong>APP ENV:</strong>
+        <br>
+        <span>{{ $config.appEnv }}</span>
+      </div>
+    </div>
+    <div
       v-if="userSession"
       class="session d-flex align-items-center text-white"
     >
