@@ -1,32 +1,63 @@
-<template>
-  <new2-page
-    entity="schools"
-    :fields="fields"
-    :show-after-create="true"
-  >
-    <template #layout="{ context, values }">
-      <record-form :context="context" :values="values" />
-    </template>
-  </new2-page>
-</template>
-
 <script lang="ts">
-import { Component } from 'vue-property-decorator';
-import { DatabasePage } from '~/components';
-import { FormFieldDefinition } from '~/components/Form';
-import { school } from '~/lib/records';
-import New2Page from '~/components/database/pages/new/New2Page.vue';
-import RecordForm from '~/components/database/records/schools/RecordForm.vue';
+import { Vue, Component } from 'vue-property-decorator';
+import CountryDBPage from '~/components/database/pages/CountryDBPage.vue';
+import ApplicationPage from '~/components/views/application/ApplicationPage.vue';
+import app from '~/lib/app';
+import EditRecordCard from '~/components/views/application/pages/EditRecordCard.vue';
+import EntityCardHeader from '~/components/database/pages/shared/EntityCardHeader.vue';
+import RecordErrors from '~/components/database/RecordErrors.vue';
+import EditSchoolFields from '~/components/views/school/EditSchoolFields.vue';
+import { wai } from '~/vendor/wai';
 
 @Component({
-  components: { RecordForm, New2Page },
+  components: { EditSchoolFields, RecordErrors, EntityCardHeader, EditRecordCard, CountryDBPage, ApplicationPage },
 })
-export default class extends DatabasePage {
-  get fields (): FormFieldDefinition[] {
-    return school.recordControls({
-      countryData: this.$store.state.session.country,
-      $api2: this.$api2,
+export default class New extends CountryDBPage.ComponentBase {
+  page = app.page.emptyState();
+  saveable = app.page.saveableState({
+    context: this,
+    onSave: () => this.onSave(),
+  })
+
+  async onSave () {
+    const record = this.saveable.getRecordParams?.() ?? {};
+
+    const { response, okPayload } = await this.$api2.V3_request({
+      path: '/schools/create',
+      params: { record },
+      reducer: wai.recordUpdate,
+    });
+
+    this.saveable.errors = app.api.createErrors(response);
+    if (this.saveable.errors) {
+      this.saveable.transaction.state.isProcessing = false;
+      return;
+    }
+
+    await this.$router.push({
+      path: `/database/schools/${okPayload?.record_id}`,
     });
   }
 }
 </script>
+
+<template>
+  <CountryDBPage>
+    <ApplicationPage :state="page">
+      <EditRecordCard
+        :active="page.hasConnected"
+        :transaction="saveable.transaction"
+      >
+        <template #header>
+          <EntityCardHeader>
+            <t value="page.schools.new.title" />
+          </EntityCardHeader>
+        </template>
+        <template v-if="saveable.errors" #errors>
+          <RecordErrors entity="schools" :errors="saveable.errors" />
+        </template>
+        <EditSchoolFields :saveable="saveable" />
+      </EditRecordCard>
+    </ApplicationPage>
+  </CountryDBPage>
+</template>

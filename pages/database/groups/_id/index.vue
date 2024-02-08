@@ -132,7 +132,7 @@ export default class extends DatabasePage {
               v-model="shown.ref"
               entity="groups"
               :record-id="record.id"
-              @archived="$router.push('/database/groups')"
+              @archived="$router.push({ path: '/database/groups' })"
             />
           </ButtonToModal>
         </li>

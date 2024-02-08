@@ -1,13 +1,14 @@
 import * as api from './api';
 import * as country from './country';
 import * as locales from './locales';
+import * as page from './page';
 import * as session from './session';
 import app from '~/lib/app/index';
 import Ema from '~/lib/app/Ema';
 export * from './types';
 export * from './global';
 export { default as Transaction } from './Transaction';
-export { api, country, locales, session, Ema };
+export { api, country, locales, page, session, Ema };
 
 export const OTHER_OPTION = '_other';
 

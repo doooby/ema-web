@@ -24,6 +24,7 @@ export default class NameInput extends Vue {
 
     if (newValue[index] !== text) {
       newValue[index] = text;
+      this.$emit('input', newValue);
       this.$emit('change', newValue);
     }
   }

@@ -6,9 +6,11 @@ import IndexPage2 from '~/components/database/pages/index/IndexPage2.vue';
 import controls from '~/components/controls';
 import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
 import { BRecordsSelect } from '~/components/controls/inputs';
+import ButtonToPath from '~/components/views/application/buttons/ButtonToPath.vue';
 
 @Component({
   components: {
+    ButtonToPath,
     SchoolsListing,
     NewRecordButton,
     IndexPage2,
@@ -36,10 +38,18 @@ export default class extends DatabasePage {
   >
 
     <template
-      v-if="$admission.can('schools.create')"
       #resource-actions
     >
-      <NewRecordButton entity="schools" />
+      <div class="d-flex">
+        <ButtonToPath
+          v-if="$ema.canI('act:/schools/actions/create')"
+          class="btn-outline-secondary border-0"
+          path="/database/schools/new"
+        >
+          <b-icon icon="clipboard-plus" class="mr-2" />
+          <t value="db.page.new.action" />
+        </ButtonToPath>
+      </div>
     </template>
 
     <template #search-form="{ group }">

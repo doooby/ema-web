@@ -8,7 +8,10 @@ export default class CheckBox extends Vue {
   @Prop() readonly value?: boolean;
 
   onChange (newValue: boolean) {
-    if (newValue !== this.value) this.$emit('change', newValue);
+    if (newValue !== this.value) {
+      this.$emit('input', newValue);
+      this.$emit('change', newValue);
+    }
   }
 }
 </script>

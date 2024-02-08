@@ -17,7 +17,10 @@ export default class TextArea extends Vue {
   }
 
   invokeChange (newValue) {
-    if (newValue !== this.value) this.$emit('change', newValue);
+    if (newValue !== this.value) {
+      this.$emit('input', newValue);
+      this.$emit('change', newValue);
+    }
   }
 }
 </script>

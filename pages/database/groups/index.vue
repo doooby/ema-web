@@ -6,7 +6,7 @@ import controls from '~/components/controls';
 import NewRecordButton from '~/components/database/pages/index/NewRecordButton.vue';
 import { BRecordsSelect, OptionsSelect } from '~/components/controls/inputs';
 import GroupsListing from '~/components/database/records/groups/GroupsListing.vue';
-import ButtonToAction from '~/components/views/application/buttons/ButtonToAction.vue';
+import ButtonToPath from '~/components/views/application/buttons/ButtonToPath.vue';
 
 const nonAssignedOptions = Object.freeze([
   { value: '', item: 'db.record.groups.filters.non_classified.all' },
@@ -16,7 +16,7 @@ const nonAssignedOptions = Object.freeze([
 
 @Component({
   components: {
-    ButtonToAction,
+    ButtonToPath,
     OptionsSelect,
     GroupsListing,
     NewRecordButton,
@@ -64,17 +64,18 @@ export default class extends DatabasePage {
   >
 
     <template
-      v-if="$admission.can('groups.create')"
       #resource-actions
     >
-      <ButtonToAction
-        v-if="$ema.canI('act:/groups/actions/create')"
-        class="btn-outline-secondary border-0"
-        new-page="/database/groups/new"
-      >
-        <b-icon icon="clipboard-plus" class="mr-2" />
-        <t value="db.page.new.action" />
-      </ButtonToAction>
+      <div class="d-flex">
+        <ButtonToPath
+          v-if="$ema.canI('act:/groups/actions/create')"
+          class="btn-outline-secondary border-0"
+          path="/database/groups/new"
+        >
+          <b-icon icon="clipboard-plus" class="mr-2" />
+          <t value="db.page.new.action" />
+        </ButtonToPath>
+      </div>
     </template>
 
     <template #search-form="{ group }">

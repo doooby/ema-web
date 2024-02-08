@@ -10,14 +10,7 @@ export default class LoadingBlock extends Vue {
 
 <template>
   <div :class="$attrs.class">
-    <div
-      v-if="isLoading"
-      class="spinner-border"
-      role="status"
-    >
-      <span class="sr-only" />
-    </div>
-    <div v-else-if="failMessage">
+    <div v-if="failMessage">
       <b-alert show variant="warning">
         <b-icon icon="exclamation-triangle-fill" class="mr-3" />
         <t :value="failMessage" />
@@ -25,6 +18,13 @@ export default class LoadingBlock extends Vue {
           <slot name="fail-content" />
         </div>
       </b-alert>
+    </div>
+    <div
+      v-else-if="isLoading"
+      class="spinner-border"
+      role="status"
+    >
+      <span class="sr-only" />
     </div>
     <slot v-else />
   </div>

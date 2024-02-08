@@ -88,13 +88,13 @@ export default class New_linked extends CountryDBPage.ComponentBase {
     });
 
     this.saveErrors = app.api.createErrors(response) ?? null;
-    if (this.saveErrors || !okPayload?.record_id) {
+    if (this.saveErrors) {
       this.transaction.state.isProcessing = false;
       return;
     }
 
     this.onCleanAction?.();
-    this.$router.push({ path: `/database/groups/${okPayload.record_id}` });
+    this.$router.push({ path: `/database/groups/${okPayload?.record_id}` });
   }
 }
 </script>

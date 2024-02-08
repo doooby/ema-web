@@ -7,6 +7,8 @@ import RecordErrors from '~/components/database/RecordErrors.vue';
 import { ErrorMessage } from '~/lib/api2';
 import EntityCardHeader from '~/components/database/pages/shared/EntityCardHeader.vue';
 
+// TODO depricated
+
 @Component({
   components: {
     EntityCardHeader,

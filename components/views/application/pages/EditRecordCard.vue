@@ -1,21 +1,14 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import LoadingBlock from '~/components/database/components/LoadingBlock.vue';
-import RecordErrors from '~/components/database/RecordErrors.vue';
+import app from '~/lib/app';
 import RequestButton from '~/components/views/application/buttons/RequestButton.vue';
 
-// TODO depricated
-
 @Component({
-  components: {
-    RequestButton,
-    RecordErrors,
-    LoadingBlock,
-  },
+  components: { RequestButton },
 })
-export default class RecordEditCard extends Vue {
+export default class EditRecordCard extends Vue {
   @Prop() readonly active?: boolean;
-  @Prop() readonly isProcessing?: boolean;
+  @Prop({ required: true }) readonly transaction!: app.Transaction;
   @Prop() readonly noBody?: boolean;
 }
 </script>
@@ -33,13 +26,13 @@ export default class RecordEditCard extends Vue {
         <RequestButton
           class="btn-success"
           :active="active"
-          :processing="isProcessing"
-          @click="$emit('save')"
+          :processing="transaction.state.isProcessing"
+          @click="transaction.commit"
         />
         <b-button
           variant="outline-secondary"
-          :disabled="isProcessing"
-          @click="$emit('cancel')"
+          :disabled="transaction.state.isProcessing"
+          @click="transaction.cancel"
         >
           <t value="lexicon.to_cancel" />
         </b-button>

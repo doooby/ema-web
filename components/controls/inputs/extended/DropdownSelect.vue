@@ -38,6 +38,7 @@ export default class DropdownSelect extends Vue {
       );
     }
 
+    this.$emit('input', newValue);
     this.$emit('change', newValue);
   }
 }

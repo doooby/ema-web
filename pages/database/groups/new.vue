@@ -1,7 +1,6 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import app from '~/lib/app';
-import { wai } from '~/vendor/wai';
 import EditRecordPage from '~/components/views/application/pages/EditRecordPage.vue';
 import { ActionParams } from '~/components/database/pages/ActionPage2.vue';
 import { ErrorMessage } from '~/lib/api2';
@@ -59,13 +58,13 @@ export default class New extends CountryDBPage.ComponentBase {
     });
 
     this.saveErrors = app.api.createErrors(response) ?? null;
-    if (this.saveErrors || !okPayload?.record_id) {
+    if (this.saveErrors) {
       this.transaction.state.isProcessing = false;
       return;
     }
 
     this.onCleanAction?.();
-    this.$router.push({ path: `/database/groups/${okPayload.record_id}` });
+    this.$router.push({ path: `/database/groups/${okPayload?.record_id}` });
   }
 }
 </script>

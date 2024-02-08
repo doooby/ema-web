@@ -28,7 +28,7 @@ export default class BRecordsSelect extends Vue {
   onRemoveRecord (record: wai.AResource) {
     if (this.disabled) return;
     const list = this.value.filter(({ id }) => id !== record.id);
-    this.$emit('change', list);
+    this.emitChange(list);
   }
 
   onSelect (record: wai.AResource) {
@@ -36,9 +36,9 @@ export default class BRecordsSelect extends Vue {
     if (selectedIds.includes(record.id)) {
       this.onRemoveRecord(record);
     } else if (this.multiple) {
-      this.$emit('change', [ ...this.value, record ]);
+      this.emitChange([ ...this.value, record ]);
     } else {
-      this.$emit('change', [ record ]);
+      this.emitChange([ record ]);
       this.modalShown = false;
     }
   }
@@ -71,6 +71,11 @@ export default class BRecordsSelect extends Vue {
     }),
 
   };
+
+  emitChange (list) {
+    this.$emit('input', list);
+    this.$emit('change', list);
+  }
 }
 </script>
 

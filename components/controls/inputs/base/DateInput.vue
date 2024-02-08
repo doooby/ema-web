@@ -58,6 +58,7 @@ export default class DateInput extends Vue {
 
   emitChange (newDate: app.Maybe<Date>) {
     if (!newDate) this.textValue = '';
+    this.$emit('input', newDate);
     this.$emit('change', newDate);
   }
 }

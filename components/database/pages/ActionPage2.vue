@@ -4,6 +4,8 @@ import LoadingBlock from '~/components/database/components/LoadingBlock.vue';
 import * as localStorage from '~/lib/localStorage';
 import app from '~/lib/app';
 
+// TODO depricated
+
 export interface ActionParams<P> {
   params: P;
   onClean(): void;

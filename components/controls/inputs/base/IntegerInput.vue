@@ -31,7 +31,10 @@ export default class IntegerInput extends Vue {
     if (this.inputValue !== input.value) {
       input.value = this.inputValue;
     }
-    if (this.internalValue !== this.value) this.$emit('change', this.internalValue);
+    if (this.internalValue !== this.value) {
+      this.$emit('input', this.internalValue);
+      this.$emit('change', this.internalValue);
+    }
   }
 }
 
