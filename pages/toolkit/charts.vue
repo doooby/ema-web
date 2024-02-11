@@ -55,12 +55,11 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
 import PieChart from '~/components/Chart/PieChart.vue';
-import SelectWithModal from '~/components/Form/primitives/SelectWithModal.vue';
 import GradesDistribution from '~/components/Chart/GradesDistribution.vue';
 import { AppPage } from '~/components';
 
 @Component({
-  components: { PieChart, SelectWithModal, GradesDistribution },
+  components: { PieChart, GradesDistribution },
 })
 export default class Charts extends AppPage {
   projectsListSource = Object.freeze({

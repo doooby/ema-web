@@ -48,6 +48,7 @@ export default class DropdownSelect extends Vue {
   <b-dropdown
     size="sm"
     variant="secondary"
+    :disabled="disabled"
     :class="[
       $attrs.class,
       'd-flex ema--control--dropdown-select',
@@ -92,6 +93,7 @@ export default class DropdownSelect extends Vue {
   > .btn {
     padding: 0;
     border: none;
+    width: 100%;
   }
   > .dropdown-menu {
     max-height: 200px;

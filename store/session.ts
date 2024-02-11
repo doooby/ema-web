@@ -8,15 +8,16 @@ import { staticLists } from '~/lib/app/country/internalLists';
   namespaced: true,
 })
 export default class SessionModule extends VuexModule {
+  // TODO remove
   user: null | app.session.User = null;
   country: null | app.session.CountryData = null;
-
+  // use this
   userSession: null | user.SessionSlice = null;
   currentCountry: null | user.CurrentCountrySlice = null;
 
   loginModalShown = false;
-  languageModalShown: boolean = false;
-  debugTranslations: boolean = false;
+  languageModalShown = false;
+  debugTranslations = false;
 
   @Mutation
   setUser (data: {

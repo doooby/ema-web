@@ -6,14 +6,14 @@
       :style="{ cursor: 'pointer' }"
       @click="onClickToOpen"
     >
-      <b-icon icon="chat-left-quote" />
+      <b-icon icon="pencil" />
     </a>
     <span
       v-if="translatedText.isMissing"
       class="mr-1"
       title="missing translation"
     >
-      <b-icon icon="exclamation-triangle" />
+      <b-icon icon="type" class="text-danger" />
     </span>
     <span>
       {{ translatedText.value }}
@@ -38,7 +38,7 @@
       >
         <b-form-input
           id="translation-new"
-          :value="translatedText.isMissing ? value : translatedText.value"
+          :value="translatedText.isMissing ? '' : translatedText.value"
           @input.native="onInput"
           @keydown.ctrl.enter="onChange"
         />

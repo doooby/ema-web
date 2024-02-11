@@ -68,11 +68,11 @@ export function recordControls ({
   return [
     [ 'director', dbFields.selectBRecord, { entity: 'people' } ],
     [ 'education_levels', dbFields.selectManyBRecords, { entity: 'education_levels' } ],
-    [ 'address', controls.location, {
-      system: countryData?.addressSystem,
-      fetchLocations: parent_id =>
-        location.browseLocationsOfParent($api2, countryData?.addressSystem, parent_id),
-    } ],
+    // [ 'address', controls.location, {
+    //   system: countryData?.addressSystem,
+    //   fetchLocations: parent_id =>
+    //     location.browseLocationsOfParent($api2, countryData?.addressSystem, parent_id),
+    // } ],
     [ 'name', controls.name ],
     [ 'external_id', controls.text ],
     [ 'education_types', controls.selectMultiple, {

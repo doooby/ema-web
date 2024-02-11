@@ -3,7 +3,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 import {
   BRecordsSelect, NameInput, TextInput, OptionsSelect,
-  IntegerInput,
+  IntegerInput, LocationInput,
 } from '~/components/controls/inputs';
 
 @Component({
@@ -13,6 +13,7 @@ import {
     IntegerInput,
     BRecordsSelect,
     OptionsSelect,
+    LocationInput,
   },
 })
 export default class EditSchoolFields extends Vue {
@@ -24,6 +25,7 @@ export default class EditSchoolFields extends Vue {
       education_levels: undefined,
       director: undefined,
       external_id: undefined,
+      address: undefined,
       education_types: undefined,
       gender_dedications: undefined,
       classrooms_count: undefined,
@@ -37,6 +39,7 @@ export default class EditSchoolFields extends Vue {
         education_levels_ids: record.education_levels?.map(r => r.id),
         director_id: record.director?.[0]?.id,
         external_id: record.external_id,
+        address: record.address,
         education_types: record.education_types?.map(i => i.value),
         gender_dedications: record.gender_dedications?.map(i => i.value),
         classrooms_count: record.classrooms_count,
@@ -98,7 +101,10 @@ export default class EditSchoolFields extends Vue {
         <template #label>
           <t value="db.record.schools.label.address" />
         </template>
-        address
+        <LocationInput
+          v-model="saveable.record.address"
+          :system="$ema.currentCountry?.locations?.address"
+        />
       </b-form-group>
     </div>
     <div class="col-12">

@@ -20,7 +20,7 @@ export default class New extends CountryDBPage.ComponentBase {
   })
 
   async onSave () {
-    const record = this.saveable.getRecordParams?.() ?? {};
+    const record = this.saveable.getRecordParams?.();
 
     const { response, okPayload } = await this.$api2.V3_request({
       path: '/schools/create',

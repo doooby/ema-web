@@ -16,7 +16,6 @@ import * as subject_category from './subject_category';
 import * as user from './user';
 import * as work_agreement from './work_agreement';
 import * as project from './project';
-export * from './location';
 export {
   application_record,
   course,
