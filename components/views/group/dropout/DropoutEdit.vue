@@ -41,16 +41,16 @@ export default class DropoutEdit extends Vue {
 
     this.$emit('input', controls.Group.compose(
       DropoutReasons.asField({
-        default: () => dropout.record?.reasons,
+        default: () => dropout.record?.record?.reasons,
       }),
       DropoutOn.asField({
-        default: () => dropout.record?.dropout_on,
+        default: () => dropout.record?.record?.dropout_on,
       }),
       ReturnOn.asField({
-        default: () => dropout.record?.return_on,
+        default: () => dropout.record?.record?.return_on,
       }),
       DropoutNote.asField({
-        default: () => dropout.record?.note,
+        default: () => dropout.record?.record?.note,
       }),
     ));
   }

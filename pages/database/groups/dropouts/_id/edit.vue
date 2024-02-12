@@ -37,10 +37,11 @@ export default class Edit extends CountryDBPage.ComponentBase {
   }
 
   async onSubmit () {
-    const dropout = this.dropoutResource?.state.resource;
-    if (!dropout?.record) return;
+    const dropout = this.dropoutResource?.state.resource?.record;
+    if (!dropout) return;
     this.transaction.state.isProcessing = true;
     this.saveErrors = null;
+    console.log(dropout);
 
     const params = this.controls?.ref?.getParams();
     const result = await this.$api2.V3_request({
@@ -56,7 +57,7 @@ export default class Edit extends CountryDBPage.ComponentBase {
       return;
     }
 
-    const path = `/database/groups/${dropout.record.group.id}`;
+    const path = `/database/groups/${dropout.group?.group.id}`;
     await this.$router.replace({ path });
   }
 }

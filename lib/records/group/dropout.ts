@@ -4,6 +4,7 @@ export const entity = 'groups/dropouts';
 
 export interface Dropout extends wai.AResource {
   record?: RecordSlice;
+  group?: GroupSlice;
 }
 
 interface RecordSlice {
