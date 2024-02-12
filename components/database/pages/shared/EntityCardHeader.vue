@@ -11,8 +11,10 @@ export default class EntityCardHeader extends Vue {
   @Prop() readonly entity?: string;
   @Prop() readonly record?: wai.AResource;
   @Prop() readonly hasShowPage?: boolean;
+  @Prop() readonly path?: string;
 
-  get path () {
+  get internalPath () {
+    if (this.path) return this.path;
     if (this.hasShowPage && this.record) {
       return `/database/${this.entity}/${this.record.id}`;
     }
@@ -33,7 +35,7 @@ export default class EntityCardHeader extends Vue {
       <RecordId
         v-if="record"
         :record="record"
-        :path="path"
+        :path="internalPath"
         :new-tab="true"
       />
     </div>

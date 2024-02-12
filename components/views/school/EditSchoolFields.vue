@@ -5,6 +5,7 @@ import {
   BRecordsSelect, NameInput, TextInput, OptionsSelect,
   IntegerInput, LocationInput,
 } from '~/components/controls/inputs';
+import { school } from '~/lib/records';
 
 @Component({
   components: {
@@ -18,19 +19,30 @@ import {
 })
 export default class EditSchoolFields extends Vue {
   @Prop({ required: true }) saveable!: app.page.SaveablePage;
+  @Prop() record?: school.RecordSlice;
+
+  options = new app.internals.Options();
 
   created () {
     this.saveable.record = {
-      name: [ '', '' ],
-      education_levels: undefined,
-      director: undefined,
-      external_id: undefined,
-      address: undefined,
-      education_types: undefined,
-      gender_dedications: undefined,
-      classrooms_count: undefined,
-      female_latrines_count: undefined,
-      male_latrines_count: undefined,
+      name: this.record?.name ?? [ '', '' ],
+      education_levels: this.record?.education_levels,
+      director: [ this.record?.director ],
+      external_id: this.record?.external_id,
+      address: this.record?.address,
+      education_types: this.options.getByValues(
+        this,
+        'education_type',
+        this.record?.education_types,
+      ),
+      gender_dedications: this.options.getByValues(
+        this,
+        'gender',
+        this.record?.gender_dedications,
+      ),
+      classrooms_count: this.record?.classrooms_count,
+      female_latrines_count: this.record?.female_latrines_count,
+      male_latrines_count: this.record?.male_latrines_count,
     };
     this.saveable.getRecordParams = () => {
       const { record } = this.saveable;
@@ -47,10 +59,6 @@ export default class EditSchoolFields extends Vue {
         male_latrines_count: record.male_latrines_count,
       };
     };
-  }
-
-  getOptions (list: string) {
-    return app.internalOptionsList3(this, list);
   }
 }
 </script>
@@ -74,6 +82,7 @@ export default class EditSchoolFields extends Vue {
         <BRecordsSelect
           v-model="saveable.record.education_levels"
           entity="education_levels"
+          :record-does-not-have-path="true"
           :multiple="true"
         />
       </b-form-group>
@@ -117,7 +126,7 @@ export default class EditSchoolFields extends Vue {
         </template>
         <OptionsSelect
           v-model="saveable.record.education_types"
-          :options="getOptions('education_type')"
+          :options="options.getAll(this, 'education_type')"
           :multiple="true"
         >
           <template #option-content="{ option }">
@@ -131,7 +140,7 @@ export default class EditSchoolFields extends Vue {
         </template>
         <OptionsSelect
           v-model="saveable.record.gender_dedications"
-          :options="getOptions('gender')"
+          :options="options.getAll(this, 'gender')"
           :multiple="true"
         >
           <template #option-content="{ option }">

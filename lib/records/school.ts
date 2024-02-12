@@ -1,18 +1,13 @@
 import {
-  Api2Plugin,
   BRecord,
   RecordAssociations,
   recordsQueries,
 } from '~/lib/api2';
-import { controls, FormFieldDefinition } from '~/components/Form';
 import {
   application_record,
-  location,
 } from '~/lib/records';
 import { wai } from '~/vendor/wai';
 import { mapAssociation, mapAssociations, mapName } from '~/lib/api2/mappers';
-import { dbFields } from '~/components/database/fields';
-import app from '~/lib/app';
 
 export const entity = 'schools';
 
@@ -22,8 +17,25 @@ export interface School extends application_record.SharedAttributes {
   education_levels?: BRecord[];
   projects?: BRecord[];
   name?: string[];
-  // address?: string[]; // TODO
   external_id?: string;
+  education_types?: string[];
+  gender_dedications?: string[];
+  classrooms_count?: number;
+  female_latrines_count?: number;
+  male_latrines_count?: number;
+}
+
+export interface V3_School extends wai.AResource {
+  record?: RecordSlice;
+}
+
+export interface RecordSlice {
+  director?: wai.AResource;
+  education_levels?: wai.AResource[];
+  projects?: wai.AResource[];
+  external_id?: string;
+  name: string[];
+  address?: string[];
   education_types?: string[];
   gender_dedications?: string[];
   classrooms_count?: number;
@@ -58,31 +70,31 @@ export const queries = {
   update: recordsQueries.update(entity),
 };
 
-export function recordControls ({
-  countryData,
-  $api2,
-}: {
-  countryData?: app.session.CountryData;
-  $api2: Api2Plugin;
-}): FormFieldDefinition[] {
-  return [
-    [ 'director', dbFields.selectBRecord, { entity: 'people' } ],
-    [ 'education_levels', dbFields.selectManyBRecords, { entity: 'education_levels' } ],
-    // [ 'address', controls.location, {
-    //   system: countryData?.addressSystem,
-    //   fetchLocations: parent_id =>
-    //     location.browseLocationsOfParent($api2, countryData?.addressSystem, parent_id),
-    // } ],
-    [ 'name', controls.name ],
-    [ 'external_id', controls.text ],
-    [ 'education_types', controls.selectMultiple, {
-      options: app.internalOptionsList(countryData, 'education_type'),
-    } ],
-    [ 'gender_dedications', controls.selectMultiple, {
-      options: app.internalOptionsList(countryData, 'gender'),
-    } ],
-    [ 'classrooms_count', controls.integer ],
-    [ 'female_latrines_count', controls.integer ],
-    [ 'male_latrines_count', controls.integer ],
-  ];
+export function V3_parseRecord (
+  value,
+  associations: wai.Associations,
+): V3_School {
+  return wai.object(record => ({
+    record: wai.property(record, 'record', wai.nullable(value => parseRecordSlice(value, associations))),
+  }))(value);
+}
+
+function parseRecordSlice (
+  value,
+  wai_associations: wai.Associations,
+): RecordSlice {
+  const associations = wai_associations as any;
+  return wai.object(value => ({
+    director: wai.property(value, 'director_id', wai.nullable(mapAssociation('people', associations))),
+    education_levels: wai.property(value, 'education_levels_ids', wai.nullable(mapAssociations('education_levels', associations))),
+    projects: wai.property(value, 'projects_ids', wai.nullable(mapAssociations('projects', associations))),
+    external_id: wai.property(value, 'external_id', wai.nullable(wai.string)),
+    name: wai.property(value, 'name', wai.listOfStrings),
+    address: wai.property(value, 'address', wai.nullable(wai.listOfStrings)),
+    education_types: wai.property(value, 'education_types', wai.nullable(wai.listOfStrings)),
+    gender_dedications: wai.property(value, 'gender_dedications', wai.nullable(wai.listOfStrings)),
+    classrooms_count: wai.property(value, 'classrooms_count', wai.nullable(wai.integer)),
+    female_latrines_count: wai.property(value, 'female_latrines_count', wai.nullable(wai.integer)),
+    male_latrines_count: wai.property(value, 'male_latrines_count', wai.nullable(wai.integer)),
+  }))(value);
 }

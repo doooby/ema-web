@@ -13,12 +13,17 @@ import RecordId from '~/components/views/application/RecordId.vue';
 export default class BRecordsSelect extends Vue {
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
-  @Prop({ default: () => [] }) readonly value!: wai.AResource[];
+  @Prop() readonly value?: wai.AResource[];
   @Prop({ required: true }) readonly entity!: string;
   @Prop({ default: false }) readonly multiple!: boolean;
   @Prop() params?: Params;
+  @Prop() recordDoesNotHavePath?: boolean;
 
   modalShown = false;
+
+  get internalValue () {
+    return (this.value ?? []).filter(a => a);
+  }
 
   onShow () {
     if (this.disabled) return;
@@ -27,16 +32,16 @@ export default class BRecordsSelect extends Vue {
 
   onRemoveRecord (record: wai.AResource) {
     if (this.disabled) return;
-    const list = this.value.filter(({ id }) => id !== record.id);
+    const list = this.internalValue.filter(({ id }) => id !== record.id);
     this.emitChange(list);
   }
 
   onSelect (record: wai.AResource) {
-    const selectedIds = this.value.map(record => record.id);
+    const selectedIds = this.internalValue.map(record => record.id);
     if (selectedIds.includes(record.id)) {
       this.onRemoveRecord(record);
     } else if (this.multiple) {
-      this.emitChange([ ...this.value, record ]);
+      this.emitChange([ ...this.internalValue, record ]);
     } else {
       this.emitChange([ record ]);
       this.modalShown = false;
@@ -45,7 +50,7 @@ export default class BRecordsSelect extends Vue {
 
   // TODO cleanup
   get unsafeValue () {
-    return this.value as any;
+    return this.internalValue as any;
   }
 
   static asField = {
@@ -88,14 +93,14 @@ export default class BRecordsSelect extends Vue {
   >
     <div class="controls--label flex-fill d-flex flex-wrap">
       <div
-        v-for="record of value"
+        v-for="record of internalValue"
         :key="record.id"
         class="mr-3 d-flex align-items-center"
       >
         <RecordId
           class="d-inline-block mr-2 font-14"
           :record="record"
-          :path="`/database/${entity}/${record.id}`"
+          :path="recordDoesNotHavePath ? undefined : `/database/${entity}/${record.id}`"
           :new-tab="true"
         />
         <btn-mini variant="secondary" icon="x" @click="onRemoveRecord(record)" />

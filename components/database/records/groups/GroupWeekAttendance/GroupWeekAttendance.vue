@@ -240,6 +240,7 @@ export default class GroupWeekAttendance extends Vue {
       }),
     );
 
+    // TODO use `app.api.updateErrors`
     if (app.api.updateSuccess(this.updateWeek.response)) {
       this.onShowWeek();
     }

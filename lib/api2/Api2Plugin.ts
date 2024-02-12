@@ -147,7 +147,7 @@ export default class Api2Plugin {
 
     if (response.ok) {
       const [ error, payload ] = wai.tryParse(response.payload, query.reducer);
-      if (error || !payload) {
+      if (error) {
         utils.warnOfError(error, { query, payload: response.payload });
 
         state.response = {

@@ -14,10 +14,8 @@ export default class OptionsSelect extends Vue {
   get sanitizedValue (): app.OptionItem[] {
     if (this.multiple) {
       if (Array.isArray(this.value)) return this.value;
-    } else if (Array.isArray(this.value)) {
-      if (this.value[0]) {
-        return [ this.value[0] ];
-      }
+    } else if (Array.isArray(this.value) && this.value[0]) {
+      return this.value.slice(0, 1);
     }
 
     return [];

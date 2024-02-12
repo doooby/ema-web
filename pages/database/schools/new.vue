@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Component } from 'vue-property-decorator';
 import CountryDBPage from '~/components/database/pages/CountryDBPage.vue';
 import ApplicationPage from '~/components/views/application/ApplicationPage.vue';
 import app from '~/lib/app';
@@ -10,14 +10,18 @@ import EditSchoolFields from '~/components/views/school/EditSchoolFields.vue';
 import { wai } from '~/vendor/wai';
 
 @Component({
-  components: { EditSchoolFields, RecordErrors, EntityCardHeader, EditRecordCard, CountryDBPage, ApplicationPage },
+  components: {
+    EditSchoolFields,
+    RecordErrors,
+    EntityCardHeader,
+    EditRecordCard,
+    CountryDBPage,
+    ApplicationPage,
+  },
 })
 export default class New extends CountryDBPage.ComponentBase {
   page = app.page.emptyState();
-  saveable = app.page.saveableState({
-    context: this,
-    onSave: () => this.onSave(),
-  })
+  saveable = app.page.saveableState(this);
 
   async onSave () {
     const record = this.saveable.getRecordParams?.();

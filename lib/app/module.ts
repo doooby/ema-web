@@ -1,5 +1,6 @@
 import * as api from './api';
 import * as country from './country';
+import * as internals from './internals';
 import * as locales from './locales';
 import * as page from './page';
 import * as session from './session';
@@ -8,7 +9,15 @@ import Ema from '~/lib/app/Ema';
 export * from './types';
 export * from './global';
 export { default as Transaction } from './Transaction';
-export { api, country, locales, page, session, Ema };
+export {
+  api,
+  country,
+  internals,
+  locales,
+  page,
+  session,
+  Ema,
+};
 
 export const OTHER_OPTION = '_other';
 
@@ -54,6 +63,7 @@ export function internalOptionsList2 (
   }));
 }
 
+// deprecated, use `app.internal.Options`
 export function internalOptionsList3<I=unknown> (
   vue: Vue,
   name: string,

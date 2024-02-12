@@ -37,7 +37,11 @@ export default class ApplicationPage extends Vue {
       :fail-message="state.hasFailed ? 'application.ApplicationPage.failed' : undefined"
     >
       <template v-if="state.hasFailed" #fail-content>
-        <slot name="fail-content" />
+        <t
+          v-if="typeof state.hasFailed === 'string'"
+          :value="state.hasFailed"
+        />
+        <slot v-else name="fail-content" />
       </template>
     </LoadingBlock>
     <slot v-if="state.hasConnected" />
