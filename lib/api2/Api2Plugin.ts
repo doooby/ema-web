@@ -147,7 +147,7 @@ export default class Api2Plugin {
 
     if (response.ok) {
       const [ error, payload ] = wai.tryParse(response.payload, query.reducer);
-      if (error) {
+      if (error || !payload) {
         utils.warnOfError(error, { query, payload: response.payload });
 
         state.response = {
@@ -198,7 +198,7 @@ export default class Api2Plugin {
     return await this.V3_request({
       path: query.path,
       params: query.params,
-      reducer: value => ({ record: wai.recordShow(value, query.reducer) }),
+      reducer: value => wai.recordShow(value, query.reducer),
     });
   }
 

@@ -17,7 +17,7 @@ export default class CountryDashboard extends Vue {
   }
 
   get sums () {
-    if (!this.resource.resource) return;
+    if (!this.resource.resource?.record) return;
 
     return Object.freeze({
 
@@ -26,12 +26,12 @@ export default class CountryDashboard extends Vue {
         items: [
           {
             text: 'boys',
-            value: this.resource.resource.main.students.boys,
+            value: this.resource.resource.record.main.students.boys,
             color: '#143a9f',
           },
           {
             text: 'girls',
-            value: this.resource.resource.main.students.girls,
+            value: this.resource.resource.record.main.students.girls,
             color: '#933030',
           },
         ],
@@ -58,12 +58,12 @@ export default class CountryDashboard extends Vue {
         items: [
           {
             text: 'formal',
-            value: this.resource.resource.main.schools.formal,
+            value: this.resource.resource.record.main.schools.formal,
             color: '#148119',
           },
           {
             text: 'informal',
-            value: this.resource.resource.main.schools.non_formal,
+            value: this.resource.resource.record.main.schools.non_formal,
             color: '#83682f',
           },
         ],

@@ -39,12 +39,12 @@ export default class Edit extends CountryDBPage.ComponentBase {
     });
 
     const errors = app.api.showErrors(response, [ 'record' ]);
-    if (errors?.[0] || !okPayload) {
+    if (errors?.[0] || !okPayload?.record) {
       this.page.hasFailed = `app.processing.${errors?.[0]?.[1] ?? 'not_found'}`;
       return;
     }
 
-    this.school = okPayload;
+    this.school = okPayload.record;
     this.page.hasConnected = true;
   }
 

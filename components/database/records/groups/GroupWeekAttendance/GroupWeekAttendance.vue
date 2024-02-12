@@ -97,11 +97,11 @@ export default class GroupWeekAttendance extends Vue {
   }
 
   get originalSessions () {
-    return this.showWeek.currentPayload?.sessions;
+    return this.showWeek.currentPayload?.record?.sessions;
   }
 
   get originalAttendance () {
-    return this.showWeek.currentPayload?.students;
+    return this.showWeek.currentPayload?.record?.students;
   }
 
   get saveErrors (): app.Maybe<ResourceError[]> {

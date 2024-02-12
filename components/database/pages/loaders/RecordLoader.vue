@@ -40,7 +40,7 @@ export default class RecordLoader extends Vue {
     const { processing: isLoading, response } = this.query;
     return {
       isLoading,
-      record: response?.ok ? response.payload : undefined,
+      record: response?.ok ? response.payload.record : undefined,
       failReason: response?.ok === false ? response.reason : undefined,
       onReload: this.onReload,
     };

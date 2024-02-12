@@ -1,5 +1,4 @@
 import { wai } from '~/vendor/wai';
-import app from '~/lib/app';
 
 export type AResource<S = {}> = S & {
   id?: string;
@@ -15,13 +14,13 @@ export interface ResourcesListing<R = {}> {
   records: AResource<R>[];
 }
 
-export type ResourceShow<R = {}> = undefined | AResource<R>;
+export type ResourceShow<R = {}> = { record: undefined | AResource<R> };
 
 export interface RecordsList<R = {}> {
   listing: {
     page: number;
     per_page: number;
-    order_by: app.Maybe<[ string, string ][]>;
+    order_by: undefined | [ string, string ][];
   }
   total: number;
   records: AResource<R>[];
@@ -118,7 +117,7 @@ export function recordShow<R> (
       wai.nullable(value => uncertainResource(mapRecord)(value, associations)),
       () => undefined,
     ));
-    return record;
+    return { record };
   })(value);
 }
 

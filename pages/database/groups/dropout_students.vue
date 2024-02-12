@@ -94,14 +94,14 @@ export default class DropoutStudents extends CountryDBPage.ComponentBase {
     ]);
 
     if (
-      !groupResource.resource.state.resource ||
+      !groupResource.resource.state.resource?.record ||
       !studentsResource.resource.state.resource
     ) {
       return;
     }
 
     this.data = {
-      group: groupResource.resource.state.resource,
+      group: groupResource.resource.state.resource?.record,
       students: studentsResource.resource.state.resource,
     };
     this.controls = controls.Group.compose(
