@@ -2,7 +2,6 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 import { location_system } from '~/lib/records';
-import { times } from 'lodash';
 import TextNames from '~/components/database/components/TextNames.vue';
 import LocationLevelSelect from '~/components/controls/inputs/extended/LocationInput/LocationLevelSelect.vue';
 import TextInput from '~/components/controls/inputs/base/TextInput.vue';
@@ -17,11 +16,7 @@ export default class LocationInput extends Vue {
   @Prop({ required: true }) readonly system!: app.Maybe<location_system.V3_LocationSystem>;
 
   get locationLevels () {
-    const levels: location_system.LocationSystemLevel[] = [];
-    times(this.system?.levels ?? 0, (index) => {
-      levels[String(index)] = this.system?.settings[index];
-    });
-    return levels;
+    return location_system.unnestLevelsSettings(this.system);
   }
 
   onChangeLevel (index, levelValue): void {

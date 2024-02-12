@@ -16,6 +16,7 @@ export interface School extends application_record.SharedAttributes {
   director?: BRecord;
   education_levels?: BRecord[];
   projects?: BRecord[];
+  address?: string[];
   name?: string[];
   external_id?: string;
   education_types?: string[];
@@ -53,6 +54,7 @@ export function parseRecord (
     director: wai.prop('director_id', value, wai.nullable(mapAssociation('people', associations))),
     education_levels: wai.prop('education_levels_ids', value, mapAssociations('education_levels', associations)),
     projects: wai.prop('project_ids', value, mapAssociations('projects', associations)),
+    address: wai.prop('address', value, wai.nullable(wai.listOfStrings)),
     name: wai.prop('name', value, wai.nullable(mapName)),
     external_id: wai.prop('external_id', value, wai.nullable(wai.string)),
     education_types: wai.prop('education_types', value, wai.nullable(wai.listOf(wai.string))),

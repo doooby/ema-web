@@ -10,6 +10,7 @@ import EditAction from '~/components/database/components/detail/actions/EditActi
 import AssociationList from '~/components/database/components/listing/AssociationList.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import ButtonToPath from '~/components/views/application/buttons/ButtonToPath.vue';
+import PrintLocations from '~/components/views/location/PrintLocations.vue';
 
 enum Tabs {
   courses,
@@ -18,6 +19,7 @@ enum Tabs {
 
 @Component({
   components: {
+    PrintLocations,
     ButtonToPath,
     TextNames,
     AssociationList,
@@ -67,6 +69,12 @@ export default class extends DatabasePage {
         </show-page-table-row>
         <show-page-table-row label="db.record.schools.label.external_id">
           {{ record.external_id }}
+        </show-page-table-row>
+        <show-page-table-row label="db.record.schools.label.address">
+          <PrintLocations
+            :system="$ema.currentCountry?.locations?.address"
+            :value="record.address"
+          />
         </show-page-table-row>
         <show-page-table-row label="db.record.schools.label.director">
           <BRecordLink v-if="record.director" entity="people" :record="record.director" />

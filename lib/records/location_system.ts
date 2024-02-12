@@ -1,6 +1,8 @@
 import { wai } from '~/vendor/wai';
 import { times } from 'lodash';
 import { mappers } from '~/lib/api2';
+import { location_system } from '~/lib/records/index';
+import app from '~/lib/app';
 
 export interface V3_LocationSystem extends wai.AResource {
   levels: number;
@@ -52,4 +54,12 @@ function parseSettings (
   });
 
   return list;
+}
+
+export function unnestLevelsSettings (system?: location_system.V3_LocationSystem) {
+  const levels: app.List<location_system.LocationSystemLevel> = [];
+  times(system?.levels ?? 0, (index) => {
+    levels[index] = system?.settings[index];
+  });
+  return levels.filter(a => a) as location_system.LocationSystemLevel[];
 }
