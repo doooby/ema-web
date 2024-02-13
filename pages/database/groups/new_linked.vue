@@ -51,21 +51,21 @@ export default class New_linked extends CountryDBPage.ComponentBase {
   }: ActionParams<CreateLinkedGroupParams>) {
     this.onCleanAction = onClean;
 
-    const groupResource = await this.$api2.V3_loadRecord({
+    const { okPayload } = await this.$api2.V3_request({
       path: '/groups',
       params: {
         id: params.parent.id ?? '-1',
         slices: [ 'school_course' ],
       },
-      reducer: group.V3_parseRecord,
+      reducer: value => wai.recordShow(value, group.V3_parseRecord),
     });
 
-    if (!groupResource.okPayload?.record) {
+    if (!okPayload?.record) {
       return;
     }
 
     this.pageData = {
-      group: groupResource.okPayload.record,
+      group: okPayload.record,
     };
   }
 

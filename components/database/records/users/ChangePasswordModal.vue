@@ -66,7 +66,7 @@ export default Vue.extend({
         this.$api2.getQuery('users', 'changePassword')(this.record.id, password),
       );
 
-      const payload = this.$api2.mapPayload(this.request);
+      const payload = (this.request.response?.ok && this.request.response.payload) || undefined;
       if (payload?.record_id) {
         this.onHidden();
       } else {

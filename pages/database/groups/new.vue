@@ -7,6 +7,7 @@ import { ErrorMessage } from '~/lib/api2';
 import { BRecordsSelect, NameInput, IntegerInput } from '~/components/controls/inputs';
 import CountryDBPage from '~/components/database/pages/CountryDBPage.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
+import { wai } from '~/vendor/wai';
 
 @Component({
   components: {
@@ -48,13 +49,16 @@ export default class New extends CountryDBPage.ComponentBase {
 
     this.saveErrors = null;
 
-    const { response, okPayload } = await this.$api2.V3_updateRecord({
+    const { response, okPayload } = await this.$api2.V3_request({
       path: '/groups/create',
-      record: {
-        course_id: this.record.course?.[0]?.id,
-        name: this.record.name ?? [],
-        term: this.record.term,
+      params: {
+        record: {
+          course_id: this.record.course?.[0]?.id,
+          name: this.record.name ?? [],
+          term: this.record.term,
+        },
       },
+      reducer: wai.recordUpdate,
     });
 
     this.saveErrors = app.api.createErrors(response) ?? null;

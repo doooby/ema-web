@@ -1,8 +1,6 @@
 import { Params, RecordAssociations } from '~/lib/api2/types';
 import { parsers } from '~/lib/api2/index';
 import { bRecordMapper } from '~/lib/api2/parsers';
-import { wai } from '~/vendor/wai';
-import { api } from '~/lib/api2/module';
 
 export function search<R> (
   path: string,

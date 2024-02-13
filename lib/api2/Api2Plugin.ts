@@ -190,29 +190,7 @@ export default class Api2Plugin {
     };
   }
 
-  async V3_loadRecord<R> (query: {
-    path: string;
-    params: Params;
-    reducer: (payload, associations: wai.Associations) => R;
-  }) {
-    return await this.V3_request({
-      path: query.path,
-      params: query.params,
-      reducer: value => wai.recordShow(value, query.reducer),
-    });
-  }
-
-  async V3_updateRecord (query: {
-    path: string;
-    record: Params;
-  }) {
-    return await this.V3_request({
-      path: query.path,
-      params: { record: query.record },
-      reducer: wai.recordUpdate,
-    });
-  }
-
+  // remove
   async transientRequest2<V> (
     query: api.Query<V>,
   ): Promise<RequestResponse<V>> {
@@ -270,37 +248,9 @@ export default class Api2Plugin {
 
     const response = await rawResponse.json();
     if (!response.ok) {
-      // TODO validate & remove - we do not want to kick the user out when goes out of bounds
-      // if (!isOnServer && rawResponse.status === 401) {
-      //   this.context.store.commit('session/clearUser');
-      // }
       response.message = response.message || 'unknown_error';
     }
     return response;
-  }
-
-  createLoader<V> (
-    loader: () => Promise<RequestResponse<V>>,
-  ) {
-    const state = Vue.observable({
-      loading: false,
-      response: null as null | RequestResponse<V>,
-      payload: null as null | V,
-    });
-
-    return Object.freeze({
-      state,
-      async load () {
-        state.loading = true;
-        state.response = null;
-        state.payload = null;
-        state.response = await loader();
-        state.loading = false;
-        if (state.response.ok && state.response.payload) {
-          state.payload = state.response.payload;
-        }
-      },
-    });
   }
 
   createRecordLoader<R> (
@@ -338,9 +288,5 @@ export default class Api2Plugin {
         throw error;
       };
     }
-  }
-
-  mapPayload<V = never> (request: RequestState<V>) {
-    return (request.response?.ok && request.response.payload) || undefined;
   }
 }
