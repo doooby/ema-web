@@ -39,6 +39,7 @@
           <b-form-select
             id="login-country"
             v-model="form.country"
+            :disabled="!countriesOptions.length"
             :options="countriesOptions"
           />
         </b-form-group>
@@ -78,14 +79,13 @@
 <script lang="ts">
 import Vue from 'vue';
 import { mapState } from 'vuex';
-import { RequestResponse } from '~/lib/api';
-import { AssociatedRecord } from '~/lib/api/mappers';
 import app from '~/lib/app';
+import { wai } from '~/vendor/wai';
 
 export default Vue.extend({
   data () {
     return {
-      countries: undefined as undefined | AssociatedRecord[],
+      countries: undefined as app.Maybe<wai.AResource[]>,
       form: {
         country: '',
         login: '',
@@ -100,18 +100,11 @@ export default Vue.extend({
       shown: (state: any) => state.session.loginModalShown,
     }),
     countriesOptions (): { value: string; text: string }[] {
-      return (this.countries ?? []).map(country => ({
-        value: String(country.id),
-        text: country.labels.caption as string,
+      return (this.countries ?? []).map(({ id, caption }) => ({
+        value: id ?? '-1',
+        text: caption ?? id ?? 'Unknown',
       }));
     },
-  },
-  mounted () {
-    loadCountries().then((countries) => {
-      if (countries.ok) {
-        this.countries = countries.data;
-      }
-    });
   },
   methods: {
     onShow () {
@@ -119,9 +112,25 @@ export default Vue.extend({
       this.form.login = '';
       this.form.password = '';
       this.form.error = null;
+      this.onLoadCountries();
     },
+
     onHidden () {
       if (this.shown) this.$store.commit('session/hideLoginModal');
+      this.countries = undefined;
+    },
+
+    async onLoadCountries () {
+      const response = await this.$api2.transientRequest(
+        {
+          pathIsFull: true,
+          path: '/public/countries',
+          reducer: a => a,
+        },
+      );
+      if (response.ok && response.payload) {
+        this.countries = (response.payload as any).list;
+      }
     },
 
     async onLoginSubmit (event: any) {
@@ -156,14 +165,4 @@ export default Vue.extend({
 
   },
 });
-
-async function loadCountries () {
-  try {
-    const rawResponse = await globalThis.fetch('/public/countries');
-    const { ok, payload }: RequestResponse = await rawResponse.json();
-    return { ok, data: payload.list as AssociatedRecord[] };
-  } catch (error) {
-    return { ok: false };
-  }
-}
 </script>

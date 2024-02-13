@@ -3,7 +3,7 @@ export async function fetchLocales (
   context: any,
   language: string,
 ) {
-  const path = `${context.$config.apiBaseUrl}/session/translations/${language}`;
+  const path = `${context.$config.apiBaseUrl}/public/translations/${language}`;
   const nativeOptions: any = {
     method: 'GET',
     headers: {
