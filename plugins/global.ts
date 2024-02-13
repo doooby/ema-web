@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import { IconsPlugin } from 'bootstrap-vue';
 
-import DataTableView from '~/components/DataTable/View.vue';
-import DataTable2View from '~/components/DataTable/View2.vue';
 import { ItemsListingMain } from '~/components/ItemsListing';
 import { FormGroup } from '~/components/Form';
 import FormField from '~/components/Form/Field';
@@ -13,8 +11,6 @@ import * as global_utils from '~/lib/global_utils';
 
 Vue.use(IconsPlugin);
 
-Vue.component('DataTableView', DataTableView);
-Vue.component('DataTable2View', DataTable2View);
 Vue.component('ItemsListing', ItemsListingMain);
 Vue.component('FormGroup', FormGroup);
 Vue.component('FormField', FormField);

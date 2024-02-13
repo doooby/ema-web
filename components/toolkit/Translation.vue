@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { reloadLocales } from '~/lib/api/session';
+import { reloadLocales } from '~/lib/locales';
 import { parsers, UpdatedRecordResponsePayload } from '~/lib/api2';
 
 @Component

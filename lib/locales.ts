@@ -1,4 +1,3 @@
-
 export async function fetchLocales (
   context: any,
   language: string,

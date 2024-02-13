@@ -12,9 +12,6 @@
       <template #header-subject>
         <t value="db.record.subjects.meta.s" />
       </template>
-      <template #header-teacher>
-        <t value="db.record.courses.subjects.label.teacher" />
-      </template>
       <template #header-grading>
         <t value="db.record.courses.subjects.label.grading" />
       </template>
@@ -27,12 +24,6 @@
           :record="item.subject"
         />
       </template>
-      <!--      <template #cell-teacher="{ item }">-->
-      <!--        <AbbreviatedRecordSelect-->
-      <!--          entity="people"-->
-      <!--          :record="item.teacher"-->
-      <!--        />-->
-      <!--      </template>-->
       <template #cell-grading="{ item, index }">
         <course-grading
           :value="item.grading"
@@ -63,11 +54,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import ControlMixin from '~/components/Form/ControlMixin';
 import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/components/Form';
 import { course } from '~/lib/records';
-import * as mappers from '~/lib/api/mappers';
-import SearchModal from '~/components/database/SearchModal.vue';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 import CourseGrading from '~/components/database/controls/primitives/CourseGrading.vue';
-import AbbreviatedRecordSelect from '~/components/database/controls/AbbreviatedRecordSelect.vue';
 import { BRecord } from '~/lib/api2';
 import SearchBRecordsModal from '~/components/database/modals/SearchBRecordsModal.vue';
 import BRecordLink from '~/components/database/components/BRecordLink.vue';
@@ -77,10 +65,8 @@ import BRecordLink from '~/components/database/components/BRecordLink.vue';
   components: {
     BRecordLink,
     SearchBRecordsModal,
-    SearchModal,
     CheckboxInput,
     CourseGrading,
-    AbbreviatedRecordSelect,
   },
 })
 export default class SubjectsField extends Vue {
@@ -88,11 +74,9 @@ export default class SubjectsField extends Vue {
     fillParams ({ name }: FormField, values: FormValues, record: any): any {
       let value = values[name];
       if (value) {
-        // value = value.map(({ subject, teacher, ...item }: course.CourseSubject) => {
         value = value.map(({ subject, ...item }: course.CourseSubject) => {
           const processedItem: any = { ...item, subject_id: subject.id };
           if (!processedItem.exam) delete processedItem.exam;
-          // if (teacher) processedItem.teacher_id = teacher.id;
           return processedItem;
         });
       }
@@ -115,17 +99,9 @@ export default class SubjectsField extends Vue {
   selectSubjectModalShown = false;
   columns = [
     { name: 'subject' },
-    { name: 'teacher' },
     { name: 'grading', size: 250 },
     { name: 'exam', size: 100 },
   ];
-
-  onBuildSearchQuery () {
-    return {
-      path: '/subjects',
-      mapper: mappers.paginatedAbbreviatedRecords,
-    };
-  }
 
   onAddSubject (subject: BRecord) {
     this.selectSubjectModalShown = false;

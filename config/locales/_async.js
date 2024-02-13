@@ -1,3 +1,3 @@
-import { fetchLocales } from '~/lib/api/session';
+import { fetchLocales } from '~/lib/locales';
 
 export default fetchLocales;

@@ -65,7 +65,6 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/admission.ts',
-    '~/plugins/api.ts',
     '~/plugins/api2.ts',
     '~/plugins/ema.ts',
     '~/plugins/global.ts',
