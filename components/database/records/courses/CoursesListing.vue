@@ -79,7 +79,7 @@ export default class CoursesListing extends Vue {
       <HeaderCell
         :record="record"
         :path="`/database/courses/${record.id}`"
-        :names="record.name"
+        :name="record.name?.[1]"
       />
       <td>
         <RecordAssociations

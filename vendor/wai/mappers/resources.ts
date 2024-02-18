@@ -9,6 +9,7 @@ export type AResource<S = {}> = S & {
 
 export type Associations = Record<string, undefined | Record<string, undefined | AResource>>;
 
+// TODO deprecated, use `RecordsList`
 export interface ResourcesListing<R = {}> {
   total: number;
   records: AResource<R>[];

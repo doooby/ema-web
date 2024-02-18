@@ -5,9 +5,10 @@ import { wai } from '~/vendor/wai';
 import app from '~/lib/app';
 import { ResourceError } from '~/vendor/wai/mappers';
 import RecordErrors from '~/components/database/RecordErrors.vue';
+import RequestButton from '~/components/views/application/buttons/RequestButton.vue';
 
 @Component({
-  components: { RecordErrors, ConfirmActionModal },
+  components: { RequestButton, RecordErrors, ConfirmActionModal },
 })
 export default class ArchiveRecordModal extends Vue {
   @Prop({ required: true }) readonly value!: boolean;
@@ -58,6 +59,15 @@ export default class ArchiveRecordModal extends Vue {
         <t value="application.modals.ArchiveRecordModal.confirm" />
       </div>
     </div>
+    <template #button="{ active, processing, confirm }">
+      <RequestButton
+        class="btn-dark"
+        text="lexicon.to_archive"
+        :active="active"
+        :processing="processing"
+        @click="confirm"
+      />
+    </template>
     <template v-if="archiveErrors.ref" #errors>
       <RecordErrors :entity="entity" :errors="archiveErrors.ref" />
     </template>

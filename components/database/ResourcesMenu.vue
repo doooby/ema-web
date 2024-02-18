@@ -14,17 +14,17 @@
       </div>
     </div>
     <hr>
-    <resources-listing />
+    <ResourcesMenuResourcesListing />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import CountrySwitch from '~/components/database/ResourcesMenuCountrySwitch.vue';
-import ResourcesListing from '~/components/database/ResourcesMenuResourcesListing.vue';
+import ResourcesMenuResourcesListing from '~/components/database/ResourcesMenuResourcesListing.vue';
 
 @Component({
-  components: { CountrySwitch, ResourcesListing },
+  components: { CountrySwitch, ResourcesMenuResourcesListing },
 })
 export default class ResourcesMenu extends Vue {
   get user () {

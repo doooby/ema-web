@@ -8,7 +8,7 @@ import SmallDropdownSelect from '~/components/controls/inputs/temporary/SmallDro
   components: { SmallDropdownSelect, PageSelect },
 })
 export default class ListingControls extends Vue {
-  @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.ResourcesListing<never>>;
+  @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.RecordsListing<never>>;
   @Prop() readonly hidePerPage?: boolean;
   @Prop() readonly orderByOptions?: app.OptionItem<string>[];
 

@@ -56,50 +56,48 @@ export default class AssignmentHistoryListing extends Vue {
 </script>
 
 <template>
-  <div>
-    <RecordsListing
-      :columns="columns"
-      :resource="resource"
-      :order-by-options="orderByOptions"
-      @listingChange="onReload"
-    >
-      <template #row="{ record }">
-        <td>
-          <PrintTime
-            class="font-14 text-muted"
-            :value="record.assignment_record?.created_at"
-          />
-        </td>
-        <td>
-          <UserLogin :user="record.assignment_record?.created_by" />
-        </td>
-        <td>
-          <div>
-            <div
-              v-if="record.assignment_record?.operation === 'a'"
-              class="font-14"
-            >
-              <t value="w.group.students_change.AssignmentHistoryListing.action.a.header" />
-            </div>
-            <div
-              v-if="record.assignment_record?.operation === 'r'"
-              class="font-14"
-            >
-              <t value="w.group.students_change.AssignmentHistoryListing.action.r.header" />
-            </div>
-            <AssociatedRecordsList
-              v-slot="student"
-              :records="record.assignment_record?.students"
-            >
-              <RecordId
-                class="p-1 border"
-                :record="student.record"
-                :path="`/database/people/${student.record.id}`"
-              />
-            </AssociatedRecordsList>
+  <RecordsListing
+    :columns="columns"
+    :resource="resource"
+    :order-by-options="orderByOptions"
+    @listingChange="onReload"
+  >
+    <template #row="{ record }">
+      <td>
+        <PrintTime
+          class="font-14 text-muted"
+          :value="record.assignment_record?.created_at"
+        />
+      </td>
+      <td>
+        <UserLogin :user="record.assignment_record?.created_by" />
+      </td>
+      <td>
+        <div>
+          <div
+            v-if="record.assignment_record?.operation === 'a'"
+            class="font-14"
+          >
+            <t value="w.group.students_change.AssignmentHistoryListing.action.a.header" />
           </div>
-        </td>
-      </template>
-    </RecordsListing>
-  </div>
+          <div
+            v-if="record.assignment_record?.operation === 'r'"
+            class="font-14"
+          >
+            <t value="w.group.students_change.AssignmentHistoryListing.action.r.header" />
+          </div>
+          <AssociatedRecordsList
+            v-slot="student"
+            :records="record.assignment_record?.students"
+          >
+            <RecordId
+              class="p-1 border"
+              :record="student.record"
+              :path="`/database/people/${student.record.id}`"
+            />
+          </AssociatedRecordsList>
+        </div>
+      </td>
+    </template>
+  </RecordsListing>
 </template>

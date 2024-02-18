@@ -4,9 +4,10 @@ import { group, person } from '~/lib/records';
 import ConfirmModal, { ActionState } from '~/components/database/modals/ConfirmActionModal.vue';
 import { SearchRecordsResponsePayload } from '~/lib/api2';
 import { difference } from 'lodash';
+import RequestButton from '~/components/views/application/buttons/RequestButton.vue';
 
 @Component({
-  components: { ConfirmModal },
+  components: { RequestButton, ConfirmModal },
 })
 export default class RemoveStudents extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
@@ -50,7 +51,7 @@ export default class RemoveStudents extends Vue {
     <div class="d-flex align-items-center">
       <t value="db.record.groups.students.actions.RemoveStudents.button" />
     </div>
-    <confirm-modal
+    <ConfirmModal
       v-model="modalShown"
       :state="modalState"
       @confirm="onSubmit"
@@ -58,6 +59,15 @@ export default class RemoveStudents extends Vue {
       <div class="alert alert-warning" role="alert">
         <t value="db.record.groups.students.actions.RemoveStudents.confirm" />
       </div>
-    </confirm-modal>
+      <template #button="{ active, processing, confirm }">
+        <RequestButton
+          class="btn-warning"
+          text="lexicon.to_remove"
+          :active="active"
+          :processing="processing"
+          @click="confirm"
+        />
+      </template>
+    </ConfirmModal>
   </b-dropdown-item>
 </template>

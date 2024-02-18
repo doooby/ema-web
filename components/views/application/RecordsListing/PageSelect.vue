@@ -7,7 +7,7 @@ const DESIRED_PAGES = [ -15, -5, -2, -1, 0, 1, 2, 5, 15 ];
 
 @Component
 export default class PageSelect extends Vue {
-  @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.ResourcesListing<never>>;
+  @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.RecordsListing<never>>;
   @Prop() readonly hidePerPage?: boolean;
 
   get value () {
@@ -19,7 +19,7 @@ export default class PageSelect extends Vue {
   }
 
   get perPage (): number {
-    return this.value?.listing.per_page ?? app.api.Resource.LISTING_PER_PAGE_OPTIONS[0];
+    return this.value?.listing.per_page ?? app.db.LISTING_PER_PAGE_OPTIONS[0];
   }
 
   get pagesCount (): number {
@@ -52,7 +52,7 @@ export default class PageSelect extends Vue {
   }
 
   get perPageOptions () {
-    return app.api.Resource.LISTING_PER_PAGE_OPTIONS.map(per => ({ value: per, text: per }));
+    return app.db.LISTING_PER_PAGE_OPTIONS.map(per => ({ value: per, text: per }));
   }
 
   renderContent (page: number): string {

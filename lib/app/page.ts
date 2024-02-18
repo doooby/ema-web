@@ -25,6 +25,7 @@ export interface SaveablePage {
   getRecordParams: app.Maybe<() => app.Map<any>>;
 }
 
+// TODO deprecated, use `app.db.useSaveableResource`
 export function saveableState (
   context: any,
 ): SaveablePage {

@@ -22,7 +22,7 @@ const CellContent = Vue.extend({
 })
 export default class RecordsListing<R = unknown> extends Vue {
   @Prop({ required: true }) readonly columns!: Column[];
-  @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.ResourcesListing<R>>;
+  @Prop({ required: true }) readonly resource!: app.api.Resource<app.api.RecordsListing<R>>;
   @Prop() readonly hidePerPage?: boolean;
   @Prop() readonly orderByOptions?: app.OptionItem<string>[];
   @Prop() readonly showRecordMenu?: boolean;

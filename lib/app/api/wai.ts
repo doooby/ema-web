@@ -1,10 +1,12 @@
 import { wai } from '~/vendor/wai';
 import app from '~/lib/app';
 
+// TODO extreact up, `wai` is here a very bad name for module
+
 export function recordsListing<R> (
   value,
   mapRecord: (record, associations: wai.Associations) => R,
-): app.api.ResourcesListing<R> {
+): app.api.RecordsListing<R> {
   return wai.object((payload) => {
     const associations = wai.property(payload, 'associations',
       wai.nullable(wai.indexOf(wai.indexOf(wai.aResource))),

@@ -26,7 +26,6 @@ export type RequestResponse<V> =
   ok: false;
   reason: string;
   payload?: unknown;
-  // TODO v2 remove
   message: string;
   error?: Error;
 }

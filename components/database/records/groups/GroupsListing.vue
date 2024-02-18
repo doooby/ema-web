@@ -73,7 +73,7 @@ export default class GroupsListing extends Vue {
       <HeaderCell
         :record="record"
         :path="`/database/groups/${record.id}`"
-        :names="record.name"
+        :name="record.name?.[1]"
       />
       <td v-if="!hideCourse">
         <RecordAssociations

@@ -10,14 +10,19 @@ import RecordAssociations from '~/components/database/components/listing/RecordA
 import { person } from '~/lib/records';
 import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
+import StudentGroupsListing from '~/components/views/student/pages/StudentGroupsListing/StudentGroupsListing.vue';
+import HeaderRow from '~/components/views/application/pages/show/HeaderRow.vue';
 
 enum Tabs {
+  // groups2,
   groups,
   work_agreements,
 }
 
 @Component({
   components: {
+    HeaderRow,
+    StudentGroupsListing,
     PrintDate,
     PrintFullName,
     RecordAssociations,
@@ -56,9 +61,11 @@ export default class extends DatabasePage {
 
     <template #details="{ record }">
       <table class="table">
-        <show-page-table-row label="db.record.people.label.full_name">
-          <PrintFullName :person="record" />
-        </show-page-table-row>
+        <HeaderRow
+          :record="record"
+          :path="`/database/people/${record.id}`"
+          :name="record.full_name_local"
+        />
         <show-page-table-row label="db.record.people.label.student_kobo_no">
           {{ record.student_kobo_no }}
         </show-page-table-row>
@@ -88,6 +95,14 @@ export default class extends DatabasePage {
 
     <template #container="{ record }">
       <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
+<!--        <b-tab>-->
+<!--          <template #title>-->
+<!--            <t value="db.record.groups.meta.p" />-->
+<!--          </template>-->
+<!--          <div v-if="currenTab === Tabs.groups2">-->
+<!--            <StudentGroupsListing :person="record" />-->
+<!--          </div>-->
+<!--        </b-tab>-->
         <b-tab>
           <template #title>
             <t value="db.record.groups.meta.p" />

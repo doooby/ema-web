@@ -157,7 +157,7 @@ export default class extends DatabasePage {
         <HeaderRow
           :record="record"
           :path="`/database/groups/${record.id}`"
-          :names="record.name"
+          :name="record.name?.[1]"
           :labels="labels"
         />
         <show-page-table-row label="db.record.groups.label.course">
@@ -225,7 +225,9 @@ export default class extends DatabasePage {
             <t value="db.pages.groups.show.tabs.assignment_history.title" />
           </template>
           <template #content="{ present }">
-            <AssignmentHistoryListing v-if="present" :group="record" />
+            <div>
+              <AssignmentHistoryListing v-if="present" :group="record" />
+            </div>
           </template>
         </PageTab>
         <PageTab

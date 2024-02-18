@@ -25,6 +25,7 @@ export interface Person extends application_record.SharedAttributes {
   student_kobo_no?: string;
   external_id?: string;
   navision_id?: string;
+  caption: string;
   full_name_local: string;
   first_name: string[];
   last_name?: string[];
@@ -86,6 +87,7 @@ export function parseRecord (
       position: wai.prop('position', value, wai.nullable(wai.string)),
       school: wai.prop('school_id', value, mapAssociation('schools', associations)),
     })))),
+    caption: wai.prop('caption', value, wai.string),
     full_name_local: wai.prop('full_name_local', value, wai.string),
     first_name: wai.prop('first_name', value, mapName),
     last_name: wai.prop('last_name', value, wai.nullable(mapName)),

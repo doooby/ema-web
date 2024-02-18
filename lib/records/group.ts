@@ -23,8 +23,15 @@ export interface Group extends application_record.SharedAttributes {
 }
 
 export interface V3_Group extends wai.AResource {
+  detail?: DetailSlice;
   school_course?: SchoolCourseSlice;
   students_list?: StudentsListSlice;
+}
+
+export interface DetailSlice {
+  name: string;
+  term: number;
+  term_dates?: [Date, Date];
 }
 
 export interface SchoolCourseSlice {
@@ -66,12 +73,23 @@ export function V3_parseRecord (
   associations: wai.Associations,
 ): V3_Group {
   return wai.object(record => ({
-    school_course: wai.property(record, 'school_course', wai.nullable(value => parseComputedSlice(value))),
+    detail: wai.property(record, 'detail', wai.nullable(value => parseDetail(value))),
+    school_course: wai.property(record, 'school_course', wai.nullable(value => parseSchoolCourseSlice(value))),
     students_list: wai.property(record, 'students_list', wai.nullable(value => parseStudentsListSlice(value, associations))),
   }))(value);
 }
 
-function parseComputedSlice (value): SchoolCourseSlice {
+export function parseDetail (value): DetailSlice {
+  return wai.object(value => ({
+    name: wai.property(value, 'name', wai.string),
+    term: wai.property(value, 'term', wai.integer),
+    term_dates: wai.property(value, 'term_dates', wai.nullable(
+      wai.tuple(wai.time, wai.time),
+    )),
+  }))(value);
+}
+
+export function parseSchoolCourseSlice (value): SchoolCourseSlice {
   return wai.object(value => ({
     course: wai.property(value, 'course', wai.aResource),
     school: wai.property(value, 'school', wai.aResource),

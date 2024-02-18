@@ -9,14 +9,14 @@ import { wai } from '~/vendor/wai';
 export default class HeaderCell extends Vue {
   @Prop() record!: wai.AResource;
   @Prop() readonly path?: string;
-  @Prop() names?: string[];
+  @Prop() name?: string;
 }
 </script>
 
 <template>
   <td>
-    <h5>
-      {{ names?.[1] }}
+    <h5 v-if="name">
+      {{ name }}
     </h5>
     <RecordId
       :record="record"

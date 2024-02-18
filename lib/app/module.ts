@@ -1,5 +1,6 @@
 import * as api from './api';
 import * as country from './country';
+import * as db from './db';
 import * as internals from './internals';
 import * as locales from './locales';
 import * as page from './page';
@@ -11,8 +12,9 @@ export * from './global';
 export { default as Transaction } from './Transaction';
 export {
   api,
-  country,
-  internals,
+  country, // TODO move
+  db,
+  internals, // TODO move
   locales,
   page,
   session,

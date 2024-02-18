@@ -42,9 +42,12 @@ function filterAssociations (record, list): Item[] {
 <template>
   <div>
     <RecordNamedValue
-      v-for="{ entity, bRecord } in filteredList"
+      v-for="({ entity, bRecord }, index) in filteredList"
       :key="entity"
-      class="font-12"
+      :class="[
+        'font-12',
+        { 'mt-1': index > 0 }
+      ]"
     >
       <template #label>
         <t :value="`db.record.${entity}.meta.s`" />

@@ -61,16 +61,10 @@ export default class ConfirmModal extends Vue {
     <template #modal-footer="{ close }">
       <div class="flex-fill">
         <slot
-          v-if="$slots.button"
           name="button"
-        />
-        <RequestButton
-          v-else
-          class="btn-dark"
-          text="lexicon.to_archive"
           :active="!isOkDisabled && !isBusy"
           :processing="isProcessing"
-          @click="$emit('confirm')"
+          :confirm="() => $emit('confirm')"
         />
         <b-button
           variant="outline-secondary"

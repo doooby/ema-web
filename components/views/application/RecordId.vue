@@ -27,7 +27,7 @@ export default class RecordId extends Vue {
       [&nbsp;{{ record.id }}&nbsp;]
     </code>
 
-    <span class="--link" v-if="path">
+    <span v-if="path" class="--link">
       <nuxt-link
         v-if="!newTab"
         :to="path"

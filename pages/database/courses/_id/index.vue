@@ -106,7 +106,7 @@ export default class extends DatabasePage {
         <HeaderRow
           :record="record"
           :path="`/database/courses/${record.id}`"
-          :names="record.name"
+          :name="record.name?.[1]"
           :labels="labels"
         />
         <show-page-table-row label="db.record.schools.meta.s">

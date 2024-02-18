@@ -28,7 +28,7 @@ interface RecordHeaderLabel {
 export default class HeaderRow extends Vue {
   @Prop() record!: wai.AResource;
   @Prop() readonly path?: string;
-  @Prop() names?: string[];
+  @Prop() name?: string;
   @Prop() labels?: RecordHeaderLabels;
 }
 </script>
@@ -41,8 +41,8 @@ export default class HeaderRow extends Vue {
           <t value="lexicon.archived" />
         </span>
       </h5>
-      <h1>
-        {{ names?.[1] }}
+      <h1 v-if="name">
+        {{ name }}
       </h1>
       <h4>
         <RecordId
