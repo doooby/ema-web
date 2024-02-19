@@ -44,12 +44,12 @@ export default class StudentGroupsListing extends Vue {
       {
         name: 'term',
         size: 200,
-        headerText: 'db.record.groups.label.term',
+        headerText: 'student.pages.StudentsGroupsListing.column.term',
       },
       {
         name: 'attendance',
         size: 200,
-        headerText: 'db.record.groups.label.attendance',
+        headerText: 'student.pages.StudentsGroupsListing.column.attendance',
       },
     );
   }
@@ -66,6 +66,12 @@ export default class StudentGroupsListing extends Vue {
           value => ({
             detail: wai.property(value, 'detail', value => group.parseDetail(value)),
             school_course: wai.property(value, 'school_course', value => group.parseSchoolCourseSlice(value)),
+            student: wai.property(value, 'student', wai.nullable(wai.object(value => ({
+              attendance: wai.property(value, 'attendance', wai.nullable(wai.object(value => ({
+                present: wai.property(value, 'present', wai.integer),
+                sessions: wai.property(value, 'sessions', wai.integer),
+              })))),
+            })))),
           }),
         )),
       }));
@@ -111,6 +117,21 @@ export default class StudentGroupsListing extends Vue {
               v-if="record.detail.term_dates"
               :dates="record.detail.term_dates"
             />
+          </div>
+        </td>
+        <td>
+          <div v-if="record.student?.attendance">
+            <div>
+              <t value="student.pages.StudentsGroupsListing.attendance.present" />
+              <span>: {{ record.student.attendance.present }}</span>
+            </div>
+            <div>
+              <t value="student.pages.StudentsGroupsListing.attendance.sessions" />
+              <span>: </span>
+              <span>{{ record.student.attendance.sessions }} </span>
+              <span> | </span>
+              <span>{{ ((record.student.attendance.present / record.student.attendance.sessions) * 100).toFixed(2) }}&nbsp;%</span>
+            </div>
           </div>
         </td>
       </template>

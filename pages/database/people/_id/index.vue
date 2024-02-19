@@ -14,7 +14,7 @@ import StudentGroupsListing from '~/components/views/student/pages/StudentGroups
 import HeaderRow from '~/components/views/application/pages/show/HeaderRow.vue';
 
 enum Tabs {
-  // groups2,
+  groups2,
   groups,
   work_agreements,
 }
@@ -35,7 +35,7 @@ enum Tabs {
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.groups;
+  currenTab: Tabs = Tabs.groups2;
 
   mainGroupAssociations = person.mainGroupAssociations();
   mainContractAssociations = person.mainContractAssociations();
@@ -95,14 +95,14 @@ export default class extends DatabasePage {
 
     <template #container="{ record }">
       <b-tabs v-model="currenTab" content-class="emt-3 emb-6" no-fade>
-<!--        <b-tab>-->
-<!--          <template #title>-->
-<!--            <t value="db.record.groups.meta.p" />-->
-<!--          </template>-->
-<!--          <div v-if="currenTab === Tabs.groups2">-->
-<!--            <StudentGroupsListing :person="record" />-->
-<!--          </div>-->
-<!--        </b-tab>-->
+        <b-tab>
+          <template #title>
+            <t value="db.record.groups.meta.p" />
+          </template>
+          <div v-if="currenTab === Tabs.groups2">
+            <StudentGroupsListing :person="record" />
+          </div>
+        </b-tab>
         <b-tab>
           <template #title>
             <t value="db.record.groups.meta.p" />
