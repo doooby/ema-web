@@ -4,17 +4,15 @@ import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
-import PeopleGroupsListing from '~/components/database/records/people/PeopleGroupsListing.vue';
 import WorkAgreementsListing from '~/components/database/records/people/WorkAgreementsListing.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import { person } from '~/lib/records';
 import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
-import StudentGroupsListing from '~/components/views/student/pages/StudentGroupsListing/StudentGroupsListing.vue';
+import StudentGroups from '~/components/views/student/pages/StudentGroups/StudentGroups.vue';
 import HeaderRow from '~/components/views/application/pages/show/HeaderRow.vue';
 
 enum Tabs {
-  groups2,
   groups,
   work_agreements,
 }
@@ -22,12 +20,11 @@ enum Tabs {
 @Component({
   components: {
     HeaderRow,
-    StudentGroupsListing,
+    StudentGroups,
     PrintDate,
     PrintFullName,
     RecordAssociations,
     WorkAgreementsListing,
-    PeopleGroupsListing,
     Show2Page,
     ShowPageAction,
     ShowPageTableRow,
@@ -35,7 +32,7 @@ enum Tabs {
 })
 export default class extends DatabasePage {
   Tabs = Tabs;
-  currenTab: Tabs = Tabs.groups2;
+  currenTab: Tabs = Tabs.groups;
 
   mainGroupAssociations = person.mainGroupAssociations();
   mainContractAssociations = person.mainContractAssociations();
@@ -99,16 +96,8 @@ export default class extends DatabasePage {
           <template #title>
             <t value="db.record.groups.meta.p" />
           </template>
-          <div v-if="currenTab === Tabs.groups2">
-            <StudentGroupsListing :person="record" />
-          </div>
-        </b-tab>
-        <b-tab>
-          <template #title>
-            <t value="db.record.groups.meta.p" />
-          </template>
           <div v-if="currenTab === Tabs.groups">
-            <PeopleGroupsListing :person="record" />
+            <StudentGroups :person="record" />
           </div>
         </b-tab>
         <b-tab>

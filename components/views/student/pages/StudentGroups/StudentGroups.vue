@@ -11,18 +11,39 @@ import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
 import RecordNamedValue from '~/components/views/application/RecordNamedValue.vue';
 import RecordId from '~/components/views/application/RecordId.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
+import PrintAttendance from '~/components/views/student/pages/StudentGroups/PrintAttendance.vue';
+
+function parseRecord (value) {
+  return wai.object2(
+    value,
+    value => ({
+      detail: wai.property(value, 'detail', value => group.parseDetail(value)),
+      school_course: wai.property(value, 'school_course', value => group.parseSchoolCourseSlice(value)),
+      parent: wai.property(value, 'parent', wai.nullable(wai.aResource)),
+      linked_groups: wai.property(value, 'linked_groups', wai.nullable(wai.listOf(wai.aResource))),
+      assignment_changes: wai.property(value, 'assignment_changes', wai.nullable(wai.object(value => ({
+        added: wai.property(value, 'added', wai.nullable(wai.time)),
+        removed: wai.property(value, 'removed', wai.nullable(wai.time)),
+      })))),
+      attendance: wai.property(value, 'attendance', wai.nullable(wai.object(value => ({
+        present: wai.property(value, 'present', wai.integer),
+        must: wai.property(value, 'must', wai.integer),
+        sessions: wai.property(value, 'sessions', wai.integer),
+      })))),
+    }),
+  );
+}
+
+type Record = ReturnType<typeof parseRecord>;
 
 @Component({
-  components: { PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
+  components: { PrintAttendance, PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
 })
-export default class StudentGroupsListing extends Vue {
+export default class StudentGroups extends Vue {
   @Prop({ required: true }) readonly person!: person.Person;
 
   filters = app.db.useFilters('id');
-  groups = app.db.useResource<wai.RecordsList<wai.AResource<{
-    detail: group.DetailSlice;
-    school_course: group.SchoolCourseSlice;
-  }>>>();
+  groups = app.db.useResource<wai.RecordsList<wai.AResource<Record>>>();
 
   mounted () {
     this.groups.queryParams.staticParams = {
@@ -62,6 +83,11 @@ export default class StudentGroupsListing extends Vue {
     );
   }
 
+  attendanceForGroup (record: Record) {
+    if (!record.attendance) return;
+    record.attendance?.sessions
+  }
+
   @Watch('person')
   @Watch('filters')
   onLoadPage () {
@@ -70,23 +96,7 @@ export default class StudentGroupsListing extends Vue {
       this.groups,
       () => ({
         path: `/students/${this.person.id}/groups`,
-        reducer: value => wai.recordsList(value, wai.object(
-          value => ({
-            detail: wai.property(value, 'detail', value => group.parseDetail(value)),
-            school_course: wai.property(value, 'school_course', value => group.parseSchoolCourseSlice(value)),
-            parent: wai.property(value, 'parent', wai.nullable(wai.aResource)),
-            linked_groups: wai.property(value, 'linked_groups', wai.nullable(wai.listOf(wai.aResource))),
-            assignment_changes: wai.property(value, 'assignment_changes', wai.nullable(wai.object(value => ({
-              added: wai.property(value, 'added', wai.nullable(wai.time)),
-              removed: wai.property(value, 'removed', wai.nullable(wai.time)),
-            })))),
-            attendance: wai.property(value, 'attendance', wai.nullable(wai.object(value => ({
-              present: wai.property(value, 'present', wai.integer),
-              must: wai.property(value, 'must', wai.integer),
-              sessions: wai.property(value, 'sessions', wai.integer),
-            })))),
-          }),
-        )),
+        reducer: value => wai.recordsList(value, parseRecord),
       }));
   }
 }
@@ -184,20 +194,17 @@ export default class StudentGroupsListing extends Vue {
               <t value="student.pages.StudentsGroupsListing.attendance.present" />
               <span>: {{ record.attendance.present }}</span>
             </div>
-            <div>
-              <t value="student.pages.StudentsGroupsListing.attendance.must_attend" />
-              <span>: </span>
-              {{ record.attendance.must }}
-              <span> | </span>
-              <strong>{{ ((record.attendance.present / record.attendance.must) * 100).toFixed(2) }}&nbsp;%</strong>
-            </div>
-            <div>
-              <t value="student.pages.StudentsGroupsListing.attendance.sessions" />
-              <span>: </span>
-              <span>{{ record.attendance.sessions }} </span>
-              <span> | </span>
-              <span>{{ ((record.attendance.present / record.attendance.sessions) * 100).toFixed(2) }}&nbsp;%</span>
-            </div>
+            <PrintAttendance
+              text="student.pages.StudentsGroupsListing.attendance.must_attend"
+              :present="record.attendance.present"
+              :must="record.attendance.must"
+              :strong="true"
+            />
+            <PrintAttendance
+              text="student.pages.StudentsGroupsListing.attendance.sessions"
+              :present="record.attendance.present"
+              :must="record.attendance.sessions"
+            />
           </div>
         </td>
       </template>
