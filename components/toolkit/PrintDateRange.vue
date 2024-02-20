@@ -14,9 +14,7 @@ export default class PrintDateRange extends Vue {
 <template>
   <div class="d-flex align-items-center">
     <PrintDate :value="dates[0]" />
-    <div class="mx-3">
-      -
-    </div>
+    <span class="mx-1">-</span>
     <PrintDate :value="dates[1]" />
   </div>
 </template>

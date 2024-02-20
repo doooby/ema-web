@@ -37,6 +37,7 @@ export interface DetailSlice {
 export interface SchoolCourseSlice {
   course: wai.AResource;
   school: wai.AResource;
+  school_year?: wai.AResource;
 }
 
 export interface StudentsListSlice {
@@ -93,6 +94,7 @@ export function parseSchoolCourseSlice (value): SchoolCourseSlice {
   return wai.object(value => ({
     course: wai.property(value, 'course', wai.aResource),
     school: wai.property(value, 'school', wai.aResource),
+    school_year: wai.property(value, 'school_year', wai.nullable(wai.aResource)),
   }))(value);
 }
 

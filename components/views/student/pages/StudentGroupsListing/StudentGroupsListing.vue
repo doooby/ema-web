@@ -8,9 +8,12 @@ import RecordsTable from '~/components/views/application/RecordsTable/RecordsTab
 import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';
+import RecordNamedValue from '~/components/views/application/RecordNamedValue.vue';
+import RecordId from '~/components/views/application/RecordId.vue';
+import PrintDate from '~/components/toolkit/PrintDate.vue';
 
 @Component({
-  components: { PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
+  components: { PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
 })
 export default class StudentGroupsListing extends Vue {
   @Prop({ required: true }) readonly person!: person.Person;
@@ -47,8 +50,13 @@ export default class StudentGroupsListing extends Vue {
         headerText: 'student.pages.StudentsGroupsListing.column.term',
       },
       {
+        name: 'assignment_changes',
+        size: 140,
+        headerText: 'student.pages.StudentsGroupsListing.column.assignment_changes',
+      },
+      {
         name: 'attendance',
-        size: 200,
+        size: 300,
         headerText: 'student.pages.StudentsGroupsListing.column.attendance',
       },
     );
@@ -66,11 +74,16 @@ export default class StudentGroupsListing extends Vue {
           value => ({
             detail: wai.property(value, 'detail', value => group.parseDetail(value)),
             school_course: wai.property(value, 'school_course', value => group.parseSchoolCourseSlice(value)),
-            student: wai.property(value, 'student', wai.nullable(wai.object(value => ({
-              attendance: wai.property(value, 'attendance', wai.nullable(wai.object(value => ({
-                present: wai.property(value, 'present', wai.integer),
-                sessions: wai.property(value, 'sessions', wai.integer),
-              })))),
+            parent: wai.property(value, 'parent', wai.nullable(wai.aResource)),
+            linked_groups: wai.property(value, 'linked_groups', wai.nullable(wai.listOf(wai.aResource))),
+            assignment_changes: wai.property(value, 'assignment_changes', wai.nullable(wai.object(value => ({
+              added: wai.property(value, 'added', wai.nullable(wai.time)),
+              removed: wai.property(value, 'removed', wai.nullable(wai.time)),
+            })))),
+            attendance: wai.property(value, 'attendance', wai.nullable(wai.object(value => ({
+              present: wai.property(value, 'present', wai.integer),
+              must: wai.property(value, 'must', wai.integer),
+              sessions: wai.property(value, 'sessions', wai.integer),
             })))),
           }),
         )),
@@ -105,11 +118,24 @@ export default class StudentGroupsListing extends Vue {
               { entity: 'schools', attr: 'school' },
             ]"
           />
+          <RecordNamedValue
+            v-if="record.parent"
+            class="font-12 mt-1"
+          >
+            <template #label>
+              <t value="db.groups.label.parent_group" />
+            </template>
+            <RecordId
+              class="font-14"
+              :record="record.parent"
+              :path="`/database/groups/${record.parent.id}`"
+            />
+          </RecordNamedValue>
         </td>
         <td>
           <div>
             <div>
-              <t value="db.record.groups.caption.term" />
+              <t value="db.groups.caption.term" />
               <span>: </span>
               {{ record.detail.term }}
             </div>
@@ -117,20 +143,60 @@ export default class StudentGroupsListing extends Vue {
               v-if="record.detail.term_dates"
               :dates="record.detail.term_dates"
             />
+            <RecordNamedValue
+              v-if="record.school_course.school_year"
+              class="font-12 mt-1"
+            >
+              <template #label>
+                <t value="db.school_years.singular" />
+              </template>
+              <RecordId
+                class="font-14"
+                :record="record.school_course.school_year"
+              />
+            </RecordNamedValue>
           </div>
         </td>
         <td>
-          <div v-if="record.student?.attendance">
+          <RecordNamedValue
+            v-if="record.assignment_changes?.added"
+            class="mt-1"
+          >
+            <template #label>
+              <t class="font-12" value="student.pages.StudentsGroupsListing.label.added_later" />
+            </template>
+            <PrintDate :value="record.assignment_changes.added" />
+          </RecordNamedValue>
+          <RecordNamedValue
+            v-if="record.assignment_changes?.removed"
+            class="mt-1"
+          >
+            <template #label>
+              <t class="font-12" value="student.pages.StudentsGroupsListing.label.removed" />
+            </template>
+            <PrintDate :value="record.assignment_changes.removed" />
+          </RecordNamedValue>
+
+        </td>
+        <td>
+          <div v-if="record.attendance">
             <div>
               <t value="student.pages.StudentsGroupsListing.attendance.present" />
-              <span>: {{ record.student.attendance.present }}</span>
+              <span>: {{ record.attendance.present }}</span>
+            </div>
+            <div>
+              <t value="student.pages.StudentsGroupsListing.attendance.must_attend" />
+              <span>: </span>
+              {{ record.attendance.must }}
+              <span> | </span>
+              <strong>{{ ((record.attendance.present / record.attendance.must) * 100).toFixed(2) }}&nbsp;%</strong>
             </div>
             <div>
               <t value="student.pages.StudentsGroupsListing.attendance.sessions" />
               <span>: </span>
-              <span>{{ record.student.attendance.sessions }} </span>
+              <span>{{ record.attendance.sessions }} </span>
               <span> | </span>
-              <span>{{ ((record.student.attendance.present / record.student.attendance.sessions) * 100).toFixed(2) }}&nbsp;%</span>
+              <span>{{ ((record.attendance.present / record.attendance.sessions) * 100).toFixed(2) }}&nbsp;%</span>
             </div>
           </div>
         </td>

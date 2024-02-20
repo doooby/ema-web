@@ -149,7 +149,7 @@ function resizeColumn (
       &:last-child { border-bottom: none; }
 
       > td:not(.ema--toolkit--data-table--td__empty) {
-        padding: 4px 0;
+        padding: 12px 0;
         background-color: $body-bg;
       }
 
