@@ -81,7 +81,12 @@ function resizeColumn (
 </script>
 
 <template>
-  <div class="ema--toolkit--data-table">
+  <div
+    :class="[
+      'ema--toolkit--data-table',
+      $attrs.class,
+    ]"
+  >
     <table class="w-100">
       <colgroup>
         <col

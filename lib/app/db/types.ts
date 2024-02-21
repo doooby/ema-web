@@ -24,3 +24,9 @@ export interface SaveAbleResource<Model = any> {
   errors: app.Maybe<ErrorMessage[]>;
   recordParams: app.Maybe<() => Params>
 }
+
+export interface ListingParams {
+  page: number;
+  per_page: number;
+  order_by: [ string, 'ASC' | 'DESC' ][];
+}

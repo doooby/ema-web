@@ -1,9 +1,9 @@
 import app from '~/lib/app';
 
 export default class QueryParams {
-  params: app.Maybe<app.db.Params> = undefined;
   staticParams: app.Maybe<app.db.Params> = undefined;
-  listingParams: app.Maybe<app.api.ListingParams> = undefined;
+  listingParams: app.Maybe<app.db.ListingParams> = undefined;
+  params: app.Maybe<app.db.Params> = undefined;
 
   produce (): app.db.Params {
     return {

@@ -96,7 +96,7 @@ export default class extends DatabasePage {
           <template #title>
             <t value="db.record.groups.meta.p" />
           </template>
-          <div v-if="currenTab === Tabs.groups">
+          <div v-if="currenTab === Tabs.groups" class="mt-3">
             <StudentGroups :person="record" />
           </div>
         </b-tab>

@@ -83,13 +83,7 @@ export default class StudentGroups extends Vue {
     );
   }
 
-  attendanceForGroup (record: Record) {
-    if (!record.attendance) return;
-    record.attendance?.sessions
-  }
-
   @Watch('person')
-  @Watch('filters')
   onLoadPage () {
     app.db.loadResource(
       this,
@@ -103,111 +97,110 @@ export default class StudentGroups extends Vue {
 </script>
 
 <template>
-  <div>
-    <span>controls</span>
-    <RecordsTable
-      :resource="groups"
-      :columns="columns"
-    >
-      <template #row="{ record, order }">
-        <td class="align-top">
-          <span class="text-muted m-0 font-12">
-            {{ order }}.
-          </span>
-        </td>
-        <HeaderCell
-          :record="record"
-          :path="`/database/groups/${record.id}`"
-          :name="record.detail.name"
+  <RecordsTable
+    :resource="groups"
+    :columns="columns"
+    :sort-options="{ name: 'groups', options: [ 'id' ] }"
+    @change="onLoadPage"
+  >
+    <template #row="{ record, order }">
+      <td class="align-top">
+        <span class="text-muted m-0 font-12">
+          {{ order }}.
+        </span>
+      </td>
+      <HeaderCell
+        :record="record"
+        :path="`/database/groups/${record.id}`"
+        :name="record.detail.name"
+      />
+      <td>
+        <RecordAssociations
+          :record="record.school_course"
+          :associations="[
+            { entity: 'courses', attr: 'course' },
+            { entity: 'schools', attr: 'school' },
+          ]"
         />
-        <td>
-          <RecordAssociations
-            :record="record.school_course"
-            :associations="[
-              { entity: 'courses', attr: 'course' },
-              { entity: 'schools', attr: 'school' },
-            ]"
+        <RecordNamedValue
+          v-if="record.parent"
+          class="font-12 mt-1"
+        >
+          <template #label>
+            <t value="db.groups.label.parent_group" />
+          </template>
+          <RecordId
+            class="font-14"
+            :record="record.parent"
+            :path="`/database/groups/${record.parent.id}`"
+          />
+        </RecordNamedValue>
+      </td>
+      <td>
+        <div>
+          <div>
+            <t value="db.groups.caption.term" />
+            <span>: </span>
+            {{ record.detail.term }}
+          </div>
+          <PrintDateRange
+            v-if="record.detail.term_dates"
+            :dates="record.detail.term_dates"
           />
           <RecordNamedValue
-            v-if="record.parent"
+            v-if="record.school_course.school_year"
             class="font-12 mt-1"
           >
             <template #label>
-              <t value="db.groups.label.parent_group" />
+              <t value="db.school_years.singular" />
             </template>
             <RecordId
               class="font-14"
-              :record="record.parent"
-              :path="`/database/groups/${record.parent.id}`"
+              :record="record.school_course.school_year"
             />
           </RecordNamedValue>
-        </td>
-        <td>
-          <div>
-            <div>
-              <t value="db.groups.caption.term" />
-              <span>: </span>
-              {{ record.detail.term }}
-            </div>
-            <PrintDateRange
-              v-if="record.detail.term_dates"
-              :dates="record.detail.term_dates"
-            />
-            <RecordNamedValue
-              v-if="record.school_course.school_year"
-              class="font-12 mt-1"
-            >
-              <template #label>
-                <t value="db.school_years.singular" />
-              </template>
-              <RecordId
-                class="font-14"
-                :record="record.school_course.school_year"
-              />
-            </RecordNamedValue>
-          </div>
-        </td>
-        <td>
-          <RecordNamedValue
-            v-if="record.assignment_changes?.added"
-            class="mt-1"
-          >
-            <template #label>
-              <t class="font-12" value="student.pages.StudentsGroupsListing.label.added_later" />
-            </template>
-            <PrintDate :value="record.assignment_changes.added" />
-          </RecordNamedValue>
-          <RecordNamedValue
-            v-if="record.assignment_changes?.removed"
-            class="mt-1"
-          >
-            <template #label>
-              <t class="font-12" value="student.pages.StudentsGroupsListing.label.removed" />
-            </template>
-            <PrintDate :value="record.assignment_changes.removed" />
-          </RecordNamedValue>
+        </div>
+      </td>
+      <td>
+        <RecordNamedValue
+          v-if="record.assignment_changes?.added"
+          class="mt-1"
+        >
+          <template #label>
+            <t class="font-12" value="student.pages.StudentsGroupsListing.label.added_later" />
+          </template>
+          <PrintDate :value="record.assignment_changes.added" />
+        </RecordNamedValue>
+        <RecordNamedValue
+          v-if="record.assignment_changes?.removed"
+          class="mt-1"
+        >
+          <template #label>
+            <t class="font-12" value="student.pages.StudentsGroupsListing.label.removed" />
+          </template>
+          <PrintDate :value="record.assignment_changes.removed" />
+        </RecordNamedValue>
 
-        </td>
-        <td>
-          <div v-if="record.attendance">
-            <div>
-              <t value="student.pages.StudentsGroupsListing.attendance.present" />
-              <span>: {{ record.attendance.present }}</span>
-            </div>
-            <PrintAttendance
-              text="student.pages.StudentsGroupsListing.attendance.must_attend"
-              :present="record.attendance.present"
-              :must="record.attendance.must"
-              :strong="true"
-            />
-            <PrintAttendance
-              text="student.pages.StudentsGroupsListing.attendance.sessions"
-              :present="record.attendance.present"
-              :must="record.attendance.sessions"
-            />
+      </td>
+      <td>
+        <div v-if="record.attendance">
+          <div>
+            <t value="student.pages.StudentsGroupsListing.attendance.present" />
+            <span>: {{ record.attendance.present }}</span>
           </div>
-        </td>
-      </template>
-    </RecordsTable>
-  </div>
+          <PrintAttendance
+            text="student.pages.StudentsGroupsListing.attendance.must_attend"
+            :present="record.attendance.present"
+            :must="record.attendance.must"
+            :strong="true"
+          />
+          <PrintAttendance
+            text="student.pages.StudentsGroupsListing.attendance.sessions"
+            :present="record.attendance.present"
+            :must="record.attendance.sessions"
+          />
+        </div>
+      </td>
+    </template>
+  </RecordsTable>
 </template>

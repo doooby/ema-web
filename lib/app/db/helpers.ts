@@ -73,3 +73,13 @@ async function fetch<Data> (
   });
   return state.response!; // yes, really
 }
+
+export function mapSortOptions (
+  listingName: string,
+  sortKeys: app.Maybe<string[]>,
+): app.OptionItem<string>[] {
+  return sortKeys?.map(value => ({
+    value,
+    item: `app.db.sort.${listingName}.${value}`,
+  })) ?? [];
+}
