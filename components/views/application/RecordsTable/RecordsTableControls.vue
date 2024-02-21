@@ -35,7 +35,7 @@ export default class RecordsTableControls extends Vue {
       page: 0,
       per_page: 0,
       order_by: [],
-      ...this.list?.listing,
+      ...(this.list?.listing as any),
       ...value,
     };
   }

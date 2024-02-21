@@ -41,7 +41,7 @@ export default class RecordsTable extends Vue {
     );
   }
 
-  get recordsList () {
+  get recordsList (): app.Maybe<wai.RecordsList<unknown>> {
     return this.resource.response?.ok ? this.resource.response.payload : undefined;
   }
 
