@@ -52,9 +52,21 @@ export default class RecordId extends Vue {
       </a>
     </span>
 
-    <span v-else>
+    <span v-else class="non-link">
       {{ record.caption }}
     </span>
 
   </div>
 </template>
+
+<style lang="scss" scoped>
+@import "assets/css/variables";
+
+$link-color: $blue;
+.non-link {
+  color: $link-color;
+  &:hover {
+    color: darken($link-color, 15%);
+  }
+}
+</style>

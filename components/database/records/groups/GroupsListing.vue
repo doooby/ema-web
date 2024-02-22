@@ -94,7 +94,7 @@ export default class GroupsListing extends Vue {
           v-if="!hideCourse && record.school_year"
           :record="record"
           :associations="[
-            { entity: 'school_years', attr: 'school_year' },
+            { entity: 'school_years', attr: 'school_year', noShow: true },
           ]"
         />
         <div v-if="record.term_info">

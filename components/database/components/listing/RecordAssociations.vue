@@ -9,11 +9,13 @@ import RecordId from '~/components/views/application/RecordId.vue';
 export interface Association {
   entity: string;
   attr: string;
+  noShow?: boolean;
 }
 
 interface Item {
   entity: string;
   bRecord: BRecord;
+  noShow?: boolean;
 }
 
 @Component({
@@ -33,7 +35,7 @@ function filterAssociations (record, list): Item[] {
   return list
     .map((item) => {
       const bRecord = item && get(record, item.attr);
-      return bRecord ? { entity: item.entity, bRecord } : undefined;
+      return bRecord ? { entity: item.entity, bRecord, noShow: item.noShow } : undefined;
     })
     .filter(i => i) as Item[];
 }
@@ -42,7 +44,7 @@ function filterAssociations (record, list): Item[] {
 <template>
   <div>
     <RecordNamedValue
-      v-for="({ entity, bRecord }, index) in filteredList"
+      v-for="({ entity, bRecord, noShow }, index) in filteredList"
       :key="entity"
       :class="[
         'font-12',
@@ -55,7 +57,7 @@ function filterAssociations (record, list): Item[] {
       <RecordId
         class="font-14"
         :record="bRecord"
-        :path="`/database/${entity}/${bRecord.id}`"
+        :path="noShow ? undefined : `/database/${entity}/${bRecord.id}`"
         :new-tab="newTab"
       />
     </RecordNamedValue>

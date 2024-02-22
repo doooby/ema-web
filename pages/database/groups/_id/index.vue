@@ -179,7 +179,7 @@ export default class extends DatabasePage {
             v-if="record.school_year"
             :record="record"
             :associations="[
-              { entity: 'school_years', attr: 'school_year' },
+              { entity: 'school_years', attr: 'school_year', noShow: true },
             ]"
           />
           <div v-if="record.term_info">

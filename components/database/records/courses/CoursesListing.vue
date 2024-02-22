@@ -38,7 +38,7 @@ export default class CoursesListing extends Vue {
   ];
 
   associations1 = [
-    { entity: 'school_years', attr: 'school_year' },
+    { entity: 'school_years', attr: 'school_year', noShow: true },
     (!this.school && { entity: 'schools', attr: 'school' }),
   ].filter(a => a)
 
