@@ -12,6 +12,7 @@ import RecordNamedValue from '~/components/views/application/RecordNamedValue.vu
 import RecordId from '~/components/views/application/RecordId.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
 import PrintAttendance from '~/components/views/student/pages/StudentGroups/PrintAttendance.vue';
+import { isSameDay } from 'date-fns';
 
 function parseRecord (value) {
   return wai.object2(
@@ -22,7 +23,8 @@ function parseRecord (value) {
       parent: wai.property(value, 'parent', wai.nullable(wai.aResource)),
       linked_groups: wai.property(value, 'linked_groups', wai.nullable(wai.listOf(wai.aResource))),
       assignment_changes: wai.property(value, 'assignment_changes', wai.nullable(wai.object(value => ({
-        added: wai.property(value, 'added', wai.nullable(wai.time)),
+        added_first: wai.property(value, 'added_first', wai.nullable(wai.time)),
+        added_last: wai.property(value, 'added_last', wai.nullable(wai.time)),
         removed: wai.property(value, 'removed', wai.nullable(wai.time)),
       })))),
       attendance: wai.property(value, 'attendance', wai.nullable(wai.object(value => ({
@@ -93,6 +95,11 @@ export default class StudentGroups extends Vue {
         reducer: value => wai.recordsList(value, parseRecord),
       }));
   }
+
+  showAddedLast (record: Record) {
+    const { added_last, added_first } = record.assignment_changes ?? {};
+    return !!added_first && !!added_last && !isSameDay(added_first, added_last);
+  }
 }
 </script>
 
@@ -106,7 +113,7 @@ export default class StudentGroups extends Vue {
     <template #row="{ record, order }">
       <td class="align-top">
         <span class="text-muted m-0 font-12">
-          {{ order }}.
+          {{ order + 1 }}.
         </span>
       </td>
       <HeaderCell
@@ -163,13 +170,22 @@ export default class StudentGroups extends Vue {
       </td>
       <td>
         <RecordNamedValue
-          v-if="record.assignment_changes?.added"
+          v-if="record.assignment_changes?.added_first"
           class="mt-1"
         >
           <template #label>
-            <t class="font-12" value="student.pages.StudentsGroupsListing.label.added_later" />
+            <t class="font-12" value="student.pages.StudentsGroupsListing.label.added_later_first" />
           </template>
-          <PrintDate :value="record.assignment_changes.added" />
+          <PrintDate :value="record.assignment_changes.added_first" />
+        </RecordNamedValue>
+        <RecordNamedValue
+          v-if="record.assignment_changes?.added_last && showAddedLast(record)"
+          class="mt-1"
+        >
+          <template #label>
+            <t class="font-12" value="student.pages.StudentsGroupsListing.label.added_later_last" />
+          </template>
+          <PrintDate :value="record.assignment_changes.added_last" />
         </RecordNamedValue>
         <RecordNamedValue
           v-if="record.assignment_changes?.removed"
