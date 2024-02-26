@@ -3,10 +3,13 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { uniq } from 'lodash';
 import app from '~/lib/app';
 import { wai } from '~/vendor/wai';
+import MiniToggle from '~/components/views/application/buttons/MiniToggle.vue';
 
 const DESIRED_PAGES = [ -15, -5, -2, -1, 0, 1, 2, 5, 15 ];
 
-@Component
+@Component({
+  components: { MiniToggle },
+})
 export default class RecordsTablePageSelect extends Vue {
   @Prop({ required: true }) readonly value!: app.Maybe<wai.RecordsList<unknown>>;
   @Prop() readonly hidePerPage?: boolean;
@@ -49,27 +52,13 @@ export default class RecordsTablePageSelect extends Vue {
   }
 
   get perPageOptions () {
-    return app.db.LISTING_PER_PAGE_OPTIONS.map(per => ({ value: per, text: per }));
+    return [ 10, 25, 100 ];
   }
 
   renderContent (page: number): string {
     if (page === 1 && page !== this.currentPage) return '«';
     else if (page === this.lastPage && page !== this.currentPage) return '»';
     else return String(page);
-  }
-
-  onPageInput (event) {
-    let page = Number(event.target.value);
-    if (!isNaN(page)) {
-      if (page < 1) page = 1;
-      if (page > this.lastPage) page = this.lastPage;
-      if (this.currentPage !== page) {
-        this.$emit('select', {
-          page,
-          perPage: this.perPage,
-        });
-      }
-    }
   }
 
   onPageSelect (event) {
@@ -94,46 +83,26 @@ export default class RecordsTablePageSelect extends Vue {
 </script>
 
 <template>
-  <div>
+  <div :class="$attrs.class">
 
     <div class="pagination-row d-flex justify-content-end flex-wrap">
       <div
         v-if="!hidePerPage"
-        class="d-flex px-1"
+        class="d-flex px-1 align-items-center"
+        style="gap: 4px;"
       >
-        <span>
+        <div>
           <t value="db.listing.SearchPagination.per_page" />
-        </span>
-        <span>&nbsp;:&nbsp;</span>
-        <select
-          :value="perPage"
-          class="form-control pagination--per_page"
-          @change="onPerPageSelect($event.target.value)"
+          <span> :</span>
+        </div>
+        <MiniToggle
+          v-for="option in perPageOptions"
+          :key="option"
+          :value="perPage == option"
+          @click="onPerPageSelect(option)"
         >
-          <option
-            v-for="option of perPageOptions"
-            :key="option.value"
-            :value="option.value"
-          >
-            {{ option.text }}
-          </option>
-        </select>
-      </div>
-      <div class="pagination-input d-flex px-1">
-        <span>
-          <t value="db.listing.SearchPagination.pages" />
-        </span>
-        <span>&nbsp;:&nbsp;</span>
-        <input
-          type="text"
-          class="form-control-plaintext p-0"
-          :value="currentPage"
-          @blur="onPageInput"
-          @keydown.enter="onPageInput"
-        >
-        <span class="flex-fill">
-          &nbsp;/&nbsp;{{ lastPage }}
-        </span>
+          {{ option }}
+        </MiniToggle>
       </div>
       <div class="px-1 d-flex">
         <t value="db.listing.SearchPagination.count" />
@@ -144,19 +113,17 @@ export default class RecordsTablePageSelect extends Vue {
       </div>
     </div>
 
-    <div class="d-flex justify-content-end">
+    <div
+      class="mt-1 pagination-row d-flex justify-content-end"
+      @click="onPageSelect"
+    >
       <div
-        class="pt-1 pagination-row d-flex flex-wrap"
-        @click="onPageSelect"
+        v-for="page of availablePages"
+        :key="page"
+        :class="{ 'pagination-item': true, 'current-page': currentPage === page }"
       >
-        <div
-          v-for="page of availablePages"
-          :key="page"
-          :class="{ 'pagination-item': true, 'current-page': currentPage === page }"
-        >
-          <div :data-page="page">
-            {{ renderContent(page) }}
-          </div>
+        <div :data-page="page">
+          {{ renderContent(page) }}
         </div>
       </div>
     </div>

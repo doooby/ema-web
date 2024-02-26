@@ -13,6 +13,7 @@ import RecordId from '~/components/views/application/RecordId.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
 import PrintAttendance from '~/components/views/student/pages/StudentGroups/PrintAttendance.vue';
 import { isSameDay } from 'date-fns';
+import MiniToggle from '~/components/views/application/buttons/MiniToggle.vue';
 
 function parseRecord (value) {
   return wai.object2(
@@ -39,19 +40,20 @@ function parseRecord (value) {
 type Record = ReturnType<typeof parseRecord>;
 
 @Component({
-  components: { PrintAttendance, PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
+  components: { MiniToggle, PrintAttendance, PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
 })
 export default class StudentGroups extends Vue {
   @Prop({ required: true }) readonly person!: person.Person;
 
-  filters = app.db.useFilters('id');
   groups = app.db.useResource<wai.RecordsList<wai.AResource<Record>>>();
 
   mounted () {
     this.groups.queryParams.staticParams = {
       slices: [ 'detail', 'school_course' ],
     };
-    this.onLoadPage();
+    this.groups.queryParams.params = {
+      show_history: false,
+    };
   }
 
   get columns () {
@@ -110,6 +112,15 @@ export default class StudentGroups extends Vue {
     :sort-options="{ name: 'groups', options: [ 'id' ] }"
     @change="onLoadPage"
   >
+    <template #prepend>
+      <div class="mb-2">
+        <MiniToggle
+          :value="!!groups.queryParams.params?.show_history"
+          text="views.student.pages.StudentGroups.show_history"
+          @click="groups.queryParams.setParams({ show_history: $event })"
+        />
+      </div>
+    </template>
     <template #row="{ record, order }">
       <td class="align-top">
         <span class="text-muted m-0 font-12">

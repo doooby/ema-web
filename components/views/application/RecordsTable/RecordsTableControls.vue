@@ -66,7 +66,7 @@ export default class RecordsTableControls extends Vue {
         $attrs.class,
       ]"
     >
-      <div>
+      <div class="mt-1">
         <div
           v-if="sortOptions?.length"
           class="gray-border-controls"
@@ -92,9 +92,12 @@ export default class RecordsTableControls extends Vue {
             </div>
           </div>
         </div>
-        <div class="mt-1" />
+        <div class="mt-1">
+          <slot name="controls" />
+        </div>
       </div>
       <RecordsTablePageSelect
+        class="mt-1"
         :value="list"
         :hide-per-page="hidePerPage"
         @select="({ page, perPage }) => onInput({ page, per_page: perPage })"

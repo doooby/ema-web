@@ -12,4 +12,8 @@ export default class QueryParams {
       ...this.listingParams,
     };
   }
+
+  setParams (params) {
+    this.params = params;
+  }
 }

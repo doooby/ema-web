@@ -18,6 +18,9 @@
 
 .text-archived {
   color: $gray-500;
+  &:hover, :focus {
+    color: $gray-600 !important;
+  }
 }
 
 .text-decoration-line-through {

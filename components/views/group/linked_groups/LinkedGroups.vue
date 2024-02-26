@@ -6,9 +6,10 @@ import RecordId from '~/components/views/application/RecordId.vue';
 import { wai } from '~/vendor/wai';
 import app from '~/lib/app';
 import ButtonToAction from '~/components/views/application/buttons/ButtonToAction.vue';
+import MiniToggle from '~/components/views/application/buttons/MiniToggle.vue';
 
 @Component({
-  components: { ButtonToAction, RecordId, ShowPageTableRow },
+  components: { MiniToggle, ButtonToAction, RecordId, ShowPageTableRow },
 })
 export default class LinkedGroups extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
@@ -50,9 +51,7 @@ export default class LinkedGroups extends Vue {
       >
         <div>
           <button
-            :class="[ 'btn btn-xs btn-link d-flex align-items-center font-14', {
-              'text-archived': !showArchived
-            } ]"
+            class="btn btn-xs btn-link d-flex align-items-center font-14 text-archived"
             type="button"
             @click="showArchived = !showArchived"
           >
