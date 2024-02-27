@@ -92,9 +92,7 @@ export default class RecordsTableControls extends Vue {
             </div>
           </div>
         </div>
-        <div class="mt-1">
-          <slot name="controls" />
-        </div>
+        <div class="mt-1" />
       </div>
       <RecordsTablePageSelect
         class="mt-1"

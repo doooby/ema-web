@@ -76,11 +76,13 @@ export default class CoursesListing extends Vue {
       <slot name="group-actions" :records="records" />
     </template>
     <template #row="{ record }">
-      <HeaderCell
-        :record="record"
-        :path="`/database/courses/${record.id}`"
-        :name="record.name?.[1]"
-      />
+      <td>
+        <HeaderCell
+          :record="record"
+          :path="`/database/courses/${record.id}`"
+          :name="record.name?.[1]"
+        />
+      </td>
       <td>
         <RecordAssociations
           :record="record"

@@ -11,6 +11,7 @@ import * as school from './school';
 import * as school_year from './school_year';
 import * as standardized_course from './standardized_course';
 import * as statistics from './statistics';
+import * as student from './student';
 import * as subject from './subject';
 import * as subject_category from './subject_category';
 import * as user from './user';
@@ -31,6 +32,7 @@ export {
   school_year,
   standardized_course,
   statistics,
+  student,
   subject,
   subject_category,
   user,

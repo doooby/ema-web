@@ -17,8 +17,8 @@ export default class PrintAttendance extends Vue {
 
 <template>
   <div>
-    <t :value="text" />
-    <span>: </span>
+    <t class="text-muted" :value="text" />
+    <span class="text-muted">: </span>
     {{ must ?? 0 }}
     <span v-if="percentage !== null"> |&nbsp;</span>
     <span

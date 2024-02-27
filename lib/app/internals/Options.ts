@@ -12,6 +12,18 @@ export default class Options {
     return this.index[name] ?? [];
   }
 
+  getByValue (
+    context: any,
+    name: string,
+    value?: string,
+  ): app.Maybe<app.OptionItem<string>> {
+    if (!value) return;
+
+    return this.getAll(context, name).find(
+      option => option.value === value,
+    );
+  }
+
   getByValues (context: any, name: string, values?: string[]): app.OptionItem<string>[] {
     if (!values?.length) return [];
 

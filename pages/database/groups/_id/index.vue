@@ -24,10 +24,12 @@ import ArchiveRecordModal from '~/components/views/application/modals/ArchiveRec
 import HeaderRow, { RecordHeaderLabels } from '~/components/views/application/pages/show/HeaderRow.vue';
 import ButtonToPath from '~/components/views/application/buttons/ButtonToPath.vue';
 import ButtonToHref from '~/components/views/application/buttons/ButtonToHref.vue';
+import GroupStudents from '~/components/views/group/pages/GroupStudents/GroupStudents.vue';
 
 enum Tabs {
   none,
   students,
+  students2,
   assignment_history,
   attendance,
   grading,
@@ -36,6 +38,7 @@ enum Tabs {
 
 @Component({
   components: {
+    GroupStudents,
     ButtonToHref,
     ButtonToPath,
     HeaderRow,
@@ -82,14 +85,7 @@ export default class extends DatabasePage {
 
   onLoadGroup (group) {
     this.group = group;
-
-    if (this.currentTab === Tabs.none) {
-      if (group.parent) {
-        this.currentTab = Tabs.attendance;
-      } else {
-        this.currentTab = Tabs.students;
-      }
-    }
+    this.currentTab = Tabs.students2;
   }
 }
 </script>
@@ -203,7 +199,21 @@ export default class extends DatabasePage {
     </template>
 
     <template #container="{ record }">
-      <b-tabs content-class="emt-3 emb-6" no-fade>
+      <b-tabs
+        content-class="mt-3"
+        no-fade
+      >
+        <PageTab
+          :id="Tabs.students2"
+          v-model="currentTab"
+        >
+          <template #title>
+            <t value="page.db.groups.index.students" />
+          </template>
+          <template #content="{ present }">
+            <GroupStudents v-if="present" :group="record" />
+          </template>
+        </PageTab>
         <PageTab
           v-if="!record.parent"
           :id="Tabs.students"

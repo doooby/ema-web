@@ -2,10 +2,13 @@ import app from '~/lib/app';
 import { Api2Plugin, RequestResponse } from '~/lib/api2';
 
 export function useResource<Record> (
+  fn?: (params: app.db.QueryParams) => void,
 ): app.db.Resource<Record> {
+  const queryParams = new app.db.QueryParams();
+  fn?.(queryParams);
   return {
     isLoading: false,
-    queryParams: new app.db.QueryParams(),
+    queryParams,
     response: undefined,
     cancel: undefined,
   };

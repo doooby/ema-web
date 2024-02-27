@@ -65,7 +65,7 @@ export function internalOptionsList2 (
   }));
 }
 
-// deprecated, use `app.internal.Options`
+// deprecated, use `app.internals.Options`
 export function internalOptionsList3<I=unknown> (
   vue: Vue,
   name: string,

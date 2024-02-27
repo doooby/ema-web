@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
-import { group, person } from '~/lib/records';
+import { group, person, student } from '~/lib/records';
 import app from '~/lib/app';
 import { wai } from '~/vendor/wai';
 import { DataTable } from '~/components/toolkit/DataTable';
@@ -12,27 +12,20 @@ import RecordNamedValue from '~/components/views/application/RecordNamedValue.vu
 import RecordId from '~/components/views/application/RecordId.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
 import PrintAttendance from '~/components/views/student/pages/StudentGroups/PrintAttendance.vue';
-import { isSameDay } from 'date-fns';
 import MiniToggle from '~/components/views/application/buttons/MiniToggle.vue';
+import GroupAttendance from '~/components/views/student/cells/GroupAttendance.vue';
+import GroupAssignmentChanges from '~/components/views/student/cells/GroupAssignmentChanges.vue';
 
 function parseRecord (value) {
   return wai.object2(
     value,
     value => ({
-      detail: wai.property(value, 'detail', value => group.parseDetail(value)),
-      school_course: wai.property(value, 'school_course', value => group.parseSchoolCourseSlice(value)),
+      detail: wai.property(value, 'detail', group.parseDetail),
+      school_course: wai.property(value, 'school_course', group.parseSchoolCourseSlice),
       parent: wai.property(value, 'parent', wai.nullable(wai.aResource)),
       linked_groups: wai.property(value, 'linked_groups', wai.nullable(wai.listOf(wai.aResource))),
-      assignment_changes: wai.property(value, 'assignment_changes', wai.nullable(wai.object(value => ({
-        added_first: wai.property(value, 'added_first', wai.nullable(wai.time)),
-        added_last: wai.property(value, 'added_last', wai.nullable(wai.time)),
-        removed: wai.property(value, 'removed', wai.nullable(wai.time)),
-      })))),
-      attendance: wai.property(value, 'attendance', wai.nullable(wai.object(value => ({
-        present: wai.property(value, 'present', wai.integer),
-        must: wai.property(value, 'must', wai.integer),
-        sessions: wai.property(value, 'sessions', wai.integer),
-      })))),
+      assignment_changes: wai.property(value, 'assignment_changes', wai.nullable(student.parseAssignmentChanges)),
+      attendance: wai.property(value, 'attendance', wai.nullable(student.parseAttendance)),
     }),
   );
 }
@@ -40,7 +33,7 @@ function parseRecord (value) {
 type Record = ReturnType<typeof parseRecord>;
 
 @Component({
-  components: { MiniToggle, PrintAttendance, PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
+  components: { GroupAssignmentChanges, GroupAttendance, MiniToggle, PrintAttendance, PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
 })
 export default class StudentGroups extends Vue {
   @Prop({ required: true }) readonly person!: person.Person;
@@ -76,7 +69,7 @@ export default class StudentGroups extends Vue {
       },
       {
         name: 'assignment_changes',
-        size: 140,
+        size: 150,
         headerText: 'student.pages.StudentsGroupsListing.column.assignment_changes',
       },
       {
@@ -96,11 +89,6 @@ export default class StudentGroups extends Vue {
         path: `/students/${this.person.id}/groups`,
         reducer: value => wai.recordsList(value, parseRecord),
       }));
-  }
-
-  showAddedLast (record: Record) {
-    const { added_last, added_first } = record.assignment_changes ?? {};
-    return !!added_first && !!added_last && !isSameDay(added_first, added_last);
   }
 }
 </script>
@@ -127,11 +115,13 @@ export default class StudentGroups extends Vue {
           {{ order + 1 }}.
         </span>
       </td>
-      <HeaderCell
-        :record="record"
-        :path="`/database/groups/${record.id}`"
-        :name="record.detail.name"
-      />
+      <td>
+        <HeaderCell
+          :record="record"
+          :path="`/database/groups/${record.id}`"
+          :name="record.detail.name"
+        />
+      </td>
       <td>
         <RecordAssociations
           :record="record.school_course"
@@ -180,53 +170,15 @@ export default class StudentGroups extends Vue {
         </div>
       </td>
       <td>
-        <RecordNamedValue
-          v-if="record.assignment_changes?.added_first"
-          class="mt-1"
-        >
-          <template #label>
-            <t class="font-12" value="student.pages.StudentsGroupsListing.label.added_later_first" />
-          </template>
-          <PrintDate :value="record.assignment_changes.added_first" />
-        </RecordNamedValue>
-        <RecordNamedValue
-          v-if="record.assignment_changes?.added_last && showAddedLast(record)"
-          class="mt-1"
-        >
-          <template #label>
-            <t class="font-12" value="student.pages.StudentsGroupsListing.label.added_later_last" />
-          </template>
-          <PrintDate :value="record.assignment_changes.added_last" />
-        </RecordNamedValue>
-        <RecordNamedValue
-          v-if="record.assignment_changes?.removed"
-          class="mt-1"
-        >
-          <template #label>
-            <t class="font-12" value="student.pages.StudentsGroupsListing.label.removed" />
-          </template>
-          <PrintDate :value="record.assignment_changes.removed" />
-        </RecordNamedValue>
-
+        <GroupAssignmentChanges
+          :changes="record.assignment_changes"
+        />
       </td>
       <td>
-        <div v-if="record.attendance">
-          <div>
-            <t value="student.pages.StudentsGroupsListing.attendance.present" />
-            <span>: {{ record.attendance.present }}</span>
-          </div>
-          <PrintAttendance
-            text="student.pages.StudentsGroupsListing.attendance.must_attend"
-            :present="record.attendance.present"
-            :must="record.attendance.must"
-            :strong="true"
-          />
-          <PrintAttendance
-            text="student.pages.StudentsGroupsListing.attendance.sessions"
-            :present="record.attendance.present"
-            :must="record.attendance.sessions"
-          />
-        </div>
+        <GroupAttendance
+          v-if="record.attendance"
+          :attendance="record.attendance"
+        />
       </td>
     </template>
   </RecordsTable>

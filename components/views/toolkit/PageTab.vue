@@ -15,8 +15,6 @@ export default class PageTab extends Vue {
     <template #title>
       <slot name="title" />
     </template>
-    <slot name="content" :present="id === value">
-      <slot />
-    </slot>
+    <slot name="content" :present="id === value" />
   </b-tab>
 </template>

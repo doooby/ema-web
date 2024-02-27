@@ -42,36 +42,34 @@ export default class StudentsListing extends Vue {
 </script>
 
 <template>
-  <div class="mt-3">
-    <PeopleListing
-      class="mt-2"
-      :params="searchParams"
-      :hide-detials="true"
-      :hide-group="true"
-      :hide-contract="true"
+  <PeopleListing
+    class="mt-2"
+    :params="searchParams"
+    :hide-detials="true"
+    :hide-group="true"
+    :hide-contract="true"
+  >
+    <template
+      v-if="showGroupActions"
+      #group-actions="{ records }"
     >
-      <template
-        v-if="showGroupActions"
-        #group-actions="{ records }"
-      >
-        <move-students
-          v-if="admissibleGroup['groups.move_students']"
-          :from-group="group"
-          :students="records"
-        />
-        <remove-students
-          v-if="admissibleGroup['groups.change_students']"
-          :group="group"
-          :students="records"
-          @done="onRefresh"
-        />
-        <ActionDropoutStudents
-          v-if="$ema.canI('act:/groups/dropouts/group_create')"
-          :group="group"
-          :students="records"
-          @done="onRefresh"
-        />
-      </template>
-    </PeopleListing>
-  </div>
+      <move-students
+        v-if="admissibleGroup['groups.move_students']"
+        :from-group="group"
+        :students="records"
+      />
+      <remove-students
+        v-if="admissibleGroup['groups.change_students']"
+        :group="group"
+        :students="records"
+        @done="onRefresh"
+      />
+      <ActionDropoutStudents
+        v-if="$ema.canI('act:/groups/dropouts/group_create')"
+        :group="group"
+        :students="records"
+        @done="onRefresh"
+      />
+    </template>
+  </PeopleListing>
 </template>

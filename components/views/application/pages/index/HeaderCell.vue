@@ -14,7 +14,7 @@ export default class HeaderCell extends Vue {
 </script>
 
 <template>
-  <td>
+  <div>
     <h5 v-if="name">
       {{ name }}
     </h5>
@@ -22,5 +22,5 @@ export default class HeaderCell extends Vue {
       :record="record"
       :path="path"
     />
-  </td>
+  </div>
 </template>

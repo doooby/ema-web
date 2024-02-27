@@ -63,11 +63,7 @@ export default class RecordsTable extends Vue {
       :query-params="resource.queryParams"
       :sort-options="sortOptionItems"
       :disabled="resource.isLoading"
-    >
-      <template #controls>
-        <slot name="controls" />
-      </template>
-    </RecordsTableControls>
+    />
 
     <DataTable
       :columns="columns"
