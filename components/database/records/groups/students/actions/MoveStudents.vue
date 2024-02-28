@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { group, person } from '~/lib/records';
+import { group } from '~/lib/records';
 
 export interface MoveStudentsParams {
   fromGroup?: {
@@ -14,7 +14,8 @@ export interface MoveStudentsParams {
 @Component
 export default class MoveStudents extends Vue {
   @Prop({ default: undefined }) readonly fromGroup!: undefined | group.Group;
-  @Prop({ required: true }) readonly students!: person.Person[];
+  // TODO use `wai.AResource`
+  @Prop({ required: true }) readonly students!: { id?: string }[];
 
   onClick (): void {
     const data: MoveStudentsParams = {
@@ -23,7 +24,9 @@ export default class MoveStudents extends Vue {
         courseId: this.fromGroup.course.id,
         groupId: this.fromGroup.id,
       },
-      studentsIds: this.students.map(person => person.id),
+      studentsIds: this.students
+        .map(person => person.id)
+        .filter(self => self) as string[],
     };
     this.$store.dispatch('action/goToActionPage', {
       context: this,

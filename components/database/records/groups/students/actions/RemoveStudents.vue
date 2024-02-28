@@ -1,6 +1,6 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { group, person } from '~/lib/records';
+import { group } from '~/lib/records';
 import ConfirmModal, { ActionState } from '~/components/database/modals/ConfirmActionModal.vue';
 import { SearchRecordsResponsePayload } from '~/lib/api2';
 import { difference } from 'lodash';
@@ -11,7 +11,8 @@ import RequestButton from '~/components/views/application/buttons/RequestButton.
 })
 export default class RemoveStudents extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
-  @Prop({ required: true }) readonly students!: person.Person[];
+  // TODO use `wai.AResource`
+  @Prop({ required: true }) readonly students!: { id?: string }[];
 
   modalShown = false;
   modalState = ActionState.idle;
@@ -25,7 +26,7 @@ export default class RemoveStudents extends Vue {
       this.query,
       this.$api2.getQuery('groups', 'change_students')({
         id: this.group.id,
-        students_ids: difference(this.group.students?.map(r => r.id), ids),
+        students_ids: difference(this.group.students?.map(r => r.id), ids).filter(self => self),
       }),
     );
 

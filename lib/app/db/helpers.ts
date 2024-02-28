@@ -10,7 +10,17 @@ export function useResource<Record> (
     isLoading: false,
     queryParams,
     response: undefined,
+    refreshAtPage1 () {
+      if (!this.queryParams.listingParams) return;
+      this.queryParams.listingParams = {
+        ...this.queryParams.listingParams,
+        page: 1,
+      };
+    },
     cancel: undefined,
+    get okPayload () {
+      return this.response?.ok ? this.response.payload : undefined;
+    },
   };
 }
 

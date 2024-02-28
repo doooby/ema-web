@@ -15,7 +15,9 @@ export interface Resource<Record> {
   isLoading: boolean;
   queryParams: app.db.QueryParams;
   response: app.Maybe<RequestResponse<Record>>;
+  refreshAtPage1: () => void;
   cancel: app.Maybe<() => void>;
+  okPayload: app.Maybe<Record>;
 }
 
 export interface SaveAbleResource<Model = any> {

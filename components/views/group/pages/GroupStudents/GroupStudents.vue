@@ -1,7 +1,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { wai } from '~/vendor/wai';
-import { student } from '~/lib/records';
+import { group, student } from '~/lib/records';
 import app from '~/lib/app';
 import { DataTable } from '~/components/toolkit/DataTable';
 import RecordsTable from '~/components/views/application/RecordsTable/RecordsTable.vue';
@@ -13,6 +13,10 @@ import PrintAttendance from '~/components/views/student/pages/StudentGroups/Prin
 import RecordLabels from '~/components/views/application/RecordLabels.vue';
 import GroupAttendance from '~/components/views/student/cells/GroupAttendance.vue';
 import GroupAssignmentChanges from '~/components/views/student/cells/GroupAssignmentChanges.vue';
+import RecordsTableGroupActions from '~/components/views/application/RecordsTable/RecordsTableGroupActions.vue';
+import RecordsTableRowSelect from '~/components/views/application/RecordsTable/RecordsTableRowSelect.vue';
+import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
+import RemoveStudents from '~/components/database/records/groups/students/actions/RemoveStudents.vue';
 
 function parseRecord (value) {
   return wai.object2(value, value => ({
@@ -25,10 +29,12 @@ function parseRecord (value) {
 type Record = ReturnType<typeof parseRecord>;
 
 @Component({
-  components: { GroupAssignmentChanges, GroupAttendance, RecordLabels, PrintAttendance, RecordNamedValue, PrintDate, HeaderCell, MiniToggle, RecordsTable },
+  components: { RemoveStudents, MoveStudents, RecordsTableRowSelect, RecordsTableGroupActions, GroupAssignmentChanges, GroupAttendance, RecordLabels, PrintAttendance, RecordNamedValue, PrintDate, HeaderCell, MiniToggle, RecordsTable },
 })
 export default class GroupStudents extends Vue {
-  @Prop({ required: true }) readonly group!: wai.AResource;
+  @Prop({ required: true }) readonly group!: group.Group;
+
+  admission = new app.internals.Admission(this);
 
   students = app.db.useResource<wai.RecordsList<wai.AResource<Record>>>(
     (params) => {
@@ -42,6 +48,8 @@ export default class GroupStudents extends Vue {
       };
     },
   );
+
+  groupActions = new RecordsTableGroupActions.State();
 
   options = new app.internals.Options();
 
@@ -115,13 +123,39 @@ export default class GroupStudents extends Vue {
           @click="students.queryParams.setParams({ show_history: $event })"
         />
       </div>
+      <RecordsTableGroupActions
+        v-slot="{ selected }"
+        class="mb-2"
+        :state="groupActions"
+        :disabled="students.isLoading"
+        :records="students.okPayload?.records"
+      >
+        <MoveStudents
+          v-if="admission.canAction('groups/actions/v2_move_students')"
+          :from-group="group"
+          :students="selected"
+        />
+        <RemoveStudents
+          v-if="admission.canAction('groups/actions/v2_change_students')"
+          :group="group"
+          :students="selected"
+          @done="students.refreshAtPage1"
+        />
+      </RecordsTableGroupActions>
     </template>
+
     <template #row="{ record, order }">
 
       <td class="align-top">
-        <span class="text-muted m-0 font-12">
+        <div class="text-muted m-0 font-12">
           {{ order + 1 }}.
-        </span>
+        </div>
+        <RecordsTableRowSelect
+          class="mt-2 ml-1"
+          :state="groupActions"
+          :record="record"
+          :is-loading="students.isLoading"
+        />
       </td>
 
       <td>
