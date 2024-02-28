@@ -140,7 +140,7 @@ export default class GroupStudents extends Vue {
           v-if="admission.canAction('groups/actions/v2_change_students')"
           :group="group"
           :students="selected"
-          @done="students.refreshAtPage1"
+          @done="students.refreshAtPage1()"
         />
       </RecordsTableGroupActions>
     </template>

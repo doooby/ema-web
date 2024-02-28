@@ -15,6 +15,7 @@ import PrintAttendance from '~/components/views/student/pages/StudentGroups/Prin
 import MiniToggle from '~/components/views/application/buttons/MiniToggle.vue';
 import GroupAttendance from '~/components/views/student/cells/GroupAttendance.vue';
 import GroupAssignmentChanges from '~/components/views/student/cells/GroupAssignmentChanges.vue';
+import RecordLabels from '~/components/views/application/RecordLabels.vue';
 
 function parseRecord (value) {
   return wai.object2(
@@ -33,7 +34,7 @@ function parseRecord (value) {
 type Record = ReturnType<typeof parseRecord>;
 
 @Component({
-  components: { GroupAssignmentChanges, GroupAttendance, MiniToggle, PrintAttendance, PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
+  components: { RecordLabels, GroupAssignmentChanges, GroupAttendance, MiniToggle, PrintAttendance, PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
 })
 export default class StudentGroups extends Vue {
   @Prop({ required: true }) readonly person!: person.Person;
@@ -90,6 +91,12 @@ export default class StudentGroups extends Vue {
         reducer: value => wai.recordsList(value, parseRecord),
       }));
   }
+
+  recordLabels (record: Record) {
+    return [
+      record.assignment_changes?.removed ? { variant: 'warning', text: 'student.groups.label.is_removed' } : undefined,
+    ];
+  }
 }
 </script>
 
@@ -120,6 +127,10 @@ export default class StudentGroups extends Vue {
           :record="record"
           :path="`/database/groups/${record.id}`"
           :name="record.detail.name"
+        />
+        <RecordLabels
+          class="mt-2"
+          :labels="recordLabels(record)"
         />
       </td>
       <td>
