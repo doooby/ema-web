@@ -124,6 +124,7 @@ export default class GroupStudents extends Vue {
         />
       </div>
       <RecordsTableGroupActions
+        v-if="!group.parent"
         v-slot="{ selected }"
         class="mb-2"
         :state="groupActions"
@@ -151,6 +152,7 @@ export default class GroupStudents extends Vue {
           {{ order + 1 }}.
         </div>
         <RecordsTableRowSelect
+          v-if="!group.parent"
           class="mt-2 ml-1"
           :state="groupActions"
           :record="record"
