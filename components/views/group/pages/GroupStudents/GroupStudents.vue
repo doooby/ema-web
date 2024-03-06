@@ -18,7 +18,7 @@ import RecordsTableRowSelect from '~/components/views/application/RecordsTable/R
 import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
 import RemoveStudents from '~/components/database/records/groups/students/actions/RemoveStudents.vue';
 
-function parseRecord (value) {
+function parseStudent (value) {
   return wai.object2(value, value => ({
     header: wai.property(value, 'header', student.parseHeader),
     assignment_changes: wai.property(value, 'assignment_changes', wai.nullable(student.parseAssignmentChanges)),
@@ -26,7 +26,7 @@ function parseRecord (value) {
   }));
 }
 
-type Record = ReturnType<typeof parseRecord>;
+type Student = ReturnType<typeof parseStudent>;
 
 @Component({
   components: { RemoveStudents, MoveStudents, RecordsTableRowSelect, RecordsTableGroupActions, GroupAssignmentChanges, GroupAttendance, RecordLabels, PrintAttendance, RecordNamedValue, PrintDate, HeaderCell, MiniToggle, RecordsTable },
@@ -36,28 +36,25 @@ export default class GroupStudents extends Vue {
 
   admission = new app.internals.Admission(this);
 
-  students = app.db.useResource<wai.RecordsList<wai.AResource<Record>>>(
-    (params) => {
-      params.staticParams = {
+  students = new app.db.Records<Student>({
+    params: {
+      staticParams: {
         slices: [ 'header' ],
-      };
-      params.listingParams = {
+      },
+      listingParams: {
         page: 1,
         per_page: 100,
         order_by: [ [ 'first_name_lo', 'ASC' ] ],
-      };
+      },
+      params: {
+        show_history: false,
+      },
     },
-  );
+  });
 
   groupActions = new RecordsTableGroupActions.State();
 
   options = new app.internals.Options();
-
-  mounted () {
-    this.students.queryParams.params = {
-      show_history: false,
-    };
-  }
 
   get columns () {
     return DataTable.flattenColumns(
@@ -90,17 +87,15 @@ export default class GroupStudents extends Vue {
   }
 
   @Watch('group')
-  onLoadPage () {
-    app.db.loadResource(
-      this,
-      this.students,
-      () => ({
-        path: `/groups/${this.group.id}/students`,
-        reducer: value => wai.recordsList(value, parseRecord),
-      }));
+  async onLoadPage () {
+    await this.students.load(
+      this.$api2,
+      `/groups/${this.group.id}/students`,
+      parseStudent,
+    );
   }
 
-  recordLabels (record: Record) {
+  recordLabels (record: Student) {
     return [
       record.assignment_changes?.removed ? { variant: 'warning', text: 'student.groups.label.is_removed' } : undefined,
     ];
@@ -113,14 +108,16 @@ export default class GroupStudents extends Vue {
     :resource="students"
     :columns="columns"
     :sort-options="{ name: 'students', options: [ 'id', 'first_name_lo' ] }"
+    :load-on-mount="true"
+    :hide-per-page="true"
     @change="onLoadPage"
   >
     <template #prepend>
       <div class="mb-2">
         <MiniToggle
-          :value="!!students.queryParams.params?.show_history"
+          :value="!!students.params?.show_history"
           text="group.pages.GroupStudents.show_history"
-          @click="students.queryParams.setParams({ show_history: $event })"
+          @click="students.setParams({ show_history: $event })"
         />
       </div>
       <RecordsTableGroupActions
@@ -140,7 +137,7 @@ export default class GroupStudents extends Vue {
           v-if="admission.canAction('groups/actions/v2_change_students')"
           :group="group"
           :students="selected"
-          @done="students.refreshAtPage1()"
+          @done="students.refresh()"
         />
       </RecordsTableGroupActions>
     </template>

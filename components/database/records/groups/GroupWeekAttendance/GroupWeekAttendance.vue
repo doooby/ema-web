@@ -88,9 +88,7 @@ export default class GroupWeekAttendance extends Vue {
         column: {
           name: `day_${index}`,
           size: 120,
-          renderHeader: () => h(DayColumnHeader, {
-            props: { date },
-          }),
+          header: () => h(DayColumnHeader, { props: { date } }),
         },
       };
     });

@@ -2,26 +2,39 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import ARecordsListing from '~/components/database/components/listing/ARecordsListing/ARecordsListing.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
-import { application_record, group } from '~/lib/records';
+import { group, student } from '~/lib/records';
 import ARecordLink from '~/components/database/components/ARecordLink.vue';
 import PrintFullName from '~/components/database/records/people/PrintFullName.vue';
-import { Column } from '~/components/DataTable/v3';
 import app from '~/lib/app';
 import { WeekAttendance } from '~/lib/records/group/attendance';
 import DayAttendance from '~/components/database/records/groups/GroupWeekAttendance/DayAttendance.vue';
 import CheckBox from '~/components/controls/inputs/base/CheckBox.vue';
+import { wai } from '~/vendor/wai';
+import { DataTable, DataTableColumn } from '~/components/toolkit/DataTable';
+import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
+import RecordsTable from '~/components/views/application/RecordsTable/RecordsTable.vue';
+
+function parseStudent (value) {
+  return wai.object2(value, value => ({
+    header: wai.property(value, 'header', student.parseHeader),
+  }));
+}
+
+type Student = ReturnType<typeof parseStudent>;
 
 export interface Day {
   index: number;
   included: boolean;
   date: Date;
-  column: Column;
+  column: DataTableColumn;
   session?: boolean;
   sessionChanged?: boolean;
 }
 
 @Component({
   components: {
+    RecordsTable,
+    HeaderCell,
     CheckBox,
     DayAttendance,
     PrintFullName,
@@ -39,10 +52,28 @@ export default class AttendanceListing extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
   @Prop({ required: true }) readonly days!: Day[];
 
-  columns = this.buildColumns();
+  students = new app.db.Records<Student>({
+    params: {
+      staticParams: {
+        slices: [ 'header' ],
+      },
+      listingParams: {
+        page: 1,
+        per_page: 100,
+        order_by: [ [ 'first_name_lo', 'ASC' ] ],
+      },
+    },
+  });
 
-  get listingParams () {
-    return { group_id: this.group.id };
+  get columns () {
+    return DataTable.flattenColumns(
+      {
+        name: 'person',
+        size: 250,
+        headerText: 'database.records.groups.GroupWeekAttendance.column.person',
+      },
+      ...this.days.map(({ column }) => column),
+    );
   }
 
   get sessionDays () {
@@ -57,100 +88,105 @@ export default class AttendanceListing extends Vue {
     });
   }
 
-  @Watch('sessionDays')
-  onDaysChange () {
-    this.columns = this.buildColumns();
-  }
-
-  buildColumns () {
-    return [
-      ...application_record.fillDataTableColumns('people', [
-        { name: 'person', size: 200 },
-      ]),
-      ...this.days.map(({ column }) => column),
-    ];
+  @Watch('group')
+  onLoadStudents () {
+    this.students.load(
+      this.$api2,
+      `/groups/${this.group.id}/students`,
+      parseStudent,
+    );
   }
 }
 </script>
 
 <template>
-  <ARecordsListing
-    entity="people"
-    :columns="columns"
-    :actions-size="0"
-    :params="listingParams"
-    :static-per-page="100"
-    :default-sort="[ 'first_name_lo', 'asc' ]"
-    @load="$emit('pageLoad', $event)"
-  >
-    <template #prepend-body>
-      <tr>
-        <td colspan="3" />
+  <div>
+    <RecordsTable
+      :resource="students"
+      :columns="columns"
+      :sort-options="{ name: 'students', options: [ 'id', 'first_name_lo' ] }"
+      :load-on-mount="true"
+      :hide-per-page="true"
+      @change="onLoadStudents"
+    >
+
+      <template #prepend-records>
+        <tbody>
+          <tr>
+            <td />
+            <td
+              v-for="day in sessionDays"
+              :key="day.index"
+            >
+              <div
+                v-if="day.included"
+                class="d-flex justify-content-center"
+              >
+                <div
+                  :class="[
+                    'p-1',
+                    day.sessionChanged && 'border border-warning',
+                  ]"
+                >
+                  <CheckBox
+                    :value="day.session"
+                    @change="$emit('setSession', {
+                      index: day.index,
+                      happens: $event,
+                    })"
+                  >
+                    <t
+                      class="font-12 text-muted"
+                      value="records.groups.GroupWeekAttendance.AttendanceListing.sessionDay"
+                    />
+                  </CheckBox>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+
+      <template #row="{ record }">
+        <td>
+          <HeaderCell
+            :record="record"
+            :path="`/database/people/${record.id}`"
+            :name="record.header.name_local"
+          />
+        </td>
         <td
           v-for="day in sessionDays"
           :key="day.index"
+          :class="[
+            { 'ema--data-table--td__empty': !day.session || !day.included },
+          ]"
         >
-          <div
-            v-if="day.included"
-            class="d-flex justify-content-center"
-          >
-            <div
-              :class="[
-                'p-1',
-                day.sessionChanged && 'border border-warning',
-              ]"
-            >
-              <CheckBox
-                :value="day.session"
-                @change="$emit('setSession', {
-                  index: day.index,
-                  happens: $event,
-                })"
-              >
-                <t
-                  class="font-12 text-muted"
-                  value="records.groups.GroupWeekAttendance.AttendanceListing.sessionDay"
-                />
-              </CheckBox>
-            </div>
+          <div v-if="day.session && day.included" class="px-2">
+            <DayAttendance
+              :original-value="originalAttendance?.[record.id]?.[day.index]"
+              :current-value="attendance?.[record.id]?.[day.index]"
+              :options="attendanceOptions"
+              @change="$emit('input', [
+                record.id,
+                day.index,
+                $event,
+              ])"
+            />
           </div>
         </td>
-      </tr>
-    </template>
-    <template #row="{ record }">
-      <td>
-        <div class="d-flex align-items-center">
-          <a-record-link
-            :id="record.id"
-            class="mx-2"
-            entity="people"
-          />
-          <PrintFullName :person="record" />
-        </div>
-      </td>
-      <td
-        v-for="day in sessionDays"
-        :key="day.index"
-        :class="[
-          { 'ema--data-table--td__empty': !day.session || !day.included },
-        ]"
-      >
-        <div v-if="day.session && day.included" class="px-2">
-          <DayAttendance
-            :original-value="originalAttendance?.[record.id]?.[day.index]"
-            :current-value="attendance?.[record.id]?.[day.index]"
-            :options="attendanceOptions"
-            @change="$emit('input', [
-              record.id,
-              day.index,
-              $event,
-            ])"
-          />
-        </div>
-      </td>
-    </template>
-    <template v-if="$slots.footer" #footer>
-      <slot name="footer" />
-    </template>
-  </ARecordsListing>
+      </template>
+
+      <template v-if="$slots.footer" #append-records="{ columnsCount }">
+        <tbody>
+          <tr>
+            <td :colspan="columnsCount">
+              <slot name="footer" />
+            </td>
+          </tr>
+        </tbody>
+      </template>
+
+    </RecordsTable>
+  </div>
 </template>

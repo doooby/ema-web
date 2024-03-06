@@ -17,7 +17,7 @@ import GroupAttendance from '~/components/views/student/cells/GroupAttendance.vu
 import GroupAssignmentChanges from '~/components/views/student/cells/GroupAssignmentChanges.vue';
 import RecordLabels from '~/components/views/application/RecordLabels.vue';
 
-function parseRecord (value) {
+function parseGroup (value) {
   return wai.object2(
     value,
     value => ({
@@ -31,7 +31,7 @@ function parseRecord (value) {
   );
 }
 
-type Record = ReturnType<typeof parseRecord>;
+type Group = ReturnType<typeof parseGroup>;
 
 @Component({
   components: { RecordLabels, GroupAssignmentChanges, GroupAttendance, MiniToggle, PrintAttendance, PrintDate, RecordId, RecordNamedValue, PrintDateRange, RecordAssociations, HeaderCell, RecordsTable },
@@ -39,16 +39,21 @@ type Record = ReturnType<typeof parseRecord>;
 export default class StudentGroups extends Vue {
   @Prop({ required: true }) readonly person!: person.Person;
 
-  groups = app.db.useResource<wai.RecordsList<wai.AResource<Record>>>();
-
-  mounted () {
-    this.groups.queryParams.staticParams = {
-      slices: [ 'detail', 'school_course' ],
-    };
-    this.groups.queryParams.params = {
-      show_history: false,
-    };
-  }
+  groups = new app.db.Records<Group>({
+    params: {
+      staticParams: {
+        slices: [ 'detail', 'school_course' ],
+      },
+      listingParams: {
+        page: 1,
+        per_page: 10,
+        order_by: [ [ 'first_name_lo', 'ASC' ] ],
+      },
+      params: {
+        show_history: false,
+      },
+    },
+  });
 
   get columns () {
     return DataTable.flattenColumns(
@@ -83,16 +88,14 @@ export default class StudentGroups extends Vue {
 
   @Watch('person')
   onLoadPage () {
-    app.db.loadResource(
-      this,
-      this.groups,
-      () => ({
-        path: `/students/${this.person.id}/groups`,
-        reducer: value => wai.recordsList(value, parseRecord),
-      }));
+    this.groups.load(
+      this.$api2,
+      `/students/${this.person.id}/groups`,
+      parseGroup,
+    );
   }
 
-  recordLabels (record: Record) {
+  recordLabels (record: Group) {
     return [
       record.assignment_changes?.removed ? { variant: 'warning', text: 'student.groups.label.is_removed' } : undefined,
     ];
@@ -105,14 +108,15 @@ export default class StudentGroups extends Vue {
     :resource="groups"
     :columns="columns"
     :sort-options="{ name: 'groups', options: [ 'id' ] }"
+    :load-on-mount="true"
     @change="onLoadPage"
   >
     <template #prepend>
       <div class="mb-2">
         <MiniToggle
-          :value="!!groups.queryParams.params?.show_history"
+          :value="!!groups.params?.show_history"
           text="views.student.pages.StudentGroups.show_history"
-          @click="groups.queryParams.setParams({ show_history: $event })"
+          @click="groups.setParams({ show_history: $event })"
         />
       </div>
     </template>

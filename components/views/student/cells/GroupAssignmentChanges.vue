@@ -19,7 +19,7 @@ export default class GroupAssignmentChanges extends Vue {
 
   showAddedLast (changes: Changes) {
     const { added_last, added_first } = changes;
-    return !!added_first && !!added_last && !isSameDay(added_first, added_last);
+    return added_first ? (added_last && !isSameDay(added_first, added_last)) : !!added_last;
   }
 }
 </script>

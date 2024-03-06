@@ -11,21 +11,16 @@ import RecordsTableControls from '~/components/views/application/RecordsTable/Re
 })
 export default class RecordsTable extends Vue {
   @Prop({ required: true }) readonly columns!: DataTableColumn[];
-  @Prop({ required: true }) readonly resource!: app.db.Resource<wai.RecordsList<unknown>>;
+  @Prop({ required: true }) readonly resource!: app.db.Records<unknown>;
+  @Prop() readonly loadOnMount?: boolean;
+  @Prop() readonly hidePerPage?: boolean;
   @Prop() readonly sortOptions?: {
     name?: string;
     options?: string[];
   };
 
-  get records (): wai.AResource<unknown>[] {
-    if (!this.resource.response?.ok) return [];
-    const { payload } = this.resource.response;
-    return payload.records;
-  }
-
-  get failReason () {
-    if (!this.resource.response || this.resource.response.ok) return;
-    return this.resource.response.reason;
+  mounted () {
+    if (this.loadOnMount) this.onChange();
   }
 
   get recordsOffset (): number {
@@ -41,10 +36,6 @@ export default class RecordsTable extends Vue {
     );
   }
 
-  get recordsList (): app.Maybe<wai.RecordsList<unknown>> {
-    return this.resource.response?.ok ? this.resource.response.payload : undefined;
-  }
-
   @Watch('resource.queryParams.listingParams')
   @Watch('resource.queryParams.params')
   onChange () {
@@ -57,29 +48,36 @@ export default class RecordsTable extends Vue {
   <div :class="$attrs.class">
     <slot name="prepend" />
     <RecordsTableControls
-      :list="recordsList"
+      :list="resource.okPayload"
       :query-params="resource.queryParams"
       :sort-options="sortOptionItems"
       :disabled="resource.isLoading"
+      :hide-per-page="hidePerPage"
     />
     <DataTable
+      v-slot="{ columnsCount }"
       :columns="columns"
       class="mt-1"
     >
-      <template v-if="failReason" #prepend-full-row>
-        <b-alert variant="warning" show class="m-0">
-          <t
-            class="d-block"
-            value="views.application.RecordsTable.fetch_fail"
-          />
-          <t
-            class="d-block"
-            :value="`app.processing.${failReason}`"
-          />
-        </b-alert>
-      </template>
+      <tbody v-if="resource.failReason">
+        <tr>
+          <td :colspan="columnsCount">
+            <b-alert variant="warning" show class="m-0">
+              <t
+                class="d-block"
+                value="views.application.RecordsTable.fetch_fail"
+              />
+              <t
+                class="d-block"
+                :value="`app.processing.${resource.failReason}`"
+              />
+            </b-alert>
+          </td>
+        </tr>
+      </tbody>
+      <slot name="prepend-records" />
       <tbody>
-        <tr v-for="(record, index) in records" :key="`${index}-${record.id}`">
+        <tr v-for="(record, index) in (resource.okPayload?.records ?? [])" :key="`${index}-${record.id}`">
           <td v-if="record.error" :colspan="columns.length">
             <div class="pt-2">
               <b-alert variant="warning" show class="m-0">
@@ -99,6 +97,7 @@ export default class RecordsTable extends Vue {
           />
         </tr>
       </tbody>
+      <slot name="append-records" :columns-count="columnsCount" />
     </DataTable>
   </div>
 </template>

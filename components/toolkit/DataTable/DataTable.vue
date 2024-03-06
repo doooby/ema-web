@@ -118,14 +118,7 @@ function resizeColumn (
           <th scope="col" />
         </tr>
       </thead>
-      <tbody v-if="$slots['prepend-full-row']">
-        <tr>
-          <td :colspan="columns.length + 1">
-            <slot name="prepend-full-row" />
-          </td>
-        </tr>
-      </tbody>
-      <slot />
+      <slot :columns-count="columns.length + 1" />
     </table>
   </div>
 </template>

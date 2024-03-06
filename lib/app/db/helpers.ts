@@ -1,79 +1,28 @@
 import app from '~/lib/app';
 import { Api2Plugin, RequestResponse } from '~/lib/api2';
 
-export function useResource<Record> (
-  fn?: (params: app.db.QueryParams) => void,
-): app.db.Resource<Record> {
-  const queryParams = new app.db.QueryParams();
-  fn?.(queryParams);
-  return {
-    isLoading: false,
-    queryParams,
-    response: undefined,
-    refreshAtPage1 () {
-      if (!this.queryParams.listingParams) return;
-      this.queryParams.listingParams = {
-        ...this.queryParams.listingParams,
-        page: 1,
-      };
-    },
-    cancel: undefined,
-    get okPayload () {
-      return this.response?.ok ? this.response.payload : undefined;
-    },
-  };
-}
-
-export function useSaveableResource<Model = any> ({
-  onSave,
-  onSaveCanceled,
-  $router,
-}:{
-  onSave?(): void;
-  onSaveCanceled?(): void;
-  $router: Vue['$router'],
-}): app.db.SaveAbleResource<Model> {
-  return {
-    transaction: new app.Transaction(
-      () => onSave?.(),
-      () => onSaveCanceled ? onSaveCanceled() : $router.go(-1),
-    ),
-    model: {},
-    errors: undefined,
-    recordParams: undefined,
-  };
-}
-
-export async function loadResource<Record> (
-  context: { $api2: Api2Plugin },
-  resource: app.db.Resource<Record>,
-  block: (params: app.db.Params) => app.db.QueryDefinition<Record>,
-) {
-  resource.cancel?.();
-
-  let canceled = false;
-  resource.cancel = () => { canceled = true; };
-
-  resource.isLoading = true;
-  const params = resource.queryParams.produce();
-  const definition = block(params);
-  const response = await fetch(context, { params, ...definition });
-  if (canceled) return;
-
-  resource.response = response;
-  resource.isLoading = false;
-}
-
-export function useFilters (...shown: string[]): {
-  shown?: string[];
-} {
-  return {
-    shown,
-  };
-}
+// export function useSaveableResource<Model = any> ({
+//   onSave,
+//   onSaveCanceled,
+//   $router,
+// }:{
+//   onSave?(): void;
+//   onSaveCanceled?(): void;
+//   $router: Vue['$router'],
+// }): app.db.SaveAbleResource<Model> {
+//   return {
+//     transaction: new app.Transaction(
+//       () => onSave?.(),
+//       () => onSaveCanceled ? onSaveCanceled() : $router.go(-1),
+//     ),
+//     model: {},
+//     errors: undefined,
+//     recordParams: undefined,
+//   };
+// }
 
 // this is coupled with `Api2Plugin`
-async function fetch<Data> (
+export async function fetch<Data> (
   context: { $api2: Api2Plugin },
   query: app.db.QueryDefinition<Data>,
 ): Promise<RequestResponse<Data>> {
