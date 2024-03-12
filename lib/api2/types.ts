@@ -73,12 +73,15 @@ export interface Loader<V> {
 }
 
 export interface RecordLoader<R> {
+  // TODO change the nulls to undefined
   state: {
     loading: boolean;
     response: null | RequestResponse<SearchRecordsResponsePayload<R>>
     record: null | R;
   },
   load(): Promise<void>;
+  loadOnce(): Promise<void>;
+  notOkMessage(message?: string): app.Maybe<string>;
 }
 
 export interface QueryResourceState<R = unknown> {

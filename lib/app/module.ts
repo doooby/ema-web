@@ -85,3 +85,16 @@ export function nullable<V> (defaultValue?: V): app.Nullable<V> {
 export function createRef<V> (defaultValue?: V): app.Ref<V> {
   return { ref: defaultValue };
 }
+
+export function reduceObjects<O> (
+  objects: O[],
+  key: (o: O) => number | string,
+): app.Map<O> {
+  return objects.reduce(
+    (memo, o) => {
+      memo[key(o)] = o;
+      return memo;
+    },
+    {},
+  );
+}

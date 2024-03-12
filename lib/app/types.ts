@@ -12,6 +12,10 @@ export interface Ref<V> {
   ref: Maybe<V>;
 }
 
+export type Loaded =
+  | undefined
+  | { isLoading: boolean, errorMessage: Maybe<string> };
+
 export type Option = {
   value?: string;
   textKey: string;

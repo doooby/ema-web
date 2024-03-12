@@ -53,22 +53,15 @@ export default class GroupWeekAttendance extends Vue {
 
   async mounted () {
     await Promise.resolve();
-
-    if (!this.courseLoader.state.response) {
-      await this.courseLoader.load();
-    }
+    await this.courseLoader.loadOnce();
   }
 
-  get course (): app.Maybe<course.Course> {
-    const { response } = this.courseLoader.state;
-    return response?.ok
-      ? response.payload.records[0]
-      : undefined;
+  get course () {
+    return this.courseLoader.state.record;
   }
 
   get courseLoadFailMessage (): app.Maybe<string> {
-    const { response } = this.courseLoader.state;
-    return response?.ok === false ? 'app.processing.not_found' : undefined;
+    return this.courseLoader.notOkMessage();
   }
 
   get termDates (): app.Maybe<{ begin: Date, end: Date }> {
@@ -275,7 +268,7 @@ function updateArrayAt (array: unknown[], index: number, value: unknown): unknow
 
 <template>
   <LoadingBlock
-    class="mt-3"
+    :class="$attrs.class"
     :is-loading="!course"
     :fail-message="courseLoadFailMessage"
   >

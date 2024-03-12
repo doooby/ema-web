@@ -45,3 +45,13 @@ export function mapSortOptions (
     item: `app.db.sort.${listingName}.${value}`,
   })) ?? [];
 }
+
+export function loaded (
+  isLoading: boolean,
+  errorMessage?: string,
+): app.Loaded {
+  return {
+    isLoading: !isLoading,
+    errorMessage,
+  };
+}

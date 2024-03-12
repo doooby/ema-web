@@ -4,6 +4,7 @@ import ShowPageAction from '~/components/database/ShowPageAction.vue';
 import ShowPageTableRow from '~/components/database/ShowPageTableRow.vue';
 import { DatabasePage } from '~/components';
 import GroupGrades from '~/components/database/records/groups/GroupGrades/index.vue';
+import GroupGrades2 from '~/components/database/records/groups/GroupGrades/GroupGrades2.vue';
 import TextNames from '~/components/database/components/TextNames.vue';
 import Show2Page from '~/components/database/pages/show/Show2Page.vue';
 import EditAction from '~/components/database/components/detail/actions/EditAction.vue';
@@ -31,6 +32,7 @@ enum Tabs {
   assignment_history,
   attendance,
   grading,
+  grading2,
   dropout,
 }
 
@@ -55,6 +57,7 @@ enum Tabs {
     ShowPageAction,
     ShowPageTableRow,
     GroupGrades,
+    GroupGrades2,
     TextNames,
   },
 })
@@ -82,7 +85,7 @@ export default class extends DatabasePage {
 
   onLoadGroup (group) {
     this.group = group;
-    this.currentTab = Tabs.students;
+    this.currentTab = Tabs.grading2;
   }
 }
 </script>
@@ -201,6 +204,22 @@ export default class extends DatabasePage {
         no-fade
       >
         <PageTab
+          :id="Tabs.grading2"
+          v-model="currentTab"
+        >
+          <template #title>
+            <t value="page.db.groups.index.grades2" />
+          </template>
+          <template #content="{ present }">
+            <GroupGrades2
+              v-if="present"
+              clas="mt-3"
+              :group="record"
+              :course-loader="courseLoader"
+            />
+          </template>
+        </PageTab>
+        <PageTab
           :id="Tabs.students"
           v-model="currentTab"
         >
@@ -235,6 +254,7 @@ export default class extends DatabasePage {
           <template #content="{ present }">
             <GroupWeekAttendance
               v-if="present"
+              clas="mt-3"
               :group="record"
               :course-loader="courseLoader"
             />

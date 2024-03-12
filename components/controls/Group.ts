@@ -1,20 +1,15 @@
 import controls from '~/components/controls/index';
 import { Vue } from 'vue-property-decorator';
 import { Params } from '~/lib/api2';
+import app from '~/lib/app';
 
 export default class Group {
-  fieldsIndex: Record<string, controls.FieldDefinition>;
+  fieldsIndex: app.Map<controls.FieldDefinition>;
 
   state: controls.GroupState;
 
   constructor (readonly fields: controls.FieldDefinition[]) {
-    this.fieldsIndex = fields.reduce(
-      (index, field) => {
-        index[field.name] = field;
-        return index;
-      },
-      {},
-    );
+    this.fieldsIndex = app.reduceObjects(fields, field => field.name);
     this.state = Vue.observable({
       values: this.buildDefaultState(),
       params: {},
@@ -22,6 +17,32 @@ export default class Group {
     this.state.params = this.buildParams();
   }
 
+  static new (
+    ...fields: app.SparseList<
+      string
+      | [ string, (name: string) => Omit<controls.FieldDefinition, 'name'> ]
+      | controls.FieldDefinition
+    >
+  ): Group {
+    const composer = new Group.Composer();
+    for (const field of fields) {
+      if (field === undefined) continue;
+
+      let fieldDefinition: controls.FieldDefinition;
+      if (typeof field === 'string') {
+        fieldDefinition = { name: field };
+      } else if (Array.isArray(field)) {
+        const [ name, fn ] = field;
+        fieldDefinition = { name, ...fn(name) };
+      } else {
+        fieldDefinition = field;
+      }
+      composer.add(fieldDefinition);
+    }
+    return composer.finalize();
+  }
+
+  // TODO deprecated, use `Group.new()`
   static compose (...fields: controls.FieldDefinition[]): Group {
     const group = new Group(fields);
     return Object.freeze(group) as Group;
@@ -35,7 +56,8 @@ export default class Group {
     }
 
     finalize (): Group {
-      return Group.compose(...this.fields);
+      const group = new Group(this.fields);
+      return Object.freeze(group) as Group;
     }
   }
 

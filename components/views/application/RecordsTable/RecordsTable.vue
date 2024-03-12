@@ -2,7 +2,6 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { DataTable, DataTableColumn } from '~/components/toolkit/DataTable';
 import app from '~/lib/app';
-import { wai } from '~/vendor/wai';
 import RecordId from '~/components/views/application/RecordId.vue';
 import RecordsTableControls from '~/components/views/application/RecordsTable/RecordsTableControls.vue';
 
@@ -75,7 +74,7 @@ export default class RecordsTable extends Vue {
           </td>
         </tr>
       </tbody>
-      <slot name="prepend-records" />
+      <slot name="prepend-records" :columns-count="columnsCount" />
       <tbody>
         <tr v-for="(record, index) in (resource.okPayload?.records ?? [])" :key="`${index}-${record.id}`">
           <td v-if="record.error" :colspan="columns.length">

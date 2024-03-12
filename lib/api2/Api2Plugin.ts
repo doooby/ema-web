@@ -274,6 +274,13 @@ export default class Api2Plugin {
           state.record = state.response.payload.records[0] ?? null;
         }
       },
+      async loadOnce () {
+        if (!state.response) await this.load();
+      },
+      notOkMessage (message?: string) {
+        if (!state.response || state.response.ok) return;
+        return message ?? 'app.processing.not_found';
+      },
     });
   }
 
