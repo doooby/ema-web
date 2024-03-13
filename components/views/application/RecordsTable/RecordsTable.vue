@@ -11,6 +11,7 @@ import RecordsTableControls from '~/components/views/application/RecordsTable/Re
 export default class RecordsTable extends Vue {
   @Prop({ required: true }) readonly columns!: DataTableColumn[];
   @Prop({ required: true }) readonly resource!: app.db.Records<unknown>;
+  @Prop({ required: true }) readonly parentLoaded!: app.Loaded;
   @Prop() readonly loadOnMount?: boolean;
   @Prop() readonly hidePerPage?: boolean;
   @Prop() readonly sortOptions?: {
@@ -35,6 +36,20 @@ export default class RecordsTable extends Vue {
     );
   }
 
+  get isLoading () {
+    return !!(
+      this.resource.isLoading ||
+      this.parentLoaded?.isLoading
+    );
+  }
+
+  get errorMessage () {
+    return (
+      (this.resource.failReason ? `app.processing.${this.resource.failReason}` : undefined) ||
+      this.parentLoaded?.errorMessage
+    );
+  }
+
   @Watch('resource.queryParams.listingParams')
   @Watch('resource.queryParams.params')
   onChange () {
@@ -50,53 +65,74 @@ export default class RecordsTable extends Vue {
       :list="resource.okPayload"
       :query-params="resource.queryParams"
       :sort-options="sortOptionItems"
-      :disabled="resource.isLoading"
+      :disabled="isLoading"
       :hide-per-page="hidePerPage"
     />
     <DataTable
-      v-slot="{ columnsCount }"
       :columns="columns"
       class="mt-1"
     >
-      <tbody v-if="resource.failReason">
-        <tr>
-          <td :colspan="columnsCount">
-            <b-alert variant="warning" show class="m-0">
-              <t
-                class="d-block"
-                value="views.application.RecordsTable.fetch_fail"
-              />
-              <t
-                class="d-block"
-                :value="`app.processing.${resource.failReason}`"
-              />
-            </b-alert>
-          </td>
-        </tr>
-      </tbody>
-      <slot name="prepend-records" :columns-count="columnsCount" />
-      <tbody>
-        <tr v-for="(record, index) in (resource.okPayload?.records ?? [])" :key="`${index}-${record.id}`">
-          <td v-if="record.error" :colspan="columns.length">
-            <div class="pt-2">
+      <template #header-prepend>
+        <div
+          v-if="isLoading"
+          class="position-relative"
+        >
+          <div
+            class="progress position-absolute w-100"
+            :style="{
+              left: 0,
+              top: 0,
+              height: '5px',
+            }"
+          >
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated bg-secondary w-100"
+              role="progressbar"
+            />
+          </div>
+        </div>
+      </template>
+      <template #default="{ columnsCount }">
+        <tbody v-if="errorMessage">
+          <tr>
+            <td :colspan="columnsCount">
               <b-alert variant="warning" show class="m-0">
                 <t
                   class="d-block"
-                  value="views.application.RecordsTable.record_error"
+                  value="views.application.RecordsTable.fetch_fail"
                 />
-                <RecordId :record="record" />
+                <t
+                  class="d-block"
+                  :value="errorMessage"
+                />
               </b-alert>
-            </div>
-          </td>
-          <slot
-            v-else
-            name="row"
-            :record="record"
-            :order="recordsOffset + index"
-          />
-        </tr>
-      </tbody>
-      <slot name="append-records" :columns-count="columnsCount" />
+            </td>
+          </tr>
+        </tbody>
+        <slot name="prepend-records" :columns-count="columnsCount" />
+        <tbody>
+          <tr v-for="(record, index) in (resource.okPayload?.records ?? [])" :key="`${index}-${record.id}`">
+            <td v-if="record.error" :colspan="columns.length">
+              <div class="pt-2">
+                <b-alert variant="warning" show class="m-0">
+                  <t
+                    class="d-block"
+                    value="views.application.RecordsTable.record_error"
+                  />
+                  <RecordId :record="record" />
+                </b-alert>
+              </div>
+            </td>
+            <slot
+              v-else
+              name="row"
+              :record="record"
+              :order="recordsOffset + index"
+            />
+          </tr>
+        </tbody>
+        <slot name="append-records" :columns-count="columnsCount" />
+      </template>
     </DataTable>
   </div>
 </template>

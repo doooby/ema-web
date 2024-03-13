@@ -3,7 +3,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { course, group, student } from '~/lib/records';
 import { RecordLoader } from '~/lib/api2';
 import controls from '~/components/controls';
-import LoadingBlock from '~/components/database/components/LoadingBlock.vue';
 import app from '~/lib/app';
 import { wai } from '~/vendor/wai';
 import { DataTable } from '~/components/toolkit/DataTable';
@@ -19,7 +18,7 @@ function parseStudent (value) {
 type Student = ReturnType<typeof parseStudent>;
 
 @Component({
-  components: { HeaderCell, RecordsTable, LoadingBlock },
+  components: { HeaderCell, RecordsTable },
 })
 export default class GroupGrades extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
@@ -85,39 +84,28 @@ export default class GroupGrades extends Vue {
 </script>
 
 <template>
-  <LoadingBlock
-    :class="$attrs.class"
-    :is-loading="!!loaded?.isLoading"
-    :fail-message="loaded?.errorMessage"
+  <RecordsTable
+    :resource="students"
+    :parent-loaded="loaded"
+    :columns="columns"
+    :sort-options="{ name: 'students', options: [ 'id', 'first_name_lo' ] }"
+    :hide-per-page="true"
+    @change="onStudentsLoad"
   >
-    <RecordsTable
-      :resource="students"
-      :columns="columns"
-      :sort-options="{ name: 'students', options: [ 'id', 'first_name_lo' ] }"
-      :hide-per-page="true"
-      @change="onStudentsLoad"
-    >
-<!--      <template-->
-<!--        #prepend-records="{ columnsCount }"-->
-<!--        v-->
-<!--      >-->
-<!--        <tbody>-->
-<!--          <tr>-->
-<!--            <td :colspan="columnsCount" />-->
-<!--          </tr>-->
-<!--        </tbody>-->
-<!--      </template>-->
+    <template #prepend>
+      <div class="mb-2">
+        fasdfs
+      </div>
+    </template>
+    <template #row="{ record }">
+      <td>
+        <HeaderCell
+          :record="record"
+          :path="`/database/people/${record.id}`"
+          :name="record.header.name_local"
+        />
+      </td>
+    </template>
 
-      <template #row="{ record }">
-        <td>
-          <HeaderCell
-            :record="record"
-            :path="`/database/people/${record.id}`"
-            :name="record.header.name_local"
-          />
-        </td>
-      </template>
-
-    </RecordsTable>
-  </LoadingBlock>
+  </RecordsTable>
 </template>

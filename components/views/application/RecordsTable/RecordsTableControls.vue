@@ -59,49 +59,47 @@ export default class RecordsTableControls extends Vue {
 </script>
 
 <template>
-  <b-overlay :show="disabled" rounded="sm">
-    <div
-      :class="[
-        'd-flex flex-wrap justify-content-between',
-        $attrs.class,
-      ]"
-    >
-      <div class="mt-1">
-        <div
-          v-if="sortOptions?.length"
-          class="gray-border-controls"
+  <div
+    :class="[
+      'd-flex flex-wrap justify-content-between',
+      $attrs.class,
+    ]"
+  >
+    <div class="mt-1">
+      <div
+        v-if="sortOptions?.length"
+        class="gray-border-controls"
+      >
+        <SmallDropdownSelect
+          :value="[ currentSortOption ]"
+          :options="sortOptions"
+          @change="onChangeSortOption($event)"
         >
-          <SmallDropdownSelect
-            :value="[ currentSortOption ]"
-            :options="sortOptions"
-            @change="onChangeSortOption($event)"
+          <template #content="{ option }">
+            <t v-if="option" :value="option.item" />
+          </template>
+          <template #option-content="{ option }">
+            <t :value="option.item" />
+          </template>
+        </SmallDropdownSelect>
+        <div>
+          <div
+            class="direction--dir-btn gray-border-controls--field--button border-0 "
+            @click="onChangeSortDirection"
           >
-            <template #content="{ option }">
-              <t v-if="option" :value="option.item" />
-            </template>
-            <template #option-content="{ option }">
-              <t :value="option.item" />
-            </template>
-          </SmallDropdownSelect>
-          <div>
-            <div
-              class="direction--dir-btn gray-border-controls--field--button border-0 "
-              @click="onChangeSortDirection"
-            >
-              {{ currentSortDirection === 'ASC' ? '⇓' : '⇑' }}
-            </div>
+            {{ currentSortDirection === 'ASC' ? '⇓' : '⇑' }}
           </div>
         </div>
-        <div class="mt-1" />
       </div>
-      <RecordsTablePageSelect
-        class="mt-1"
-        :value="list"
-        :hide-per-page="hidePerPage"
-        @select="({ page, perPage }) => onInput({ page, per_page: perPage })"
-      />
+      <div class="mt-1" />
     </div>
-  </b-overlay>
+    <RecordsTablePageSelect
+      class="mt-1"
+      :value="list"
+      :hide-per-page="hidePerPage"
+      @select="({ page, perPage }) => onInput({ page, per_page: perPage })"
+    />
+  </div>
 </template>
 
 <style scoped>

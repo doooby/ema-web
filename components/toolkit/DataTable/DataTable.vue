@@ -97,6 +97,14 @@ function resizeColumn (
         <col style="min-width: 12px;">
       </colgroup>
       <thead v-if="!hideHeader">
+        <tr v-if="$slots['header-prepend']">
+          <th
+            class="ema--toolkit--data-table--header__prepend"
+            :colspan="columns.length + 1"
+          >
+            <slot name="header-prepend" />
+          </th>
+        </tr>
         <tr>
           <th
             v-for="(column, index) of columns"
@@ -136,9 +144,13 @@ function resizeColumn (
       > th.ema--toolkit--data-table--header {
         padding: 0;
         > div {
-          //overflow-y: auto;
+          overflow-y: auto;
           max-height: 100px;
         }
+      }
+      > th.ema--toolkit--data-table--header__prepend {
+        background-color: $body-bg;
+        padding: 0;
       }
     }
 
