@@ -5,10 +5,12 @@ import { wai } from '~/vendor/wai';
 import SmallDropdownSelect from '~/components/controls/inputs/temporary/SmallDropdownSelect.vue';
 import RecordsTablePageSelect from '~/components/views/application/RecordsTable/RecordsTablePageSelect.vue';
 import { recordsList } from '~/vendor/wai/mappers';
+import MiniToggle from '~/components/views/application/buttons/MiniToggle.vue';
 
 @Component({
   methods: { recordsList },
   components: {
+    MiniToggle,
     RecordsTablePageSelect,
     SmallDropdownSelect,
   },
@@ -20,6 +22,8 @@ export default class RecordsTableControls extends Vue {
   @Prop() readonly disabled?: boolean;
   @Prop() readonly hidePerPage?: boolean;
 
+  perPageOptions = [ 10, 25, 100 ];
+
   get currentSortOption () {
     const value = this.list?.listing?.order_by?.[0]?.[0];
     if (!value) return;
@@ -28,6 +32,18 @@ export default class RecordsTableControls extends Vue {
 
   get currentSortDirection () {
     return this.list?.listing?.order_by?.[0]?.[1] === 'ASC' ? 'ASC' : 'DESC';
+  }
+
+  get perPage (): number {
+    return this.list?.listing.per_page ?? app.db.LISTING_PER_PAGE_OPTIONS[0];
+  }
+
+  get countOnPage (): number {
+    return this.list?.records?.length || 0;
+  }
+
+  get countTotal (): number {
+    return this.list?.total || 0;
   }
 
   onInput (value: Partial<app.db.ListingParams>) {
@@ -61,11 +77,11 @@ export default class RecordsTableControls extends Vue {
 <template>
   <div
     :class="[
-      'd-flex flex-wrap justify-content-between',
+      'row',
       $attrs.class,
     ]"
   >
-    <div class="mt-1">
+    <div class="col-12 col-md-6 col-lg-4">
       <div
         v-if="sortOptions?.length"
         class="gray-border-controls"
@@ -91,14 +107,45 @@ export default class RecordsTableControls extends Vue {
           </div>
         </div>
       </div>
-      <div class="mt-1" />
     </div>
-    <RecordsTablePageSelect
-      class="mt-1"
-      :value="list"
-      :hide-per-page="hidePerPage"
-      @select="({ page, perPage }) => onInput({ page, per_page: perPage })"
-    />
+    <div class="col-12 col-md-6 col-lg-4 mt-1 mt-md-0">
+      <div
+        class="gray-border-controls justify-content-center"
+      >
+        <div
+          v-if="!hidePerPage"
+          class="d-flex align-items-center"
+          style="gap: 4px;"
+        >
+          <div>
+            <t value="db.listing.SearchPagination.per_page" />
+            <span> :</span>
+          </div>
+          <MiniToggle
+            v-for="option in perPageOptions"
+            :key="option"
+            :value="perPage == option"
+            @click="onInput({ page: 1, per_page: option })"
+          >
+            {{ option }}
+          </MiniToggle>
+        </div>
+        <div class="d-flex">
+          <t value="db.listing.SearchPagination.count" />
+          <span>&nbsp;:&nbsp;</span>
+          <span>{{ countOnPage }}</span>
+          <span>&nbsp;/&nbsp;</span>
+          <span>{{ countTotal }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 col-lg-4 mt-1 mt-lg-0">
+      <RecordsTablePageSelect
+        :value="list"
+        :hide-per-page="hidePerPage"
+        @select="(value) => onInput({ page: value.page, per_page: value.perPage })"
+      />
+    </div>
   </div>
 </template>
 

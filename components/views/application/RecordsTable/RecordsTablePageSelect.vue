@@ -32,14 +32,6 @@ export default class RecordsTablePageSelect extends Vue {
     return this.pagesCount || 0;
   }
 
-  get countOnPage (): number {
-    return this.value?.records?.length || 0;
-  }
-
-  get total (): number {
-    return this.value?.total || 0;
-  }
-
   get availablePages (): number[] {
     const topLimit = this.lastPage + 1;
     return uniq([
@@ -51,14 +43,18 @@ export default class RecordsTablePageSelect extends Vue {
     );
   }
 
-  get perPageOptions () {
-    return [ 10, 25, 100 ];
-  }
-
-  renderContent (page: number): string {
-    if (page === 1 && page !== this.currentPage) return '«';
-    else if (page === this.lastPage && page !== this.currentPage) return '»';
-    else return String(page);
+  get extendedPages (): {
+    page: number,
+    text: string,
+    disabled: boolean,
+  }[] {
+    if (this.pagesCount < 2) return [];
+    return [
+      { page: 1, text: '«', disabled: this.currentPage === 1 },
+      { page: this.currentPage - 1, text: '‹', disabled: this.currentPage < 2 },
+      { page: this.currentPage + 1, text: '›', disabled: this.currentPage >= this.lastPage },
+      { page: this.lastPage, text: '»', disabled: this.currentPage === this.lastPage },
+    ];
   }
 
   onPageSelect (event) {
@@ -72,62 +68,35 @@ export default class RecordsTablePageSelect extends Vue {
       }
     }
   }
-
-  onPerPageSelect (value) {
-    this.$emit('select', {
-      page: 1,
-      perPage: value,
-    });
-  }
 }
 </script>
 
 <template>
-  <div :class="$attrs.class">
-
-    <div class="pagination-row d-flex justify-content-end flex-wrap">
-      <div
-        v-if="!hidePerPage"
-        class="d-flex px-1 align-items-center"
-        style="gap: 4px;"
-      >
-        <div>
-          <t value="db.listing.SearchPagination.per_page" />
-          <span> :</span>
-        </div>
-        <MiniToggle
-          v-for="option in perPageOptions"
-          :key="option"
-          :value="perPage == option"
-          @click="onPerPageSelect(option)"
-        >
-          {{ option }}
-        </MiniToggle>
-      </div>
-      <div class="px-1 d-flex">
-        <t value="db.listing.SearchPagination.count" />
-        <span>&nbsp;:&nbsp;</span>
-        <span>{{ countOnPage }}</span>
-        <span>&nbsp;/&nbsp;</span>
-        <span>{{ total }}</span>
-      </div>
-    </div>
-
+  <div
+    :class="[
+      'pagination-row d-flex justify-content-end',
+      $attrs.class,
+    ]"
+    @click="onPageSelect"
+  >
     <div
-      class="mt-1 pagination-row d-flex justify-content-end"
-      @click="onPageSelect"
+      v-for="{ page, text, disabled } of extendedPages"
+      :key="`e-${page}`"
+      class="pagination-item"
     >
-      <div
-        v-for="page of availablePages"
-        :key="page"
-        :class="{ 'pagination-item': true, 'current-page': currentPage === page }"
-      >
-        <div :data-page="page">
-          {{ renderContent(page) }}
-        </div>
+      <div :data-page="disabled ? undefined : page">
+        {{ text }}
       </div>
     </div>
-
+    <div
+      v-for="page of availablePages"
+      :key="`p-${page}`"
+      :class="{ 'pagination-item': true, 'current-page': currentPage === page }"
+    >
+      <div :data-page="page">
+        {{ page }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -151,22 +120,11 @@ export default class RecordsTablePageSelect extends Vue {
     }
   }
 }
-.pagination-input {
-  > input {
-    font-size: 14px;
-    width: 25px;
-  }
-}
 .pagination-item > div {
   text-align: center;
   line-height: 20px;
   user-select: none;
   cursor: pointer;
   padding: 0 2px;
-}
-.pagination--per_page {
-  height: 20px;
-  font-size: 14px;
-  padding: 0 4px;
 }
 </style>
