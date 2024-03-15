@@ -1,12 +1,13 @@
 import app from '~/lib/app';
-import { intersectionWith } from 'lodash';
+import { differenceBy, intersectionWith } from 'lodash';
+import { Vue } from 'vue-property-decorator';
 
 export default class Options {
   index: app.Map<app.OptionItem<string>[]> = {};
 
   getAll (context: any, name: string): app.OptionItem<string>[] {
     if (!(name in this.index)) {
-      this.index[name] = this.buildList(context, name);
+      Vue.set(this.index, name, this.buildList(context, name));
     }
 
     return this.index[name] ?? [];
@@ -39,5 +40,16 @@ export default class Options {
       value,
       item: `app.internal_lists.${name}.${value}`,
     }));
+  }
+
+  static isSameList (
+    list: app.OptionItemsList,
+    comparee: app.OptionItemsList,
+  ): boolean {
+    return differenceBy(
+      list ?? [],
+      comparee ?? [],
+      option => option.value,
+    ).length === 0;
   }
 }

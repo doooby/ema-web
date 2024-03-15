@@ -4,23 +4,24 @@ import { Params } from '~/lib/api2';
 import app from '~/lib/app';
 
 export default class Group {
-  fieldsIndex: app.Map<controls.FieldDefinition>;
-
   state: controls.GroupState;
 
-  constructor (readonly fields: controls.FieldDefinition[]) {
-    this.fieldsIndex = app.reduceObjects(fields, field => field.name);
+  constructor (
+    fields: controls.FieldDefinition[],
+  ) {
     this.state = Vue.observable({
-      values: this.buildDefaultState(),
+      values: {},
       params: {},
+      fields: app.reduceObjects(fields, field => field.name),
     });
+
+    this.state.values = this.buildDefaultValues();
     this.state.params = this.buildParams();
   }
 
   static new (
     ...fields: app.SparseList<
       string
-      | [ string, (name: string) => Omit<controls.FieldDefinition, 'name'> ]
       | controls.FieldDefinition
     >
   ): Group {
@@ -31,9 +32,6 @@ export default class Group {
       let fieldDefinition: controls.FieldDefinition;
       if (typeof field === 'string') {
         fieldDefinition = { name: field };
-      } else if (Array.isArray(field)) {
-        const [ name, fn ] = field;
-        fieldDefinition = { name, ...fn(name) };
       } else {
         fieldDefinition = field;
       }
@@ -52,13 +50,17 @@ export default class Group {
     fields: controls.FieldDefinition[] = [];
 
     add (field: controls.FieldDefinition) {
-      this.fields.push(field);
+      this.fields.push(Object.freeze(field));
     }
 
     finalize (): Group {
       const group = new Group(this.fields);
       return Object.freeze(group) as Group;
     }
+  }
+
+  getField (field: string) {
+    return this.state.fields?.[field];
   }
 
   getValue (field: string): unknown {
@@ -80,14 +82,22 @@ export default class Group {
         value = value(this.getValue(field));
       }
       newValues[field] = value;
-      this.fieldsIndex[field]?.onChange?.(newValues);
+      this.getField(field)?.onChange?.(newValues);
     }
     this.state.values = Object.freeze(newValues);
     this.state.params = this.buildParams();
   }
 
+  updateField (field: controls.FieldDefinition) {
+    const name = field.name;
+    this.state.fields = Object.freeze({
+      ...this.state.fields,
+      [name]: field,
+    });
+  }
+
   reset (): void {
-    this.state.values = this.buildDefaultState();
+    this.state.values = this.buildDefaultValues();
     this.state.params = this.buildParams();
   }
 
@@ -99,6 +109,12 @@ export default class Group {
         return field.default;
       }
     }
+  }
+
+  private get fields () {
+    return (
+      this.state.fields ? Object.values(this.state.fields) : []
+    ).filter(id => id) as controls.FieldDefinition[];
   }
 
   private buildParams (): Params {
@@ -113,7 +129,7 @@ export default class Group {
     return Object.freeze(params);
   }
 
-  private buildDefaultState (): controls.GroupValues {
+  private buildDefaultValues (): controls.GroupValues {
     const newValue = {};
     for (const field of this.fields) {
       newValue[field.name] = Group.defaultOf(field);

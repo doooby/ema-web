@@ -91,8 +91,6 @@ export default class SearchForm extends Vue {
       </b-button>
     </div>
 
-    <div v-if="!filtersShown" class="mt-3" />
-
     <b-collapse
       id="collapse__pages_search_form"
       v-model="filtersShown"

@@ -1,5 +1,6 @@
 import { Params } from '~/lib/api2/types';
 import app from '~/lib/app';
+import controls from '~/components/controls';
 
 export interface FieldDefinition {
   name: string;
@@ -13,6 +14,7 @@ export interface FieldDefinition {
 export interface GroupState {
   values: GroupValues;
   params: Params;
+  fields: app.Maybe<app.Map<controls.FieldDefinition>>;
 }
 
 export type GroupValues = Record<string, unknown>;

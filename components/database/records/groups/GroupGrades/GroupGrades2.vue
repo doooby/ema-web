@@ -8,6 +8,10 @@ import { wai } from '~/vendor/wai';
 import { DataTable } from '~/components/toolkit/DataTable';
 import RecordsTable from '~/components/views/application/RecordsTable/RecordsTable.vue';
 import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
+import RecordName from '~/components/views/application/RecordName.vue';
+import AdditionalControls from '~/components/database/records/groups/GroupGrades/AdditionalControls.vue';
+import { h } from 'vue';
+import SubjectColumnHeader from '~/components/database/records/groups/GroupGrades/SubjectColumnHeader.vue';
 
 function parseStudent (value) {
   return wai.object2(value, value => ({
@@ -18,7 +22,12 @@ function parseStudent (value) {
 type Student = ReturnType<typeof parseStudent>;
 
 @Component({
-  components: { HeaderCell, RecordsTable },
+  components: {
+    AdditionalControls,
+    RecordName,
+    HeaderCell,
+    RecordsTable,
+  },
 })
 export default class GroupGrades extends Vue {
   @Prop({ required: true }) readonly group!: group.Group;
@@ -27,10 +36,6 @@ export default class GroupGrades extends Vue {
   loaded = app.db.loaded(false);
   courseRef = app.createRef<course.Course>();
   storedGradesRef = app.createRef<any>();
-
-  form = controls.Group.new(
-    'unknown',
-  );
 
   students = new app.db.Records<Student>({
     params: {
@@ -45,10 +50,23 @@ export default class GroupGrades extends Vue {
     },
   });
 
+  controls = controls.Group.new(
+    'subjects',
+  );
+
   async mounted () {
     await Promise.resolve();
+
     await this.courseLoader.loadOnce();
     this.courseRef.ref = this.courseLoader.state.record ?? undefined;
+
+    this.controls.updateField({
+      ...this.controls.getField('subjects')!,
+      options: (this.courseRef.ref?.subjects ?? [])
+        .map(item => Object.freeze({ value: item.subject.id, item })),
+    });
+    this.controls.update('subjects', this.controls.getField('subjects')?.options);
+
     const response = await this.$api2.transientRequest(
       this.$api2.getQuery('groups', 'get_grades')({ id: this.group.id }),
     );
@@ -62,6 +80,12 @@ export default class GroupGrades extends Vue {
     }
   }
 
+  get selectedSubjects (): course.CourseSubject[] {
+    return app.selectedOptionItems<course.CourseSubject>(
+      this.controls.getValue('subjects'),
+    );
+  }
+
   get columns () {
     return DataTable.flattenColumns(
       {
@@ -69,6 +93,13 @@ export default class GroupGrades extends Vue {
         size: 250,
         headerText: 'database.records.groups.GroupGrades.column.person',
       },
+      ...(this.selectedSubjects.map(subject => ({
+        name: `subject_${subject.subject.id}`,
+        size: 150,
+        header: () => h(SubjectColumnHeader, {
+          props: { subject: subject.subject },
+        }),
+      }))),
     );
   }
 
@@ -78,7 +109,6 @@ export default class GroupGrades extends Vue {
       `/groups/${this.group.id}/students`,
       parseStudent,
     );
-    // this.form.reset();
   }
 }
 </script>
@@ -93,9 +123,10 @@ export default class GroupGrades extends Vue {
     @change="onStudentsLoad"
   >
     <template #prepend>
-      <div class="mb-2">
-        fasdfs
-      </div>
+      <AdditionalControls
+        :controls="controls"
+        :parent-loaded="loaded"
+      />
     </template>
     <template #row="{ record }">
       <td>
@@ -106,6 +137,5 @@ export default class GroupGrades extends Vue {
         />
       </td>
     </template>
-
   </RecordsTable>
 </template>

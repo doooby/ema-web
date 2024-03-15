@@ -98,3 +98,8 @@ export function reduceObjects<O> (
     {},
   );
 }
+
+export function selectedOptionItems<I> (options: unknown): I[] {
+  if (!Array.isArray(options)) return [];
+  return options?.map(option => option.item) ?? [];
+}

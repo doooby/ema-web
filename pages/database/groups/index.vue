@@ -120,7 +120,7 @@ export default class extends DatabasePage {
         </template>
         <OptionsSelect
           :value="group.getValue('non_classified')"
-          :options="group.fieldsIndex.non_classified?.options ?? []"
+          :options="group.getField('non_classified')?.options ?? []"
           @change="group.update('non_classified', $event)"
         >
           <template #option-content="{ option, selected }">

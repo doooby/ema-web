@@ -35,3 +35,5 @@ export interface OptionItem<I=unknown> {
   value: string;
   item: I;
 }
+
+export type OptionItemsList<I=unknown> = Maybe<OptionItem<I>[]>;

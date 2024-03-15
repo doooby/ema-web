@@ -151,7 +151,7 @@ export default class extends DatabasePage {
       return;
     }
 
-    const field = group.fieldsIndex[name];
+    const field = group.getField(name);
     if (!field) return;
 
     this.shownFilters.add(name);
@@ -243,7 +243,7 @@ export default class extends DatabasePage {
           </template>
           <OptionsSelect
             :value="group.getValue('non_classified')"
-            :options="group.fieldsIndex.non_classified?.options ?? []"
+            :options="group.getField('non_classified')?.options ?? []"
             @change="group.update('non_classified', $event)"
           >
             <template #option-content="{ option, selected }">
@@ -260,7 +260,7 @@ export default class extends DatabasePage {
           </template>
           <OptionsSelect
             :value="group.getValue('gender')"
-            :options="group.fieldsIndex.gender?.options ?? []"
+            :options="group.getField('gender')?.options ?? []"
             @change="group.update('gender', $event)"
           >
             <template #option-content="{ option, selected }">

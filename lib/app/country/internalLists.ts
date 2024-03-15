@@ -2,6 +2,11 @@ import { InternalOptionsList } from '~/lib/app/types';
 
 export const staticLists: Record<string, undefined | InternalOptionsList> = [
 
+  [ 'options_all_none', [
+    'all',
+    'none',
+  ] ],
+
   [ 'accreditation_authority', [
     'gov',
     'ngo',

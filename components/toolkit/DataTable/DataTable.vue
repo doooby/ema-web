@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { DataTableColumn } from '~/components/toolkit/DataTable/types';
 import { flatten } from 'lodash';
 import { h } from 'vue';
@@ -54,6 +54,14 @@ export default class DataTable extends Vue {
       props: { value: text },
       class: 'text-break',
     });
+  }
+
+  @Watch('columns')
+  onColumnsChange () {
+    this.defaultSizes = this.columns.map(({ size, fixedSize }) => {
+      return fixedSize && size ? size : resizeColumn(size);
+    });
+    this.currentSizes = this.defaultSizes.slice(0);
   }
 
   get colStyles () {
@@ -144,7 +152,7 @@ function resizeColumn (
       > th.ema--toolkit--data-table--header {
         padding: 0;
         > div {
-          overflow-y: auto;
+          //overflow-y: auto;
           max-height: 100px;
         }
       }
