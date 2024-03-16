@@ -12,6 +12,12 @@ import RecordName from '~/components/views/application/RecordName.vue';
 import AdditionalControls from '~/components/database/records/groups/GroupGrades/AdditionalControls.vue';
 import { h } from 'vue';
 import SubjectColumnHeader from '~/components/database/records/groups/GroupGrades/SubjectColumnHeader.vue';
+import SubjectColumnField from '~/components/database/records/groups/GroupGrades/SubjectColumnField.vue';
+
+interface GradedSubject {
+  subject: course.CourseSubject;
+  grading: course.grading.GradingDefinition;
+}
 
 function parseStudent (value) {
   return wai.object2(value, value => ({
@@ -23,6 +29,7 @@ type Student = ReturnType<typeof parseStudent>;
 
 @Component({
   components: {
+    SubjectColumnField,
     AdditionalControls,
     RecordName,
     HeaderCell,
@@ -34,8 +41,9 @@ export default class GroupGrades extends Vue {
   @Prop({ required: true }) readonly courseLoader!: RecordLoader<course.Course>;
 
   loaded = app.db.loaded(false);
-  courseRef = app.createRef<course.Course>();
-  storedGradesRef = app.createRef<any>();
+  course = app.nullable<course.Course>();
+  storedGrades = app.nullable<any>();
+  gradeChanges = app.nullable<any>();
 
   students = new app.db.Records<Student>({
     params: {
@@ -50,19 +58,17 @@ export default class GroupGrades extends Vue {
     },
   });
 
-  controls = controls.Group.new(
-    'subjects',
-  );
+  controls = controls.Group.new('subjects');
 
   async mounted () {
     await Promise.resolve();
 
     await this.courseLoader.loadOnce();
-    this.courseRef.ref = this.courseLoader.state.record ?? undefined;
+    this.course = this.courseLoader.state.record ?? null;
 
     this.controls.updateField({
       ...this.controls.getField('subjects')!,
-      options: (this.courseRef.ref?.subjects ?? [])
+      options: (this.course?.subjects ?? [])
         .map(item => Object.freeze({ value: item.subject.id, item })),
     });
     this.controls.update('subjects', this.controls.getField('subjects')?.options);
@@ -70,9 +76,9 @@ export default class GroupGrades extends Vue {
     const response = await this.$api2.transientRequest(
       this.$api2.getQuery('groups', 'get_grades')({ id: this.group.id }),
     );
-    if (response.ok) this.storedGradesRef.ref = response.payload;
+    if (response.ok) this.storedGrades = response.payload.subjects ?? {};
 
-    if (!this.courseRef.ref || !this.storedGradesRef) {
+    if (!this.course || !this.storedGrades) {
       this.loaded = app.db.loaded(false, 'app.processing.failed_to_load');
     } else {
       this.loaded = app.db.loaded(true);
@@ -80,10 +86,13 @@ export default class GroupGrades extends Vue {
     }
   }
 
-  get selectedSubjects (): course.CourseSubject[] {
-    return app.selectedOptionItems<course.CourseSubject>(
-      this.controls.getValue('subjects'),
-    );
+  get selectedSubjects () {
+    return app
+      .selectedOptionItems<course.CourseSubject>(this.controls.getValue('subjects'))
+      .map(subject => ({
+        subject, grading: course.grading.buildGradingDefinition(subject.grading),
+      }))
+      .filter((subject): subject is GradedSubject => !!subject.grading);
   }
 
   get columns () {
@@ -93,7 +102,7 @@ export default class GroupGrades extends Vue {
         size: 250,
         headerText: 'database.records.groups.GroupGrades.column.person',
       },
-      ...(this.selectedSubjects.map(subject => ({
+      ...(this.selectedSubjects.map(({ subject }) => ({
         name: `subject_${subject.subject.id}`,
         size: 150,
         header: () => h(SubjectColumnHeader, {
@@ -134,6 +143,16 @@ export default class GroupGrades extends Vue {
           :record="record"
           :path="`/database/people/${record.id}`"
           :name="record.header.name_local"
+        />
+      </td>
+      <td
+        v-for="({subject, grading}) in selectedSubjects"
+        :key="subject.subject.id"
+      >
+        <SubjectColumnField
+          :grading="grading"
+          :original-value="storedGrades?.[subject.subject.id]?.[record.id]"
+          :value="gradeChanges?.[subject.subject.id]?.[record.id]"
         />
       </td>
     </template>

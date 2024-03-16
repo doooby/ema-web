@@ -1,6 +1,7 @@
 import { BRecord } from '~/lib/api2';
 import { course } from '~/lib/records';
 import { reverse, times } from 'lodash';
+import app from '~/lib/app';
 
 export function buildSubjectsGrading (course: course.Course): {
   subject: BRecord;
@@ -12,9 +13,9 @@ export function buildSubjectsGrading (course: course.Course): {
   }));
 }
 
-function buildGradingDefinition (
+export function buildGradingDefinition (
   grading: undefined | [string, string, (undefined | string)],
-): undefined | course.grading.GradingDefinition {
+): app.Maybe<course.grading.GradingDefinition> {
   if (!grading?.[0]) return;
 
   let type, min, max, isReversed, options;

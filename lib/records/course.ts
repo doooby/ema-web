@@ -167,7 +167,7 @@ export function mapSubject (
 
 export function mapGrading (
   value: unknown,
-): [string, string, undefined | string] {
+): app.Maybe<[string, string, undefined | string]> {
   if (!Array.isArray(value)) {
     throw new wai.MappingError('not array');
   }
@@ -175,7 +175,8 @@ export function mapGrading (
   array[0] = wai.prop(0, value, wai.string);
   array[1] = wai.prop(1, value, wai.string);
   array[2] = wai.prop(2, value, wai.nullable(wai.string));
-  return Object.freeze(array);
+
+  if (array[0].length && array[1].length) return Object.freeze(array);
 }
 
 export const queries = {
