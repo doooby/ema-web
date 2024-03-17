@@ -7,7 +7,6 @@ import * as page from './page';
 import * as session from './session';
 import app from '~/lib/app/index';
 import Ema from '~/lib/app/Ema';
-import { PageState } from '~/lib/app/types';
 export * from './types';
 export * from './global';
 export { default as Transaction } from './Transaction';

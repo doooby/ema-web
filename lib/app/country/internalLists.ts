@@ -118,12 +118,18 @@ export const staticLists: Record<string, undefined | InternalOptionsList> = [
   ] ],
 
   [ 'nationalities', [
+    'ethiopian',
     'syrian',
   ] ],
 
   [ 'languages', [
-    'eng',
-    'ara',
+    'eng', // English
+    'ara', // Arabic
+    'amh', // Amharic
+    'drs', // Gedeo / Gedeofa
+    'orm', // Oromo / Oromifa
+    'sid', // Sidama / Sidamigna
+    'wal', // Wolaitta / Wolayitigna
   ] ],
 
   [ 'attendance', [
