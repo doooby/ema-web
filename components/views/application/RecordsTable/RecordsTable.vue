@@ -11,7 +11,7 @@ import RecordsTableControls from '~/components/views/application/RecordsTable/Re
 export default class RecordsTable extends Vue {
   @Prop({ required: true }) readonly columns!: DataTableColumn[];
   @Prop({ required: true }) readonly resource!: app.db.Records<unknown>;
-  @Prop({ required: true }) readonly parentLoaded!: app.Loaded;
+  @Prop({ required: true }) readonly pageState!: app.PageState;
   @Prop() readonly loadOnMount?: boolean;
   @Prop() readonly hidePerPage?: boolean;
   @Prop() readonly sortOptions?: {
@@ -39,14 +39,14 @@ export default class RecordsTable extends Vue {
   get isLoading () {
     return !!(
       this.resource.isLoading ||
-      this.parentLoaded?.isLoading
+      this.pageState?.isLoading
     );
   }
 
   get errorMessage () {
     return (
       (this.resource.failReason ? `app.processing.${this.resource.failReason}` : undefined) ||
-      this.parentLoaded?.errorMessage
+      this.pageState?.errorMessage
     );
   }
 

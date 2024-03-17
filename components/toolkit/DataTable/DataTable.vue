@@ -164,7 +164,6 @@ function resizeColumn (
 
     > tbody > tr {
       border-bottom: 1px solid $input-bg;
-      &:last-child { border-bottom: none; }
 
       > td:not(.ema--toolkit--data-table--td__empty) {
         padding: 12px 0;
@@ -173,6 +172,10 @@ function resizeColumn (
 
       &:not(.ema--toolkit--data-table--tr__non_hoverable):hover > td:not(.ema--toolkit--data-table--td__empty) {
         background-color: $gray-100;
+      }
+
+      &:not(.ema--toolkit--data-table--tr__border_bottom):last-child {
+        border-bottom: none;
       }
     }
   }

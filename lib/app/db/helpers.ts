@@ -1,26 +1,6 @@
 import app from '~/lib/app';
 import { Api2Plugin, RequestResponse } from '~/lib/api2';
 
-// export function useSaveableResource<Model = any> ({
-//   onSave,
-//   onSaveCanceled,
-//   $router,
-// }:{
-//   onSave?(): void;
-//   onSaveCanceled?(): void;
-//   $router: Vue['$router'],
-// }): app.db.SaveAbleResource<Model> {
-//   return {
-//     transaction: new app.Transaction(
-//       () => onSave?.(),
-//       () => onSaveCanceled ? onSaveCanceled() : $router.go(-1),
-//     ),
-//     model: {},
-//     errors: undefined,
-//     recordParams: undefined,
-//   };
-// }
-
 // this is coupled with `Api2Plugin`
 export async function fetch<Data> (
   context: { $api2: Api2Plugin },
@@ -44,14 +24,4 @@ export function mapSortOptions (
     value,
     item: `app.db.sort.${listingName}.${value}`,
   })) ?? [];
-}
-
-export function loaded (
-  isLoading: boolean,
-  errorMessage?: string,
-): app.Loaded {
-  return {
-    isLoading: !isLoading,
-    errorMessage,
-  };
 }

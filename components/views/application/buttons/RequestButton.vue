@@ -2,6 +2,7 @@
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import app from '~/lib/app';
 
+// TODO rename active to disabled
 @Component
 export default class RequestButton extends Vue {
   @Prop() readonly processing?: boolean;

@@ -15,7 +15,7 @@ import app from '~/lib/app';
 })
 export default class AdditionalControls extends Vue {
   @Prop({ required: true }) readonly controls!: controls.Group;
-  @Prop({ required: true }) readonly parentLoaded!: app.Loaded;
+  @Prop({ required: true }) readonly pageState!: app.PageState;
 
   options = new app.internals.Options();
 
@@ -57,7 +57,6 @@ export default class AdditionalControls extends Vue {
   <HideableControls
     class="mb-3"
     name="records--groups--GroupGrades"
-    :show="true"
   >
     <b-form-group
       class="col-md-4 col-lg-3"
@@ -71,7 +70,7 @@ export default class AdditionalControls extends Vue {
         :multiple="true"
         :options="controls.getField('subjects')?.options ?? []"
         :max-height="200"
-        :disabled="parentLoaded?.isLoading"
+        :disabled="pageState?.isLoading"
         @change="controls.update('subjects', $event)"
       >
         <template #option-content="{ option }">

@@ -26,5 +26,6 @@ module.exports = {
     'vue/multiline-html-element-content-newline': [ 'error', {
       allowEmptyLines: true,
     } ],
+    'lines-between-class-members': [ 'off' ],
   },
 };

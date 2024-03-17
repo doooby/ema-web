@@ -7,6 +7,7 @@ import * as page from './page';
 import * as session from './session';
 import app from '~/lib/app/index';
 import Ema from '~/lib/app/Ema';
+import { PageState } from '~/lib/app/types';
 export * from './types';
 export * from './global';
 export { default as Transaction } from './Transaction';
@@ -102,4 +103,11 @@ export function reduceObjects<O> (
 export function selectedOptionItems<I> (options: unknown): I[] {
   if (!Array.isArray(options)) return [];
   return options?.map(option => option.item) ?? [];
+}
+
+export function connectedPageState (
+  base: app.Maybe<app.PageState>,
+  nextState: app.Maybe<app.PageState>,
+): app.PageState {
+  return { ...base, ...nextState };
 }

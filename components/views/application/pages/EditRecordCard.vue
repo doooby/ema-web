@@ -2,9 +2,11 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 import RequestButton from '~/components/views/application/buttons/RequestButton.vue';
+import TransactionControls from '~/components/views/application/db/TransactionControls.vue';
 
+// TODO rename active to disabled
 @Component({
-  components: { RequestButton },
+  components: { TransactionControls, RequestButton },
 })
 export default class EditRecordCard extends Vue {
   @Prop() readonly active?: boolean;
@@ -15,34 +17,20 @@ export default class EditRecordCard extends Vue {
 
 <template>
   <div class="card">
-    <div v-if="$scopedSlots.header" class="card-header">
+    <div v-if="$slots.header" class="card-header">
       <slot name="header" />
     </div>
     <div v-if="!noBody" class="card-body">
       <slot />
     </div>
-    <div class="card-footer">
-      <div>
-        <RequestButton
-          class="btn-success"
-          :active="active"
-          :processing="transaction.state.isProcessing"
-          @click="transaction.commit"
-        />
-        <b-button
-          variant="outline-secondary"
-          :disabled="transaction.state.isProcessing"
-          @click="transaction.cancel"
-        >
-          <t value="lexicon.to_cancel" />
-        </b-button>
-      </div>
-      <div
-        v-if="$scopedSlots.errors"
-        class="mt-3"
-      >
+    <TransactionControls
+      class="card-footer"
+      :active="active"
+      :transaction="transaction"
+    >
+      <template v-if="$slots.errors" #errors>
         <slot name="errors" />
-      </div>
-    </div>
+      </template>
+    </TransactionControls>
   </div>
 </template>
