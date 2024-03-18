@@ -89,12 +89,13 @@ export default class AttendanceListing extends Vue {
   }
 
   @Watch('group')
-  onLoadStudents () {
-    this.students.load(
+  async onLoadStudents () {
+    await this.students.load(
       this.$api2,
       `/groups/${this.group.id}/students`,
       parseStudent,
     );
+    this.$emit('pageLoad', this.students.okPayload?.records);
   }
 }
 </script>
