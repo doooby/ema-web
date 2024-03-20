@@ -5,16 +5,14 @@ import controls from '~/components/controls';
 export interface FieldDefinition {
   name: string;
   default?: null | boolean | number | string | (() => unknown);
-  onChange?:(values: GroupValues) => void;
-  populateParams?:(values: GroupValues, params: Params) => void;
+  onChange?:(values: app.Map<unknown>) => void;
+  populateParams?:(values: app.Map<unknown>, params: Params) => void;
   options?: app.OptionItem[];
   custom?: any;
 }
 
 export interface GroupState {
-  values: GroupValues;
+  values: app.Map<unknown>;
   params: Params;
   fields: app.Maybe<app.Map<controls.FieldDefinition>>;
 }
-
-export type GroupValues = Record<string, unknown>;

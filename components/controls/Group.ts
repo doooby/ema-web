@@ -129,7 +129,7 @@ export default class Group {
     return Object.freeze(params);
   }
 
-  private buildDefaultValues (): controls.GroupValues {
+  private buildDefaultValues (): app.Map<unknown> {
     const newValue = {};
     for (const field of this.fields) {
       newValue[field.name] = Group.defaultOf(field);

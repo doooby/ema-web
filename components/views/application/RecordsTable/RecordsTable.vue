@@ -4,9 +4,10 @@ import { DataTable, DataTableColumn } from '~/components/toolkit/DataTable';
 import app from '~/lib/app';
 import RecordId from '~/components/views/application/RecordId.vue';
 import RecordsTableControls from '~/components/views/application/RecordsTable/RecordsTableControls.vue';
+import LoaderStrip from '~/components/views/application/pages/LoaderStrip.vue';
 
 @Component({
-  components: { RecordsTableControls, RecordId, DataTable },
+  components: { LoaderStrip, RecordsTableControls, RecordId, DataTable },
 })
 export default class RecordsTable extends Vue {
   @Prop({ required: true }) readonly columns!: DataTableColumn[];
@@ -73,30 +74,13 @@ export default class RecordsTable extends Vue {
       class="mt-1"
     >
       <template #header-prepend>
-        <div
-          v-if="isLoading"
-          class="position-relative"
-        >
-          <div
-            class="progress position-absolute w-100"
-            :style="{
-              left: 0,
-              top: 0,
-              height: '5px',
-            }"
-          >
-            <div
-              class="progress-bar progress-bar-striped progress-bar-animated bg-secondary w-100"
-              role="progressbar"
-            />
-          </div>
-        </div>
+        <LoaderStrip :is-processing="isLoading" />
       </template>
       <template #default="{ columnsCount }">
         <tbody v-if="errorMessage">
           <tr>
             <td :colspan="columnsCount">
-              <b-alert variant="warning" show class="m-0">
+              <div class="m-0 alert alert-warning">
                 <t
                   class="d-block"
                   value="views.application.RecordsTable.fetch_fail"
@@ -105,7 +89,7 @@ export default class RecordsTable extends Vue {
                   class="d-block"
                   :value="errorMessage"
                 />
-              </b-alert>
+              </div>
             </td>
           </tr>
         </tbody>

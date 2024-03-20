@@ -8,6 +8,7 @@ export interface Page {
   hasSucceeded: app.Maybe<boolean>;
 }
 
+// TODO deprecated
 export function emptyState (): Page {
   return {
     pageData: undefined,
@@ -25,7 +26,7 @@ export interface SaveablePage {
   getRecordParams: app.Maybe<() => app.Map<any>>;
 }
 
-// TODO deprecated
+// TODO deprecated, use `.useSaveableRecord`
 export function saveableState (
   context: any,
 ): SaveablePage {
@@ -37,5 +38,33 @@ export function saveableState (
     record: {},
     errors: undefined,
     getRecordParams: undefined,
+  };
+}
+
+export interface State {
+  isLoading?: boolean;
+  errorMessage?: string;
+}
+
+export interface SaveableRecord {
+  transaction: app.Transaction;
+  record: app.Maybe<any>;
+  changeParams: app.Maybe<app.Map<unknown>>;
+  errors: app.Maybe<app.db.ErrorMessage[]>;
+}
+
+export function useSaveableRecord (context: any): SaveableRecord {
+  return {
+    transaction: new app.Transaction(
+      () => context.onSave(),
+      () => (
+        typeof context.onSaveCancel === 'function'
+          ? context.onSaveCancel()
+          : context.$router.go(-1)
+      ),
+    ),
+    record: undefined,
+    changeParams: undefined,
+    errors: undefined,
   };
 }
