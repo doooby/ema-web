@@ -1,3 +1,5 @@
+import app from '~/lib/app/index';
+
 export type Map<V> = Record<string, Maybe<V>>;
 
 //  TODO should be Array or SparseList
@@ -24,6 +26,8 @@ export type Option = {
   value?: string;
   text: string;
 }
+
+export type PersonNames = app.SparseList<app.SparseList<string>>;
 
 export type FilterableList<I> = (undefined | false | I)[]
 

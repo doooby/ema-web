@@ -29,6 +29,7 @@ const HeaderContent = Vue.extend({
 export default class DataTable extends Vue {
   @Prop({ required: true }) readonly columns!: DataTableColumn[];
   @Prop() readonly hideHeader?: boolean;
+  @Prop() readonly noAdditionColumns?: boolean;
 
   defaultSizes = this.columns.map(({ size, fixedSize }) => {
     return fixedSize && size ? size : resizeColumn(size);
@@ -65,7 +66,12 @@ export default class DataTable extends Vue {
   }
 
   get colStyles () {
-    return this.currentSizes.map(size => `width: ${size}px`);
+    return this.currentSizes.map(size => size && `width: ${size}px`);
+  }
+
+  get columnsCount () {
+    if (this.noAdditionColumns) return this.columns.length;
+    else return this.columns.length + 1;
   }
 
   onShift (columnIndex: number, value: number) {
@@ -81,9 +87,13 @@ function resizeColumn (
   size: app.Maybe<number>,
   diff?: number,
 ) {
-  let value = size ?? 0;
-  if (diff) value += diff;
-  if (value < MIN_COLUMNS_WIDTH) value = MIN_COLUMNS_WIDTH;
+  let value: app.Maybe<number>;
+  if (diff) {
+    value = (size ?? 0) + diff;
+  } else if (size) {
+    value = size;
+    if (value < MIN_COLUMNS_WIDTH) value = MIN_COLUMNS_WIDTH;
+  }
   return value;
 }
 </script>
@@ -102,13 +112,13 @@ function resizeColumn (
           :key="column.name"
           :style="colStyles[index]"
         >
-        <col style="min-width: 12px;">
+        <col v-if="!noAdditionColumns" style="min-width: 12px;">
       </colgroup>
       <thead v-if="!hideHeader">
         <tr v-if="$slots['header-prepend']">
           <th
             class="ema--toolkit--data-table--header__prepend"
-            :colspan="columns.length + 1"
+            :colspan="columnsCount"
           >
             <slot name="header-prepend" />
           </th>
@@ -134,7 +144,7 @@ function resizeColumn (
           <th scope="col" />
         </tr>
       </thead>
-      <slot :columns-count="columns.length + 1" />
+      <slot :columns-count="columnsCount" />
     </table>
   </div>
 </template>
@@ -143,7 +153,7 @@ function resizeColumn (
 @import "assets/css/variables";
 .ema--toolkit--data-table {
   overflow-x: scroll;
-  background-color: $EMA-table-head;
+  background-color: $EMA-table-bg;
 
   > table {
     table-layout: fixed;

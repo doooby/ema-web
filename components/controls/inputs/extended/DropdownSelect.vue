@@ -53,6 +53,7 @@ export default class DropdownSelect extends Vue {
       $attrs.class,
       'd-flex ema--control--dropdown-select',
     ]"
+    :style="$attrs.style"
     no-caret
   >
     <template #button-content>

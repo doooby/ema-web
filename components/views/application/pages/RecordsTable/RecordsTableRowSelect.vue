@@ -3,7 +3,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { wai } from '~/vendor/wai';
 import {
   State,
-} from '~/components/views/application/RecordsTable/RecordsTableGroupActions.vue';
+} from '~/components/views/application/pages/RecordsTable/RecordsTableGroupActions.vue';
 
 @Component
 export default class RecordsTableRowSelect extends Vue {

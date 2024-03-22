@@ -1,7 +1,7 @@
 $EMA-primary: #E74011;
 $EMA-primary-contrast: #f3e1e1;
-$EMA-control: #e8e8e8;
-$EMA-table-head: $EMA-control;
+$EMA-control: #fdfaf2;
+$EMA-table-bg: #f1f0f0; //$EMA-control;
 
 $EMA-top-bar-height: 60;
 $EMA-top-bar-login-height: 40;
@@ -81,3 +81,5 @@ $input-bg: $EMA-control;
 $input-group-addon-bg: $gray-200;
 
 $label-margin-bottom: px-size(1);
+
+$card-cap-bg: $EMA-table-bg;

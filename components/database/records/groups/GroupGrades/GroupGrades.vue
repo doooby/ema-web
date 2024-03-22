@@ -6,7 +6,7 @@ import controls from '~/components/controls';
 import app from '~/lib/app';
 import { wai } from '~/vendor/wai';
 import { DataTable } from '~/components/toolkit/DataTable';
-import RecordsTable from '~/components/views/application/RecordsTable/RecordsTable.vue';
+import RecordsTable from '~/components/views/application/pages/RecordsTable/RecordsTable.vue';
 import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
 import RecordName from '~/components/views/application/RecordName.vue';
 import AdditionalControls from '~/components/database/records/groups/GroupGrades/AdditionalControls.vue';

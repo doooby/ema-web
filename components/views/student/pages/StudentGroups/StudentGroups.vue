@@ -4,7 +4,7 @@ import { group, person, student } from '~/lib/records';
 import app from '~/lib/app';
 import { wai } from '~/vendor/wai';
 import { DataTable } from '~/components/toolkit/DataTable';
-import RecordsTable from '~/components/views/application/RecordsTable/RecordsTable.vue';
+import RecordsTable from '~/components/views/application/pages/RecordsTable/RecordsTable.vue';
 import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
 import RecordAssociations from '~/components/database/components/listing/RecordAssociations.vue';
 import PrintDateRange from '~/components/toolkit/PrintDateRange.vue';

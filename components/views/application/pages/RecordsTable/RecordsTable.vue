@@ -3,7 +3,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { DataTable, DataTableColumn } from '~/components/toolkit/DataTable';
 import app from '~/lib/app';
 import RecordId from '~/components/views/application/RecordId.vue';
-import RecordsTableControls from '~/components/views/application/RecordsTable/RecordsTableControls.vue';
+import RecordsTableControls from '~/components/views/application/pages/RecordsTable/RecordsTableControls.vue';
 import LoaderStrip from '~/components/views/application/pages/LoaderStrip.vue';
 
 @Component({

@@ -16,7 +16,8 @@ export default class New2 extends CountryDBPage.ComponentBase {
   record = app.page.useSaveableRecord(this);
 
   onSave () {
-    // if (!this.record.changeParams) return;
+    console.log('onSave', this.record.changeParams);
+    if (!this.record.changeParams) return;
     this.record.transaction.state.isProcessing = true;
     this.record.errors = undefined;
     setTimeout(
@@ -26,7 +27,7 @@ export default class New2 extends CountryDBPage.ComponentBase {
           [ undefined, 'MY_BAD' ],
         ];
       },
-      2000,
+      800,
     );
   }
 }
@@ -49,6 +50,7 @@ export default class New2 extends CountryDBPage.ComponentBase {
         </template>
         <EditPersonFields
           :page-state="pageState"
+          :transaction="record.transaction"
           @change="record.changeParams = $event"
         />
       </EditRecordCard>

@@ -12,7 +12,7 @@ import CheckBox from '~/components/controls/inputs/base/CheckBox.vue';
 import { wai } from '~/vendor/wai';
 import { DataTable, DataTableColumn } from '~/components/toolkit/DataTable';
 import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
-import RecordsTable from '~/components/views/application/RecordsTable/RecordsTable.vue';
+import RecordsTable from '~/components/views/application/pages/RecordsTable/RecordsTable.vue';
 
 function parseStudent (value) {
   return wai.object2(value, value => ({

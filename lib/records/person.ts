@@ -59,6 +59,9 @@ export interface Person extends application_record.SharedAttributes {
 }
 
 export interface PersonCaregiver {
+  type: string;
+  relation_other?: string;
+  names?: app.PersonNames;
   relation?: [string, undefined | string];
   first_name?: string[];
   last_name?: string[];
@@ -126,6 +129,7 @@ export function parseRecord (
 
 function mapCaregiver (value): person.PersonCaregiver {
   return wai.object(value => ({
+    type: '',
     relation: wai.prop('relation', value, wai.nullable(mapSelectOrFillTuple)),
     first_name: wai.prop('first_name', value, wai.nullable(mapName)),
     last_name: wai.prop('last_name', value, wai.nullable(mapName)),

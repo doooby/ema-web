@@ -3,7 +3,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
 import { wai } from '~/vendor/wai';
 import SmallDropdownSelect from '~/components/controls/inputs/temporary/SmallDropdownSelect.vue';
-import RecordsTablePageSelect from '~/components/views/application/RecordsTable/RecordsTablePageSelect.vue';
+import RecordsTablePageSelect from '~/components/views/application/pages/RecordsTable/RecordsTablePageSelect.vue';
 import { recordsList } from '~/vendor/wai/mappers';
 import MiniToggle from '~/components/views/application/buttons/MiniToggle.vue';
 

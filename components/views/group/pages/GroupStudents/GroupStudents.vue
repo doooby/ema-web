@@ -4,7 +4,7 @@ import { wai } from '~/vendor/wai';
 import { group, student } from '~/lib/records';
 import app from '~/lib/app';
 import { DataTable } from '~/components/toolkit/DataTable';
-import RecordsTable from '~/components/views/application/RecordsTable/RecordsTable.vue';
+import RecordsTable from '~/components/views/application/pages/RecordsTable/RecordsTable.vue';
 import MiniToggle from '~/components/views/application/buttons/MiniToggle.vue';
 import HeaderCell from '~/components/views/application/pages/index/HeaderCell.vue';
 import PrintDate from '~/components/toolkit/PrintDate.vue';
@@ -13,8 +13,8 @@ import PrintAttendance from '~/components/views/student/pages/StudentGroups/Prin
 import RecordLabels from '~/components/views/application/RecordLabels.vue';
 import GroupAttendance from '~/components/views/student/cells/GroupAttendance.vue';
 import GroupAssignmentChanges from '~/components/views/student/cells/GroupAssignmentChanges.vue';
-import RecordsTableGroupActions from '~/components/views/application/RecordsTable/RecordsTableGroupActions.vue';
-import RecordsTableRowSelect from '~/components/views/application/RecordsTable/RecordsTableRowSelect.vue';
+import RecordsTableGroupActions from '~/components/views/application/pages/RecordsTable/RecordsTableGroupActions.vue';
+import RecordsTableRowSelect from '~/components/views/application/pages/RecordsTable/RecordsTableRowSelect.vue';
 import MoveStudents from '~/components/database/records/groups/students/actions/MoveStudents.vue';
 import RemoveStudents from '~/components/database/records/groups/students/actions/RemoveStudents.vue';
 

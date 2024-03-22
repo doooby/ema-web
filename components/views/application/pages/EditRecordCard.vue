@@ -12,8 +12,8 @@ import LoaderStrip from '~/components/views/application/pages/LoaderStrip.vue';
 })
 export default class EditRecordCard extends Vue {
   @Prop() readonly pageState?: app.page.State;
-  @Prop() readonly active?: boolean;
   @Prop({ required: true }) readonly transaction!: app.Transaction;
+  @Prop() readonly active?: boolean;
   @Prop() readonly noBody?: boolean;
 
   get isProcessing () {
