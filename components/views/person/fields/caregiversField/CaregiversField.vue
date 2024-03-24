@@ -63,17 +63,18 @@ export default class CaregiversField extends Vue {
 </script>
 
 <template>
-  <div>
+  <div class="row">
     <CaregiversFieldItem
       v-for="(caregiver, index) in value"
       :key="index"
+      class="col-md-6"
       :index="index"
       :caregiver="caregiver"
       :type-options="caregiverTypeOptions"
       @change="onSetCaregiver(index, $event)"
       @remove="onRemoveCaregiver(index)"
     />
-    <div>
+    <div class="col-12">
       <SimpleButton
         class="font-14 btn-sm btn-outline-secondary border-0"
         @click="onAddCaregiver"

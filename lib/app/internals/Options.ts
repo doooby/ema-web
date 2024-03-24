@@ -36,10 +36,10 @@ export default class Options {
   private buildList (context: any, name: string): app.OptionItem<string>[] {
     const countryData = context.$store.state.session.country;
     const options = countryData?.internalLists?.[name]?.options ?? [];
-    return options.map(value => ({
+    return options.map(value => (Object.freeze({
       value,
       item: `app.internal_lists.${name}.${value}`,
-    }));
+    })));
   }
 
   static isSameList (

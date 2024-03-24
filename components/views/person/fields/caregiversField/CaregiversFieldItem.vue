@@ -28,7 +28,7 @@ export default class CaregiversFieldItem extends Vue {
 </script>
 
 <template>
-  <div>
+  <div :class="$attrs.class">
     <div>
       <h5 class="mb-2 d-flex align-items-center">
         <span class="mr-2">{{ index + 1 }}.</span>
@@ -61,16 +61,17 @@ export default class CaregiversFieldItem extends Vue {
           <t :value="option.item" />
         </template>
       </DropdownSelect>
-      <TextInput
-        v-if="caregiver.type === '_other'"
-        class="col"
-        :disabled="disabled"
-        :value="caregiver.relation_other"
-        @change="$emit('change', {
-          ...caregiver,
-          relation_other: $event,
-        })"
-      />
+      <div class="col">
+        <TextInput
+          v-if="caregiver.type === '_other'"
+          :disabled="disabled"
+          :value="caregiver.relation_other"
+          @change="$emit('change', {
+            ...caregiver,
+            relation_other: $event,
+          })"
+        />
+      </div>
     </div>
     <div class="form-group">
       <label for="person--caregiver_name--en">

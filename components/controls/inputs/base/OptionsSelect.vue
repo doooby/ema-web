@@ -28,6 +28,7 @@ export default class OptionsSelect extends Vue {
   }
 
   onToggleOption (option: app.OptionItem): void {
+    if (this.disabled) return;
     this.onSetOption(option, !this.isSelected(option));
   }
 
