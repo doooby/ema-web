@@ -15,20 +15,16 @@ export default class New2 extends CountryDBPage.ComponentBase {
 
   record = app.page.useSaveableRecord(this);
 
-  onSave () {
-    console.log('onSave', this.record.changeParams);
+  async onSave () {
     if (!this.record.changeParams) return;
-    this.record.transaction.state.isProcessing = true;
-    this.record.errors = undefined;
-    setTimeout(
-      () => {
-        this.record.transaction.state.isProcessing = false;
-        this.record.errors = [
-          [ undefined, 'MY_BAD' ],
-        ];
-      },
-      800,
+    const { success, recordId } = await app.api.createRecord(
+      this, this.record, '/people/create',
     );
+    if (success) {
+      await this.$router.push({
+        path: `/database/people/${recordId}`,
+      });
+    }
   }
 }
 </script>

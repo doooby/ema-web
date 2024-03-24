@@ -4,7 +4,7 @@ import controls from '~/components/controls';
 
 export interface FieldDefinition {
   name: string;
-  default?: null | boolean | number | string | (() => unknown);
+  default?: unknown | (() => unknown);
   onChange?:(values: app.Map<unknown>) => void;
   populateParams?:(values: app.Map<unknown>, params: Params) => void;
   options?: app.OptionItem[];

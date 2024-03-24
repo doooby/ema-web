@@ -1,11 +1,10 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import NameInputsTable from '~/components/controls/inputs/extended/NameInputsTable.vue';
-import DropdownSelect from '~/components/controls/inputs/extended/DropdownSelect.vue';
 import { person } from '~/lib/records';
 import app from '~/lib/app';
 import SimpleButton from '~/components/views/application/buttons/SimpleButton.vue';
-import { CheckBox, TextInput } from '~/components/controls/inputs';
+import { CheckBox, TextInput, DropdownSelect } from '~/components/controls/inputs';
+import NamesInputTable from '~/components/controls/inputs/extended/NamesInputTable.vue';
 
 @Component({
   components: {
@@ -13,7 +12,7 @@ import { CheckBox, TextInput } from '~/components/controls/inputs';
     TextInput,
     SimpleButton,
     DropdownSelect,
-    NameInputsTable,
+    NamesInputTable,
   },
 })
 export default class CaregiversFieldItem extends Vue {
@@ -77,7 +76,7 @@ export default class CaregiversFieldItem extends Vue {
       <label for="person--caregiver_name--en">
         <t value="person.label.name" />
       </label>
-      <NameInputsTable
+      <NamesInputTable
         :value="caregiver.names"
         dom-id="person--caregiver_name"
         :disabled="disabled"
@@ -88,7 +87,7 @@ export default class CaregiversFieldItem extends Vue {
       />
     </div>
     <div class="row no--gutter">
-      <div class="col">
+      <div class="col-md-6">
         <div class="form-group">
           <label for="person--caregiver_citizen_id">
             <t value="person.label.citizen_id" />
@@ -132,7 +131,7 @@ export default class CaregiversFieldItem extends Vue {
           />
         </div>
       </div>
-      <div class="col">
+      <div class="col-md-6">
         <div class="form-group">
           <CheckBox
             :disabled="disabled"

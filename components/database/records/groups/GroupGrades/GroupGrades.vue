@@ -77,11 +77,10 @@ export default class GroupGrades extends Vue {
     await this.courseLoader.loadOnce();
     this.course = this.courseLoader.state.record ?? null;
 
-    this.controls.updateField({
-      ...this.controls.getField('subjects')!,
+    this.controls.updateField('subjects', () => ({
       options: (this.course?.subjects ?? [])
         .map(item => Object.freeze({ value: item.subject.id, item })),
-    });
+    }));
     this.controls.update('subjects', this.controls.getField('subjects')?.options);
 
     if (!this.course) {

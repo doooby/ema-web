@@ -108,14 +108,13 @@ import { FormField, FormFieldType, FormGroupContext, FormValues } from '~/compon
 import { person } from '~/lib/records';
 import SelectInput from '~/components/Form/primitives/SelectInput.vue';
 import NameInput from '~/components/Form/primitives/NameInput.vue';
-import TextInput from '~/components/Form/primitives/TextInput.vue';
 import SelectOrFillInput from '~/components/Form/primitives/SelectOrFillInput.vue';
 import app from '~/lib/app';
 import CheckboxInput from '~/components/Form/primitives/CheckboxInput.vue';
 
 @Component({
   mixins: [ ControlMixin ],
-  components: { CheckboxInput, SelectOrFillInput, SelectInput, NameInput, TextInput },
+  components: { CheckboxInput, SelectOrFillInput, SelectInput, NameInput },
 })
 export default class CaregiversField extends Vue {
   static fieldType: FormFieldType = {};

@@ -1,12 +1,12 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
-import { TextInput } from '~/components/controls/inputs';
+import TextInput from '~/components/Form/primitives/TextInput.vue';
 
 @Component({
   components: { TextInput },
 })
-export default class NameInputsTable extends Vue {
+export default class NamesInputTable extends Vue {
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
   @Prop() readonly value?: app.PersonNames;
@@ -15,7 +15,7 @@ export default class NameInputsTable extends Vue {
     const newNames = this.value?.slice(0) ?? [];
     let variants = newNames[language_index];
     if (!variants) {
-      variants = [];
+      variants = [ '', '' ];
       newNames[language_index] = variants;
     }
     variants[variant_index] = value;
@@ -26,15 +26,15 @@ export default class NameInputsTable extends Vue {
 
 <template>
   <div :class="$attrs.class">
-    <div class="row no-gutters font-14" style="gap: 2px;">
+    <div class="row no-gutters font-14 text-muted" style="gap: 2px;">
       <span class="col">
-        <t value="controls.inputs.NameInputsTable.col1" />
+        <t value="controls.inputs.NamesInputTable.col1" />
       </span>
       <span class="col">
-        <t value="controls.inputs.NameInputsTable.col2" />
+        <t value="controls.inputs.NamesInputTable.col2" />
       </span>
       <span class="col">
-        <t value="controls.inputs.NameInputsTable.col3" />
+        <t value="controls.inputs.NamesInputTable.col3" />
       </span>
     </div>
     <div class="row no-gutters" style="gap: 2px;">

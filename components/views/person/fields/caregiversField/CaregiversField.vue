@@ -4,13 +4,14 @@ import { person } from '~/lib/records';
 import app from '~/lib/app';
 import { DataTable } from '~/components/toolkit/DataTable';
 import SimpleButton from '~/components/views/application/buttons/SimpleButton.vue';
-import DropdownSelect from '~/components/controls/inputs/extended/DropdownSelect.vue';
-import TextNames from '~/components/database/components/TextNames.vue';
-import NameInputsTable from '~/components/controls/inputs/extended/NameInputsTable.vue';
+import {
+  DropdownSelect,
+} from '~/components/controls/inputs';
 import CaregiversFieldItem from '~/components/views/person/fields/caregiversField/CaregiversFieldItem.vue';
+import NamesInputTable from '~/components/controls/inputs/extended/NamesInputTable.vue';
 
 @Component({
-  components: { CaregiversFieldItem, NameInputsTable, TextNames, DropdownSelect, SimpleButton, DataTable },
+  components: { CaregiversFieldItem, NamesInputTable, DropdownSelect, SimpleButton, DataTable },
 })
 export default class CaregiversField extends Vue {
   @Prop() readonly disabled?: boolean;

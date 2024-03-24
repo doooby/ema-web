@@ -1,10 +1,11 @@
 import controls from '~/components/controls/index';
 import { Vue } from 'vue-property-decorator';
-import { Params } from '~/lib/api2';
 import app from '~/lib/app';
 
 export default class Group {
   state: controls.GroupState;
+  defaultsGet = app.createRef<() => app.Map<unknown>>();
+  paramsGet = app.createRef<(values: app.Map<unknown>) => app.db.Params>();
 
   constructor (
     fields: controls.FieldDefinition[],
@@ -88,11 +89,19 @@ export default class Group {
     this.state.params = this.buildParams();
   }
 
-  updateField (field: controls.FieldDefinition) {
-    const name = field.name;
+  updateField (
+    fieldName: string,
+    fn: (field: controls.FieldDefinition) => Partial<controls.FieldDefinition>,
+  ) {
+    let field = this.state.fields?.[fieldName];
+    if (!field) return;
+    field = {
+      ...field,
+      ...fn(field),
+    };
     this.state.fields = Object.freeze({
       ...this.state.fields,
-      [name]: field,
+      [fieldName]: field,
     });
   }
 
@@ -101,39 +110,45 @@ export default class Group {
     this.state.params = this.buildParams();
   }
 
-  static defaultOf (field: controls.FieldDefinition) {
-    if (Object.prototype.hasOwnProperty.call(field, 'default')) {
-      if (typeof field.default === 'function') {
-        return field.default();
-      } else {
-        return field.default;
-      }
-    }
-  }
-
   private get fields () {
     return (
       this.state.fields ? Object.values(this.state.fields) : []
     ).filter(id => id) as controls.FieldDefinition[];
   }
 
-  private buildParams (): Params {
+  private buildParams (): app.db.Params {
     const values = this.state.values;
-    const params: Params = { ...values };
+    const params: app.db.Params = { ...values, ...this.paramsGet.ref?.(values) };
     for (const { name, populateParams } of this.fields) {
       if (populateParams) {
         delete params[name];
         populateParams(values, params);
       }
     }
+
     return Object.freeze(params);
   }
 
   private buildDefaultValues (): app.Map<unknown> {
     const newValue = {};
+    const defaults = this.defaultsGet.ref?.() ?? {};
     for (const field of this.fields) {
-      newValue[field.name] = Group.defaultOf(field);
+      newValue[field.name] = defaultOfField(field, defaults);
     }
     return Object.freeze(newValue);
+  }
+}
+
+function defaultOfField (
+  field: controls.FieldDefinition,
+  defaults: app.Map<unknown>,
+) {
+  if (field.name in defaults) return defaults[field.name];
+  if ('default' in field) {
+    if (typeof field.default === 'function') {
+      return field.default();
+    } else {
+      return field.default;
+    }
   }
 }

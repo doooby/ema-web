@@ -1,6 +1,7 @@
 import { RequestResponse } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import app from '~/lib/app';
+import { SaveableRecord } from '~/lib/app/page';
 
 // deprecated
 export function updateSuccess (
@@ -53,5 +54,29 @@ export function updateErrors (
     return [ [ undefined, response.reason ] ];
   } else if (response.payload.errors?.length) {
     return response.payload.errors;
+  }
+}
+
+export async function createRecord (
+  context: any,
+  saveable: app.page.SaveableRecord,
+  path: string,
+): Promise<{
+  success: boolean;
+  recordId?: string;
+}> {
+  saveable.transaction.state.isProcessing = true;
+  saveable.errors = undefined;
+  const { response, okPayload } = await context.$api2.V3_request({
+    path,
+    params: { record: saveable.changeParams },
+    reducer: wai.recordUpdate,
+  });
+  saveable.errors = app.api.createErrors(response);
+  if (saveable.errors) {
+    saveable.transaction.state.isProcessing = false;
+    return { success: false };
+  } else {
+    return { success: true, recordId: okPayload?.record_id };
   }
 }
