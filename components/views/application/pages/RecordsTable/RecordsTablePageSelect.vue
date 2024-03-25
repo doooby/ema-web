@@ -80,21 +80,21 @@ export default class RecordsTablePageSelect extends Vue {
     @click="onPageSelect"
   >
     <div
-      v-for="{ page, text, disabled } of extendedPages"
-      :key="`e-${page}`"
-      class="pagination-item"
-    >
-      <div :data-page="disabled ? undefined : page">
-        {{ text }}
-      </div>
-    </div>
-    <div
       v-for="page of availablePages"
       :key="`p-${page}`"
       :class="{ 'pagination-item': true, 'current-page': currentPage === page }"
     >
       <div :data-page="page">
         {{ page }}
+      </div>
+    </div>
+    <div
+      v-for="({ page, text, disabled }, index) of extendedPages"
+      :key="`e-${index}`"
+      class="pagination-item"
+    >
+      <div :data-page="disabled ? undefined : page">
+        {{ text }}
       </div>
     </div>
   </div>
@@ -107,7 +107,7 @@ export default class RecordsTablePageSelect extends Vue {
   > div {
     min-width: 28px;
     height: 28px;
-    border: 2px solid $input-bg;
+    border: 2px solid $EMA-table-bg;
     padding: 2px;
     font-size: 14px;
 

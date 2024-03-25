@@ -4,11 +4,22 @@ import controls from '~/components/controls';
 import app from '~/lib/app';
 import CaregiversField from '~/components/views/person/fields/caregiversField/CaregiversField.vue';
 import {
-  OptionsSelect, DateInput, NamesInputTable, TextInput, CheckBox, TextArea, IntegerInput,
+  OptionsSelect, DateInput, NamesInputTable,
+  TextInput, CheckBox, TextArea, IntegerInput, LocationInput,
 } from '~/components/controls/inputs';
 
 @Component({
-  components: { IntegerInput, TextArea, CheckBox, NamesInputTable, CaregiversField, DateInput, OptionsSelect, TextInput },
+  components: {
+    LocationInput,
+    IntegerInput,
+    TextArea,
+    CheckBox,
+    NamesInputTable,
+    CaregiversField,
+    DateInput,
+    OptionsSelect,
+    TextInput,
+  },
 })
 export default class EditPersonFields extends Vue {
   @Prop({ required: true }) pageState!: app.page.State;
@@ -21,7 +32,6 @@ export default class EditPersonFields extends Vue {
     this.controls.paramsGet.ref = (values: any) => {
       return {
         gender: values.gender?.[0]?.value,
-        residency_status: values.residency_status?.[0]?.value,
         nationality: values.nationality?.[0]?.value,
         mother_tongue: values.mother_tongue?.[0]?.value,
         spoken_languages: values.spoken_languages?.map(item => item.value),
@@ -29,8 +39,12 @@ export default class EditPersonFields extends Vue {
         disabilities: values.disabilities?.map(item => item.value),
         outside_school: values.outside_school?.[0]?.value,
         school_distance_km: values.school_distance_km?.[0]?.value,
-        school_transport: values.school_transport?.[0]?.value,
         teaching_qualification: values.teaching_qualification?.[0]?.value,
+        residency_status: [ values.residency_status?.[0]?.value, values.residency_status?.[1] ],
+        school_transport: [ values.school_transport?.[0]?.value, values.school_transport?.[1] ],
+        registered_on: app.internals.dateToParam(values.registered_on),
+        enrolled_on: app.internals.dateToParam(values.enrolled_on),
+        born_on: app.internals.dateToParam(values.born_on),
       };
     };
   }
@@ -43,6 +57,14 @@ export default class EditPersonFields extends Vue {
     return {
       disabilities: [
         ...this.options.getAll(this, 'disabilities'),
+        app.country.defaults.options.otherOption(),
+      ],
+      residency_status: [
+        ...this.options.getAll(this, 'residency_status'),
+        app.country.defaults.options.otherOption(),
+      ],
+      school_transport: [
+        ...this.options.getAll(this, 'school_transport'),
         app.country.defaults.options.otherOption(),
       ],
     };
@@ -115,16 +137,23 @@ export default class EditPersonFields extends Vue {
               <t value="person.label.residency_status" />
             </label>
             <OptionsSelect
-              :value="controls.getValue('residency_status')"
-              :options="options.getAll(this, 'residency_status')"
               :disabled="disabled"
-              @change="controls.update('residency_status', $event)"
+              :value="[ controls.getValue('residency_status')?.[0] ]"
+              :options="fieldsOptions.residency_status"
+              @change="controls.update('residency_status', [ $event?.[0] ])"
             >
               <template #option-content="{ option, selected }">
                 <input type="radio" :checked="selected" class="mr-1">
                 <t :value="option.item" />
               </template>
             </OptionsSelect>
+            <TextInput
+              v-if="controls.getValue('residency_status')?.[0]?.value === '_other'"
+              :disabled="disabled"
+              style="margin-top: 2px;"
+              :value="controls.getValue('residency_status')?.[1]"
+              @change="controls.update('residency_status', value => ([ value?.[0], $event ]))"
+            />
           </div>
         </div>
         <div class="col-md-6">
@@ -356,15 +385,33 @@ export default class EditPersonFields extends Vue {
         <div class="col-md-6">
           <div class="form-group">
             <label>
-              <t value="person.label.external_id" />
+              <t value="person.label.birthplace_address" />
             </label>
-            <TextInput
+            <LocationInput
               :disabled="disabled"
-              :value="controls.getValue('external_id')"
-              @change="controls.update('external_id', $event)"
+              :value="controls.getValue('birthplace_address')"
+              :system="$ema.currentCountry?.locations?.address"
+              @change="controls.update('birthplace_address', $event)"
             />
           </div>
         </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>
+              <t value="person.label.address" />
+            </label>
+            <LocationInput
+              :disabled="disabled"
+              :value="controls.getValue('address')"
+              :system="$ema.currentCountry?.locations?.address"
+              @change="controls.update('address', $event)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>
@@ -398,22 +445,35 @@ export default class EditPersonFields extends Vue {
             </label>
             <OptionsSelect
               :disabled="disabled"
-              :value="controls.getValue('school_transport')"
-              :options="options.getAll(this, 'school_transport')"
-              @change="controls.update('school_transport', $event)"
+              :value="[ controls.getValue('school_transport')?.[0] ]"
+              :options="fieldsOptions.school_transport"
+              @change="controls.update('school_transport', [ $event?.[0] ])"
             >
               <template #option-content="{ option, selected }">
                 <input type="radio" :checked="selected" class="mr-1">
                 <t :value="option.item" />
               </template>
             </OptionsSelect>
+            <TextInput
+              v-if="controls.getValue('school_transport')?.[0]?.value === '_other'"
+              :disabled="disabled"
+              style="margin-top: 2px;"
+              :value="controls.getValue('school_transport')?.[1]"
+              @change="controls.update('school_transport', value => ([ value?.[0], $event ]))"
+            />
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="row">
         <div class="col-md-6">
+          <div class="form-group">
+            <label>
+              <t value="person.label.external_id" />
+            </label>
+            <TextInput
+              :disabled="disabled"
+              :value="controls.getValue('external_id')"
+              @change="controls.update('external_id', $event)"
+            />
+          </div>
           <div class="form-group">
             <label>
               <t value="person.label.navision_id" />

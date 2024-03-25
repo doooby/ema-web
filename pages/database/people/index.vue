@@ -53,6 +53,13 @@ export default class extends DatabasePage {
       #resource-actions
     >
       <NewRecordButton entity="people" />
+      <nuxt-link
+        :to="`/database/people/new2`"
+        class="btn btn-outline-secondary"
+      >
+        <b-icon icon="clipboard-plus" class="mr-1" />
+        <t value="db.page.new.action" />
+      </nuxt-link>
     </template>
 
     <template #search-form="{}" />

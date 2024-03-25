@@ -12,6 +12,8 @@ const CellContent = Vue.extend({
   },
 });
 
+// TODO deprecated
+
 @Component({
   components: {
     DataTable,

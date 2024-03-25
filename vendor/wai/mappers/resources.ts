@@ -75,11 +75,11 @@ export function uncertainResource<S> (
       if (typeof value !== 'object') value = {};
       utils.warnOfError(error, { value });
 
-      return {
+      return Object.freeze({
         id: String(value.id),
         caption: String(value.caption),
         error,
-      } as AResource<never>;
+      }) as AResource<never>;
     }
   };
 }

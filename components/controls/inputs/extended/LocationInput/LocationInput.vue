@@ -24,6 +24,7 @@ export default class LocationInput extends Vue {
     value.length = index;
     value[index] = levelValue;
     this.$emit('input', value);
+    this.$emit('change', value);
   }
 }
 </script>
@@ -34,33 +35,34 @@ export default class LocationInput extends Vue {
       <t value="controls.LocationInput.missing_location_system" />
     </div>
     <div v-else :id="domId">
-      <div
-        v-for="(level, index) of locationLevels"
-        :key="index"
-        :class="{ 'mt-1': index > 0 }"
-      >
-        <TextNames
-          class="font-14 mb-1"
-          :value="level.name"
-          :inline="true"
-        />
-        <LocationLevelSelect
-          v-if="level.type === 'l'"
-          :disabled="disabled"
-          :system="system"
-          :level="index + 1"
-          :parent-value="value?.[index - 1]"
-          :value="value?.[index]"
-          @input="onChangeLevel(index, $event)"
-        />
-        <TextInput
-          v-if="level.type === 't'"
-          :disabled="disabled || (index > 0 && !value?.[index - 1])"
-          :value="value?.[index]"
-          @input="onChangeLevel(index, $event)"
-        />
-      </div>
-
+      <client-only>
+        <div
+          v-for="(level, index) of locationLevels"
+          :key="index"
+          :class="{ 'mt-1': index > 0 }"
+        >
+          <TextNames
+            class="font-14 mb-1"
+            :value="level.name"
+            :inline="true"
+          />
+          <LocationLevelSelect
+            v-if="level.type === 'l'"
+            :disabled="disabled"
+            :system="system"
+            :level="index + 1"
+            :parent-value="value?.[index - 1]"
+            :value="value?.[index]"
+            @input="onChangeLevel(index, $event)"
+          />
+          <TextInput
+            v-if="level.type === 't'"
+            :disabled="disabled || (index > 0 && !value?.[index - 1])"
+            :value="value?.[index]"
+            @input="onChangeLevel(index, $event)"
+          />
+        </div>
+      </client-only>
     </div>
   </div>
 </template>

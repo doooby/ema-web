@@ -13,6 +13,7 @@ export function warnOfError (error, ...context: any) {
 }
 
 // this strips the timezone, which is necessary, when sending the date to the server
+// TODO deprecated, use `app.internals.dateToParam`
 export function dateToParam (date?: Date): string {
   if (!date) return '';
   return formatISO(date, { representation: 'date' });

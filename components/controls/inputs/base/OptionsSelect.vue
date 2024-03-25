@@ -1,8 +1,11 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import app from '~/lib/app';
+import SimpleButton from '~/components/views/application/buttons/SimpleButton.vue';
 
-@Component
+@Component({
+  components: { SimpleButton },
+})
 export default class OptionsSelect extends Vue {
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
@@ -55,27 +58,13 @@ export default class OptionsSelect extends Vue {
 
 <template>
   <div
-    class="d-flex border"
+    class="border"
     :style="{
       overflowY: 'scroll',
       maxHeight: `${$props.maxHeight}px`,
     }"
   >
-    <ul
-      v-if="$scopedSlots.options"
-      class="w-100 list-group list-group-flush"
-    >
-      <slot
-        name="options"
-        :options="options"
-        :is-selected="isSelected"
-        :on-toggle-option="onToggleOption"
-      />
-    </ul>
-    <ul
-      v-else
-      class="w-100 list-group list-group-flush"
-    >
+    <ul class="w-100 list-group list-group-flush">
       <li
         v-for="option in options"
         :key="option.value"
