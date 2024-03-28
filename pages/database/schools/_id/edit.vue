@@ -26,12 +26,12 @@ export default class Edit extends CountryDBPage.ComponentBase {
   school = app.nullable<school.V3_School>();
 
   async onConnect () {
-    const record_id = this.$route.params.id || '-1';
+    const recordId = this.$route.params.id || '-1';
 
     const { response, okPayload } = await this.$api2.V3_request({
       path: '/schools',
       params: {
-        id: record_id,
+        id: recordId,
         per_page: 1,
         slices: [ 'record' ],
       },

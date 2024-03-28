@@ -21,7 +21,7 @@ export default class EditSchoolFields extends Vue {
   @Prop({ required: true }) saveable!: app.page.SaveablePage;
   @Prop() record?: school.RecordSlice;
 
-  options = new app.internals.Options();
+  options = new app.internals.Options(this);
 
   created () {
     this.saveable.record = {

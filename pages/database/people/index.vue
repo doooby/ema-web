@@ -48,11 +48,11 @@ export default class extends DatabasePage {
       </b-tabs>
     </template>
 
-    <template
-      v-if="$admission.can('people.create')"
-      #resource-actions
-    >
-      <NewRecordButton entity="people" />
+    <template #resource-actions>
+      <NewRecordButton
+        v-if="$admission.can('people.create')"
+        entity="people"
+      />
       <nuxt-link
         :to="`/database/people/new2`"
         class="btn btn-outline-secondary"

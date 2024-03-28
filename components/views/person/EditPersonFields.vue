@@ -7,6 +7,7 @@ import {
   OptionsSelect, DateInput, NamesInputTable,
   TextInput, CheckBox, TextArea, IntegerInput, LocationInput,
 } from '~/components/controls/inputs';
+import { person } from '~/lib/records';
 
 @Component({
   components: {
@@ -23,51 +24,103 @@ import {
 })
 export default class EditPersonFields extends Vue {
   @Prop({ required: true }) pageState!: app.page.State;
+  @Prop() person?: ReturnType<typeof person.parseRecordSlice>;
   @Prop({ required: true }) readonly transaction!: app.Transaction;
 
-  options = new app.internals.Options();
+  options = new app.internals.Options(this);
   controls = controls.Group.new();
 
   created () {
-    this.controls.paramsGet.ref = (values: any) => {
-      return {
-        gender: values.gender?.[0]?.value,
-        nationality: values.nationality?.[0]?.value,
-        mother_tongue: values.mother_tongue?.[0]?.value,
-        spoken_languages: values.spoken_languages?.map(item => item.value),
-        enrollment_reasons: values.enrollment_reasons?.map(item => item.value),
-        disabilities: values.disabilities?.map(item => item.value),
-        outside_school: values.outside_school?.[0]?.value,
-        school_distance_km: values.school_distance_km?.[0]?.value,
-        teaching_qualification: values.teaching_qualification?.[0]?.value,
-        residency_status: [ values.residency_status?.[0]?.value, values.residency_status?.[1] ],
-        school_transport: [ values.school_transport?.[0]?.value, values.school_transport?.[1] ],
-        registered_on: app.internals.dateToParam(values.registered_on),
-        enrolled_on: app.internals.dateToParam(values.enrolled_on),
-        born_on: app.internals.dateToParam(values.born_on),
-      };
+    this.options.fillCache([
+      { name: 'gender' },
+      { name: 'nationalities' },
+      { name: 'languages' },
+      { name: 'outside_school_terms' },
+      { name: 'teaching_qualifications' },
+      { name: 'distance_to_school' },
+      { name: 'enrolment_reasons' },
+      { name: 'disabilities', other: true },
+      { name: 'school_transport', other: true },
+      { name: 'residency_status', other: true },
+    ]);
+
+    this.controls.paramsGet.ref = (values) => {
+      return app.forms.valuesToParams(values, {
+        names: value => value,
+        citizen_id: value => value,
+        external_id: value => value,
+        passport_no: value => value,
+        telephone_no: value => value,
+        disability_note: value => value,
+        navision_id: value => value,
+        school_distance_min: value => value,
+        disability_diagnosis: value => value,
+        assistance_needed: value => value,
+        assistance_provided: value => value,
+        birthplace_address: value => value,
+        address: value => value,
+        gender: app.forms.optionToParam,
+        nationality: app.forms.optionToParam,
+        mother_tongue: app.forms.optionToParam,
+        outside_school: app.forms.optionToParam,
+        school_distance_km: app.forms.optionToParam,
+        teaching_qualification: app.forms.optionToParam,
+        spoken_languages: app.forms.optionsToParam,
+        enrollment_reasons: app.forms.optionsToParam,
+        disabilities: app.forms.optionsToParam,
+        registered_on: app.forms.dateToParam,
+        enrolled_on: app.forms.dateToParam,
+        born_on: app.forms.dateToParam,
+        residency_status: app.forms.optionOrFillToParam,
+        school_transport: app.forms.optionOrFillToParam,
+        caregivers: value => value,
+      });
     };
   }
 
-  get disabled () {
-    return this.pageState?.isLoading || this.transaction.state.isProcessing;
+  @Watch('person')
+  onPersonChange (value) {
+    this.controls.defaultsGet.ref = () => {
+      return app.forms.valuesForRecord(value, {
+        names: value => value,
+        born_on: value => value,
+        registered_on: value => value,
+        enrolled_on: value => value,
+        citizen_id: value => value,
+        passport_no: value => value,
+        telephone_no: value => value,
+        disability_note: value => value,
+        navision_id: value => value,
+        external_id: value => value,
+        school_distance_min: value => value,
+        disability_diagnosis: value => value,
+        assistance_needed: value => value,
+        assistance_provided: value => value,
+        birthplace_address: value => value,
+        address: value => value,
+        caregivers: value => value,
+        gender: value => app.forms.valueForOption(value, this.options.cache.gender),
+        nationality: value => app.forms.valueForOption(value, this.options.cache.nationalities),
+        mother_tongue: value => app.forms.valueForOption(value, this.options.cache.languages),
+        outside_school: value => app.forms.valueForOption(value, this.options.cache.outside_school_terms),
+        teaching_qualification: value => app.forms.valueForOption(value, this.options.cache.teaching_qualifications),
+        school_distance_km: value => app.forms.valueForOption(value, this.options.cache.distance_to_school),
+        spoken_languages: value => app.forms.valueForOptions(value, this.options.cache.languages),
+        enrollment_reasons: value => app.forms.valueForOptions(value, this.options.cache.enrolment_reasons),
+        disabilities: value => app.forms.valueForOptions(value, this.options.cache.disabilities),
+        school_transport: value => app.forms.valueForOptionOrFill(value, this.options.cache.school_transport),
+        residency_status: value => app.forms.valueForOptionOrFill(value, this.options.cache.residency_status),
+      });
+    };
+    this.controls.reset();
   }
 
-  get fieldsOptions () {
-    return {
-      disabilities: [
-        ...this.options.getAll(this, 'disabilities'),
-        app.country.defaults.options.otherOption(),
-      ],
-      residency_status: [
-        ...this.options.getAll(this, 'residency_status'),
-        app.country.defaults.options.otherOption(),
-      ],
-      school_transport: [
-        ...this.options.getAll(this, 'school_transport'),
-        app.country.defaults.options.otherOption(),
-      ],
-    };
+  get disabled (): boolean {
+    return !!(
+      this.pageState?.isLoading ||
+      this.pageState?.errorMessage ||
+      this.transaction.state.isProcessing
+    );
   }
 
   @Watch('controls.state.params')
@@ -102,7 +155,7 @@ export default class EditPersonFields extends Vue {
             </label>
             <OptionsSelect
               :value="controls.getValue('gender')"
-              :options="options.getAll(this, 'gender')"
+              :options="options.cache.gender ?? []"
               :disabled="disabled"
               @change="controls.update('gender', $event)"
             >
@@ -139,7 +192,7 @@ export default class EditPersonFields extends Vue {
             <OptionsSelect
               :disabled="disabled"
               :value="[ controls.getValue('residency_status')?.[0] ]"
-              :options="fieldsOptions.residency_status"
+              :options="options.cache.residency_status ?? []"
               @change="controls.update('residency_status', [ $event?.[0] ])"
             >
               <template #option-content="{ option, selected }">
@@ -163,7 +216,7 @@ export default class EditPersonFields extends Vue {
             </label>
             <OptionsSelect
               :value="controls.getValue('nationality')"
-              :options="options.getAll(this, 'nationalities')"
+              :options="options.cache.nationalities ?? []"
               :disabled="disabled"
               @change="controls.update('nationality', $event)"
             >
@@ -216,7 +269,7 @@ export default class EditPersonFields extends Vue {
             </label>
             <OptionsSelect
               :value="controls.getValue('mother_tongue')"
-              :options="options.getAll(this, 'languages')"
+              :options="options.cache.languages ?? []"
               :disabled="disabled"
               @change="controls.update('mother_tongue', $event)"
             >
@@ -235,7 +288,7 @@ export default class EditPersonFields extends Vue {
             <OptionsSelect
               :disabled="disabled"
               :value="controls.getValue('spoken_languages')"
-              :options="options.getAll(this, 'languages')"
+              :options="options.cache.languages ?? []"
               :multiple="true"
               @change="controls.update('spoken_languages', $event)"
             >
@@ -270,7 +323,7 @@ export default class EditPersonFields extends Vue {
             </label>
             <OptionsSelect
               :value="controls.getValue('outside_school')"
-              :options="options.getAll(this, 'outside_school_terms')"
+              :options="options.cache.outside_school_terms ?? []"
               :disabled="disabled"
               @change="controls.update('outside_school', $event)"
             >
@@ -289,7 +342,7 @@ export default class EditPersonFields extends Vue {
             <OptionsSelect
               :disabled="disabled"
               :value="controls.getValue('enrollment_reasons')"
-              :options="options.getAll(this, 'enrolment_reasons')"
+              :options="options.cache.enrolment_reasons ?? []"
               :multiple="true"
               :max-height="250"
               @change="controls.update('enrollment_reasons', $event)"
@@ -311,7 +364,7 @@ export default class EditPersonFields extends Vue {
             <OptionsSelect
               :disabled="disabled"
               :value="controls.getValue('disabilities')"
-              :options="fieldsOptions.disabilities"
+              :options="options.cache.disabilities ?? []"
               :multiple="true"
               @change="controls.update('disabilities', $event)"
             >
@@ -417,6 +470,7 @@ export default class EditPersonFields extends Vue {
             <label>
               <t value="person.label.school_distance_min" />
             </label>
+            {{ controls.getValue('school_distance_min') }}
             <IntegerInput
               :disabled="disabled"
               :value="controls.getValue('school_distance_min')"
@@ -430,7 +484,7 @@ export default class EditPersonFields extends Vue {
             <OptionsSelect
               :disabled="disabled"
               :value="controls.getValue('school_distance_km')"
-              :options="options.getAll(this, 'distance_to_school')"
+              :options="options.cache.distance_to_school ?? []"
               @change="controls.update('school_distance_km', $event)"
             >
               <template #option-content="{ option, selected }">
@@ -446,7 +500,7 @@ export default class EditPersonFields extends Vue {
             <OptionsSelect
               :disabled="disabled"
               :value="[ controls.getValue('school_transport')?.[0] ]"
-              :options="fieldsOptions.school_transport"
+              :options="options.cache.school_transport ?? []"
               @change="controls.update('school_transport', [ $event?.[0] ])"
             >
               <template #option-content="{ option, selected }">
@@ -491,7 +545,7 @@ export default class EditPersonFields extends Vue {
             <OptionsSelect
               :disabled="disabled"
               :value="controls.getValue('teaching_qualification')"
-              :options="options.getAll(this, 'teaching_qualifications')"
+              :options="options.cache.teaching_qualifications ?? []"
               @change="controls.update('teaching_qualification', $event)"
             >
               <template #option-content="{ option, selected }">

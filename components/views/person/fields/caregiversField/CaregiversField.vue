@@ -17,7 +17,7 @@ export default class CaregiversField extends Vue {
   @Prop() readonly disabled?: boolean;
   @Prop({ required: true }) value!: app.Maybe<person.PersonCaregiver[]>;
 
-  options = new app.internals.Options();
+  options = new app.internals.Options(this);
 
   get columns () {
     return DataTable.flattenColumns(
@@ -52,7 +52,6 @@ export default class CaregiversField extends Vue {
   }
 
   onRemoveCaregiver (index: number) {
-    console.log('fdsfs');
     const newValue = [
       ...(this.value ?? []),
     ];

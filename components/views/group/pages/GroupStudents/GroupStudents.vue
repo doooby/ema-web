@@ -54,7 +54,7 @@ export default class GroupStudents extends Vue {
 
   groupActions = new RecordsTableGroupActions.State();
 
-  options = new app.internals.Options();
+  options = new app.internals.Options(this);
 
   get columns () {
     return DataTable.flattenColumns(

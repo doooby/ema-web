@@ -1,17 +1,22 @@
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import app from '~/lib/app';
 
 @Component
 export default class IntegerInput extends Vue {
   @Prop() readonly domId?: string;
   @Prop() readonly disabled?: boolean;
-  @Prop() readonly value?: string;
+  @Prop() readonly value?: number;
 
   internalValue: app.Maybe<number> = undefined;
   inputValue = '';
 
   created () {
+    this.onValueChanged();
+  }
+
+  @Watch('value')
+  onValueChanged () {
     this.internalValue = sanitizeValue(this.value);
     this.inputValue = sanitizeInputValue(this.internalValue);
   }

@@ -16,13 +16,15 @@ export default class EditRecordCard extends Vue {
   @Prop() readonly active?: boolean;
   @Prop() readonly noBody?: boolean;
 
-  get isProcessing () {
-    return this.pageState?.isLoading && !this.pageState.errorMessage;
+  get isProcessing (): boolean {
+    return !!(this.pageState?.isLoading && !this.pageState.errorMessage);
   }
 
-  get activeInternal () {
-    if (!this.pageState) return this.active;
-    return !this.isProcessing && !this.transaction.state.isProcessing;
+  get activeInternal (): boolean {
+    if (!this.pageState) return !!this.active;
+    return !this.pageState.isLoading &&
+     !this.pageState.errorMessage &&
+     !this.transaction.state.isProcessing;
   }
 }
 </script>

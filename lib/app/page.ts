@@ -46,9 +46,9 @@ export interface State {
   errorMessage?: string;
 }
 
+// TODO move to `app.api`
 export interface SaveableRecord {
   transaction: app.Transaction;
-  record: app.Maybe<any>;
   changeParams: app.Maybe<app.Map<unknown>>;
   errors: app.Maybe<app.db.ErrorMessage[]>;
 }
@@ -63,7 +63,6 @@ export function useSaveableRecord (context: any): SaveableRecord {
           : context.$router.go(-1)
       ),
     ),
-    record: undefined,
     changeParams: undefined,
     errors: undefined,
   };

@@ -1,6 +1,7 @@
 import * as api from './api';
 import * as country from './country';
 import * as db from './db';
+import * as forms from './forms';
 import * as internals from './internals';
 import * as locales from './locales';
 import * as page from './page';
@@ -14,6 +15,7 @@ export {
   api,
   country, // TODO move
   db,
+  forms,
   internals, // TODO move
   locales,
   page,
@@ -23,6 +25,7 @@ export {
 
 export const OTHER_OPTION = '_other';
 
+// deprecated, use `app.internals.Options`
 export function extendOptionsList (list?: app.Option[], options?: {
   empty?: boolean;
   other?: boolean;
@@ -42,6 +45,7 @@ export function extendOptionsList (list?: app.Option[], options?: {
   return list;
 }
 
+// deprecated, use `app.internals.Options`
 export function internalOptionsList (
   countryData: undefined | app.session.CountryData,
   name: string,
@@ -54,6 +58,7 @@ export function internalOptionsList (
   }));
 }
 
+// deprecated, use `app.internals.Options`
 export function internalOptionsList2 (
   countryData: app.Maybe<app.session.CountryData>,
   name: string,

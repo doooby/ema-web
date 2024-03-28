@@ -11,16 +11,27 @@ export default class NamesInputTable extends Vue {
   @Prop() readonly disabled?: boolean;
   @Prop() readonly value?: app.PersonNames;
 
-  onChange (language_index: number, variant_index: number, value?: string) {
-    const newNames = this.value?.slice(0) ?? [];
-    let variants = newNames[language_index];
-    if (!variants) {
-      variants = [ '', '' ];
-      newNames[language_index] = variants;
-    }
-    variants[variant_index] = value;
+  onChange (
+    nameIndex: number,
+    languageIndex: number,
+    value?: string,
+  ) {
+    const newNames = [
+      updateVariants(this.value?.[0]),
+      updateVariants(this.value?.[1]),
+      updateVariants(this.value?.[2]),
+    ];
+    const variants = newNames[nameIndex];
+    variants[languageIndex] = value ?? '';
     this.$emit('change', newNames);
   }
+}
+
+function updateVariants (source?: app.SparseList<string>) {
+  return [
+    source?.[0] ?? '',
+    source?.[1] ?? '',
+  ];
 }
 </script>
 

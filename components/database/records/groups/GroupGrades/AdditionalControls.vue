@@ -17,7 +17,7 @@ export default class AdditionalControls extends Vue {
   @Prop({ required: true }) readonly controls!: controls.Group;
   @Prop({ required: true }) readonly pageState!: app.PageState;
 
-  options = new app.internals.Options();
+  options = new app.internals.Options(this);
 
   get subjectsAllValue () {
     const selectedSubjects = (this.controls.getValue('subjects') as app.OptionItemsList) ?? [];

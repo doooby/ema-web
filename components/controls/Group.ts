@@ -130,10 +130,9 @@ export default class Group {
   }
 
   private buildDefaultValues (): app.Map<unknown> {
-    const newValue = {};
-    const defaults = this.defaultsGet.ref?.() ?? {};
+    const newValue = this.defaultsGet.ref?.() ?? {};
     for (const field of this.fields) {
-      newValue[field.name] = defaultOfField(field, defaults);
+      newValue[field.name] = defaultOfField(field, newValue);
     }
     return Object.freeze(newValue);
   }

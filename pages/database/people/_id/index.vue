@@ -53,6 +53,14 @@ export default class extends DatabasePage {
             <t value="db.page.edit.action" />
           </show-page-action>
         </li>
+        <li v-if="$admission.can('people.update')">
+          <show-page-action
+            icon="pencil"
+            :path="`/database/people/${record.id}/edit2`"
+          >
+            <t value="db.page.edit.action" />
+          </show-page-action>
+        </li>
       </ul>
     </template>
 

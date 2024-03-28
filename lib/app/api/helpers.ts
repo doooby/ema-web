@@ -1,7 +1,6 @@
-import { RequestResponse } from '~/lib/api2';
+import { Api2Plugin, RequestResponse } from '~/lib/api2';
 import { wai } from '~/vendor/wai';
 import app from '~/lib/app';
-import { SaveableRecord } from '~/lib/app/page';
 
 // deprecated
 export function updateSuccess (
@@ -58,7 +57,7 @@ export function updateErrors (
 }
 
 export async function createRecord (
-  context: any,
+  api: Api2Plugin,
   saveable: app.page.SaveableRecord,
   path: string,
 ): Promise<{
@@ -67,7 +66,7 @@ export async function createRecord (
 }> {
   saveable.transaction.state.isProcessing = true;
   saveable.errors = undefined;
-  const { response, okPayload } = await context.$api2.V3_request({
+  const { response, okPayload } = await api.V3_request({
     path,
     params: { record: saveable.changeParams },
     reducer: wai.recordUpdate,
@@ -79,4 +78,43 @@ export async function createRecord (
   } else {
     return { success: true, recordId: okPayload?.record_id };
   }
+}
+
+export async function fetchRecord<R> (
+  api: Api2Plugin,
+  path: string,
+  id: string,
+  slices: app.Maybe<string[]>,
+  parser: (value) => wai.AResource<R>,
+): Promise<{
+  success: true;
+  record: wai.AResource<R>,
+}
+| {
+  success: false;
+  errorMessage: string;
+}> {
+  const { response } = await api.V3_request({
+    path,
+    params: {
+      id,
+      per_page: 1,
+      slices,
+    },
+    reducer: value => wai.recordShow(value, parser),
+  });
+
+  let error;
+
+  if (!response.ok) {
+    error = response.reason;
+  } else if (!response.payload?.record) {
+    error = 'not_found';
+  } else if (response.payload.record.error) {
+    error = 'invalid_record';
+  } else {
+    return { success: true, record: response.payload.record };
+  }
+
+  return { success: false, errorMessage: `app.processing.${error}` };
 }

@@ -17,7 +17,7 @@ import {
 export default class NewGroupFields extends Vue {
   @Prop({ required: true }) saveable!: app.page.SaveablePage;
 
-  options = new app.internals.Options();
+  options = new app.internals.Options(this);
 
   created () {
     this.saveable.record = {
