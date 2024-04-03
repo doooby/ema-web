@@ -11,7 +11,7 @@ export const entity = 'people';
 
 export function parseRecordSlice (value) {
   return wai.object2(value, value => ({
-    names: wai.property(value, 'names', wai.nullable(wai.listOf(wai.listOfStrings))),
+    names: wai.property(value, 'names', wai.nullable(wai.listOf(wai.nullable(wai.listOfStrings)))),
     born_on: wai.property(value, 'born_on', wai.time),
     registered_on: wai.property(value, 'registered_on', wai.nullable(wai.time)),
     enrolled_on: wai.property(value, 'enrolled_on', wai.nullable(wai.time)),
@@ -44,7 +44,7 @@ export function parseRecordSlice (value) {
 export function parsePersonCaregiver (value) {
   return wai.object2(value, value => ({
     type: wai.property(value, 'type', wai.string),
-    names: wai.property(value, 'names', wai.nullable(wai.listOf(wai.listOfStrings))),
+    names: wai.property(value, 'names', wai.nullable(wai.listOf(wai.nullable(wai.listOfStrings)))),
     relation_other: wai.property(value, 'relation_other', wai.nullable(wai.string)),
     citizen_id: wai.property(value, 'citizen_id', wai.nullable(wai.string)),
     phone_no: wai.property(value, 'phone_no', wai.nullable(wai.string)),
