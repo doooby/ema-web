@@ -184,6 +184,16 @@ export default class extends DatabasePage {
       </b-tabs>
     </template>
 
+    <template #resource-actions>
+      <nuxt-link
+        :to="`/database/students/new`"
+        class="btn btn-outline-secondary"
+      >
+        <b-icon icon="clipboard-plus" class="mr-1" />
+        <t value="db.page.new.action" />
+      </nuxt-link>
+    </template>
+
     <template #search-form="{ group }">
       <div class="col-md-4 col-lg-3">
         <SchoolsFilter

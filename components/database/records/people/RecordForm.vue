@@ -54,9 +54,6 @@
     <div class="col-12">
       <div class="border-bottom my-2" />
     </div>
-    <div class="col-12">
-      <form-field name="caregivers" :context="context" :values="values" />
-    </div>
   </div>
 </template>
 

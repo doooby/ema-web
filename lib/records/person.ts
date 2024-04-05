@@ -137,7 +137,7 @@ export function parseRecord (
     })))),
     caption: wai.prop('caption', value, wai.string),
     full_name_local: wai.prop('full_name_local', value, wai.string),
-    first_name: wai.prop('first_name', value, mapName),
+    first_name: wai.prop('first_name', value, wai.nullable(mapName)) ?? [],
     last_name: wai.prop('last_name', value, wai.nullable(mapName)),
     mother_first_name: wai.prop('mother_first_name', value, wai.nullable(mapName)),
     mother_last_name: wai.prop('mother_last_name', value, wai.nullable(mapName)),
@@ -269,9 +269,6 @@ export function recordControls ({
         app.internalOptionsList(countryData, 'teaching_qualifications'),
         { empty: true },
       ),
-    } ],
-    [ 'caregivers', asFieldType(CaregiversField), {
-      relationOptions: app.internalOptionsList(countryData, 'caregivers.relation'),
     } ],
   ];
 }

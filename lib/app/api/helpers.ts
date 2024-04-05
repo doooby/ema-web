@@ -60,6 +60,7 @@ export async function createRecord (
   api: Api2Plugin,
   saveable: app.page.SaveableRecord,
   path: string,
+  params?: app.api.Params,
 ): Promise<{
   success: boolean;
   recordId?: string;
@@ -68,7 +69,7 @@ export async function createRecord (
   saveable.errors = undefined;
   const { response, okPayload } = await api.V3_request({
     path,
-    params: { record: saveable.changeParams },
+    params: { record: saveable.changeParams, ...params },
     reducer: wai.recordUpdate,
   });
   saveable.errors = app.api.createErrors(response);

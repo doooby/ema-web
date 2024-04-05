@@ -1,49 +1,35 @@
 <script lang="ts">
 import { Component } from 'vue-property-decorator';
-import CountryDBPage from '~/components/database/pages/CountryDBPage.vue';
-import EntityCardHeader from '~/components/database/pages/shared/EntityCardHeader.vue';
-import EditRecordCard from '~/components/views/application/pages/EditRecordCard.vue';
-import EditPersonFields from '~/components/views/person/EditPersonFields.vue';
 import app from '~/lib/app';
-import { person } from '~/lib/records';
-import { wai } from '~/vendor/wai';
+import CountryDBPage from '~/components/database/pages/CountryDBPage.vue';
+import EditRecordCard from '~/components/views/application/pages/EditRecordCard.vue';
+import EntityCardHeader from '~/components/database/pages/shared/EntityCardHeader.vue';
 import RecordErrors from '~/components/database/RecordErrors.vue';
+import EditPersonFields from '~/components/views/person/EditPersonFields.vue';
+import AddToCourseFields from '~/components/views/student/fields/AddToCourseFields.vue';
 
 @Component({
   components: {
-    CountryDBPage,
-    EditRecordCard,
-    EntityCardHeader,
     EditPersonFields,
     RecordErrors,
+    EntityCardHeader,
+    EditRecordCard,
+    CountryDBPage,
+    AddToCourseFields,
   },
 })
-export default class Edit2 extends CountryDBPage.ComponentBase {
-  pageState: app.page.State = { isLoading: true };
-  person = app.nullable<wai.AResource<{
-    record: ReturnType<typeof person.parseRecordSlice>;
-  }>>();
+export default class extends CountryDBPage.ComponentBase {
+  pageState: app.page.State = { isLoading: false };
+
   record = app.page.useSaveableRecord(this);
 
-  async created () {
-    const personId = this.$route.params.id || '-1';
-    const fetchedPerson = await app.api.fetchRecord(
-      this.$api2, '/people', personId, [ 'record' ], value => ({
-        record: wai.property(value, 'record', person.parseRecordSlice),
-      }),
-    );
-    if (!fetchedPerson.success) {
-      this.pageState.errorMessage = fetchedPerson.errorMessage;
-    } else {
-      this.person = fetchedPerson.record;
-    }
-    this.pageState.isLoading = false;
-  }
+  moveToCourseParams: app.api.Params = {};
 
   async onSave () {
-    if (!this.person?.id || !this.record.changeParams) return;
+    if (!this.record.changeParams) return;
     const { success, recordId } = await app.api.createRecord(
-      this.$api2, this.record, `/people/${this.person.id}/update`,
+      this.$api2, this.record, '/students/create',
+      { course: this.moveToCourseParams },
     );
     if (success) {
       await this.$router.push({
@@ -63,15 +49,28 @@ export default class Edit2 extends CountryDBPage.ComponentBase {
       >
         <template #header>
           <EntityCardHeader>
-            <t value="page.people.edit.title" />
+            <t value="page.students.new.title" />
           </EntityCardHeader>
         </template>
         <template v-if="record.errors" #errors>
           <RecordErrors entity="people" :errors="record.errors" />
         </template>
+        <div class="row">
+          <div class="col">
+            <h3>
+              <t value="db.pages.people.new.move_to_course.title" />
+            </h3>
+            <div class="col-md-6">
+              <AddToCourseFields
+                v-model="moveToCourseParams"
+                :page-state="pageState"
+                :transaction="record.transaction"
+              />
+            </div>
+          </div>
+        </div>
         <EditPersonFields
           :page-state="pageState"
-          :person="person?.record"
           :transaction="record.transaction"
           @change="record.changeParams = $event"
         />

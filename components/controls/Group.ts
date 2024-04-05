@@ -6,6 +6,7 @@ export default class Group {
   state: controls.GroupState;
   defaultsGet = app.createRef<() => app.Map<unknown>>();
   paramsGet = app.createRef<(values: app.Map<unknown>) => app.db.Params>();
+  paramsOverrideFn = app.createRef<(values: app.Map<unknown>) => app.db.Params>();
 
   constructor (
     fields: controls.FieldDefinition[],
@@ -89,6 +90,23 @@ export default class Group {
     this.state.params = this.buildParams();
   }
 
+  addField (
+    fieldName: string,
+    fn: (field: controls.FieldDefinition) => Partial<controls.FieldDefinition>,
+  ) {
+    let field: controls.FieldDefinition = {
+      name: fieldName,
+    };
+    field = {
+      ...field,
+      ...fn(field),
+    };
+    this.state.fields = Object.freeze({
+      ...this.state.fields,
+      [fieldName]: field,
+    });
+  }
+
   updateField (
     fieldName: string,
     fn: (field: controls.FieldDefinition) => Partial<controls.FieldDefinition>,
@@ -117,12 +135,18 @@ export default class Group {
   }
 
   private buildParams (): app.db.Params {
-    const values = this.state.values;
-    const params: app.db.Params = { ...values, ...this.paramsGet.ref?.(values) };
-    for (const { name, populateParams } of this.fields) {
-      if (populateParams) {
-        delete params[name];
-        populateParams(values, params);
+    const values = this.state.values
+    let params: app.db.Params
+
+    if (this.paramsOverrideFn.ref) {
+      params = this.paramsOverrideFn.ref(values)
+    } else {
+      params = { ...values, ...this.paramsGet.ref?.(values) };
+      for (const { name, populateParams } of this.fields) {
+        if (populateParams) {
+          delete params[name];
+          populateParams(values, params);
+        }
       }
     }
 
