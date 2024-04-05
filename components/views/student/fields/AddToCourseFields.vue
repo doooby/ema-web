@@ -26,7 +26,7 @@ export default class AddToCourseFields extends Vue {
           values.group_select = undefined
         },
       }))
-      this.controls.paramsOverrideFn.ref = (values) => {
+      this.controls.paramsOverrideFn.ref = (values: any) => {
         return {
           id: values.course_select?.[0]?.id,
           group_id: values.group_select?.[0]?.id,
@@ -48,11 +48,11 @@ export default class AddToCourseFields extends Vue {
     }
 
     get selectedSchoolId () {
-      return this.controls.getValue('school_select')?.[0]?.id
+      return (this.controls.getValue('school_select')as any)?.[0]?.id
     }
 
     get selectedCourseId () {
-      return this.controls.getValue('course_select')?.[0]?.id
+      return (this.controls.getValue('course_select')as any)?.[0]?.id
     }
 }
 </script>
