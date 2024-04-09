@@ -2,6 +2,7 @@
 Compote.log :yellow, '===== building nuxt app'
 Compote.run <<-CMD
 sudo docker run --rm \\
+  --env-file .env
   -v ./src:/app \\
   -v ./var/node_modules:/app/node_modules \\
   -v ./var/nuxt:/app/.nuxt \\
