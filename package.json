@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "APP_ENV=localhost NODE_OPTIONS=--openssl-legacy-provider nuxt",
+    "dev": "APP_ENV=local NODE_OPTIONS=--openssl-legacy-provider nuxt",
     "build": "NODE_OPTIONS=--openssl-legacy-provider nuxt build",
     "start": "NODE_OPTIONS=--openssl-legacy-provider nuxt start"
   },
