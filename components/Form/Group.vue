@@ -1,5 +1,10 @@
 <template>
-  <div :class="className">
+  <div
+    :class="[
+      $attrs.class,
+      'form--group',
+    ]"
+  >
     <slot
       v-if="$scopedSlots.layout"
       name="layout"
@@ -19,7 +24,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import classNames from 'classnames';
 import { buildFormFields, FormField, FormFieldDefinition, FormGroupContext, FormValues } from '.';
 import FormFieldComponent from './Field';
 
@@ -33,12 +37,6 @@ export default Vue.extend({
     labelPrefix: { type: String, default: 'form.fields' },
   },
   computed: {
-    className (): string {
-      return classNames(
-        'form--group',
-        this.$attrs.class,
-      );
-    },
     buildFields (): FormField[] {
       if (this.fields) return this.fields;
       if (this.fieldsDefinitions) return buildFormFields(this.fieldsDefinitions);

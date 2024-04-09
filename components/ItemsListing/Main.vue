@@ -1,5 +1,5 @@
 <template>
-  <div :class="className">
+  <div :class="[$attrs.class, 'data-table']">
     <table>
       <colgroup>
         <col style="width: 40px;">
@@ -52,7 +52,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import classNames from 'classnames';
 import { ItemsListing } from '~/components/ItemsListing';
 import ColumnLimit from '~/components/DataTable/ColumnLimit.vue';
 
@@ -65,13 +64,6 @@ export default class Main extends Vue {
 
   columnsStatic = [ ...this.columns ];
   widths = this.columnsStatic.map(column => column.size ?? 150);
-
-  get className (): string {
-    return classNames(
-      'data-table',
-      this.$attrs.class,
-    );
-  }
 
   get computedColumns (): ItemsListing.ComputedColumn[] {
     return this.columnsStatic.map((column, i) => ({

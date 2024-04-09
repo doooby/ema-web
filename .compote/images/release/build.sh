@@ -7,9 +7,7 @@ function archive_dir {
   tar -zcf $2 $1
 }
 
-NODE_ENV=development yarn install
-yarn build
-
-yarn install
+NODE_ENV=production npm run install
+npm run build
 archive_dir node_modules tmp/build/node_modules.tar.gz
 archive_dir .nuxt tmp/build/nuxt.tar.gz

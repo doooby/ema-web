@@ -1,6 +1,9 @@
 <template>
   <b-button
-    :class="className"
+    :class="[
+      $attrs.class,
+      'd-flex align-items-center',
+    ]"
     variant="link"
     @click="onClick"
   >
@@ -12,17 +15,12 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import classNames from 'classnames';
 
 @Component
 export default class BrowsePageAction extends Vue {
   @Prop({ default: null }) readonly path!: null | string;
   @Prop({ default: false }) readonly modal!: boolean | string;
   @Prop({ required: true }) readonly icon!: string;
-
-  get className (): string {
-    return classNames('d-flex align-items-center', this.$attrs.class);
-  }
 
   onClick (event: any): void {
     if (this.path) {

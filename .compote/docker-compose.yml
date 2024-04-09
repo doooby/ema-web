@@ -7,7 +7,7 @@ services:
       PORT: 3000
     env_file:
       - ${JAR_PATH}/.env
-    command: yarn start
+    command: npm run start
     restart: unless-stopped
     ports:
       - ${APP_SERVICE_PORT}:3000
