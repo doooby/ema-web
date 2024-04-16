@@ -47,6 +47,9 @@ export default class EditRecordCard extends Vue {
         />
       </div>
     </div>
+    <div v-if="!noBody" class="card-body">
+      <slot />
+    </div>
     <TransactionControls
       class="card-body"
       :active="activeInternal"
@@ -56,8 +59,5 @@ export default class EditRecordCard extends Vue {
         <slot name="errors" />
       </template>
     </TransactionControls>
-    <div v-if="!noBody" class="card-body">
-      <slot />
-    </div>
   </div>
 </template>
