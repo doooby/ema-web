@@ -1,3 +1,3 @@
-FROM node:alpine
+FROM node:current-bookworm
 
 WORKDIR /app
