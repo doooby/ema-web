@@ -50,7 +50,7 @@ export default class extends DatabasePage {
 
     <template #resource-actions>
       <nuxt-link
-        v-if="$ema.canI('act:/people/create')"
+        v-if="$ema.canI('act:/people/actions/create')"
         :to="`/database/people/new2`"
         class="btn btn-outline-secondary"
       >

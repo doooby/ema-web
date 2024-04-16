@@ -48,7 +48,7 @@ export default class PeopleListing extends Vue {
     @connect="$emit('connect', $event)"
   >
     <template
-      v-if="$ema.canI('act:/people/update')"
+      v-if="$ema.canI('act:/people/actions/update')"
       #record-actions="{ record }"
     >
       <b-dropdown-item :to="`/database/people/${record.id}/edit2`">
