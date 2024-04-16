@@ -49,11 +49,8 @@ export default class extends DatabasePage {
     </template>
 
     <template #resource-actions>
-      <NewRecordButton
-        v-if="$admission.can('people.create')"
-        entity="people"
-      />
       <nuxt-link
+        v-if="$ema.canI('act:/people/create')"
         :to="`/database/people/new2`"
         class="btn btn-outline-secondary"
       >

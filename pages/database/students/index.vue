@@ -186,6 +186,7 @@ export default class extends DatabasePage {
 
     <template #resource-actions>
       <nuxt-link
+        v-if="$ema.canI('act:/students/create')"
         :to="`/database/students/new`"
         class="btn btn-outline-secondary"
       >

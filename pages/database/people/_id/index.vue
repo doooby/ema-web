@@ -45,15 +45,7 @@ export default class extends DatabasePage {
   >
     <template #actions="{ record }">
       <ul>
-        <li v-if="$admission.can('people.update')">
-          <show-page-action
-            icon="pencil"
-            :path="`/database/people/${record.id}/edit`"
-          >
-            <t value="db.page.edit.action" />
-          </show-page-action>
-        </li>
-        <li v-if="$admission.can('people.update')">
+        <li v-if="$ema.canI('act:/people/update')">
           <show-page-action
             icon="pencil"
             :path="`/database/people/${record.id}/edit2`"
