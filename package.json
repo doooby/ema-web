@@ -8,6 +8,7 @@
     "start": "NODE_OPTIONS=--openssl-legacy-provider nuxt start"
   },
   "dependencies": {
+    "vue": "2.7.14",
     "@types/lodash": "^4.14.171",
     "bootstrap": "^4.6.0",
     "bootstrap-vue": "^2.21.2",
@@ -16,7 +17,9 @@
     "date-fns": "^2.22.1",
     "lodash": "^4.17.21",
     "vuex": "^3.6.2",
-    "nuxt": "^2.15.3",
+    "nuxt": "2.17.1",
+    "vue-server-renderer": "2.7.14",
+    "vue-template-compiler": "2.7.14",
     "@nuxt/typescript-build": "^2.1.0",
     "nuxt-i18n": "^6.27.0",
     "sass": "^1.32.12",
