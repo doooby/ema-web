@@ -161,6 +161,13 @@ export const staticLists: Record<string, undefined | InternalOptionsList> = [
     'early_marriage',
   ] ],
 
+  [ 'institution_type', [
+    'school',
+    'tls',
+    'dlc',
+    'cfs',
+  ] ],
+
 ].reduce(
   (memo, item: any) => {
     const [ name, options ] = item;

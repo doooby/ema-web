@@ -37,6 +37,7 @@ export interface RecordSlice {
   external_id?: string;
   name: string[];
   address?: string[];
+  institution_types?: string[];
   education_types?: string[];
   gender_dedications?: string[];
   classrooms_count?: number;
@@ -93,6 +94,7 @@ function parseRecordSlice (
     external_id: wai.property(value, 'external_id', wai.nullable(wai.string)),
     name: wai.property(value, 'name', wai.listOfStrings),
     address: wai.property(value, 'address', wai.nullable(wai.listOfStrings)),
+    institution_types: wai.property(value, 'institution_types', wai.nullable(wai.listOfStrings)),
     education_types: wai.property(value, 'education_types', wai.nullable(wai.listOfStrings)),
     gender_dedications: wai.property(value, 'gender_dedications', wai.nullable(wai.listOfStrings)),
     classrooms_count: wai.property(value, 'classrooms_count', wai.nullable(wai.integer)),

@@ -30,6 +30,11 @@ export default class EditSchoolFields extends Vue {
       director: [ this.record?.director ],
       external_id: this.record?.external_id,
       address: this.record?.address,
+      institution_types: this.options.getByValues(
+        this,
+        'institution_type',
+        this.record?.institution_types,
+      ),
       education_types: this.options.getByValues(
         this,
         'education_type',
@@ -52,6 +57,7 @@ export default class EditSchoolFields extends Vue {
         director_id: record.director?.[0]?.id,
         external_id: record.external_id,
         address: record.address,
+        institution_types: record.institution_types?.map(i => i.value),
         education_types: record.education_types?.map(i => i.value),
         gender_dedications: record.gender_dedications?.map(i => i.value),
         classrooms_count: record.classrooms_count,
@@ -120,6 +126,20 @@ export default class EditSchoolFields extends Vue {
       <div class="border-bottom my-2" />
     </div>
     <div class="col-md-6">
+    <b-form-group>
+            <template #label>
+              <t value="db.record.schools.label.institution_type" />
+            </template>
+            <OptionsSelect
+              v-model="saveable.record.institution_types"
+              :options="options.getAll(this, 'institution_type')"
+              :multiple="true"
+            >
+              <template #option-content="{ option }">
+                <t :value="option.item" />
+              </template>
+            </OptionsSelect>
+          </b-form-group>
       <b-form-group>
         <template #label>
           <t value="db.record.schools.label.education_types" />
