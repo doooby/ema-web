@@ -130,6 +130,9 @@ export const staticLists: Record<string, undefined | InternalOptionsList> = [
     'orm', // Oromo / Oromifa
     'sid', // Sidama / Sidamigna
     'wal', // Wolaitta / Wolayitigna
+    'ktb', // Kambaata / Kembatigna
+    'hdy', // Hadiyya / Hadiyedna
+    '_gm', // Gemugna
   ] ],
 
   [ 'attendance', [
